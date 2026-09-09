@@ -1,6 +1,6 @@
 # Contributing to SatQuery AI
 
-## The model in one paragraph
+## The idea in one paragraph
 
 `main` is the protected product branch, controlled by the repo owner. **Everyone else works on their own branch and never pushes to `main`.** You can create as many branches and sub-branches as you want, commit and push to them as often as you like, and experiment freely — but the only way code reaches `main` is a **pull request that the owner reviews and squash-merges**. That gives you maximum freedom to try things, and keeps `main` clean, readable, and always shippable for the demo.
 
