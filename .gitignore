@@ -91,6 +91,7 @@ prod08_merged_baked/
 # --- live Cursor operator IPC (confuses GitHub teammates) ---
 # Still used locally. Drop these lines if you want them as a private backup.
 ORCHESTRATOR_BOOTSTRAP.md
+ORCHESTRATOR_HANDOFF.md
 EXECUTOR_BOOTSTRAP.md
 SECOND_OPINION_BOOTSTRAP.md
 ORCHESTRATOR_OUT.md

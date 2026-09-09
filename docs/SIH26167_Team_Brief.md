@@ -1,8 +1,8 @@
 # SIH26167 "SatQuery AI" — Team Brief
 
-**Read this before the internal show (16–17 Sep 2026).** Idea deadline: **20 Sep 2026**. Architecture and compliance: `SIH26167_Final_Plan.md`. Product map: `../README.md`.
+**Read this before the internal show (16–17 Sep 2026).** Idea-submission deadline: **20 Sep 2026**. Architecture and PS-compliance detail: `SIH26167_Final_Plan.md`. Product map: `../README.md`.
 
-This brief kills ambiguity. It is not a live GPU status board. Where something is unverified, it says so.
+This brief is the single reference for what we are building, what the problem statement demands, and what has already been proven or ruled out. Where something is unverified, it says so. It is a product brief — it does not track live GPU jobs.
 
 ---
 
@@ -10,9 +10,9 @@ This brief kills ambiguity. It is not a live GPU status board. Where something i
 
 ISRO/SAC wants a system where a **non-expert user types a plain-English question about satellite imagery and gets an evidence-backed answer** — not a land-cover map with a legend only a GIS analyst can read.
 
-Three kinds of input: one image, two images of the same place at different times (what changed?), and an optical + SAR image pair of the same place (see through clouds). The system must **decide for itself which specialist tools to run**, show its work, and prove that at least one of its AI components was actually **adapted to remote sensing** — a generic off-the-shelf chatbot explicitly fails the requirement.
+Three kinds of input: one image, two images of the same place at different times (what changed?), and an optical + SAR image pair of the same place (see through clouds). The system must **decide for itself which specialist tools to run**, show its work in a visible, scored execution trace, and prove that at least one of its AI components was actually **adapted to remote sensing** — a generic off-the-shelf chatbot explicitly fails the requirement.
 
-We build it from open-source models that run **on our own machine, offline**.
+We build it from open-source models that run **on our own machine, fully offline**, with the VLM narrating and deterministic tools doing every measurement.
 
 ---
 
@@ -56,11 +56,11 @@ A **satellite analyst you can talk to**, with the analyst's work shown. Three in
 
 ### 3.2 Is local inference feasible?
 
-Yes, measured on the demo laptop (RTX 5060 8 GB):
+Yes — measured, not hoped, on the demo laptop (RTX 5060 8 GB):
 
-- **Qwen3-VL-8B-Instruct** via llama.cpp `llama-server` (Q4_K_M + mmproj), offline.
+- **Qwen3-VL-8B-Instruct** via llama.cpp `llama-server` (Q4_K_M + mmproj), fully offline.
 - Demo scenes complete in a few seconds (budget was < 20 s first token, < 45 s complete).
-- Ollama cannot import this mmproj. Serving path is llama.cpp, not Ollama.
+- Ollama cannot import this mmproj. The serving path is llama.cpp, not Ollama.
 - Qwen2.5-VL-7B 4-bit remains the **local-judge** model and fallback, not the narrator.
 - One VLM on 8 GB. No GeoChat / second 7B on the demo machine.
 
@@ -73,34 +73,34 @@ Yes, measured on the demo laptop (RTX 5060 8 GB):
 | **LEVIR-CD** | Change-detection specialist; pretrained ChangeFormer weights exist. |
 | **BigEarthNet / BEN text** | Named adaptation source (Europe Sentinel-1/2). Not Indian Cartosat+RISAT. |
 
-RSVQA was not used as a second harness. Hidden ISRO/Cartosat+RISAT annotations stay unknown.
+RSVQA was located but not used as a second harness. Hidden ISRO/Cartosat+RISAT annotations stay unknown.
 
 ### 3.4 Can we fine-tune a VLM? Do we have to for the internal show?
 
 The **pipe is proven** (Gate 2 LoRA smoke on Modal). The **production mixes we already ran did not earn a demo attach**:
 
-- Vision+language LoRA on BEN: local-judge **0.6433** (worse than zero-shot 0.7833). Parked.
+- Vision+language LoRA on BEN: local-judge **0.6433** (worse than zero-shot **0.7833**). Parked as a domain specialist.
 - Language-only short VQA: exact-match rose, but mean answer length collapsed to **~1 token**. Unusable as a narrator.
 
-**Internal 16–17 Sep ships zero-shot Qwen3-VL-8B.** Adaptation remains a **finale** checkbox. Do not plug an adapter into `demo/serve.ps1` unless these bars pass **on disk**: caption style ≥40 + cross-tag; untagged exact ≥ 0.55; tripwire; looking blank ≤ 0.40 **and** Qty+Color shuffle ≤ 0.40. Fail any → stay zero-shot through the internal show.
+**Internal 16–17 Sep ships zero-shot Qwen3-VL-8B.** Adaptation remains a **finale** checkbox. Do not plug an adapter into `demo/serve.ps1` unless these bars pass **on disk**: caption style ≥40 tokens + cross-tag; untagged exact ≥ 0.55; tripwire; looking blank ≤ 0.40 **and** Qty+Color shuffle ≤ 0.40. Fail any → stay zero-shot through the internal show.
 
-### 3.5 Isn't "agentic AI" buzzword here?
+### 3.5 Isn't "agentic AI" a buzzword here?
 
-No. The PS scores the **observable execution trace**. Our planner is a constrained grammar of a few tools, deterministic routing, every step logged. Routing accuracy on a 20-query suite is a metric we can show.
+No. The PS scores the **observable execution trace**, and ours is real: a constrained grammar of a few tools, deterministic routing, every step logged. Routing accuracy on a 20-query suite is a metric we can show on demand.
 
-### 3.6 SAR
+### 3.6 How does SAR fit in?
 
 - Pairs are **pre-co-registered**. We do not solve registration.
-- We do **not** train pixel-level optical↔SAR fusion. SAR tool → structured stats; optical tool → its reading; **fusion at the VLM reasoning layer**.
-- BEN is Europe Sentinel. Hidden set is Indian Cartosat+RISAT. Hedge = tools, not a RISAT encoder.
+- We do **not** train pixel-level optical↔SAR fusion. The SAR tool produces structured statistics; the optical tool produces its reading; **fusion happens at the VLM reasoning layer**, quoting both.
+- BigEarthNet is Europe Sentinel-1/2. The hidden set is Indian Cartosat+RISAT. Our hedge is the geography-agnostic tool layer, not a retrained RISAT encoder.
 
 ### 3.7 Can we demo this without it dying on stage?
 
-Three rehearsed scenes (single / bi-temporal change / optical+SAR), latency budget, cached trapdoor, recorded fallback. Scene 2 is the money scene: messy pair → change mask → a number with the tool math on screen.
+Three rehearsed scenes (single / bi-temporal change / optical+SAR), a latency budget, a cached trapdoor that replays everything without a GPU, and a recorded fallback. Scene 2 is the money scene: a messy pair goes in, a change mask comes out, and a number lands on screen with the tool math visible beside it.
 
 ### 3.8 Too crowded / too hard?
 
-Space Technology has produced SIH winners every edition 2017–2025. Given-benchmark + hidden-eval PSs punish theatrical teams. Harness-first is the moat. Feasibility and competition are the honest weaknesses — that is why the demo is deterministic and the VLM never invents a measured number.
+Space Technology has produced SIH winners in every edition 2017–2025. Given-benchmark + hidden-eval PSs punish theatrical teams — which is exactly why we built harness-first. Feasibility and competition are our honest weaknesses; the deterministic demo and the tool-grounded numbers are the answers to both.
 
 ---
 
@@ -110,22 +110,30 @@ Space Technology has produced SIH winners every edition 2017–2025. Given-bench
 USER QUERY + INPUT (single / bi-temporal / optical+SAR)
         │
         ▼
-INPUT VALIDATOR — count, modality, format, compatibility
+INPUT VALIDATOR ── count, modality, format, compatibility
+        │            (fail here → friendly refusal, not a hallucinated answer)
         ▼
-AGENTIC PLANNER — task, tools, VISIBLE execution trace (scored)
+AGENTIC PLANNER ── task, tool sequence, parameters
+        │            (deterministic grammar; every step logged)
         ▼
-SPECIALIST TOOLS — small, independently measurable
-  ├─ VLM (Qwen3-VL-8B, currently zero-shot) → VQA / caption
-  ├─ ChangeFormer (pretrained LEVIR-CD) → change mask
-  ├─ Raster math → area from mask × GSD
-  └─ SAR reader → backscatter / water stats (not learned fusion)
+SPECIALIST TOOLS ── small, independent, individually testable
+   ├─ VLM (Qwen3-VL-8B, currently zero-shot) → VQA / caption
+   ├─ ChangeFormer (pretrained LEVIR-CD)     → change mask
+   ├─ Raster math                            → area = mask pixels × GSD²
+   └─ SAR reader                             → backscatter / water stats
+        │
         ▼
-VLM NARRATION — answer + cited regions + confidence
+EVIDENCE FUSION ── every tool output lands in a structured record
+        │            (VLM quotes these figures; never invents a second set)
         ▼
-UI — three tabs, masks, agent-trace panel, report export
+VLM NARRATION ── answer + cited regions + confidence
+        │
+        ▼
+UI ── three tabs · mask overlays · agent-trace panel · report export
+        └─ cached trapdoor + recorded fallback for demo day
 ```
 
-**The VLM never computes.** Areas, percentages, counts come from tools. When a judge asks where a number came from, we point at the tool and the mask.
+**The VLM never computes.** Areas, percentages, counts come from tools. When a judge asks where a number came from, we point at the tool output and the mask — both on screen.
 
 ---
 

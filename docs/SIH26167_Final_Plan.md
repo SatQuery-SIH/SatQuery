@@ -4,12 +4,14 @@ Stable product architecture. Not a live GPU log. Team FAQ: `SIH26167_Team_Brief.
 
 **Internal show:** 16–17 Sep 2026. **Idea deadline:** 20 Sep 2026.
 
-**Base narrator:** Qwen3-VL-8B-Instruct (llama.cpp Q4_K_M + mmproj), currently **zero-shot**.  
+**Base narrator:** Qwen3-VL-8B-Instruct (llama.cpp Q4_K_M + mmproj), currently **zero-shot**.
 **Judge / fallback:** Qwen2.5-VL-7B 4-bit (Ollama). Local-judge VRSBench VQA n=300 = **0.7833** (continuity column, not an attach bar).
 
 ---
 
 ## 1. PS compliance map
+
+Missing one mandatory item is how complete-looking teams lose. This is the checklist judges will literally tick:
 
 | # | Official requirement | What we ship | Proof |
 | --- | --- | --- | --- |
@@ -23,8 +25,6 @@ Stable product architecture. Not a live GPU log. Team FAQ: `SIH26167_Team_Brief.
 | 8 | Validation, confidence, summaries, downloadable reports | Ingest preview, metric badge, report export | `demo/report.py` |
 | 9 | Interactive GUI | Gradio | `demo/app.py` |
 
-Missing one mandatory item is how complete-looking teams lose.
-
 ---
 
 ## 2. Architecture
@@ -33,46 +33,55 @@ Missing one mandatory item is how complete-looking teams lose.
 USER QUERY + INPUT CONFIG (single / bi-temporal / optical+SAR)
         │
         ▼
-PLANNER  ──► visible JSON plan (task, tools, parameters)
+INPUT VALIDATOR ── count, modality, format, compatibility
+        │            (incompatible → structured refusal; never a guess)
         ▼
-SPECIALIST TOOLS (deterministic)
-  ├─ vqa / caption     → Qwen3-VL-8B (zero-shot until attach)
-  ├─ change_detect     → ChangeFormerV6 (LEVIR-CD pretrained)
-  ├─ area_calc         → pixel count × GSD²
-  └─ sar_read          → backscatter / water threshold (no learned fusion)
+AGENTIC PLANNER ── task, tool sequence, parameters
+        │            (deterministic grammar; every step logged; visible JSON trace)
         ▼
-VLM NARRATION — quotes tool numbers; does not invent a second set
+SPECIALIST TOOLS ── deterministic, one job each, independently testable
+   ├─ vqa / caption     → Qwen3-VL-8B (zero-shot until attach bars pass)
+   ├─ change_detect     → ChangeFormerV6 (LEVIR-CD pretrained, zero training)
+   ├─ area_calc         → pixel count × GSD²  (ground-sample-distance math)
+   └─ sar_read          → backscatter / water threshold (classical stats)
+        │
         ▼
-UI — three tabs, mask overlay, agent-trace, report
+EVIDENCE FUSION ── all tool outputs land in one structured record
+        │            (metric badge + report show these exact figures)
+        ▼
+VLM NARRATION ── quotes the tool record; does not invent a second set
+        │
+        ▼
+UI ── three tabs · mask overlays · agent-trace panel · metric badge · report export
 ```
 
-Rules:
+**Design rules (the ones judges probe):**
 
-- **The VLM never computes.** Areas, IoU, counts come from tools.
-- **Planner is boring.** Constrained tool grammar, not a free-form agent.
-- **Every specialist is independently testable.**
+- **The VLM never computes.** Areas, IoU, counts come from tools; the narration cites the tool record.
+- **The planner is boring on purpose.** A constrained tool grammar, not a free-form agent — routing accuracy on a 20-query suite is a showable metric.
+- **Every specialist is independently testable.** Change detection is scored against ground truth (LEVIR IoU), the area tool is pure raster math, the SAR reader is classical statistics.
 - **One VLM on 8 GB.** No GeoChat, no second 7B, on the demo laptop.
 
 ### 2.1 Serving
 
-llama.cpp `llama-server` on `127.0.0.1:8080` (OpenAI-compatible). Gradio on `7860`. Ollama cannot import the Qwen3-VL mmproj.
+llama.cpp `llama-server` on `127.0.0.1:8080` (OpenAI-compatible). Gradio on `7860`. Ollama cannot import the Qwen3-VL mmproj — that is why the serving path is llama.cpp.
 
 ### 2.2 SAR scope
 
-Input pairs are **pre-co-registered**. No registration solver. No pixel-level optical→SAR network. Fusion is **late**: structured SAR reading + optical reading + VLM reasoning. BigEarthNet is Europe Sentinel-1/2; the hidden set is Cartosat-2S + RISAT. Hedge = tools.
+Input pairs are **pre-co-registered**. No registration solver. No pixel-level optical→SAR network. Fusion is **late**: a structured SAR reading + an optical reading + VLM reasoning over both. BigEarthNet is Europe Sentinel-1/2; the hidden set is Cartosat-2S + RISAT. The hedge is the geography-agnostic tool layer, not a retrained encoder.
 
 ### 2.3 Adaptation doctrine (finale, not internal)
 
 - Internal show: **zero-shot** narrator. Gate 2 already proved a LoRA pipe exists.
-- Vision+language BEN LoRA **failed** the local-judge bar (0.6433 vs 0.7833).
+- Vision+language BEN LoRA **failed** the local-judge bar (0.6433 vs 0.7833) — parked as a domain specialist.
 - Language-only short VQA **collapsed** to ~1-token answers. Do not attach.
-- A later adapter may attach only if these bars pass **on disk**: caption style ≥40 + cross-tag; untagged exact ≥ 0.55; tripwire; looking blank ≤ 0.40 **and** Qty+Color shuffle ≤ 0.40. Fail any → stay zero-shot through 16–17 Sep and keep the finale checkbox honest.
+- A later adapter may attach only if these bars pass **on disk**: caption style ≥40 tokens + cross-tag; untagged exact ≥ 0.55; tripwire; looking blank ≤ 0.40 **and** Qty+Color shuffle ≤ 0.40. Fail any → stay zero-shot through 16–17 Sep and keep the finale checkbox honest.
 
 ---
 
 ## 3. Evaluation harness
 
-Build order was harness-first. The exam is the official splits, not a self-made quiz.
+Build order was harness-first: the exam is the official splits, not a self-made quiz.
 
 | Piece | Where |
 | --- | --- |
