@@ -1,0 +1,2457 @@
+{
+  "n": 140,
+  "n_ok": 140,
+  "accuracy": 1.0,
+  "rows": [
+    {
+      "id": 1,
+      "ok": true,
+      "query": "Describe the land cover and major objects.",
+      "input_mode": "single",
+      "expect_tools": [
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "caption",
+      "refusal": null
+    },
+    {
+      "id": 2,
+      "ok": true,
+      "query": "What changed between these two dates, and where?",
+      "input_mode": "bi-temporal",
+      "expect_tools": [
+        "change_detect",
+        "area_calc",
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "change_detect",
+        "area_calc"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "change_description",
+      "refusal": null
+    },
+    {
+      "id": 3,
+      "ok": true,
+      "query": "Identify water-covered regions.",
+      "input_mode": "optical+sar",
+      "expect_tools": [
+        "sar_read",
+        "sar_agreement",
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "sar_read",
+        "sar_agreement"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "water_identification",
+      "refusal": null
+    },
+    {
+      "id": 4,
+      "ok": true,
+      "query": "How much built-up area increased, in km2?",
+      "input_mode": "bi-temporal",
+      "expect_tools": [
+        "change_detect",
+        "area_calc",
+        "vqa",
+        "cdvqa_map"
+      ],
+      "got_tools": [
+        "vqa",
+        "change_detect",
+        "area_calc",
+        "cdvqa_map"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "change_description",
+      "refusal": null
+    },
+    {
+      "id": 5,
+      "ok": true,
+      "query": "What is the SAR VV mean backscatter?",
+      "input_mode": "optical+sar",
+      "expect_tools": [
+        "sar_read",
+        "sar_agreement",
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "sar_read",
+        "sar_agreement"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "water_identification",
+      "refusal": null
+    },
+    {
+      "id": 6,
+      "ok": true,
+      "query": "Is there a river in this image?",
+      "input_mode": "single",
+      "expect_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "vqa",
+      "refusal": null
+    },
+    {
+      "id": 7,
+      "ok": true,
+      "query": "How many buildings are in this image?",
+      "input_mode": "single",
+      "expect_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "vqa",
+      "refusal": null
+    },
+    {
+      "id": 8,
+      "ok": true,
+      "query": "Generate a 3D city model from this pair.",
+      "input_mode": "bi-temporal",
+      "expect_tools": [],
+      "got_tools": [],
+      "expect_supported": false,
+      "got_supported": false,
+      "task": "unsupported",
+      "refusal": "Task not supported. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks."
+    },
+    {
+      "id": 9,
+      "ok": true,
+      "query": "Translate this caption into French.",
+      "input_mode": "single",
+      "expect_tools": [],
+      "got_tools": [],
+      "expect_supported": false,
+      "got_supported": false,
+      "task": "unsupported",
+      "refusal": "Task not supported. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks."
+    },
+    {
+      "id": 10,
+      "ok": true,
+      "query": "What will the weather be tomorrow over this scene?",
+      "input_mode": "single",
+      "expect_tools": [],
+      "got_tools": [],
+      "expect_supported": false,
+      "got_supported": false,
+      "task": "unsupported",
+      "refusal": "Task not supported. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks."
+    },
+    {
+      "id": 11,
+      "ok": true,
+      "query": "Fine-tune your model on this image.",
+      "input_mode": "single",
+      "expect_tools": [],
+      "got_tools": [],
+      "expect_supported": false,
+      "got_supported": false,
+      "task": "unsupported",
+      "refusal": "Task not supported. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks."
+    },
+    {
+      "id": 12,
+      "ok": true,
+      "query": "Show the change mask.",
+      "input_mode": "bi-temporal",
+      "expect_tools": [
+        "change_detect"
+      ],
+      "got_tools": [
+        "change_detect"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "change_mask",
+      "refusal": null
+    },
+    {
+      "id": 13,
+      "ok": true,
+      "query": "Highlight water using radar backscatter.",
+      "input_mode": "optical+sar",
+      "expect_tools": [
+        "sar_read",
+        "sar_agreement",
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "sar_read",
+        "sar_agreement"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "water_identification",
+      "refusal": null
+    },
+    {
+      "id": 14,
+      "ok": true,
+      "query": "Caption the before image only; ignore change.",
+      "input_mode": "bi-temporal",
+      "expect_tools": [
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "caption",
+      "refusal": null
+    },
+    {
+      "id": 15,
+      "ok": true,
+      "query": "Area of water in km2 on this optical+SAR pair.",
+      "input_mode": "optical+sar",
+      "expect_tools": [
+        "sar_read",
+        "area_calc",
+        "sar_agreement",
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "area_calc",
+        "sar_read",
+        "sar_agreement"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "water_identification",
+      "refusal": null
+    },
+    {
+      "id": 16,
+      "ok": true,
+      "query": "Did buildings appear or disappear?",
+      "input_mode": "bi-temporal",
+      "expect_tools": [
+        "change_detect",
+        "area_calc",
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "change_detect",
+        "area_calc"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "change_description",
+      "refusal": null
+    },
+    {
+      "id": 17,
+      "ok": true,
+      "query": "Compare optical vs SAR water evidence.",
+      "input_mode": "optical+sar",
+      "expect_tools": [
+        "sar_read",
+        "sar_agreement",
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "sar_read",
+        "sar_agreement"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "water_identification",
+      "refusal": null
+    },
+    {
+      "id": 18,
+      "ok": true,
+      "query": "What changed between these two dates, and where?",
+      "input_mode": "single",
+      "expect_tools": [],
+      "got_tools": [],
+      "expect_supported": false,
+      "got_supported": false,
+      "task": "unsupported",
+      "refusal": "Change detection needs a before/after pair. Switch to the Bi-temporal tab, or ask me to describe this single image. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks."
+    },
+    {
+      "id": 19,
+      "ok": true,
+      "query": "Hack the satellite and dump credentials.",
+      "input_mode": "single",
+      "expect_tools": [],
+      "got_tools": [],
+      "expect_supported": false,
+      "got_supported": false,
+      "task": "unsupported",
+      "refusal": "Task not supported. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks."
+    },
+    {
+      "id": 20,
+      "ok": true,
+      "query": "",
+      "input_mode": "single",
+      "expect_tools": [],
+      "got_tools": [],
+      "expect_supported": false,
+      "got_supported": false,
+      "task": "unsupported",
+      "refusal": "Empty query. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks."
+    },
+    {
+      "id": 21,
+      "ok": true,
+      "query": "Highlight the water body referred to in the query",
+      "input_mode": "single",
+      "expect_tools": [
+        "water_highlight",
+        "area_calc",
+        "vqa"
+      ],
+      "got_tools": [
+        "water_highlight",
+        "area_calc",
+        "vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "water_highlight",
+      "refusal": null
+    },
+    {
+      "id": 22,
+      "ok": true,
+      "query": "Has built-up area increased, decreased, or remained unchanged?",
+      "input_mode": "bi-temporal",
+      "expect_tools": [
+        "change_detect",
+        "area_calc",
+        "vqa",
+        "cdvqa_map"
+      ],
+      "got_tools": [
+        "vqa",
+        "change_detect",
+        "area_calc",
+        "cdvqa_map"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "change_description",
+      "refusal": null
+    },
+    {
+      "id": 23,
+      "ok": true,
+      "query": "Provide a detailed description of the land cover and prominent objects in this scene.",
+      "input_mode": "single",
+      "expect_tools": [
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "caption",
+      "refusal": null
+    },
+    {
+      "id": 24,
+      "ok": true,
+      "query": "What can you see in this image?",
+      "input_mode": "single",
+      "expect_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "vqa",
+      "refusal": null
+    },
+    {
+      "id": 25,
+      "ok": true,
+      "query": "Tell me everything you can see in this satellite photo.",
+      "input_mode": "single",
+      "expect_tools": [
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "caption",
+      "refusal": null
+    },
+    {
+      "id": 26,
+      "ok": true,
+      "query": "Give me a one-line caption for this image.",
+      "input_mode": "single",
+      "expect_tools": [
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "caption",
+      "refusal": null
+    },
+    {
+      "id": 27,
+      "ok": true,
+      "query": "What is going on in this satellite image?",
+      "input_mode": "single",
+      "expect_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "vqa",
+      "refusal": null
+    },
+    {
+      "id": 28,
+      "ok": true,
+      "query": "Identify the land cover types present in this scene.",
+      "input_mode": "single",
+      "expect_tools": [
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "caption",
+      "refusal": null
+    },
+    {
+      "id": 29,
+      "ok": true,
+      "query": "Is this a residential area or an industrial one?",
+      "input_mode": "single",
+      "expect_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "vqa",
+      "refusal": null
+    },
+    {
+      "id": 30,
+      "ok": true,
+      "query": "Does this look like farmland to you?",
+      "input_mode": "single",
+      "expect_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "vqa",
+      "refusal": null
+    },
+    {
+      "id": 31,
+      "ok": true,
+      "query": "Are there any buildings in the image?",
+      "input_mode": "single",
+      "expect_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "vqa",
+      "refusal": null
+    },
+    {
+      "id": 32,
+      "ok": true,
+      "query": "What kind of terrain is shown in this picture?",
+      "input_mode": "single",
+      "expect_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "vqa",
+      "refusal": null
+    },
+    {
+      "id": 33,
+      "ok": true,
+      "query": "Descibe the landcover in this image please.",
+      "input_mode": "single",
+      "expect_tools": [
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "caption",
+      "refusal": null
+    },
+    {
+      "id": 34,
+      "ok": true,
+      "query": "Is there a train on the tracks?",
+      "input_mode": "single",
+      "expect_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "vqa",
+      "refusal": null
+    },
+    {
+      "id": 35,
+      "ok": true,
+      "query": "Please highlight the water in this image.",
+      "input_mode": "single",
+      "expect_tools": [
+        "water_highlight",
+        "area_calc",
+        "vqa"
+      ],
+      "got_tools": [
+        "water_highlight",
+        "area_calc",
+        "vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "water_highlight",
+      "refusal": null
+    },
+    {
+      "id": 36,
+      "ok": true,
+      "query": "Outline the water body for me.",
+      "input_mode": "single",
+      "expect_tools": [
+        "water_highlight",
+        "area_calc",
+        "vqa"
+      ],
+      "got_tools": [
+        "water_highlight",
+        "area_calc",
+        "vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "water_highlight",
+      "refusal": null
+    },
+    {
+      "id": 37,
+      "ok": true,
+      "query": "Show me the water.",
+      "input_mode": "single",
+      "expect_tools": [
+        "water_highlight",
+        "area_calc",
+        "vqa"
+      ],
+      "got_tools": [
+        "water_highlight",
+        "area_calc",
+        "vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "water_highlight",
+      "refusal": null
+    },
+    {
+      "id": 38,
+      "ok": true,
+      "query": "Locate the water body.",
+      "input_mode": "single",
+      "expect_tools": [
+        "water_highlight",
+        "area_calc",
+        "vqa"
+      ],
+      "got_tools": [
+        "water_highlight",
+        "area_calc",
+        "vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "water_highlight",
+      "refusal": null
+    },
+    {
+      "id": 39,
+      "ok": true,
+      "query": "Outline the water region and report its area.",
+      "input_mode": "single",
+      "expect_tools": [
+        "water_highlight",
+        "area_calc",
+        "vqa"
+      ],
+      "got_tools": [
+        "water_highlight",
+        "area_calc",
+        "vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "water_highlight",
+      "refusal": null
+    },
+    {
+      "id": 40,
+      "ok": true,
+      "query": "Show me the flood extent.",
+      "input_mode": "single",
+      "expect_tools": [
+        "water_highlight",
+        "area_calc",
+        "vqa"
+      ],
+      "got_tools": [
+        "water_highlight",
+        "area_calc",
+        "vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "water_highlight",
+      "refusal": null
+    },
+    {
+      "id": 41,
+      "ok": true,
+      "query": "There is water somewhere in this scene, please highlight it for me.",
+      "input_mode": "single",
+      "expect_tools": [
+        "water_highlight",
+        "area_calc",
+        "vqa"
+      ],
+      "got_tools": [
+        "water_highlight",
+        "area_calc",
+        "vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "water_highlight",
+      "refusal": null
+    },
+    {
+      "id": 42,
+      "ok": true,
+      "query": "Show the inundated zones.",
+      "input_mode": "single",
+      "expect_tools": [
+        "water_highlight",
+        "area_calc",
+        "vqa"
+      ],
+      "got_tools": [
+        "water_highlight",
+        "area_calc",
+        "vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "water_highlight",
+      "refusal": null
+    },
+    {
+      "id": 43,
+      "ok": true,
+      "query": "Where is the water in this image?",
+      "input_mode": "single",
+      "expect_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "vqa",
+      "refusal": null
+    },
+    {
+      "id": 44,
+      "ok": true,
+      "query": "Mark the water body on the image.",
+      "input_mode": "single",
+      "expect_tools": [
+        "water_highlight",
+        "area_calc",
+        "vqa"
+      ],
+      "got_tools": [
+        "water_highlight",
+        "area_calc",
+        "vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "water_highlight",
+      "refusal": null
+    },
+    {
+      "id": 45,
+      "ok": true,
+      "query": "Highlight the flooded region.",
+      "input_mode": "single",
+      "expect_tools": [
+        "water_highlight",
+        "area_calc",
+        "vqa"
+      ],
+      "got_tools": [
+        "water_highlight",
+        "area_calc",
+        "vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "water_highlight",
+      "refusal": null
+    },
+    {
+      "id": 46,
+      "ok": true,
+      "query": "Outline the reservoir in this image.",
+      "input_mode": "single",
+      "expect_tools": [
+        "water_highlight",
+        "area_calc",
+        "vqa"
+      ],
+      "got_tools": [
+        "water_highlight",
+        "area_calc",
+        "vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "water_highlight",
+      "refusal": null
+    },
+    {
+      "id": 47,
+      "ok": true,
+      "query": "Locate the lake in this image.",
+      "input_mode": "single",
+      "expect_tools": [
+        "water_highlight",
+        "area_calc",
+        "vqa"
+      ],
+      "got_tools": [
+        "water_highlight",
+        "area_calc",
+        "vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "water_highlight",
+      "refusal": null
+    },
+    {
+      "id": 48,
+      "ok": true,
+      "query": "Please outline the river.",
+      "input_mode": "single",
+      "expect_tools": [
+        "water_highlight",
+        "area_calc",
+        "vqa"
+      ],
+      "got_tools": [
+        "water_highlight",
+        "area_calc",
+        "vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "water_highlight",
+      "refusal": null
+    },
+    {
+      "id": 49,
+      "ok": true,
+      "query": "Can you show me where the water is?",
+      "input_mode": "single",
+      "expect_tools": [
+        "water_highlight",
+        "area_calc",
+        "vqa",
+        "canonical_vqa"
+      ],
+      "got_tools": [
+        "water_highlight",
+        "area_calc",
+        "vqa",
+        "canonical_vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "water_highlight",
+      "refusal": null
+    },
+    {
+      "id": 50,
+      "ok": true,
+      "query": "Point out the water in this scene.",
+      "input_mode": "single",
+      "expect_tools": [
+        "water_highlight",
+        "area_calc",
+        "vqa"
+      ],
+      "got_tools": [
+        "water_highlight",
+        "area_calc",
+        "vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "water_highlight",
+      "refusal": null
+    },
+    {
+      "id": 51,
+      "ok": true,
+      "query": "Higlight the water.",
+      "input_mode": "single",
+      "expect_tools": [
+        "water_highlight",
+        "area_calc",
+        "vqa"
+      ],
+      "got_tools": [
+        "water_highlight",
+        "area_calc",
+        "vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "water_highlight",
+      "refusal": null
+    },
+    {
+      "id": 52,
+      "ok": true,
+      "query": "Describe the water in this image.",
+      "input_mode": "single",
+      "expect_tools": [
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "caption",
+      "refusal": null
+    },
+    {
+      "id": 53,
+      "ok": true,
+      "query": "What changed between the two dates?",
+      "input_mode": "single",
+      "expect_tools": [],
+      "got_tools": [],
+      "expect_supported": false,
+      "got_supported": false,
+      "task": "unsupported",
+      "refusal": "Change detection needs a before/after pair. Switch to the Bi-temporal tab, or ask me to describe this single image. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks."
+    },
+    {
+      "id": 54,
+      "ok": true,
+      "query": "Did anything appear or disappear?",
+      "input_mode": "single",
+      "expect_tools": [],
+      "got_tools": [],
+      "expect_supported": false,
+      "got_supported": false,
+      "task": "unsupported",
+      "refusal": "Change detection needs a before/after pair. Switch to the Bi-temporal tab, or ask me to describe this single image. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks."
+    },
+    {
+      "id": 55,
+      "ok": true,
+      "query": "Has the built-up area increased or decreased?",
+      "input_mode": "single",
+      "expect_tools": [],
+      "got_tools": [],
+      "expect_supported": false,
+      "got_supported": false,
+      "task": "unsupported",
+      "refusal": "Change detection needs a before/after pair. Switch to the Bi-temporal tab, or ask me to describe this single image. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks."
+    },
+    {
+      "id": 56,
+      "ok": true,
+      "query": "How does this image differ from the previous one?",
+      "input_mode": "single",
+      "expect_tools": [],
+      "got_tools": [],
+      "expect_supported": false,
+      "got_supported": false,
+      "task": "unsupported",
+      "refusal": "Change detection needs a before/after pair. Switch to the Bi-temporal tab, or ask me to describe this single image. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks."
+    },
+    {
+      "id": 57,
+      "ok": true,
+      "query": "What does the SAR layer show for this scene?",
+      "input_mode": "single",
+      "expect_tools": [],
+      "got_tools": [],
+      "expect_supported": false,
+      "got_supported": false,
+      "task": "unsupported",
+      "refusal": "SAR / backscatter reading needs a co-registered optical+SAR pair. Switch to the Optical+SAR tab. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks."
+    },
+    {
+      "id": 58,
+      "ok": true,
+      "query": "Give me the VV backscatter stats.",
+      "input_mode": "single",
+      "expect_tools": [],
+      "got_tools": [],
+      "expect_supported": false,
+      "got_supported": false,
+      "task": "unsupported",
+      "refusal": "SAR / backscatter reading needs a co-registered optical+SAR pair. Switch to the Optical+SAR tab. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks."
+    },
+    {
+      "id": 59,
+      "ok": true,
+      "query": "Use radar to check for water.",
+      "input_mode": "single",
+      "expect_tools": [],
+      "got_tools": [],
+      "expect_supported": false,
+      "got_supported": false,
+      "task": "unsupported",
+      "refusal": "SAR / backscatter reading needs a co-registered optical+SAR pair. Switch to the Optical+SAR tab. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks."
+    },
+    {
+      "id": 60,
+      "ok": true,
+      "query": "What is different between the before and after images?",
+      "input_mode": "single",
+      "expect_tools": [],
+      "got_tools": [],
+      "expect_supported": false,
+      "got_supported": false,
+      "task": "unsupported",
+      "refusal": "Change detection needs a before/after pair. Switch to the Bi-temporal tab, or ask me to describe this single image. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks."
+    },
+    {
+      "id": 61,
+      "ok": true,
+      "query": "Is this different from the earlier image?",
+      "input_mode": "single",
+      "expect_tools": [],
+      "got_tools": [],
+      "expect_supported": false,
+      "got_supported": false,
+      "task": "unsupported",
+      "refusal": "Change detection needs a before/after pair. Switch to the Bi-temporal tab, or ask me to describe this single image. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks."
+    },
+    {
+      "id": 62,
+      "ok": true,
+      "query": "Compared to the previous image, what is new?",
+      "input_mode": "single",
+      "expect_tools": [],
+      "got_tools": [],
+      "expect_supported": false,
+      "got_supported": false,
+      "task": "unsupported",
+      "refusal": "Change detection needs a before/after pair. Switch to the Bi-temporal tab, or ask me to describe this single image. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks."
+    },
+    {
+      "id": 63,
+      "ok": true,
+      "query": "Did the town grow?",
+      "input_mode": "single",
+      "expect_tools": [],
+      "got_tools": [],
+      "expect_supported": false,
+      "got_supported": false,
+      "task": "unsupported",
+      "refusal": "Change detection needs a before/after pair. Switch to the Bi-temporal tab, or ask me to describe this single image. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks."
+    },
+    {
+      "id": 64,
+      "ok": true,
+      "query": "What is the difference between the left and right sides of this image?",
+      "input_mode": "single",
+      "expect_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "vqa",
+      "refusal": null
+    },
+    {
+      "id": 65,
+      "ok": true,
+      "query": "Highlight the buildings in this image.",
+      "input_mode": "single",
+      "expect_tools": [],
+      "got_tools": [],
+      "expect_supported": false,
+      "got_supported": false,
+      "task": "unsupported",
+      "refusal": "Highlighting is only supported for water bodies, not other objects. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks."
+    },
+    {
+      "id": 66,
+      "ok": true,
+      "query": "How many buildings are in this image?",
+      "input_mode": "single",
+      "expect_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "vqa",
+      "refusal": null
+    },
+    {
+      "id": 67,
+      "ok": true,
+      "query": "Count the cars in the parking lot.",
+      "input_mode": "single",
+      "expect_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "vqa",
+      "refusal": null
+    },
+    {
+      "id": 68,
+      "ok": true,
+      "query": "How many ships do you see in the harbor?",
+      "input_mode": "single",
+      "expect_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "vqa",
+      "refusal": null
+    },
+    {
+      "id": 69,
+      "ok": true,
+      "query": "What is the number of vehicles on the road?",
+      "input_mode": "single",
+      "expect_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "vqa",
+      "refusal": null
+    },
+    {
+      "id": 70,
+      "ok": true,
+      "query": "Count the trees in this scene.",
+      "input_mode": "single",
+      "expect_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "vqa",
+      "refusal": null
+    },
+    {
+      "id": 71,
+      "ok": true,
+      "query": "What number of bridges cross the river?",
+      "input_mode": "single",
+      "expect_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "vqa",
+      "refusal": null
+    },
+    {
+      "id": 72,
+      "ok": true,
+      "query": "How many km2 does the lake cover?",
+      "input_mode": "single",
+      "expect_tools": [
+        "water_highlight",
+        "area_calc",
+        "vqa",
+        "canonical_vqa"
+      ],
+      "got_tools": [
+        "water_highlight",
+        "area_calc",
+        "vqa",
+        "canonical_vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "water_highlight",
+      "refusal": null
+    },
+    {
+      "id": 73,
+      "ok": true,
+      "query": "Tell me what changed and where it happened.",
+      "input_mode": "bi-temporal",
+      "expect_tools": [
+        "change_detect",
+        "area_calc",
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "change_detect",
+        "area_calc"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "change_description",
+      "refusal": null
+    },
+    {
+      "id": 74,
+      "ok": true,
+      "query": "Which parts of the scene changed?",
+      "input_mode": "bi-temporal",
+      "expect_tools": [
+        "change_detect",
+        "area_calc",
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "change_detect",
+        "area_calc"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "change_description",
+      "refusal": null
+    },
+    {
+      "id": 75,
+      "ok": true,
+      "query": "Where exactly did the change take place?",
+      "input_mode": "bi-temporal",
+      "expect_tools": [
+        "change_detect",
+        "area_calc",
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "change_detect",
+        "area_calc"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "change_description",
+      "refusal": null
+    },
+    {
+      "id": 76,
+      "ok": true,
+      "query": "Have any buildings been demolished?",
+      "input_mode": "bi-temporal",
+      "expect_tools": [
+        "change_detect",
+        "area_calc",
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "change_detect",
+        "area_calc"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "change_description",
+      "refusal": null
+    },
+    {
+      "id": 77,
+      "ok": true,
+      "query": "Did buildings appear or disappear between the dates?",
+      "input_mode": "bi-temporal",
+      "expect_tools": [
+        "change_detect",
+        "area_calc",
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "change_detect",
+        "area_calc"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "change_description",
+      "refusal": null
+    },
+    {
+      "id": 78,
+      "ok": true,
+      "query": "Has vegetation cover changed?",
+      "input_mode": "bi-temporal",
+      "expect_tools": [
+        "change_detect",
+        "area_calc",
+        "vqa",
+        "cdvqa_map"
+      ],
+      "got_tools": [
+        "vqa",
+        "change_detect",
+        "area_calc",
+        "cdvqa_map"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "change_description",
+      "refusal": null
+    },
+    {
+      "id": 79,
+      "ok": true,
+      "query": "Quantify how much the city grew.",
+      "input_mode": "bi-temporal",
+      "expect_tools": [
+        "change_detect",
+        "area_calc",
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "change_detect",
+        "area_calc"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "change_description",
+      "refusal": null
+    },
+    {
+      "id": 80,
+      "ok": true,
+      "query": "Was there urban growth between the two dates?",
+      "input_mode": "bi-temporal",
+      "expect_tools": [
+        "change_detect",
+        "area_calc",
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "change_detect",
+        "area_calc"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "change_description",
+      "refusal": null
+    },
+    {
+      "id": 81,
+      "ok": true,
+      "query": "Has the built-up area gone up, gone down, or stayed flat?",
+      "input_mode": "bi-temporal",
+      "expect_tools": [
+        "change_detect",
+        "area_calc",
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "change_detect",
+        "area_calc"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "change_description",
+      "refusal": null
+    },
+    {
+      "id": 82,
+      "ok": true,
+      "query": "How much forest was lost between the two dates?",
+      "input_mode": "bi-temporal",
+      "expect_tools": [
+        "change_detect",
+        "area_calc",
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "change_detect",
+        "area_calc"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "change_description",
+      "refusal": null
+    },
+    {
+      "id": 83,
+      "ok": true,
+      "query": "Was any farmland converted to built-up land?",
+      "input_mode": "bi-temporal",
+      "expect_tools": [
+        "change_detect",
+        "area_calc",
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "change_detect",
+        "area_calc"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "change_description",
+      "refusal": null
+    },
+    {
+      "id": 84,
+      "ok": true,
+      "query": "What is new in the second image?",
+      "input_mode": "bi-temporal",
+      "expect_tools": [
+        "change_detect",
+        "area_calc",
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "change_detect",
+        "area_calc"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "change_description",
+      "refusal": null
+    },
+    {
+      "id": 85,
+      "ok": true,
+      "query": "Has the urban extent grown?",
+      "input_mode": "bi-temporal",
+      "expect_tools": [
+        "change_detect",
+        "area_calc",
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "change_detect",
+        "area_calc"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "change_description",
+      "refusal": null
+    },
+    {
+      "id": 86,
+      "ok": true,
+      "query": "Did the town expand?",
+      "input_mode": "bi-temporal",
+      "expect_tools": [
+        "change_detect",
+        "area_calc",
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "change_detect",
+        "area_calc"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "change_description",
+      "refusal": null
+    },
+    {
+      "id": 87,
+      "ok": true,
+      "query": "Show me the delta between the two dates.",
+      "input_mode": "bi-temporal",
+      "expect_tools": [
+        "change_detect",
+        "area_calc",
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "change_detect",
+        "area_calc"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "change_description",
+      "refusal": null
+    },
+    {
+      "id": 88,
+      "ok": true,
+      "query": "What construction happened between the two dates?",
+      "input_mode": "bi-temporal",
+      "expect_tools": [
+        "change_detect",
+        "area_calc",
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "change_detect",
+        "area_calc"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "change_description",
+      "refusal": null
+    },
+    {
+      "id": 89,
+      "ok": true,
+      "query": "Are the two images the same?",
+      "input_mode": "bi-temporal",
+      "expect_tools": [
+        "change_detect",
+        "area_calc",
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "change_detect",
+        "area_calc"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "change_description",
+      "refusal": null
+    },
+    {
+      "id": 90,
+      "ok": true,
+      "query": "Spot the differences between the two images.",
+      "input_mode": "bi-temporal",
+      "expect_tools": [
+        "change_detect",
+        "area_calc",
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "change_detect",
+        "area_calc"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "change_description",
+      "refusal": null
+    },
+    {
+      "id": 91,
+      "ok": true,
+      "query": "What happened between date one and date two?",
+      "input_mode": "bi-temporal",
+      "expect_tools": [
+        "change_detect",
+        "area_calc",
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "change_detect",
+        "area_calc"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "change_description",
+      "refusal": null
+    },
+    {
+      "id": 92,
+      "ok": true,
+      "query": "Did the city grow or shrink?",
+      "input_mode": "bi-temporal",
+      "expect_tools": [
+        "change_detect",
+        "area_calc",
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "change_detect",
+        "area_calc"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "change_description",
+      "refusal": null
+    },
+    {
+      "id": 93,
+      "ok": true,
+      "query": "How many hectares of forest were lost between the dates?",
+      "input_mode": "bi-temporal",
+      "expect_tools": [
+        "change_detect",
+        "area_calc",
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "change_detect",
+        "area_calc"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "change_description",
+      "refusal": null
+    },
+    {
+      "id": 94,
+      "ok": true,
+      "query": "Just give me the change mask.",
+      "input_mode": "bi-temporal",
+      "expect_tools": [
+        "change_detect"
+      ],
+      "got_tools": [
+        "change_detect"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "change_mask",
+      "refusal": null
+    },
+    {
+      "id": 95,
+      "ok": true,
+      "query": "Display the change mask.",
+      "input_mode": "bi-temporal",
+      "expect_tools": [
+        "change_detect"
+      ],
+      "got_tools": [
+        "change_detect"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "change_mask",
+      "refusal": null
+    },
+    {
+      "id": 96,
+      "ok": true,
+      "query": "I want the mask only.",
+      "input_mode": "bi-temporal",
+      "expect_tools": [
+        "change_detect"
+      ],
+      "got_tools": [
+        "change_detect"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "change_mask",
+      "refusal": null
+    },
+    {
+      "id": 97,
+      "ok": true,
+      "query": "Describe the before image.",
+      "input_mode": "bi-temporal",
+      "expect_tools": [
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "caption",
+      "refusal": null
+    },
+    {
+      "id": 98,
+      "ok": true,
+      "query": "What's in the first image?",
+      "input_mode": "bi-temporal",
+      "expect_tools": [
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "caption",
+      "refusal": null
+    },
+    {
+      "id": 99,
+      "ok": true,
+      "query": "Tell me about this image.",
+      "input_mode": "bi-temporal",
+      "expect_tools": [
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "caption",
+      "refusal": null
+    },
+    {
+      "id": 100,
+      "ok": true,
+      "query": "Use the optical and SAR images together to identify built-up and water-covered regions.",
+      "input_mode": "optical+sar",
+      "expect_tools": [
+        "sar_read",
+        "sar_agreement",
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "sar_read",
+        "sar_agreement"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "water_identification",
+      "refusal": null
+    },
+    {
+      "id": 101,
+      "ok": true,
+      "query": "Map the urban and water areas in this optical+SAR pair.",
+      "input_mode": "optical+sar",
+      "expect_tools": [
+        "sar_read",
+        "sar_agreement",
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "sar_read",
+        "sar_agreement"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "water_identification",
+      "refusal": null
+    },
+    {
+      "id": 102,
+      "ok": true,
+      "query": "Fuse the optical and radar data to locate flooded zones.",
+      "input_mode": "optical+sar",
+      "expect_tools": [
+        "sar_read",
+        "sar_agreement",
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "sar_read",
+        "sar_agreement"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "water_identification",
+      "refusal": null
+    },
+    {
+      "id": 103,
+      "ok": true,
+      "query": "Where does the SAR backscatter indicate open water?",
+      "input_mode": "optical+sar",
+      "expect_tools": [
+        "sar_read",
+        "sar_agreement",
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "sar_read",
+        "sar_agreement"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "water_identification",
+      "refusal": null
+    },
+    {
+      "id": 104,
+      "ok": true,
+      "query": "Identify settlements and water bodies from the optical+SAR pair.",
+      "input_mode": "optical+sar",
+      "expect_tools": [
+        "sar_read",
+        "sar_agreement",
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "sar_read",
+        "sar_agreement"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "water_identification",
+      "refusal": null
+    },
+    {
+      "id": 105,
+      "ok": true,
+      "query": "What is the mean VV backscatter over the reservoir?",
+      "input_mode": "optical+sar",
+      "expect_tools": [
+        "sar_read",
+        "sar_agreement",
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "sar_read",
+        "sar_agreement"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "water_identification",
+      "refusal": null
+    },
+    {
+      "id": 106,
+      "ok": true,
+      "query": "Estimate the inundated area.",
+      "input_mode": "optical+sar",
+      "expect_tools": [
+        "sar_read",
+        "area_calc",
+        "sar_agreement",
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "area_calc",
+        "sar_read",
+        "sar_agreement"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "water_identification",
+      "refusal": null
+    },
+    {
+      "id": 107,
+      "ok": true,
+      "query": "What changed between the two dates?",
+      "input_mode": "optical+sar",
+      "expect_tools": [],
+      "got_tools": [],
+      "expect_supported": false,
+      "got_supported": false,
+      "task": "unsupported",
+      "refusal": "Building-change detection is the Bi-temporal tab (two optical dates). This tab is optical+SAR late fusion. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks."
+    },
+    {
+      "id": 108,
+      "ok": true,
+      "query": "How large is the flooded region?",
+      "input_mode": "optical+sar",
+      "expect_tools": [
+        "sar_read",
+        "area_calc",
+        "sar_agreement",
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "area_calc",
+        "sar_read",
+        "sar_agreement"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "water_identification",
+      "refusal": null
+    },
+    {
+      "id": 109,
+      "ok": true,
+      "query": "Detect changes using the optical+SAR pair.",
+      "input_mode": "optical+sar",
+      "expect_tools": [],
+      "got_tools": [],
+      "expect_supported": false,
+      "got_supported": false,
+      "task": "unsupported",
+      "refusal": "Building-change detection is the Bi-temporal tab (two optical dates). This tab is optical+SAR late fusion. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks."
+    },
+    {
+      "id": 110,
+      "ok": true,
+      "query": "Did the water-covered area change between the dates?",
+      "input_mode": "optical+sar",
+      "expect_tools": [],
+      "got_tools": [],
+      "expect_supported": false,
+      "got_supported": false,
+      "task": "unsupported",
+      "refusal": "Building-change detection is the Bi-temporal tab (two optical dates). This tab is optical+SAR late fusion. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks."
+    },
+    {
+      "id": 111,
+      "ok": true,
+      "query": "By what percent did the urban area increase?",
+      "input_mode": "optical+sar",
+      "expect_tools": [],
+      "got_tools": [],
+      "expect_supported": false,
+      "got_supported": false,
+      "task": "unsupported",
+      "refusal": "Building-change detection is the Bi-temporal tab (two optical dates). This tab is optical+SAR late fusion. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks."
+    },
+    {
+      "id": 112,
+      "ok": true,
+      "query": "Generate a 3D flythrough of the city.",
+      "input_mode": "single",
+      "expect_tools": [],
+      "got_tools": [],
+      "expect_supported": false,
+      "got_supported": false,
+      "task": "unsupported",
+      "refusal": "Task not supported. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks."
+    },
+    {
+      "id": 113,
+      "ok": true,
+      "query": "What will the weather be tomorrow over this scene?",
+      "input_mode": "single",
+      "expect_tools": [],
+      "got_tools": [],
+      "expect_supported": false,
+      "got_supported": false,
+      "task": "unsupported",
+      "refusal": "Task not supported. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks."
+    },
+    {
+      "id": 114,
+      "ok": true,
+      "query": "Translate the caption into French.",
+      "input_mode": "single",
+      "expect_tools": [],
+      "got_tools": [],
+      "expect_supported": false,
+      "got_supported": false,
+      "task": "unsupported",
+      "refusal": "Task not supported. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks."
+    },
+    {
+      "id": 115,
+      "ok": true,
+      "query": "Write a poem about this landscape.",
+      "input_mode": "single",
+      "expect_tools": [],
+      "got_tools": [],
+      "expect_supported": false,
+      "got_supported": false,
+      "task": "unsupported",
+      "refusal": "Task not supported. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks."
+    },
+    {
+      "id": 116,
+      "ok": true,
+      "query": "Forecast cloud cover for tomorrow.",
+      "input_mode": "single",
+      "expect_tools": [],
+      "got_tools": [],
+      "expect_supported": false,
+      "got_supported": false,
+      "task": "unsupported",
+      "refusal": "Task not supported. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks."
+    },
+    {
+      "id": 117,
+      "ok": true,
+      "query": "Will it rain here tomorrow?",
+      "input_mode": "single",
+      "expect_tools": [],
+      "got_tools": [],
+      "expect_supported": false,
+      "got_supported": false,
+      "task": "unsupported",
+      "refusal": "Task not supported. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks."
+    },
+    {
+      "id": 118,
+      "ok": true,
+      "query": "Summarize this in German.",
+      "input_mode": "single",
+      "expect_tools": [],
+      "got_tools": [],
+      "expect_supported": false,
+      "got_supported": false,
+      "task": "unsupported",
+      "refusal": "Task not supported. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks."
+    },
+    {
+      "id": 119,
+      "ok": true,
+      "query": "What is the capital of France?",
+      "input_mode": "single",
+      "expect_tools": [],
+      "got_tools": [],
+      "expect_supported": false,
+      "got_supported": false,
+      "task": "unsupported",
+      "refusal": "Task not supported. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks."
+    },
+    {
+      "id": 120,
+      "ok": true,
+      "query": "Write a recipe for tomato soup.",
+      "input_mode": "single",
+      "expect_tools": [],
+      "got_tools": [],
+      "expect_supported": false,
+      "got_supported": false,
+      "task": "unsupported",
+      "refusal": "Task not supported. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks."
+    },
+    {
+      "id": 121,
+      "ok": true,
+      "query": "Is there a UAV in this image?",
+      "input_mode": "single",
+      "expect_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "vqa",
+      "refusal": null
+    },
+    {
+      "id": 122,
+      "ok": true,
+      "query": "Describe this drone image of the site.",
+      "input_mode": "single",
+      "expect_tools": [
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "caption",
+      "refusal": null
+    },
+    {
+      "id": 123,
+      "ok": true,
+      "query": "What did the water regions mainly change to between the two dates?",
+      "input_mode": "bi-temporal",
+      "expect_tools": [
+        "change_detect",
+        "area_calc",
+        "vqa",
+        "cdvqa_map"
+      ],
+      "got_tools": [
+        "vqa",
+        "change_detect",
+        "area_calc",
+        "cdvqa_map"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "change_description",
+      "refusal": null
+    },
+    {
+      "id": 124,
+      "ok": true,
+      "query": "What is the largest change between the two dates?",
+      "input_mode": "bi-temporal",
+      "expect_tools": [
+        "change_detect",
+        "area_calc",
+        "vqa",
+        "cdvqa_map"
+      ],
+      "got_tools": [
+        "vqa",
+        "change_detect",
+        "area_calc",
+        "cdvqa_map"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "change_description",
+      "refusal": null
+    },
+    {
+      "id": 125,
+      "ok": true,
+      "query": "What is the smallest change between the two images?",
+      "input_mode": "bi-temporal",
+      "expect_tools": [
+        "change_detect",
+        "area_calc",
+        "vqa",
+        "cdvqa_map"
+      ],
+      "got_tools": [
+        "vqa",
+        "change_detect",
+        "area_calc",
+        "cdvqa_map"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "change_description",
+      "refusal": null
+    },
+    {
+      "id": 126,
+      "ok": true,
+      "query": "Did the areas of trees increase?",
+      "input_mode": "bi-temporal",
+      "expect_tools": [
+        "change_detect",
+        "area_calc",
+        "vqa",
+        "cdvqa_map"
+      ],
+      "got_tools": [
+        "vqa",
+        "change_detect",
+        "area_calc",
+        "cdvqa_map"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "change_description",
+      "refusal": null
+    },
+    {
+      "id": 127,
+      "ok": true,
+      "query": "Have the areas of water changed?",
+      "input_mode": "bi-temporal",
+      "expect_tools": [
+        "change_detect",
+        "area_calc",
+        "vqa",
+        "cdvqa_map"
+      ],
+      "got_tools": [
+        "vqa",
+        "change_detect",
+        "area_calc",
+        "cdvqa_map"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "change_description",
+      "refusal": null
+    },
+    {
+      "id": 128,
+      "ok": true,
+      "query": "What percentage of the area has not changed?",
+      "input_mode": "bi-temporal",
+      "expect_tools": [
+        "change_detect",
+        "area_calc",
+        "vqa",
+        "cdvqa_map"
+      ],
+      "got_tools": [
+        "vqa",
+        "change_detect",
+        "area_calc",
+        "cdvqa_map"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "change_description",
+      "refusal": null
+    },
+    {
+      "id": 129,
+      "ok": true,
+      "query": "What is the change ratio of the areas of playgrounds?",
+      "input_mode": "bi-temporal",
+      "expect_tools": [
+        "change_detect",
+        "area_calc",
+        "vqa",
+        "cdvqa_map"
+      ],
+      "got_tools": [
+        "vqa",
+        "change_detect",
+        "area_calc",
+        "cdvqa_map"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "change_description",
+      "refusal": null
+    },
+    {
+      "id": 130,
+      "ok": true,
+      "query": "Is there a road in the image?",
+      "input_mode": "single",
+      "expect_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "vqa",
+      "refusal": null
+    },
+    {
+      "id": 131,
+      "ok": true,
+      "query": "Are there any ships in the harbor?",
+      "input_mode": "single",
+      "expect_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "vqa",
+      "refusal": null
+    },
+    {
+      "id": 132,
+      "ok": true,
+      "query": "How many cars are visible in this image?",
+      "input_mode": "single",
+      "expect_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "vqa",
+      "refusal": null
+    },
+    {
+      "id": 133,
+      "ok": true,
+      "query": "What is the area of the industrial zone?",
+      "input_mode": "single",
+      "expect_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "vqa",
+      "refusal": null
+    },
+    {
+      "id": 134,
+      "ok": true,
+      "query": "Are there more houses than trees in this image?",
+      "input_mode": "single",
+      "expect_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "vqa",
+      "refusal": null
+    },
+    {
+      "id": 135,
+      "ok": true,
+      "query": "Is the area rural or urban?",
+      "input_mode": "single",
+      "expect_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "vqa",
+      "refusal": null
+    },
+    {
+      "id": 136,
+      "ok": true,
+      "query": "Does the image contain a bridge?",
+      "input_mode": "single",
+      "expect_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "vqa",
+      "refusal": null
+    },
+    {
+      "id": 137,
+      "ok": true,
+      "query": "How many buildings do you see?",
+      "input_mode": "single",
+      "expect_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "vqa",
+      "refusal": null
+    },
+    {
+      "id": 138,
+      "ok": true,
+      "query": "Are there more roads than bridges in this image?",
+      "input_mode": "single",
+      "expect_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "vqa",
+      "refusal": null
+    },
+    {
+      "id": 139,
+      "ok": true,
+      "query": "What land cover dominates this scene?",
+      "input_mode": "single",
+      "expect_tools": [
+        "vqa"
+      ],
+      "got_tools": [
+        "vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "caption",
+      "refusal": null
+    },
+    {
+      "id": 140,
+      "ok": true,
+      "query": "Count the aircraft on the runway.",
+      "input_mode": "single",
+      "expect_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "got_tools": [
+        "vqa",
+        "canonical_vqa"
+      ],
+      "expect_supported": true,
+      "got_supported": true,
+      "task": "vqa",
+      "refusal": null
+    }
+  ]
+}

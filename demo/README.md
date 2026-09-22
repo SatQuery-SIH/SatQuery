@@ -7,8 +7,16 @@ The product. Three scenes, one planner, fully offline — this is what runs on s
 ## Setup (weights and scene PNGs are not in git)
 
 1. Put `llama-server` (llama.cpp) plus `Qwen3VL-8B-Instruct-Q4_K_M.gguf` and `mmproj-Qwen3VL-8B-Instruct-F16.gguf` under `gates/qwen3vl/`.
-2. Rebuild the three scenes from their sources: `python demo/prepare_scenes.py`
+2. Scene PNGs already live under `demo/data/` on this laptop. Rebuild from source only if those folders are missing (`python demo/prepare_scenes.py`).
 3. Install the UI requirements: `python -m pip install -r demo/requirements.txt`
+
+## Uploads (hidden-set path)
+
+Empty file boxes on each tab use the **prepared** scenes (16–17 rehearsal). Attach GeoTIFF/PNG/JPEG to run tools on those files instead:
+
+- GSD is read from the GeoTIFF geotransform. PNG/JPEG uploads **do not** inherit LEVIR 0.5 m or Sentinel-2 10 m; m² is withheld if GSD is unknown.
+- Bi-temporal uploads always run change detection; they never reuse `demo/data/scene2/pred_mask.png`.
+- Cached trapdoor (`--mode cached`) is prepared scenes only.
 
 ## Run
 

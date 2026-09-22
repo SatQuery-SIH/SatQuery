@@ -22,9 +22,9 @@ def main() -> None:
     # Predict on each of the 3 run buttons. Endpoint names vary by Gradio version;
     # try numbered fns then named.
     calls = [
-        ("scene1", "/scene1", ["Describe the land cover and major objects."]),
-        ("scene2", "/scene2", ["What changed between these two dates, and where?"]),
-        ("scene3", "/scene3", ["Identify water-covered regions."]),
+        ("scene1", "/scene1", ["Describe the land cover and major objects.", None]),
+        ("scene2", "/scene2", ["What changed between these two dates, and where?", None, None]),
+        ("scene3", "/scene3", ["Identify water-covered regions.", None, None]),
     ]
     alts = {
         "scene1": ["/lambda", "/predict"],

@@ -24,28 +24,51 @@ class HardenTests(unittest.TestCase):
         self.assertIn("20470.5", card)
         path = write_report(trace)
         text = path.read_text(encoding="utf-8")
-        self.assertIn("INGEST PREVIEW / VALIDATION", text)
+        self.assertIn("Built-in examples below", text)
         self.assertIn("changed_pixels", text)
         self.assertIn(trace["query"], text)
         self.assertTrue(path.suffix == ".md")
+        import re
 
-    def test_tiff_pil_fallback(self) -> None:
+        m = re.search(r"trace_sha256: `([0-9a-f]{64})`", text)
+        self.assertIsNotNone(m, text[:500])
+        from report import tool_outputs_sha256
+
+        self.assertEqual(m.group(1), tool_outputs_sha256(trace.get("tool_outputs") or {}))
+
+    def test_tiff_gsd_and_preview(self) -> None:
+        from ingest import write_test_geotiff, read_gsd
         from report import ingest_preview
+        import numpy as np
 
-        tmp = Path(tempfile.mkdtemp()) / "tiny.tif"
-        Image.new("RGB", (32, 24), (10, 80, 30)).save(tmp, format="TIFF")
-        im, note = ingest_preview(tmp)
+        tmp = Path(tempfile.mkdtemp())
+        rgb = np.zeros((24, 32, 3), dtype=np.uint8)
+        rgb[..., 1] = 80
+        tif = write_test_geotiff(tmp / "tiny.tif", rgb, 0.5, 0.5, geographic=False)
+        gsd = read_gsd(tif)
+        self.assertAlmostEqual(gsd["gsd_m"], 0.5, places=4)
+        self.assertEqual(gsd["source"], "geotransform")
+        im, note = ingest_preview(tif)
         self.assertIsNotNone(im)
         self.assertEqual(im.size, (32, 24))
-        self.assertIn("INGEST PREVIEW / VALIDATION", note)
-        self.assertIn("cartosat", note.lower())
+        self.assertIn("GSD", note)
+
+    def test_png_upload_does_not_invent_gsd(self) -> None:
+        from ingest import read_gsd
+
+        tmp = Path(tempfile.mkdtemp()) / "x.png"
+        Image.new("RGB", (16, 16), (10, 80, 30)).save(tmp)
+        gsd = read_gsd(tmp)
+        self.assertIsNone(gsd["gsd_m"])
+        self.assertEqual(gsd["source"], "none")
 
     def test_banner_and_serve_base(self) -> None:
         import app as demo_app
 
         demo_app.MODE = "live"
         b = demo_app._banner()
-        self.assertIn("LIVE = Qwen3-VL-8B zero-shot, adapter off", b)
+        self.assertIn("Live demo", b)
+        self.assertIn("measurement tools", b)
         ps1 = (DEMO / "serve.ps1").read_text(encoding="utf-8")
         self.assertIn("Qwen3VL-8B-Instruct-Q4_K_M.gguf", ps1)
         self.assertIn("mmproj-Qwen3VL-8B-Instruct-F16.gguf", ps1)
@@ -56,9 +79,60 @@ class HardenTests(unittest.TestCase):
     def test_buildings_refused(self) -> None:
         from planner import plan
 
+        # WIRE-8091: single-image counts route to the canonical_vqa seat
+        # (RSVQA count family); the refusal now applies to modes with no
+        # counting seat, e.g. bi-temporal.
         p = plan("How many buildings are in this image?", "single")
-        self.assertFalse(p["supported"])
-        self.assertIn("count", (p["refusal"] or "").lower())
+        self.assertTrue(p["supported"])
+        self.assertIn("canonical_vqa", p["tools"])
+        bt = plan("How many buildings are in this image?", "bi-temporal")
+        self.assertFalse(bt["supported"])
+        self.assertIn("count", (bt["refusal"] or "").lower())
+
+    def test_prepared_scene2_does_not_rewrite_pred_mask(self) -> None:
+        from pipeline import run_query
+
+        pred = DEMO / "data" / "scene2" / "pred_mask.png"
+        mtime_before = pred.stat().st_mtime
+        size_before = pred.stat().st_size
+        trace = run_query(
+            "Has built-up area increased, decreased, or remained unchanged?",
+            "bi-temporal",
+            scene=2,
+            live=False,
+            cd_prefer="classical",
+        )
+        self.assertEqual(pred.stat().st_mtime, mtime_before)
+        self.assertEqual(pred.stat().st_size, size_before)
+        cd = (trace.get("tool_outputs") or {}).get("change_detect") or {}
+        self.assertEqual(cd.get("built_up_direction"), "not_determined")
+        self.assertIn(
+            cd.get("radiometric_label"),
+            {"brighter_after", "darker_after", "similar", "unknown"},
+        )
+        self.assertNotIn("direction", cd)
+        self.assertIn("direction_provenance", cd)
+
+    def test_scene1_highlight_writes_overlay_not_primary(self) -> None:
+        from pipeline import run_query
+
+        man = json.loads((DEMO / "data" / "scene1" / "manifest.json").read_text(encoding="utf-8"))
+        primary = DEMO / "data" / "scene1" / man["primary"]
+        mtime_before = primary.stat().st_mtime
+        size_before = primary.stat().st_size
+        trace = run_query(
+            "Highlight the water body referred to in the query",
+            "single",
+            scene=1,
+            live=False,
+        )
+        self.assertEqual(trace["plan"]["tools"], ["water_highlight", "area_calc", "vqa"])
+        self.assertIn("water_highlight", trace["tool_outputs"])
+        overlay = Path(trace["overlay_path"])
+        self.assertTrue(overlay.is_file())
+        self.assertEqual(overlay.name, "water_overlay_live.png")
+        self.assertEqual(primary.stat().st_mtime, mtime_before)
+        self.assertEqual(primary.stat().st_size, size_before)
 
 
 if __name__ == "__main__":

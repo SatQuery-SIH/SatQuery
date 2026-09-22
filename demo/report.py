@@ -1,24 +1,281 @@
-"""FINALE-HARDEN-10 helpers: downloadable markdown report, TIFF ingest, measurement card.
+"""Downloadable markdown report, TIFF ingest, measurement card.
 
-Inference still uses prepared scene_paths (test_45 / VRSBench / BEN Lithuania).
-Uploads are ingest preview / validation — not the judge's Cartosat pair.
+Prepared scenes remain the default. Uploads, when attached on a tab, are
+inference inputs (see pipeline.bind_inputs) — not preview-only.
 """
 from __future__ import annotations
 
+import hashlib
 import json
+import re
 from datetime import datetime, timezone
+from decimal import Decimal, InvalidOperation, ROUND_HALF_UP
 from pathlib import Path
 from typing import Any
 
 from PIL import Image
 
+from ingest import preview_file
+from pipeline import PREPARED_NOTE
+from tools import display_name_for_rung
+
 DEMO = Path(__file__).resolve().parent
 REPORTS = DEMO / "reports"
-HONESTY = (
-    "INGEST PREVIEW / VALIDATION — not your Cartosat pair. "
-    "Inference still uses prepared demo assets via scene_paths "
-    "(Scene 2 = LEVIR-CD test_45). Uploaded GeoTIFF/PNG is shown here only."
+HONESTY = PREPARED_NOTE
+
+
+def tool_outputs_sha256(tool_outputs: Any) -> str:
+    blob = json.dumps(tool_outputs if tool_outputs is not None else {}, sort_keys=True, default=str)
+    return hashlib.sha256(blob.encode("utf-8")).hexdigest()
+
+
+_BANNED_SDWI = (
+    "Synthetic Dual-Wideband",
+    "Synthetic Dual Wideband",
+    "Dual-Wideband Index",
 )
+_NUM_RE = re.compile(r"(?<![A-Za-z_])[-+]?(?:\d+\.\d+|\d+)(?:[eE][-+]?\d+)?")
+
+
+def _frac_places(num: str) -> int | None:
+    if "." not in num:
+        return None
+    body = num.lstrip("+-")
+    if "e" in body.lower():
+        return None
+    return len(body.split(".", 1)[1])
+
+
+def _decimal_compatible(tok: str, dump_tok: str) -> bool:
+    """True if tok is a decimal prefix or same-precision rounding of dump_tok.
+
+    Both tokens must contain `.`. Integers never match floats this way
+    (so dump `0` from `count(mask>0)` cannot excuse narration `0.99`).
+    """
+    if "." not in tok or "." not in dump_tok:
+        return False
+    if dump_tok.startswith(tok) or tok.startswith(dump_tok):
+        return True
+    places = _frac_places(tok)
+    if places is None or places < 1:
+        return False
+    try:
+        q = Decimal(1).scaleb(-places)
+        rounded = Decimal(dump_tok).quantize(q, rounding=ROUND_HALF_UP)
+        return rounded == Decimal(tok)
+    except (InvalidOperation, ValueError):
+        return False
+
+
+def _percent_compatible(tok: str, dump_nums: list[str]) -> bool:
+    """True if a %-marked token equals a tool value x100 at the token's own
+    displayed precision (0.1417 -> "14.17%" passes; "1.42%" / "28.3%" fail).
+    """
+    try:
+        t = Decimal(tok)
+    except InvalidOperation:
+        return False
+    places = _frac_places(tok)
+    q = Decimal(1).scaleb(-(places if places is not None else 0))
+    for d in dump_nums:
+        try:
+            if (Decimal(d) * 100).quantize(q, rounding=ROUND_HALF_UP) == t:
+                return True
+        except (InvalidOperation, ValueError):
+            continue
+    return False
+
+
+def check_narration(text: str | None, tool_json: Any) -> dict[str, Any]:
+    """CPU check: invented numbers / banned SDWI expansions. No llama-server."""
+    raw = text or ""
+    dump = json.dumps(tool_json if tool_json is not None else {}, sort_keys=True, default=str)
+    dump_nums = [m.group(0) for m in _NUM_RE.finditer(dump)]
+    # The canonical_vqa answer is narratable evidence: its number tokens are
+    # whitelisted even when formatting differs from the JSON dump (e.g. an
+    # answer of "617m2" may be narrated as "617 m2").
+    cv = {}
+    if isinstance(tool_json, dict):
+        cv = tool_json.get("canonical_vqa") or (
+            (tool_json.get("tool_outputs") or {}).get("canonical_vqa") or {}
+        )
+    for key in ("answer", "text"):
+        dump_nums.extend(
+            m.group(0) for m in _NUM_RE.finditer(str(cv.get(key) or ""))
+        )
+    issues: list[str] = []
+    low = raw.lower()
+    for phrase in _BANNED_SDWI:
+        if phrase.lower() in low:
+            issues.append(f"banned SDWI expansion: {phrase}")
+    for m in _NUM_RE.finditer(raw):
+        tok = m.group(0)
+        if re.fullmatch(r"(?:19|20)\d{2}", tok):
+            continue
+        if tok in dump or tok in dump_nums:
+            continue
+        if any(_decimal_compatible(tok, d) for d in dump_nums):
+            continue
+        tail = raw[m.end():]
+        # %-marked tokens only: a derivation check (value x100 at the token's
+        # precision), not a percent free-pass — wrong percents still flag.
+        if (
+            tail.lstrip().startswith("%")
+            or re.match(r"(?i)\s*percent\b", tail)
+        ) and _percent_compatible(tok, dump_nums):
+            continue
+        issues.append(f"invented number {tok}")
+    return {"ok": not issues, "issues": issues}
+
+
+def _rung_with_display(
+    record: dict[str, Any],
+    key: str = "rung",
+    display_key: str = "rung_display",
+) -> str:
+    """Keep the evidence key; show the human label alongside when it differs."""
+    rung = record.get(key)
+    disp = record.get(display_key) or display_name_for_rung(rung)
+    if disp and str(disp) != str(rung):
+        return f"`{rung}` ({disp})"
+    return f"`{rung}`"
+
+
+def findings_header(trace: dict[str, Any] | None) -> str:
+    """Deterministic Findings block from tool_outputs only (not Qwen)."""
+    lines = ["### Findings (from tools)", ""]
+    if not trace:
+        lines.append("No run yet.")
+        return "\n".join(lines)
+    tout = trace.get("tool_outputs") or {}
+    if not tout:
+        lines.append("No tool measurements this run.")
+        return "\n".join(lines)
+    cd = tout.get("change_detect") or {}
+    if cd:
+        line = (
+            f"- change_detect: rung {_rung_with_display(cd)}; changed_pixels={cd.get('changed_pixels')}; "
+            f"radiometric_label=`{cd.get('radiometric_label')}` "
+            f"(delta={cd.get('radiometric_delta', cd.get('delta_mean'))}, "
+            f"eps={cd.get('direction_epsilon')}); "
+            f"built_up_direction=`{cd.get('built_up_direction', 'not_determined')}` "
+            "(not a class map)."
+        )
+        if cd.get("semantic_rung") is not None:
+            line = (
+                line[:-1]
+                + f" semantic_rung {_rung_with_display(cd, 'semantic_rung', 'semantic_rung_display')}."
+            )
+        lines.append(line)
+    area = tout.get("area_calc") or {}
+    if area:
+        lines.append(
+            f"- area_calc: {area.get('changed_pixels')} px; area_m2={area.get('area_m2')}; "
+            f"area_km2={area.get('area_km2')}; GSD={area.get('gsd_m')} "
+            f"({area.get('formula')})."
+        )
+    wh = tout.get("water_highlight") or {}
+    if wh:
+        lines.append(
+            f"- water_highlight: water_pixels={wh.get('water_pixels')}; method={wh.get('method')}."
+        )
+    sr = tout.get("sar_read") or {}
+    if sr:
+        sdwi = sr.get("sdwi_stats") or {}
+        cal = sr.get("water_calibrated")
+        lines.append(
+            f"- sar_read: water_pixels={sr.get('water_pixels')}; "
+            f"water_calibrated={cal}; "
+            f"SDWI mean={sdwi.get('mean')} (write SDWI, do not expand)."
+        )
+    ag = tout.get("sar_agreement") or {}
+    if ag:
+        verdicts = ag.get("verdicts") or {}
+        lines.append(
+            f"- sar_agreement: water={verdicts.get('water')} "
+            f"built_up={verdicts.get('built_up', 'withheld_no_tool')}"
+        )
+    cg = tout.get("coreg_check") or {}
+    if cg:
+        tr = cg.get("transform") or {}
+        px = cg.get("pixel") or {}
+        off = tr.get("offset_m")
+        sh = px.get("shift_px")
+        shift_s = (
+            f"{sh}px (phase-corr)"
+            if sh is not None
+            else f"inconclusive({px.get('reason')})"
+        )
+        lines.append(
+            f"- coreg: shift={shift_s}; transform_offset_m="
+            f"{off if off is not None else tr.get('status')}; "
+            f"same_res={tr.get('same_res')}"
+        )
+    sem = tout.get("semantic") or {}
+    if sem:
+        dom = sem.get("dominant_transition") or {}
+        lines.append(
+            f"- second_semantic: dominant_transition={dom.get('token')} "
+            f"built_up_direction={sem.get('built_up_direction')} "
+            "(backbone val mIoU 0.417)"
+        )
+    cm = tout.get("cdvqa_map") or {}
+    if cm:
+        ans = cm.get("answer")
+        if ans is None:
+            ans = f"withheld({cm.get('withheld_reason')})"
+        lines.append(
+            f"- cdvqa_map: answer={ans} type={cm.get('official_type')} "
+            f"claim={cm.get('claim')}"
+        )
+    cv = tout.get("canonical_vqa") or {}
+    if cv:
+        ans = cv.get("answer")
+        if not cv.get("available") or ans is None:
+            ans = f"withheld({cv.get('error') or 'empty answer'})"
+        lines.append(
+            f"- canonical_vqa: answer={ans} model={cv.get('model')} "
+            f"seat={cv.get('seat', '127.0.0.1:8091')}"
+        )
+    ge = trace.get("geo_exports") or {}
+    if ge:
+        parts = []
+        for name, rec in ge.items():
+            if rec.get("status") == "written":
+                parts.append(
+                    f"{name} -> {Path(str(rec.get('path'))).name} [{rec.get('crs')}]"
+                )
+            else:
+                parts.append(f"{name}: {rec.get('status')}")
+        lines.append("- geo_export: " + "; ".join(parts))
+    return "\n".join(lines)
+
+
+def compose_visible_answer(trace: dict[str, Any] | None) -> str:
+    """Findings header above the VLM paragraph. Flag unverified interpretation."""
+    header = findings_header(trace)
+    if not trace:
+        return header
+    raw = (trace.get("answer") or "").strip()
+    if raw.startswith("### Findings (from tools)"):
+        return raw
+    tout = trace.get("tool_outputs") or {}
+    should_check = bool(tout) or bool(trace.get("vlm"))
+    if should_check:
+        check = check_narration(raw, tout)
+        trace["narration_check"] = check
+        if not raw:
+            return header
+        if not check["ok"]:
+            return (
+                header
+                + "\n\nUNVERIFIED INTERPRETATION — JSON card wins.\n\n"
+                + raw
+            )
+        return header + "\n\n" + raw
+    if not raw:
+        return header
+    return header + "\n\n" + raw
 
 
 def _now() -> str:
@@ -40,13 +297,13 @@ def measurement_markdown(trace: dict[str, Any] | None) -> str:
     quads = area.get("quadrants") or {}
     ne = int(quads.get("NE") or 0)
     whole = int(area.get("changed_pixels") or 0)
-    gsd = float(area.get("gsd_m") or 0)
-    px_m2 = float(area.get("pixel_area_m2") or (gsd * gsd))
-    ne_m2 = ne * px_m2
+    gsd = area.get("gsd_m")
+    px_m2 = area.get("pixel_area_m2")
     lines += [
         f"- **label:** `{area.get('label')}`",
         f"- **changed_pixels (WHOLE IMAGE):** {whole:,}",
-        f"- **GSD:** {gsd} m/px",
+        f"- **GSD:** {gsd if gsd is not None else 'withheld'} "
+        f"({area.get('gsd_source') or 'from tool record'})",
         f"- **formula:** `{area.get('formula')}`",
         f"- **area_m2 (whole):** {area.get('area_m2')}",
         f"- **area_km2 (whole):** {area.get('area_km2')}",
@@ -57,6 +314,16 @@ def measurement_markdown(trace: dict[str, Any] | None) -> str:
         f"- **provenance:** {area.get('provenance')}",
         "",
         "**Do not conflate:**",
+    ]
+    if gsd is None or px_m2 is None:
+        lines += [
+            f"- Whole-image `{whole:,}` px; **m² withheld** (no geotransform / GSD).",
+            f"- NE quadrant `{ne:,}` px (still not a whole-image percent).",
+            "- If the VLM paragraph invents km², **the JSON card wins.**",
+        ]
+        return "\n".join(lines)
+    ne_m2 = ne * float(px_m2)
+    lines += [
         f"- Whole-image `{whole:,}` px × {px_m2} m²/px = **{area.get('area_m2')} m²** "
         f"({float(area.get('percent_of_image') or 0):.4f}% of image).",
         f"- NE quadrant `{ne:,}` px × {px_m2} m²/px = **{ne_m2} m²** "
@@ -90,8 +357,21 @@ def confidence_markdown(trace: dict[str, Any] | None) -> str:
         vs = c.get("vs_gt") or {}
         iou = vs.get("iou")
         lines.append(
-            f"- `change_detect`: rung `{c.get('rung')}`; "
+            f"- `change_detect`: rung {_rung_with_display(c)}; "
             + (f"IoU vs GT {iou} (mask_metrics)." if iou is not None else "no GT IoU this call.")
+            + f" radiometric_label=`{c.get('radiometric_label')}`;"
+            f" built_up_direction=`{c.get('built_up_direction', 'not_determined')}`."
+            + (
+                f" semantic_rung {_rung_with_display(c, 'semantic_rung', 'semantic_rung_display')}."
+                if c.get("semantic_rung") is not None
+                else ""
+            )
+        )
+    if "water_highlight" in tout:
+        w = tout["water_highlight"]
+        lines.append(
+            f"- `water_highlight`: water_pixels={w.get('water_pixels')} "
+            f"({w.get('method')})."
         )
     if "sar_read" in tout:
         s = tout["sar_read"]
@@ -116,16 +396,21 @@ def write_report(trace: dict[str, Any], extra_note: str = "") -> Path:
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     path = REPORTS / f"satquery_run_{stamp}.md"
     area = (trace.get("tool_outputs") or {}).get("area_calc") or {}
+    trace_sha = tool_outputs_sha256(trace.get("tool_outputs") or {})
     body = [
         "# SatQuery run report",
         "",
         f"- UTC: `{_now()}`",
+        f"- trace_sha256: `{trace_sha}`",
         f"- mode: `{'live' if trace.get('live') else 'cached'}`",
         f"- query: {trace.get('query')!r}",
         f"- input_mode: `{trace.get('input_mode')}` scene=`{trace.get('scene')}`",
-        f"- {HONESTY}",
+        f"- source: `{trace.get('input_source') or 'prepared'}`",
+        f"- {trace.get('ingest_note') or HONESTY}",
         "",
         extra_note,
+        "",
+        findings_header(trace),
         "",
         "## Plan",
         "",
@@ -164,81 +449,71 @@ def write_report(trace: dict[str, Any], extra_note: str = "") -> Path:
         "",
         f"- first_token_s: {trace.get('first_token_s')} complete_s: {trace.get('complete_s')}",
     ]
+    pkt = trace.get("evidence_packet")
+    err = trace.get("evidence_packet_error")
+    if pkt or err:
+        body += ["", "## Evidence packet", ""]
+        if pkt:
+            body.append(f"- canonical_answer: `{pkt.get('canonical_answer')}`")
+            body.append(f"- packet: `satquery_run_{stamp}_packet.json`")
+            body.append(f"- benchmark: `satquery_run_{stamp}_benchmark.json`")
+            body.append(f"- product: `satquery_run_{stamp}_product.md`")
+        if err:
+            body.append(f"- evidence_packet_error: `{err}`")
     path.write_text("\n".join(body), encoding="utf-8")
     return path
 
 
-def _percentile_stretch(arr) -> Image.Image:
-    import numpy as np
+def _stamp_from_report(md_path: Path) -> str:
+    stem = md_path.stem
+    prefix = "satquery_run_"
+    if stem.startswith(prefix):
+        return stem[len(prefix) :]
+    return stem
 
-    a = np.asarray(arr, dtype=np.float32)
-    if a.ndim == 2:
-        a = np.stack([a, a, a], axis=-1)
-    if a.ndim == 3 and a.shape[0] in (1, 3, 4) and a.shape[-1] not in (1, 3, 4):
-        a = np.moveaxis(a, 0, -1)
-    if a.ndim == 3 and a.shape[-1] > 3:
-        a = a[..., :3]
-    if a.ndim == 3 and a.shape[-1] == 1:
-        a = np.repeat(a, 3, axis=-1)
-    out = np.zeros_like(a, dtype=np.uint8)
-    for c in range(min(3, a.shape[-1])):
-        band = a[..., c]
-        lo, hi = np.percentile(band, (2, 98))
-        if hi <= lo:
-            hi = lo + 1.0
-        scaled = (band - lo) / (hi - lo)
-        out[..., c] = np.clip(scaled * 255.0, 0, 255).astype(np.uint8)
-    return Image.fromarray(out[..., :3], mode="RGB")
+
+def write_packet_artifacts(trace: dict[str, Any], stamp: str) -> dict[str, Path]:
+    """Write sidecar packet/benchmark/product files for satquery_run_<stamp>.md."""
+    from evidence_packet import (
+        build_packet_for_run,
+        render_benchmark,
+        render_product,
+    )
+
+    REPORTS.mkdir(parents=True, exist_ok=True)
+    packet = trace.get("evidence_packet")
+    if packet is None:
+        try:
+            packet = build_packet_for_run(trace, trace.get("plan"), None)
+        except Exception as e:
+            packet = {
+                "schema_version": "1.0",
+                "task": (trace.get("plan") or {}).get("task") or "unsupported",
+                "canonical_answer": None,
+                "claims": [],
+                "limitations": [f"packet build failed: {type(e).__name__}: {e}"],
+                "artifacts": [],
+                "tool_outputs": trace.get("tool_outputs") or {},
+            }
+    bench = render_benchmark(packet)
+    product = render_product(packet, qwen_text=trace.get("answer"))
+    packet_path = REPORTS / f"satquery_run_{stamp}_packet.json"
+    bench_path = REPORTS / f"satquery_run_{stamp}_benchmark.json"
+    product_path = REPORTS / f"satquery_run_{stamp}_product.md"
+    packet_path.write_text(json.dumps(packet, indent=2, default=str) + "\n", encoding="utf-8")
+    bench_path.write_text(json.dumps(bench, indent=2, default=str) + "\n", encoding="utf-8")
+    product_path.write_text(product + "\n", encoding="utf-8")
+    return {"packet": packet_path, "benchmark": bench_path, "product": product_path}
+
+
+def write_report_bundle(trace: dict[str, Any], extra_note: str = "") -> dict[str, Path]:
+    """Markdown report plus packet/benchmark/product sidecars. Same stamp."""
+    md = write_report(trace, extra_note=extra_note)
+    stamp = _stamp_from_report(md)
+    arts = write_packet_artifacts(trace, stamp)
+    return {"md": md, **arts}
 
 
 def ingest_preview(src: str | Path) -> tuple[Image.Image | None, str]:
-    """PNG/JPEG stay RGB. GeoTIFF/TIFF → RGB preview. Never claims Cartosat inference."""
-    if src is None:
-        return None, "no file"
-    path = Path(str(src))
-    if not path.is_file():
-        return None, f"missing: {path}"
-    suf = path.suffix.lower()
-    note_prefix = HONESTY + " "
-    pil_note = ""
-    if suf in {".png", ".jpg", ".jpeg", ".webp", ".bmp"}:
-        im = Image.open(path).convert("RGB")
-        return im, note_prefix + f"PNG/JPEG preview `{path.name}` ({im.size[0]}×{im.size[1]})."
-    if suf not in {".tif", ".tiff"}:
-        return None, note_prefix + f"Unsupported suffix {suf!r}. Use PNG/JPEG/TIFF."
-
-    try:
-        import rasterio
-
-        with rasterio.open(path) as ds:
-            n = ds.count
-            if n >= 3:
-                arr = ds.read([1, 2, 3])
-            else:
-                arr = ds.read(1)
-            im = _percentile_stretch(arr)
-            crs = ds.crs
-            return im, (
-                note_prefix
-                + f"GeoTIFF via rasterio `{path.name}` bands={n} size={im.size} crs={crs}. "
-                "RGB stretch is preview only."
-            )
-    except ImportError:
-        pass
-    except Exception as e:
-        pil_note = f"rasterio read failed ({type(e).__name__}: {e}); falling back to PIL. "
-    else:
-        pil_note = ""
-
-    try:
-        im = Image.open(path)
-        im.seek(0)
-        frame = im.convert("RGB") if im.mode != "RGB" else im.copy()
-        return frame, (
-            note_prefix
-            + pil_note
-            + "FALLBACK: rasterio/GDAL missing or failed. First TIFF page/band rendered to RGB. "
-            f"`{path.name}` mode={im.mode} size={frame.size}. Not a georeferenced analysis."
-        )
-    except Exception as e:
-        return None, note_prefix + f"TIFF ingest failed: {type(e).__name__}: {e}"
+    """RGB preview + GSD note. Inference use is decided by pipeline.bind_inputs."""
+    return preview_file(src)
