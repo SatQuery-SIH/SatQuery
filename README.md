@@ -1,6 +1,6 @@
 # SatQuery AI — SIH26167 (ISRO / Smart India Hackathon 2026)
 
-SatQuery AI is a **satellite-imagery assistant**: you ask a question about satellite imagery in plain English, and it answers with evidence. Two open-weight Qwen3-VL-8B seats work in tandem — a **remote-sensing-adapted canonical** produces typed answers and claims, while a **frozen narrator** turns tool evidence into prose; deterministic specialist tools do every measurement — area, change masks, SAR statistics. Nothing on screen comes from the VLM's imagination: every number traces to a tool, and when evidence is insufficient the system says so rather than guessing.
+SatQuery AI is a **satellite-imagery assistant**: you ask a question about satellite imagery in plain English, and it answers with evidence. Two open-weight Qwen3-VL-8B models work in tandem — a **domain-adapted answer model** produces the typed answers and claims, while a **frozen narration model** (unmodified base weights) turns tool evidence into prose; deterministic specialist tools do every measurement — area, change masks, SAR statistics. Nothing on screen comes from the VLM's imagination: every number traces to a tool, and when evidence is insufficient the system says so rather than guessing.
 
 Built for **Smart India Hackathon 2026**, problem statement SIH26167 (ISRO / Space Technology).
 
@@ -23,24 +23,24 @@ Built for **Smart India Hackathon 2026**, problem statement SIH26167 (ISRO / Spa
                 ┌──────────────────────┼───────────────────────────┐
                 ▼                      ▼                           ▼
         ┌───────────────┐    ┌──────────────────┐        ┌──────────────────┐
-        │   INGEST      │    │ SPECIALIST TOOLS │        │   VLM SEATS      │
-        │ rasterio bind │    │ (deterministic)  │        │ (Qwen3-VL-8B ×2) │
-        │ GSD + CRS +   │    │ cdvqa_map /      │        │                  │
-        │ dtype + SAR   │    │ changeformer     │        │ canonical-lrfold │
-        │ calibration   │    │ area_calc        │        │  → typed answers │
-        │ detection     │    │ water/SDWI masks │        │   + claims       │
-        └───────────────┘    │ sar_read/stats   │        │                  │
-                             │ sar_agreement    │        │ narrator (frozen)│
-                             │ coreg_check      │        │  → prose from    │
-                             │ geo_export       │        │   evidence only  │
-                             └────────┬─────────┘        └────────┬─────────┘
-                                      │ tool_outputs (numbers,    │
+        │   INGEST      │    │ SPECIALIST TOOLS │        │ LANGUAGE MODELS  │
+        │ load + check  │    │ (deterministic)  │        │ (Qwen3-VL-8B ×2) │
+        │ the rasters:  │    │ cdvqa_map /      │        │                  │
+        │ pixel size,   │    │ changeformer     │        │ answer model     │
+        │ CRS, dtype,   │    │ area_calc        │        │ (adapted)        │
+        │ SAR calib.    │    │ water/SDWI masks │        │  → typed answers │
+        └───────────────┘    │ sar_read/stats   │        │   + claims       │
+                             │ sar_agreement    │        │                  │
+                             │ coreg_check      │        │ narration model  │
+                             │ geo_export       │        │ (frozen) → prose │
+                             └────────┬─────────┘        │   from evidence  │
+                                      │ tool_outputs (numbers,    └────────┬─────────┘
                                       │ masks, typed verdicts)    │ claims +
                                       ▼                           ▼ prose
                         ┌─────────────────────────────────────────────┐
-                        │  EVIDENCE PACKET — every claim typed:        │
+                        │  EVIDENCE PACKET — every claim is typed:     │
                         │  {predicate, value, confidence, source_tool, │
-                        │   model_id, artifact_sha256, seat}           │
+                        │   model_id, artifact_sha256, which endpoint} │
                         │  withheld when evidence is insufficient      │
                         └──────────────┬──────────────────────────────┘
                                        ▼
@@ -64,83 +64,85 @@ Built for **Smart India Hackathon 2026**, problem statement SIH26167 (ISRO / Spa
 
 ---
 
-## Model seats — local & cloud, labeled per claim
+## Model serving — local & cloud, labeled per answer
 
 ```
-                 seats.json profile: "local" | "cloud"
+              serving profile: "local" | "cloud"   (config/seats.json)
         ┌──────────────────────┴──────────────────────┐
-        ▼ LOCAL (default, offline-capable)            ▼ CLOUD (deployable)
+        ▼ LOCAL (default, runs offline)               ▼ CLOUD (deployable)
   ┌───────────────────────────────┐         ┌───────────────────────────────┐
-  │ narrator  :8080  llama.cpp    │         │ narrator   Modal vLLM bf16    │
-  │  Q4_K_M, frozen base          │         │  scale-to-zero, proxy-auth    │
-  │ canonical :8091  llama.cpp    │         │ canonical  Modal vLLM bf16    │
-  │  Q4_K_M canonical-lrfold      │         │  canonical-lrfold merged tree │
-  │  --image-min-tokens 384       │         │  (3a4fecb0…)                  │
+  │ narration endpoint :8080      │         │ narration endpoint (Modal     │
+  │  llama.cpp, 4-bit frozen base │         │  vLLM, full-precision bf16)   │
+  │ answer endpoint    :8091      │         │ answer endpoint (Modal vLLM,  │
+  │  llama.cpp, 4-bit adapted     │         │  full-precision merged        │
+  │  (id: canonical-lrfold)       │         │  weights 3a4fecb0…)           │
+  │  --image-min-tokens 384       │         │  scale-to-zero + proxy-auth   │
   └───────────────────────────────┘         └───────────────────────────────┘
-        Both profiles: per-claim provenance {model_id, sha256, seat}.
-        A down seat withholds — it never silently substitutes another model.
+        Either way, every answer records which model produced it
+        {model id, weights SHA, which endpoint}. A down endpoint
+        withholds — it never silently substitutes another model.
 ```
 
-The seat model lives in `config/seats.json`; the API exposes it at `GET/POST /seats`; the frontend toggle switches profiles explicitly. Cloud seats scale to zero when idle — a `GET /v1/models` probe warms them (cold start measured ~1.5–4.5 min).
+The serving profile lives in `config/seats.json`; the API exposes it at `GET/POST /seats`; the frontend toggle switches profiles explicitly. Cloud endpoints scale to zero when idle — a `GET /v1/models` probe warms them (cold start measured ~1.5–4.5 min).
 
 ---
 
-## Training recipe — how the canonical model was adapted
+## Training recipe — how the answer model was adapted
 
-The served canonical (`canonical-lrfold`) is a continuation-trained artifact built in two auditable stages:
+The adapted answer model (served id `canonical-lrfold`) is a continuation-trained artifact built in two auditable stages:
 
-**Stage 1 — RSVQA-HR adaptation (Modal, A100):**
+**Stage 1 — high-resolution adaptation (Modal, A100):**
 
 | Ingredient | Value |
 |---|---|
 | Base | `Qwen/Qwen3-VL-8B-Instruct` @ `0c351dd` |
-| Method | LoRA r16/α32 on attn+MLP **+ trained visual projector** (`merger.pt`) |
-| Data | ~120k rows: RSVQA-HR train + VRSBench captions (count-type ×2.5 oversampled) |
-| Loss | masked CE on supervised tokens, class-weighted; vision tokens masked |
-| Schedule | 2 epochs, cosine, lr 1e-4 adapter / 1e-5 merger, batch 16 |
-| Merge | adapter-first `PeftModel.from_pretrained` → `merger.pt` load with `unexpected_keys == 0` assert (the fix that caught a silently-dropped projector) |
+| Method | LoRA adapters (rank 16, α32) on attention+MLP layers **+ trained vision projector** |
+| Data | ~120k rows: RSVQA-HR train + VRSBench captions (count-type questions oversampled ×2.5) |
+| Loss | cross-entropy on supervised tokens only, class-weighted; vision tokens masked out |
+| Schedule | 2 epochs, cosine decay, lr 1e-4 (adapters) / 1e-5 (projector), batch 16 |
+| Merge | adapters loaded first, then projector weights, with a strict check that nothing silently failed to load (this is how a dropped-projector bug was caught) |
 
-**Stage 2 — LR-fold continuation (Lightning A100-40GB → Modal eval):**
+**Stage 2 — low-resolution continuation (Lightning A100-40GB → Modal eval):**
 
 | Ingredient | Value |
 |---|---|
-| Init | stage-1 `ckpt_final` (adapter + merger + optimizer state) |
-| LR rows | 57,223 **active** only — 20,009 inactive stubs excluded (their qids ARE the LR eval sets — training them = direct leak) |
-| Replay | ~20k HR rows verbatim from the original mix (anti-forgetting arm) + ~15k caption rows |
-| Mix | 117,857 rows, **zero** id-overlap AND zero image-overlap vs all eval sets |
-| Resume | rolling `ckpt_last` (every 500 steps) synced to local — survived a cross-platform migration |
+| Init | stage-1 checkpoint (adapters + projector + optimizer state) |
+| LR rows | 57,223 **active** only — 20,009 inactive stubs excluded: their question ids ARE the LR eval sets, so training them would be a direct leak |
+| Replay | ~20k HR rows verbatim from the original mix (anti-forgetting) + ~15k caption rows |
+| Mix | 117,857 rows, **zero** question-id overlap AND zero image overlap vs every eval set |
+| Resume | rolling checkpoint (every 500 steps) synced to local — survived a cross-platform migration |
 
-**Artifact chain:** merged bf16 tree (`3a4fecb0…`) → llama.cpp b10621 convert → F16 → **Q4_K_M** (`24df79c4…`) + **mmproj from the merged model** (`3197a0db…` — the projector was further-trained; borrowing the base mmproj would drop it). Every step SHA-recorded in `gates/qwen3vl/canonical/SHA256SUMS.txt`.
+**Artifact chain:** full-precision merged weights (`3a4fecb0…`) → llama.cpp b10621 convert → F16 → **4-bit quantized GGUF** (`24df79c4…`) + **vision projector file regenerated from the merged model** (`3197a0db…` — the projector was further-trained; reusing the base one would silently drop that training). Every step's hash is recorded in `gates/qwen3vl/canonical/SHA256SUMS.txt`.
 
-**Serving flag that matters:** `--image-min-tokens 384` — llama.cpp under-tokenizes 256px imagery; without it the LR smoke dropped to 12/20.
+**Serving flag that matters:** `--image-min-tokens 384` — llama.cpp gives small (256px) images too few visual tokens without it; the low-res sanity check dropped to 12/20 before this flag.
 
 ---
 
 ## Results so far (locked — please don't re-litigate in a PR)
 
-All scores are **token-exact EM on frozen eval ids**, official dataset files, coverage 1.0, greedy decode. Manifests + metrics + REPORTs under `eval_*/`; raw prediction shards stay local.
+All scores are **exact-match accuracy on frozen evaluation question ids** — official dataset files, every question answered (coverage 1.0), deterministic decoding. Manifests + metrics + reports under `eval_*/`; raw prediction files stay local.
 
-**VQA columns (merged bf16 eval):**
+**Question-answering benchmarks (full-precision model):**
 
-| Column | Zero-shot baseline | Stage-1 (HR adapt) | LR-fold (served) |
+| Benchmark | Zero-shot baseline | HR-adapted | Current adapted (served) |
 |---|---:|---:|---:|
-| RSVQA-HR val (n=102,843) | 0.5077 | **0.8136** | 0.8073 ✓ regression bar ≥0.80 |
+| RSVQA-HR val (n=102,843) | 0.5077 | **0.8136** | 0.8073 ✓ above the 0.80 regression threshold |
 | RSVQA-HR test | — | **0.8164** | deferred* |
 | RSVQA-HR test_phili | — | **0.7813** | deferred* |
 | RSVQA-LR val (n=10,005) | 0.5427 | 0.5401 | **0.7343 (+0.194)** |
 | RSVQA-LR test (n=10,004) | 0.5597 | 0.5566 | **0.7294 (+0.173)** |
 | VRSBench VQA | 0.6597 | **0.6603** | deferred* |
 
-\* three LR-fold columns deferred on budget — `SKIP_EXISTS` resumes the shards cleanly; nothing partial is published.
+\* three columns on the newest model were deferred on budget — the eval resumes shard-by-shard where it stopped; nothing partial is published.
 
 **Caption (VRSBench, pycocoevalcap, 9,350 frozen ids):** CIDEr **0.2803**, BLEU-4 0.1207, METEOR 0.2170, ROUGE-L 0.3348 — vs **0.0** CIDEr zero-shot (the adapted model answers in caption register, mean length 43 vs 199 words).
 
 **Other measured:**
-- VRSBench grounding: **0.6114** · CDVQA (deterministic mapper path): **0.62 / 0.62 / 0.51** — honestly labeled as a mapper, not a trained change-VQA
-- Served-artifact sanity (Q4, n=20 smokes, ±10pt noise): HR 16/20 · LR 18/20 · cloud bf16 17/20
-- LR weakest family: `count` ~0.25 even after ×2.5 oversample — the honest residual
+- VRSBench grounding: **0.6114** · CDVQA change-detection QA: **0.62 / 0.62 / 0.51** — produced by the deterministic tool+mapping layer (honestly labeled: not a trained change-VQA model)
+- Sanity checks on the served 4-bit model (20-question samples, ±10pt noise): HR 16/20 · LR 18/20 · cloud full-precision 17/20
+- LR weakest family: counting questions ~0.25 even after ×2.5 oversampling — the honest residual
 
-**Adapter discipline:** seats swap only on measured evidence — `canonical-lrfold` shipped after its HR-val regression bar passed (0.8073 ≥ 0.80) and its provenance re-pinned to the served bytes. Every model-produced claim carries `{model_id, artifact_sha256, seat}` — local Q4 and cloud bf16 are labeled, never conflated.
+**Model discipline:** endpoints change only on measured evidence — the current adapted model shipped after passing a regression threshold on held-out data (0.8073 ≥ 0.80), with provenance re-pinned to the exact bytes served. Every model-produced claim carries `{model id, weights SHA, which endpoint}` — the local quantized model and the cloud full-precision model are labeled separately, never conflated.
 
 ---
 
@@ -153,14 +155,14 @@ Weights and scene PNGs are **not** in git (size and licensing). You need:
 
 ```text
 python -m pip install -r demo/requirements.txt
-.\demo\serve.ps1 live                 # narrator :8080 + canonical :8091 + Gradio :7860
+.\demo\serve.ps1 live                 # narration model :8080 + answer model :8091 + Gradio :7860
 uvicorn api.main:app --port 8000      # FastAPI backend (from api/)
 cd web && npm install && npm run dev  # React SPA → :5173
 ```
 
-- Narrator → `:8080` · canonical → `:8091` · Gradio fallback → `:7860` · API → `:8000` · web → `:5173`
+- Narration model → `:8080` · answer model → `:8091` · Gradio fallback → `:7860` · API → `:8000` · web → `:5173`
 - No GPU? Cached rehearsal replays all scenes: `.\demo\rehearse_cached.ps1`
-- Serving note: llama.cpp is required because Ollama cannot import Qwen3-VL's separate mmproj vision file. Canonical serves with `--image-min-tokens 384` (llama.cpp under-tokenizes 256px LR imagery without it).
+- Serving note: llama.cpp is required because Ollama cannot import Qwen3-VL's separate vision-projector file. The answer model serves with `--image-min-tokens 384` (llama.cpp under-tokenizes small imagery without it).
 
 ---
 
@@ -172,8 +174,8 @@ cd web && npm install && npm run dev  # React SPA → :5173
 | `demo/` | The Gradio app — offline fallback UI |
 | `web/` | React SPA — the product frontend |
 | `api/` | FastAPI backend over the pipeline (contract: `api/README.md`) |
-| `deploy/` | Modal serving — cloud seats + smoke harness |
-| `config/` | `seats.json` — local/cloud seat model + provenance |
+| `deploy/` | Modal serving — cloud endpoints + smoke harness |
+| `config/` | `seats.json` — local/cloud serving profiles + provenance |
 | `scripts/` | Modal training/eval harnesses (RSVQA adapt, re-eval, artifact sync) |
 | `docs/` | Problem-statement decode + architecture (read these second) |
 | `strategy/` | Internal north star — gitignored |
@@ -187,8 +189,8 @@ cd web && npm install && npm run dev  # React SPA → :5173
 
 ## Ground rules
 
-- **No commercial vision APIs.** Open-weight models only — local seats offline-capable, cloud seats self-hosted on Modal.
-- **Seat swaps are measured, never silent.** A seat changes only with a regression-barred eval + re-pinned provenance (see Results).
+- **No commercial vision APIs.** Open-weight models only — local endpoints run offline, cloud endpoints are self-hosted on Modal.
+- **Model swaps are measured, never silent.** An endpoint's model changes only with a regression-barred eval + re-pinned provenance (see Results).
 - **No duplicate 24k training runs** on other Modal accounts.
 - **Never commit** weights, `.env`, `ops/`, or `gates/_cache/`.
 
