@@ -23,7 +23,7 @@ We build it from open-source models that run **on our own machine, fully offline
 | # | Requirement (official) | What it means |
 | --- | --- | --- |
 | 1 | Open-source vision components only; **no commercial/proprietary vision APIs** | All weights local. Prove it with an airplane-mode demo. |
-| 2 | **At least one vision/VL component fine-tuned or adapted** for remote sensing | Mandatory for the *finale*. Internal can ship zero-shot + a proven LoRA pipe. |
+| 2 | **At least one vision/VL component fine-tuned or adapted** for remote sensing | **Lit.** Domain-routed ChangeFormer (`team_second`) + SECOND semantics (`second_semantic`) execute in the live trace. Narrator stays **zero-shot** (LoRA attach bars not cleared). |
 | 3 | Three input modes: **single image**, **bi-temporal pair**, **co-registered optical+SAR pair** | One UI, three tabs. GeoTIFF/TIFF for real geospatial; PNG/JPEG for prescribed benchmarks. |
 | 4 | **Single-image VQA is mandatory** + captioning *or* text-guided grounding | Answer questions about one image, plus describe it or highlight regions. |
 | 5 | **Change description or change-VQA from a bi-temporal pair is mandatory** | "What changed between these two dates and where?" Change map is optional; we generate it anyway. |
@@ -68,12 +68,13 @@ Yes — measured, not hoped, on the demo laptop (RTX 5060 8 GB):
 
 | Dataset | What it is |
 | --- | --- |
-| **VRSBench** | PS-named single-image eval. Frozen n=300 ids in `gates/baseline_eval_ids.json`. |
-| **CDVQA** | Change-VQA exam (TGRS 2022). Frozen pair ids in `gates/cdvqa_eval_ids.json`. |
+| **VRSBench** | PS-named single-image eval. Continuity n=300 local-judge **0.7833**; constrained EM **0.5300**. Id file was wiped; do not train on a restored copy. |
+| **CDVQA** | Change-VQA. Presence v1 **0.5470** stands (v2 0.5434 does not beat it). Type-family combined **0.5540**. |
+| **RSVQA** | Official HR **validation** (Zenodo 6344367, n=102843): token-exact **0.5077** headline; unit-aware **0.5634** beside it (area 0→5727/15199; count 0.415 is the real hole). 2k mirror **0.517**. **Not official-test.** Preds wiped; numbers in `ops/PROJECT_LOG.md` §4. |
 | **LEVIR-CD** | Change-detection specialist; pretrained ChangeFormer weights exist. |
 | **BigEarthNet / BEN text** | Named adaptation source (Europe Sentinel-1/2). Not Indian Cartosat+RISAT. |
 
-RSVQA was located but not used as a second harness. Hidden ISRO/Cartosat+RISAT annotations stay unknown.
+Hidden ISRO/Cartosat+RISAT annotations stay unknown. Live eval surface for unfamiliar folders is `judge_kit/`, not the deleted `eval/` harness.
 
 ### 3.4 Can we fine-tune a VLM? Do we have to for the internal show?
 
@@ -82,7 +83,9 @@ The **pipe is proven** (Gate 2 LoRA smoke on Modal). The **production mixes we a
 - Vision+language LoRA on BEN: local-judge **0.6433** (worse than zero-shot **0.7833**). Parked as a domain specialist.
 - Language-only short VQA: exact-match rose, but mean answer length collapsed to **~1 token**. Unusable as a narrator.
 
-**Internal 16–17 Sep ships zero-shot Qwen3-VL-8B.** Adaptation remains a **finale** checkbox. Do not plug an adapter into `demo/serve.ps1` unless these bars pass **on disk**: caption style ≥40 tokens + cross-tag; untagged exact ≥ 0.55; tripwire; looking blank ≤ 0.40 **and** Qty+Color shuffle ≤ 0.40. Fail any → stay zero-shot through the internal show.
+**Internal 16–17 Sep ships zero-shot Qwen3-VL-8B as narrator.** Do not plug a **narrator** LoRA into `demo/serve.ps1` unless these bars pass **on disk**: caption style ≥40 tokens + cross-tag; untagged exact ≥ 0.55; tripwire; looking blank ≤ 0.40 **and** Qty+Color shuffle ≤ 0.40.
+
+Tick 2 is already satisfied by **tools**, not the narrator: `team_second` (SECOND-domain change, val IoU 0.371 vs start 0.015; **do not** serve it on LEVIR/Scene 2) and `second_semantic` (type/from-to on Scene 4). Scene 2 keeps imported LEVIR ChangeFormer + `built_up_direction=not_determined`.
 
 ### 3.5 Isn't "agentic AI" a buzzword here?
 
@@ -96,7 +99,7 @@ No. The PS scores the **observable execution trace**, and ours is real: a constr
 
 ### 3.7 Can we demo this without it dying on stage?
 
-Three rehearsed scenes (single / bi-temporal change / optical+SAR), a latency budget, a cached trapdoor that replays everything without a GPU, and a recorded fallback. Scene 2 is the money scene: a messy pair goes in, a change mask comes out, and a number lands on screen with the tool math visible beside it.
+Three rehearsed scenes (single / bi-temporal change / optical+SAR), plus **Scene 4** for live SECOND semantics on uploads. Cached trapdoor + recorded fallback. Scene 2 is the money scene (imported LEVIR mask + tool area). Live **uploads** are the adapted-forward proof — do not call the prepared `pred_mask.png` the specialist.
 
 ### 3.8 Too crowded / too hard?
 
@@ -141,9 +144,9 @@ UI ── three tabs · mask overlays · agent-trace panel · report export
 
 | Date | What the team shows |
 | --- | --- |
-| **16–17 Sep 2026** | Internal: 3-scene offline demo, zero-shot narrator, measured baseline, honest adaptation story. |
+| **16–17 Sep 2026** | Internal: 3-scene offline demo, zero-shot narrator, domain-routed CF specialists, honest numbers from `ops/PROJECT_LOG.md` §4. |
 | **20 Sep 2026** | Idea deadline. |
-| **After internal → finale** | Production adapter only if attach bars pass on disk. Otherwise stay zero-shot and still claim the Gate-2 pipe + closed-run evidence. |
+| **After internal → finale** | Narrator LoRA only if attach bars pass on disk. Tick 2 already lives in the tools. |
 
 Hackathon days are integration and rehearsal, not a first training run.
 
@@ -155,8 +158,8 @@ Hackathon days are integration and rehearsal, not a first training run.
 | --- | --- |
 | **Demo / frontend** | Three-tab UI, trace panel, scene choreography (`demo/`) |
 | **Planner / tools** | Routing, ChangeFormer, area, SAR (`demo/planner.py`, `demo/tools.py`) |
-| **Eval** | Frozen n=300 harness (`eval/`) |
-| **Adaptation** | Finale LoRA, attach bars — not a PR to flip `serve.ps1` |
+| **Eval** | Drop-folder kit (`judge_kit/`). Ruled numbers in `ops/PROJECT_LOG.md` §4 — preds wiped, do not re-run to “confirm”. |
+| **Adaptation** | Live: CF specialists in the registry. Narrator LoRA: attach bars — not a PR to flip `serve.ps1` |
 | **Pitch** | Internal: "ask a satellite a question." National: compliance matrix + measured numbers |
 
 ---

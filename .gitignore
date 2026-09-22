@@ -1,5 +1,5 @@
 # SatQuery git root. Do not `git init` in the parent workspace
-# (that folder also holds research_archive/, .venv/, tmp/).
+# (that folder also holds .venv/, ppt slides/, lane prompt docs).
 #
 # GitHub should be product code + the team brief.
 # Weights, caches, and the laptop board stay on this machine.

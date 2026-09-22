@@ -100,7 +100,7 @@ Squash-merging means only the **PR title** appears on `main` — so write PR tit
 ## 7. Project-specific rules (these are not bureaucracy either)
 
 - **No commercial/proprietary vision APIs.** Open-weight models only, everything runs locally.
-- **Never train on the frozen eval ids** — `gates/baseline_eval_ids.json` and `gates/cdvqa_eval_ids.json`. They are deliberately public and permanently quarantined; training on them poisons every score.
+- **Never train on frozen eval ids.** The id files were wiped; if restored they stay quarantined. Live eval is `judge_kit/`.
 - **Do not attach any adapter to `demo/serve.ps1`** unless the attach bars have passed **on disk**. The narrator stays zero-shot until then (see `docs/SIH26167_Final_Plan.md` §2.3).
 - **Do not start a second large training job** on your own Modal account. GPU strategy is coordinated with the owner — parallel duplicate runs waste both wallets.
 - **Do not `modal run` anything from `hunt/` or `train10/`** in a clone — those are owner-laptop jobs.

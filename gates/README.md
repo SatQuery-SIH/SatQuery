@@ -1,16 +1,14 @@
-# gates/ — frozen evaluation ids and data prep
+# gates/ — local weights and live checkpoints
 
-This folder holds the **quarantine**: the id lists that define our exams. They never change, and they are never trained on — that is what makes every score comparable.
+Not in git (size). Needed to run the demo:
 
 | Path | What |
 | --- | --- |
-| `baseline_eval_ids.json` | The frozen n=300 VRSBench VQA evaluation ids (seed=42). The continuity baseline **0.7833** was measured on exactly these. **Never train on them** — leakage invalidates every delta. |
-| `cdvqa_eval_ids.json` | The frozen CDVQA test pair ids for the change-VQA exam. Same quarantine rules. |
-| `data_prep.py` | Helper that turns BEN text rows into training-ready chat format. |
-
-**Sub-folders (gitignored, not in the repo):**
-
-- `_cache/` — cached datasets, predictions, judge outputs, hunt/train artifacts (`_cache/prod10/` is the live hunt/train workspace). Regenerable; never commit.
-- `qwen3vl/` — model weights (base + adapted GGUFs, mmprojs) and the llama.cpp runtime. Multi-GB; never commit.
-
-Related docs: `eval/README.md` (how the exam is run) · `../README.md` (repo map).
+| `qwen3vl/llama_cpp/llama-server.exe` | Local VLM server |
+| `qwen3vl/Qwen3VL-8B-Instruct-Q4_K_M.gguf` | Frozen narrator |
+| `qwen3vl/mmproj-Qwen3VL-8B-Instruct-F16.gguf` | Vision projector |
+| `_cache/changeformer/` | Imported LEVIR ChangeFormer checkpoint |
+| `_cache/cf_ft/train/best_by_val.pt` | Housing-change specialist |
+| `_cache/cf_ft/semantic/best_semantic.pt` | Land-cover describer |
+| `_cache/cf_ft/ckpt_registry.json` | Which ckpt is attached |
+| `data_prep.py` | Used only if you rebuild scenes with `demo/prepare_scenes.py` |

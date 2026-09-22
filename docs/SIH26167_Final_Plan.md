@@ -72,10 +72,10 @@ Input pairs are **pre-co-registered**. No registration solver. No pixel-level op
 
 ### 2.3 Adaptation doctrine (finale, not internal)
 
-- Internal show: **zero-shot** narrator. Gate 2 already proved a LoRA pipe exists.
-- Vision+language BEN LoRA **failed** the local-judge bar (0.6433 vs 0.7833) — parked as a domain specialist.
+- Internal show: **zero-shot narrator**. Tick 2 is the domain-routed ChangeFormer + semantics in the live trace, not a Qwen LoRA.
+- Vision+language BEN LoRA **failed** the local-judge bar (0.6433 vs 0.7833) — parked. Do not attach to `serve.ps1`.
 - Language-only short VQA **collapsed** to ~1-token answers. Do not attach.
-- A later adapter may attach only if these bars pass **on disk**: caption style ≥40 tokens + cross-tag; untagged exact ≥ 0.55; tripwire; looking blank ≤ 0.40 **and** Qty+Color shuffle ≤ 0.40. Fail any → stay zero-shot through 16–17 Sep and keep the finale checkbox honest.
+- A **narrator** adapter may attach only if these bars pass **on disk**: caption style ≥40 tokens + cross-tag; untagged exact ≥ 0.55; tripwire; looking blank ≤ 0.40 **and** Qty+Color shuffle ≤ 0.40.
 
 ---
 
@@ -85,9 +85,9 @@ Build order was harness-first: the exam is the official splits, not a self-made 
 
 | Piece | Where |
 | --- | --- |
-| Frozen VRSBench n=300 ids | `gates/baseline_eval_ids.json` — never train on these |
-| Frozen CDVQA test pair ids | `gates/cdvqa_eval_ids.json` |
-| Harness | `eval/eval.py` + `eval/score.py` |
+| Ruled public-split numbers | `ops/PROJECT_LOG.md` §4 (preds/ids harness **wiped** 2026-09-13; do not re-run to “confirm”) |
+| Live drop-folder eval | `judge_kit/` (same `pipeline.run_query` as the GUI) |
+| VRSBench / CDVQA / RSVQA id files | gone — if restored, quarantine; never train |
 
 The hidden ISRO set is never disclosed. Theatrical tuning to the visible 300 loses. Adaptation data, if used later, must be broader than that split.
 
