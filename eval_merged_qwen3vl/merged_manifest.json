@@ -1,0 +1,57 @@
+{
+  "step": "merge_ckpt",
+  "lane": "RE-EVAL-MERGED",
+  "merged_dir": "/data/runs/rsvqa_adapt/full_qwen3vl/ckpt_final/merged_eval",
+  "base": {
+    "hf_id": "Qwen/Qwen3-VL-8B-Instruct",
+    "revision": "0c351dd01ed87e9c1b53cbc748cba10e6187ff3b",
+    "weights_sha256": "aa8d7f7ef1f6867301225a39a924e49dea4b9c36fc9ce953eec52dc692c27a91"
+  },
+  "ckpt_sha256": {
+    "adapter_model.safetensors": "88d82e090e557f1e70c3f9a32650e325965f4d4c293e0ba8ebde5f9eecca5bd3",
+    "merger.pt": "7c77c99a3abaff393cfa06637ff7a5e3696713cb3da85b222f17c9166ab240dc",
+    "combined": "8fccee8dd09970c29e742d4053a60cb7433d2dbf463a219e5f057f0a0e5b5c99",
+    "adapter_config.json": "1df4b0afd120aecae7147cd47af194d40d6f9ca9538c0877b22e71ea25a579a1",
+    "mix.jsonl": "e60f369567e922e4ca56b509da523d351c31c09a371b5dd8d95180918e1b7332"
+  },
+  "merge": {
+    "recipe": "PeftModel.from_pretrained(base,adapter) -> load_state_dict(merger.pt, strict=False, all-matched) -> merge_and_unload() -> save_pretrained(bf16)",
+    "merger_tensors": 24,
+    "lora": {
+      "r": 16,
+      "alpha": 32,
+      "targets": "q/k/v/o/gate/up/down",
+      "exclude": "visual"
+    },
+    "note": "fp32 adapter deltas merged into bf16 base; equivalent to runtime adapter application within bf16 rounding"
+  },
+  "merged_files_sha256": {
+    "added_tokens.json": "c0284b582e14987fbd3d5a2cb2bd139084371ed9acbae488829a1c900833c680",
+    "chat_template.jinja": "3636d0f0bd6bef02654cdffdc447b79cb2cef8ab02cc75267345946291a489e4",
+    "config.json": "9534cdb388b5ec720b33b8e37f5cf4fcd9d06f16051be16e8e712040212741d3",
+    "generation_config.json": "d9363251ecc4d2f655fb0166c3cf8c42956343286371e2ff94c73a0bd62b224f",
+    "merges.txt": "8831e4f1a044471340f7c0a83d7bd71306a5b867e95fd870f74d0c5308a904d5",
+    "model-00001-of-00004.safetensors": "824befcd44bf618dcd3103e1fb8ec481b8e1dea78c6700433e120545cb944c7b",
+    "model-00002-of-00004.safetensors": "2fc438686180c8cb3024071ac45fd489b61a7214d0d1479c20da1282620c2acf",
+    "model-00003-of-00004.safetensors": "5e1b4678677a52b0ed98f6c0285b52fd9b2f3a733a93ece637b276480b3aaed1",
+    "model-00004-of-00004.safetensors": "d9e199b080c511d2cba541de09803b41b942b9f68fac752d295fb30704c0183e",
+    "model.safetensors.index.json": "859146bff8db1d617fca8b457a5223edff963bb70076b3645f2189fe0540a147",
+    "preprocessor_config.json": "27225450ac9c6529872ee1924fcb0962ff5634834f817040f444118116f4e516",
+    "special_tokens_map.json": "76862e765266b85aa9459767e33cbaf13970f327a0e88d1c65846c2ddd3a1ecd",
+    "tokenizer.json": "aeb13307a71acd8fe81861d94ad54ab689df773318809eed3cbe794b4492dae4",
+    "tokenizer_config.json": "81ec7bb9530159b326c0bef1d0b6c33d392090524014ea3f0123a3c1eb9c2af5",
+    "video_preprocessor_config.json": "7768af27c1fafa9cc9011c1dc20067e03f8915e03b63504550e11d5066986d13",
+    "vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910"
+  },
+  "merged_tree_sha256": "09ae10874d6b95349f8965245db05e97f9bf9075d4a312db9c3104cd0202a022",
+  "prior_tree_sha256_geetha_volume": "5b720abf\u2026 (per spec; cross-account volume unreachable \u2014 compare only if same file set)",
+  "account": "proxynanmaga",
+  "run": {
+    "wall_seconds": 113.1,
+    "est_usd": 0.036,
+    "gpu_usd_rate_s": 0.0,
+    "cpu_cores": 8.0,
+    "memory_gib": 96,
+    "pricing": "Modal list: A100-40GB $0.000944/s; CPU $0.0000131/core-s; mem $0.00000222/GiB-s"
+  }
+}

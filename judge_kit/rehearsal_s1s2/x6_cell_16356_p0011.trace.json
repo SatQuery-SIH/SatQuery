@@ -1,0 +1,137 @@
+{
+  "query": "Show me water bodies via radar.",
+  "input_mode": "optical+sar",
+  "scene": 3,
+  "live": true,
+  "plan": {
+    "task": "water_identification",
+    "input_mode": "optical+sar",
+    "tools": [
+      "vqa",
+      "sar_read",
+      "sar_agreement"
+    ],
+    "vlm_role": "narrate",
+    "supported": true,
+    "refusal": null,
+    "query": "Show me water bodies via radar."
+  },
+  "tool_outputs": {
+    "sar_read": {
+      "vv_db_stats": {
+        "mean": -12.730496406555176,
+        "std": 2.5279908180236816,
+        "p5": -17.036893844604492,
+        "p95": -8.812219619750977
+      },
+      "vh_db_stats": {
+        "mean": -18.980255126953125,
+        "std": 2.8303771018981934,
+        "p5": -24.215972900390625,
+        "p95": -14.984832763671875
+      },
+      "sdwi_stats": {
+        "mean": -12.999086380004883,
+        "std": 1.1332305669784546,
+        "p5": -15.066770553588867,
+        "p95": -11.375275611877441
+      },
+      "sdwi_finite": true,
+      "sdwi_finite_n": 65536,
+      "sdwi_label": "SDWI",
+      "sdwi_units": "ln(10*VV_linear*VH_linear)-8; VV_lin=10**(dB/10)",
+      "water_db_threshold": -16.0,
+      "water_pixels": 5511,
+      "water_fraction": 0.0840911865234375,
+      "water_calibrated": true,
+      "speckle": "3x3 boxcar (uniform) on dB before threshold",
+      "method": "3x3 boxcar on VV/VH dB; water = (filtered VV_dB < -16.0) + 3x3 morph open; SDWI reported as letters SDWI, not used for mask",
+      "provenance": "tools.sar_read (classical backscatter; VLM did not compute this). 3x3 boxcar on VV/VH dB; water = (filtered VV_dB < -16.0) + 3x3 morph open; SDWI reported as letters SDWI, not used for mask",
+      "ingest_provenance": "SAR raster `cell_16356_p0011.tiff` shape=(256, 256) dtype=float64 calibrated=True"
+    },
+    "water_highlight": {
+      "water_pixels": 10998,
+      "mask_shape": [
+        256,
+        256
+      ],
+      "method": "GeoTIFF bands=4; NIR/green identities unknown (descriptions=[None, None, None, None]); tifffile desc='' shape=(256, 256, 4). RGB Otsu on (B-R), threshold=12.0",
+      "provenance": "tools.water_highlight (deterministic optical mask; VLM did not compute this). GeoTIFF bands=4; NIR/green identities unknown (descriptions=[None, None, None, None]); tifffile desc='' shape=(256, 256, 4). RGB Otsu on (B-R), threshold=12.0"
+    },
+    "sar_agreement": {
+      "verdicts": {
+        "water": "disagree",
+        "built_up": "withheld_no_tool"
+      },
+      "optical_water_px": 10998,
+      "sar_water_px": 5511,
+      "optical_water_fraction": 0.167816,
+      "sar_water_fraction": 0.084091,
+      "intersection_px": 203,
+      "union_px": 16306,
+      "iou": 0.012449,
+      "grid": "same_grid",
+      "sar_calibrated": true,
+      "misreg_shift_px": null,
+      "thresholds": {
+        "iou_t": 0.25,
+        "min_frac": 0.005,
+        "misreg_px": 5.0
+      },
+      "method": "independent optical and SAR water masks compared on a common grid (per-pixel intersection/union IoU and per-modality water fractions)",
+      "provenance": "tools.sar_agreement (deterministic mask agreement; VLM did not compute this). optical=tools.water_highlight mask; sar=tools.sar_read mask. Not pixel fusion."
+    }
+  },
+  "answer": "Water bodies were identified via radar using a VV polarization threshold of -16.0 dB, which detected 5,511 water pixels (8.4% of the scene) in the SAR read tool. The optical water mask from the water_highlight tool detected 10,998 pixels (16.8% of the scene), but the two masks disagree with an IoU of only 0.012. The radar-derived water mask is more conservative, likely due to the radar\u2019s sensitivity to surface roughness and the applied 3x3 boxcar smoothing. The SDWI metric, though reported, was not used for the water mask. The water pixels are distributed across the scene, with higher concentrations in the southern and central regions where darker, smoother patches appear in the radar image.",
+  "first_token_s": 1.819,
+  "complete_s": 5.011,
+  "overlay_path": "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\demo\\data\\_uploads\\20260914T193353092999Z\\overlay_live.png",
+  "images": [
+    "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\demo\\data\\_uploads\\20260914T193353092999Z\\optical.png",
+    "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\demo\\data\\_uploads\\20260914T193353092999Z\\sar_vv.png",
+    "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\demo\\data\\_uploads\\20260914T193353092999Z\\agreement_map_live.png"
+  ],
+  "metrics_badge": null,
+  "ingest_note": "Analyzing your uploaded files \u2014 not the built-in examples. GeoTIFF via rasterio `cell_16356_p0011.tiff` bands=4 size=(256, 256) crs=EPSG:32643. SAR raster `cell_16356_p0011.tiff` shape=(256, 256) dtype=float64 calibrated=True",
+  "input_source": "upload",
+  "gsd": {
+    "path": "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\gates\\_cache\\data\\rehearsal\\s1s2_india\\cross_modal_dataset\\test\\optical\\cell_16356_p0011.tiff",
+    "gsd_m": 10.0,
+    "gsd_x_m": null,
+    "gsd_y_m": null,
+    "source": "geotransform",
+    "crs": "EPSG:32643",
+    "crs_note": null,
+    "native_width": 256,
+    "native_height": 256,
+    "backend": "rasterio",
+    "provenance": "rasterio `cell_16356_p0011.tiff` crs=EPSG:32643. projected/local pixel scale (10.0, 10.0) treated as metres; mean used.",
+    "resize_scale": 1.0,
+    "gsd_m_used": 10.0
+  },
+  "misreg_check": null,
+  "misregistration_note": null,
+  "misreg_shift_px": null,
+  "agreement_map_path": "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\demo\\data\\_uploads\\20260914T193353092999Z\\agreement_map_live.png",
+  "vlm": {
+    "text": "Water bodies were identified via radar using a VV polarization threshold of -16.0 dB, which detected 5,511 water pixels (8.4% of the scene) in the SAR read tool. The optical water mask from the water_highlight tool detected 10,998 pixels (16.8% of the scene), but the two masks disagree with an IoU of only 0.012. The radar-derived water mask is more conservative, likely due to the radar\u2019s sensitivity to surface roughness and the applied 3x3 boxcar smoothing. The SDWI metric, though reported, was not used for the water mask. The water pixels are distributed across the scene, with higher concentrations in the southern and central regions where darker, smoother patches appear in the radar image.",
+    "model": "qwen3vl",
+    "url": "http://127.0.0.1:8080",
+    "n_images": 2,
+    "image_paths": [
+      "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\demo\\data\\_uploads\\20260914T193353092999Z\\optical.png",
+      "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\demo\\data\\_uploads\\20260914T193353092999Z\\sar_vv.png"
+    ],
+    "first_token_s": 1.819,
+    "complete_s": 4.921,
+    "provenance": "tools.vqa (local llama-server; no commercial vision API)"
+  },
+  "narration_check": {
+    "ok": false,
+    "issues": [
+      "invented number 8.4",
+      "invented number 16.8"
+    ]
+  },
+  "visible_answer": "### Findings (from tools)\n\n- water_highlight: water_pixels=10998; method=GeoTIFF bands=4; NIR/green identities unknown (descriptions=[None, None, None, None]); tifffile desc='' shape=(256, 256, 4). RGB Otsu on (B-R), threshold=12.0.\n- sar_read: water_pixels=5511; water_calibrated=True; SDWI mean=-12.999086380004883 (write SDWI, do not expand).\n- sar_agreement: water=disagree built_up=withheld_no_tool\n\nUNVERIFIED INTERPRETATION \u2014 JSON card wins.\n\nWater bodies were identified via radar using a VV polarization threshold of -16.0 dB, which detected 5,511 water pixels (8.4% of the scene) in the SAR read tool. The optical water mask from the water_highlight tool detected 10,998 pixels (16.8% of the scene), but the two masks disagree with an IoU of only 0.012. The radar-derived water mask is more conservative, likely due to the radar\u2019s sensitivity to surface roughness and the applied 3x3 boxcar smoothing. The SDWI metric, though reported, was not used for the water mask. The water pixels are distributed across the scene, with higher concentrations in the southern and central regions where darker, smoother patches appear in the radar image."
+}

@@ -1,0 +1,222 @@
+{
+  "ckpt": "merged_qwen3vl",
+  "columns": {
+    "rsvqa_hr_val": {
+      "n_preds": 102843,
+      "n_gold": 102843,
+      "coverage": 1.0,
+      "oa_raw_em": 0.8136,
+      "oa_token_exact_em": 0.8136,
+      "oa_normalized_em": 0.8137,
+      "aa_token_exact": 0.7812,
+      "per_family_token_exact": {
+        "area": {
+          "n": 15199,
+          "acc": 0.5744
+        },
+        "comp": {
+          "n": 33175,
+          "acc": 0.9238
+        },
+        "count": {
+          "n": 27239,
+          "acc": 0.6938
+        },
+        "presence": {
+          "n": 27230,
+          "acc": 0.9329
+        }
+      }
+    },
+    "rsvqa_hr_test": {
+      "n_preds": 222684,
+      "n_gold": 222684,
+      "coverage": 1.0,
+      "oa_raw_em": 0.8163,
+      "oa_token_exact_em": 0.8164,
+      "oa_normalized_em": 0.8164,
+      "aa_token_exact": 0.7847,
+      "per_family_token_exact": {
+        "area": {
+          "n": 33067,
+          "acc": 0.5869
+        },
+        "comp": {
+          "n": 72923,
+          "acc": 0.9229
+        },
+        "count": {
+          "n": 58149,
+          "acc": 0.7044
+        },
+        "presence": {
+          "n": 58545,
+          "acc": 0.9245
+        }
+      }
+    },
+    "rsvqa_hr_test_phili": {
+      "n_preds": 105647,
+      "n_gold": 105647,
+      "coverage": 1.0,
+      "oa_raw_em": 0.7805,
+      "oa_token_exact_em": 0.7813,
+      "oa_normalized_em": 0.7814,
+      "aa_token_exact": 0.7458,
+      "per_family_token_exact": {
+        "area": {
+          "n": 15535,
+          "acc": 0.5344
+        },
+        "comp": {
+          "n": 35019,
+          "acc": 0.9079
+        },
+        "count": {
+          "n": 27558,
+          "acc": 0.6404
+        },
+        "presence": {
+          "n": 27535,
+          "acc": 0.9006
+        }
+      }
+    },
+    "rsvqa_lr_val": {
+      "n_preds": 10005,
+      "n_gold": 10005,
+      "coverage": 1.0,
+      "oa_raw_em": 0.5392,
+      "oa_token_exact_em": 0.5401,
+      "oa_normalized_em": 0.5401,
+      "aa_token_exact": 0.5422,
+      "per_family_token_exact": {
+        "comp": {
+          "n": 4020,
+          "acc": 0.7868
+        },
+        "count": {
+          "n": 2966,
+          "acc": 0.2279
+        },
+        "presence": {
+          "n": 2919,
+          "acc": 0.5142
+        },
+        "rural_urban": {
+          "n": 100,
+          "acc": 0.64
+        }
+      }
+    },
+    "rsvqa_lr_test": {
+      "n_preds": 10004,
+      "n_gold": 10004,
+      "coverage": 1.0,
+      "oa_raw_em": 0.5553,
+      "oa_token_exact_em": 0.5566,
+      "oa_normalized_em": 0.5566,
+      "aa_token_exact": 0.5771,
+      "per_family_token_exact": {
+        "comp": {
+          "n": 4002,
+          "acc": 0.7951
+        },
+        "count": {
+          "n": 2947,
+          "acc": 0.2464
+        },
+        "presence": {
+          "n": 2955,
+          "acc": 0.5371
+        },
+        "rural_urban": {
+          "n": 100,
+          "acc": 0.73
+        }
+      }
+    },
+    "vrsbench_vqa": {
+      "n_preds": 37409,
+      "n_gold": 37409,
+      "coverage": 1.0,
+      "oa_raw_em": 0.51,
+      "oa_token_exact_em": 0.6603,
+      "oa_normalized_em": 0.6631,
+      "aa_token_exact": 0.6497,
+      "per_family_token_exact": {
+        "image": {
+          "n": 1129,
+          "acc": 0.8609
+        },
+        "object category": {
+          "n": 5434,
+          "acc": 0.618
+        },
+        "object color": {
+          "n": 3550,
+          "acc": 0.5434
+        },
+        "object direction": {
+          "n": 477,
+          "acc": 0.5514
+        },
+        "object existence": {
+          "n": 7789,
+          "acc": 0.9133
+        },
+        "object position": {
+          "n": 5828,
+          "acc": 0.5304
+        },
+        "object quantity": {
+          "n": 6374,
+          "acc": 0.6181
+        },
+        "object shape": {
+          "n": 1423,
+          "acc": 0.5418
+        },
+        "object size": {
+          "n": 1011,
+          "acc": 0.545
+        },
+        "reasoning": {
+          "n": 902,
+          "acc": 0.6907
+        },
+        "rural or urban": {
+          "n": 295,
+          "acc": 0.8034
+        },
+        "scene type": {
+          "n": 3197,
+          "acc": 0.5799
+        }
+      }
+    }
+  },
+  "contract": {
+    "raw_em": "pred.strip() == gold.strip()",
+    "token_exact_em": "tok_exact(): strip+casefold+ws-collapse+rstrip('.') \u2014 reconstruction of the wiped 0.5077 scorer; bar metric",
+    "normalized_em": "canon() (units, digit-words, commas) + nearest-vocab projection onto TRAIN answer vocab (cutoff 0.85)",
+    "vocab_source": "train answers only \u2014 no eval gold used",
+    "decode": "greedy, repetition_penalty=1.08, max_new_tokens=16",
+    "model": "merged_eval: qwen3vl8b base + LoRA merged + trained merger (see merged_manifest.json)"
+  },
+  "bar": {
+    "column": "rsvqa_hr_val",
+    "target": 0.5077,
+    "achieved_token_exact": 0.8136,
+    "achieved_normalized": 0.8137,
+    "verdict": "BEAT"
+  },
+  "run": {
+    "wall_seconds": 40.7,
+    "est_usd": 0.0036,
+    "gpu_usd_rate_s": 0.0,
+    "cpu_cores": 4.0,
+    "memory_gib": 16,
+    "pricing": "Modal list: A100-40GB $0.000944/s; CPU $0.0000131/core-s; mem $0.00000222/GiB-s"
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "schema_version": "1.0",
+  "run_id": "8481972d7588ab1b7002260aff230aa873488b3ae3efb9c52d672734064ba4bd",
+  "task": "vqa",
+  "input_contract": {
+    "valid": true,
+    "modality": "single",
+    "gsd_m": 10.0
+  },
+  "canonical_answer": "yes",
+  "claims": [
+    {
+      "id": "E1",
+      "predicate": "canonical_answer",
+      "value": "yes",
+      "region": null,
+      "confidence": {
+        "level": "measured",
+        "basis": "adapted RSVQA model, deterministic greedy decode on 127.0.0.1:8091"
+      },
+      "provenance": {
+        "tool": "canonical_vqa",
+        "model": "canonical/Qwen3VL-8B-RSVQA-Q4_K_M.gguf",
+        "gguf_sha256": "a87976860370bf657660ea3badeb59038de89aff1bb3e5b3dce4057d4e21a33f",
+        "seat": "127.0.0.1:8091",
+        "decode": "greedy temp=0 repeat_penalty=1.08 max_tokens=16"
+      }
+    }
+  ],
+  "artifacts": [],
+  "limitations": [
+    "canonical_answer is the adapted Qwen3VL-8B-RSVQA model's short answer (greedy decode, seat 127.0.0.1:8091); it is a model claim, not a measured number.",
+    "Spatial claims have no on-disk region artifact path."
+  ],
+  "trace": [
+    {
+      "plan_task": "vqa",
+      "live": true
+    }
+  ],
+  "tool_outputs": {
+    "canonical_vqa": {
+      "available": true,
+      "answer": "yes",
+      "text": "Yes",
+      "model": "canonical/Qwen3VL-8B-RSVQA-Q4_K_M.gguf",
+      "gguf_sha256": "a87976860370bf657660ea3badeb59038de89aff1bb3e5b3dce4057d4e21a33f",
+      "mmproj_sha256": "1e15a23a03caed096a56deb60c5347bd025c5f1a2c3dfeabb7a01183f11efb2c",
+      "url": "http://127.0.0.1:8091",
+      "seat": "127.0.0.1:8091",
+      "decode": {
+        "temperature": 0.0,
+        "repeat_penalty": 1.08,
+        "repetition_penalty": 1.08,
+        "max_tokens": 16
+      },
+      "n_images": 1,
+      "image_paths": [
+        "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\demo\\data\\_uploads\\20260914T193228814035Z\\image.png"
+      ],
+      "latency_s": 0.677,
+      "error": null,
+      "provenance": "tools.canonical_vqa (adapted RSVQA specialist on 127.0.0.1:8091; greedy decode; not the :8080 narrator)"
+    }
+  }
+}

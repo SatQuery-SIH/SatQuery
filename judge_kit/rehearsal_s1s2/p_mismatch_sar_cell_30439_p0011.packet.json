@@ -1,0 +1,23 @@
+{
+  "schema_version": "1.0",
+  "run_id": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+  "task": "unsupported",
+  "input_contract": {
+    "valid": true,
+    "modality": "optical+sar",
+    "gsd_m": 10.0
+  },
+  "canonical_answer": null,
+  "claims": [],
+  "artifacts": [],
+  "limitations": [
+    "No tool-owned canonical answer; Qwen text is not canonical."
+  ],
+  "trace": [
+    {
+      "plan_task": "unsupported",
+      "live": true
+    }
+  ],
+  "tool_outputs": {}
+}

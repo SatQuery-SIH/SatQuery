@@ -1,0 +1,43 @@
+{
+  "query": "What changed between the two dates?",
+  "input_mode": "optical+sar",
+  "scene": 3,
+  "live": true,
+  "plan": {
+    "task": "unsupported",
+    "input_mode": "optical+sar",
+    "tools": [],
+    "vlm_role": "none",
+    "supported": false,
+    "refusal": "Building-change detection is the Bi-temporal tab (two optical dates). This tab is optical+SAR late fusion. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks.",
+    "query": "What changed between the two dates?"
+  },
+  "tool_outputs": {},
+  "answer": "Building-change detection is the Bi-temporal tab (two optical dates). This tab is optical+SAR late fusion. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks.",
+  "first_token_s": null,
+  "complete_s": 0.024,
+  "overlay_path": null,
+  "images": [],
+  "metrics_badge": null,
+  "ingest_note": "Analyzing your uploaded files \u2014 not the built-in examples. GeoTIFF via rasterio `cell_30439_p0011.tiff` bands=4 size=(256, 256) crs=EPSG:32644. SAR raster `cell_30439_p0011.tiff` shape=(256, 256) dtype=float64 calibrated=True",
+  "input_source": "upload",
+  "gsd": {
+    "path": "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\gates\\_cache\\data\\rehearsal\\s1s2_india\\cross_modal_dataset\\train\\optical\\cell_30439_p0011.tiff",
+    "gsd_m": 10.0,
+    "gsd_x_m": null,
+    "gsd_y_m": null,
+    "source": "geotransform",
+    "crs": "EPSG:32644",
+    "crs_note": null,
+    "native_width": 256,
+    "native_height": 256,
+    "backend": "rasterio",
+    "provenance": "rasterio `cell_30439_p0011.tiff` crs=EPSG:32644. projected/local pixel scale (10.0, 10.0) treated as metres; mean used.",
+    "resize_scale": 1.0,
+    "gsd_m_used": 10.0
+  },
+  "misreg_check": null,
+  "misregistration_note": null,
+  "misreg_shift_px": null,
+  "visible_answer": "### Findings (from tools)\n\nNo tool measurements this run.\n\nBuilding-change detection is the Bi-temporal tab (two optical dates). This tab is optical+SAR late fusion. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks."
+}

@@ -1,0 +1,245 @@
+[
+  {
+    "tag": "post",
+    "patch_id": "cell_25725_p0015",
+    "split": "train",
+    "mode": "optical+sar",
+    "query": "Is there water in this scene?",
+    "wall_s": 3.99,
+    "plan_tools": [
+      "vqa",
+      "sar_read",
+      "sar_agreement"
+    ],
+    "supported": true,
+    "refusal": null,
+    "canonical_vqa": null,
+    "sar_agreement_verdicts": {
+      "water": "disagree",
+      "built_up": "withheld_no_tool"
+    },
+    "canonical_answer": null,
+    "claim_predicates": [
+      "water_method",
+      "water_pixels",
+      "water_calibrated",
+      "sdwi_label",
+      "water_pixels",
+      "water_agreement",
+      "built_up_agreement",
+      "agreement_iou",
+      "agreement_grid",
+      "coreg_transform_offset_m",
+      "coreg_same_res",
+      "coreg_shift_px"
+    ],
+    "limitations": [
+      "water agreement compares two independent deterministic masks on a common grid; it is not pixel-level optical/SAR fusion.",
+      "co-registration is measured (transform + phase-correlation levels), not assumed; the pair is not realigned."
+    ],
+    "validate_issues": [],
+    "narration_check": {
+      "ok": true,
+      "issues": []
+    },
+    "narrator_url": "http://127.0.0.1:8080",
+    "answer_head": "Water is present in this scene, as confirmed by both SAR and optical analysis tools. The SAR tool (sar_read) identifies 9,287 water pixels, representing 14.17% of the scene, using a VV backscatter thr",
+    "coreg": {
+      "transform": {
+        "status": "measured",
+        "offset_m": 0.0,
+        "dx_m": 0.0,
+        "dy_m": 0.0,
+        "same_res": true,
+        "optical_res_m": [
+          10.0,
+          10.0
+        ],
+        "sar_res_m": [
+          10.0,
+          10.0
+        ],
+        "basis": "affine transform comparison (rasterio .transform)"
+      },
+      "pixel": {
+        "status": "inconclusive",
+        "shift_px": null,
+        "dx_px": -113.0,
+        "dy_px": 102.0,
+        "peak": 0.0158,
+        "reason": "weak_peak",
+        "method": "FFT phase cross-correlation (normalized cross-power spectrum) on 0-1 optical-grayscale vs SAR-VV grids; sub-pixel via parabolic peak fit",
+        "caveat": "cross-modal optical-vs-SAR correlation is noisy; measured-with-caveat, not ground truth"
+      },
+      "shift_px": null,
+      "provenance": "tools.coreg_check (deterministic; VLM did not compute this). transform level: affine transform comparison (rasterio .transform)"
+    },
+    "sar_verdicts": {
+      "water": "disagree",
+      "built_up": "withheld_no_tool"
+    }
+  },
+  {
+    "tag": "post",
+    "patch_id": "cell_21156_p0011",
+    "split": "train",
+    "mode": "optical+sar",
+    "query": "What is the area of water in km2?",
+    "wall_s": 5.74,
+    "plan_tools": [
+      "vqa",
+      "area_calc",
+      "sar_read",
+      "sar_agreement"
+    ],
+    "supported": true,
+    "refusal": null,
+    "canonical_vqa": null,
+    "sar_agreement_verdicts": {
+      "water": "disagree",
+      "built_up": "withheld_no_tool"
+    },
+    "canonical_answer": null,
+    "claim_predicates": [
+      "water_method",
+      "water_pixels",
+      "area_m2",
+      "water_calibrated",
+      "sdwi_label",
+      "water_pixels",
+      "area_m2",
+      "water_agreement",
+      "built_up_agreement",
+      "agreement_iou",
+      "agreement_grid",
+      "coreg_transform_offset_m",
+      "coreg_same_res",
+      "coreg_shift_px"
+    ],
+    "limitations": [
+      "water agreement compares two independent deterministic masks on a common grid; it is not pixel-level optical/SAR fusion.",
+      "co-registration is measured (transform + phase-correlation levels), not assumed; the pair is not realigned."
+    ],
+    "validate_issues": [],
+    "narration_check": {
+      "ok": true,
+      "issues": []
+    },
+    "narrator_url": "http://127.0.0.1:8080",
+    "answer_head": "The area of water is 0.3052 km\u00b2, as calculated from the SAR backscatter analysis using a threshold of -16.0 dB. This water mask, derived from VV polarization, covers 3052 pixels, which corresponds to ",
+    "coreg": {
+      "transform": {
+        "status": "measured",
+        "offset_m": 0.0,
+        "dx_m": 0.0,
+        "dy_m": 0.0,
+        "same_res": true,
+        "optical_res_m": [
+          10.0,
+          10.0
+        ],
+        "sar_res_m": [
+          10.0,
+          10.0
+        ],
+        "basis": "affine transform comparison (rasterio .transform)"
+      },
+      "pixel": {
+        "status": "inconclusive",
+        "shift_px": null,
+        "dx_px": 120.0,
+        "dy_px": -78.0,
+        "peak": 0.0175,
+        "reason": "weak_peak",
+        "method": "FFT phase cross-correlation (normalized cross-power spectrum) on 0-1 optical-grayscale vs SAR-VV grids; sub-pixel via parabolic peak fit",
+        "caveat": "cross-modal optical-vs-SAR correlation is noisy; measured-with-caveat, not ground truth"
+      },
+      "shift_px": null,
+      "provenance": "tools.coreg_check (deterministic; VLM did not compute this). transform level: affine transform comparison (rasterio .transform)"
+    },
+    "sar_verdicts": {
+      "water": "disagree",
+      "built_up": "withheld_no_tool"
+    }
+  },
+  {
+    "tag": "post",
+    "patch_id": "cell_48387_p0015",
+    "split": "val",
+    "mode": "optical+sar",
+    "query": "Highlight the flooded region using SAR backscatter.",
+    "wall_s": 9.65,
+    "plan_tools": [
+      "vqa",
+      "sar_read",
+      "sar_agreement"
+    ],
+    "supported": true,
+    "refusal": null,
+    "canonical_vqa": null,
+    "sar_agreement_verdicts": {
+      "water": "optical_only",
+      "built_up": "withheld_no_tool"
+    },
+    "canonical_answer": null,
+    "claim_predicates": [
+      "water_method",
+      "water_pixels",
+      "water_calibrated",
+      "sdwi_label",
+      "water_pixels",
+      "water_agreement",
+      "built_up_agreement",
+      "agreement_iou",
+      "agreement_grid",
+      "coreg_transform_offset_m",
+      "coreg_same_res",
+      "coreg_shift_px"
+    ],
+    "limitations": [
+      "water agreement compares two independent deterministic masks on a common grid; it is not pixel-level optical/SAR fusion.",
+      "co-registration is measured (transform + phase-correlation levels), not assumed; the pair is not realigned."
+    ],
+    "validate_issues": [],
+    "narration_check": {
+      "ok": true,
+      "issues": []
+    },
+    "narrator_url": "http://127.0.0.1:8080",
+    "answer_head": "The SAR backscatter analysis identifies a flooded region with 266 water pixels, representing 0.41% of the total area, based on a VV polarization threshold of -16.0 dB. The SDWI metric, though computed",
+    "coreg": {
+      "transform": {
+        "status": "measured",
+        "offset_m": 0.0,
+        "dx_m": 0.0,
+        "dy_m": 0.0,
+        "same_res": true,
+        "optical_res_m": [
+          10.0,
+          10.0
+        ],
+        "sar_res_m": [
+          10.0,
+          10.0
+        ],
+        "basis": "affine transform comparison (rasterio .transform)"
+      },
+      "pixel": {
+        "status": "inconclusive",
+        "shift_px": null,
+        "dx_px": 23.0,
+        "dy_px": -97.0,
+        "peak": 0.0154,
+        "reason": "weak_peak",
+        "method": "FFT phase cross-correlation (normalized cross-power spectrum) on 0-1 optical-grayscale vs SAR-VV grids; sub-pixel via parabolic peak fit",
+        "caveat": "cross-modal optical-vs-SAR correlation is noisy; measured-with-caveat, not ground truth"
+      },
+      "shift_px": null,
+      "provenance": "tools.coreg_check (deterministic; VLM did not compute this). transform level: affine transform comparison (rasterio .transform)"
+    },
+    "sar_verdicts": {
+      "water": "optical_only",
+      "built_up": "withheld_no_tool"
+    }
+  }
+]

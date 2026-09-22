@@ -1,0 +1,234 @@
+{
+  "schema_version": "1.0",
+  "run_id": "d4f2b20af09689b11e65eed3f37223f7bc08c585b7813949312ee13849d3e35e",
+  "task": "water_identification",
+  "input_contract": {
+    "valid": true,
+    "modality": "optical+sar",
+    "gsd_m": 10.0
+  },
+  "canonical_answer": null,
+  "claims": [
+    {
+      "id": "E1",
+      "predicate": "water_method",
+      "value": "GeoTIFF bands=4; NIR/green identities unknown (descriptions=[None, None, None, None]); tifffile desc='' shape=(256, 256, 4). RGB Otsu on (B-R), threshold=11.0",
+      "region": "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\demo\\data\\_uploads\\20260914T193347975292Z\\overlay_live.png",
+      "confidence": {
+        "level": "measured",
+        "basis": "optical water tool metadata"
+      },
+      "provenance": {
+        "tool": "water_highlight"
+      }
+    },
+    {
+      "id": "E2",
+      "predicate": "water_pixels",
+      "value": 10770,
+      "region": "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\demo\\data\\_uploads\\20260914T193347975292Z\\overlay_live.png",
+      "confidence": {
+        "level": "measured",
+        "basis": "GeoTIFF bands=4; NIR/green identities unknown (descriptions=[None, None, None, None]); tifffile desc='' shape=(256, 256, 4). RGB Otsu on (B-R), threshold=11.0"
+      },
+      "provenance": {
+        "tool": "water_highlight"
+      }
+    },
+    {
+      "id": "E3",
+      "predicate": "water_calibrated",
+      "value": true,
+      "region": "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\demo\\data\\_uploads\\20260914T193347975292Z\\overlay_live.png",
+      "confidence": {
+        "level": "measured",
+        "basis": "ingest calibration flag"
+      },
+      "provenance": {
+        "tool": "sar_read"
+      }
+    },
+    {
+      "id": "E4",
+      "predicate": "sdwi_label",
+      "value": "SDWI",
+      "region": "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\demo\\data\\_uploads\\20260914T193347975292Z\\overlay_live.png",
+      "confidence": {
+        "level": "measured",
+        "basis": "tool metadata; render as SDWI"
+      },
+      "provenance": {
+        "tool": "sar_read"
+      }
+    },
+    {
+      "id": "E5",
+      "predicate": "water_pixels",
+      "value": 266,
+      "region": "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\demo\\data\\_uploads\\20260914T193347975292Z\\overlay_live.png",
+      "confidence": {
+        "level": "measured",
+        "basis": "3x3 boxcar on VV/VH dB; water = (filtered VV_dB < -16.0) + 3x3 morph open; SDWI reported as letters SDWI, not used for mask"
+      },
+      "provenance": {
+        "tool": "sar_read"
+      }
+    },
+    {
+      "id": "E6",
+      "predicate": "water_agreement",
+      "value": "optical_only",
+      "region": "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\demo\\data\\_uploads\\20260914T193347975292Z\\overlay_live.png",
+      "confidence": {
+        "level": "measured",
+        "basis": "sar_agreement verdict on common grid"
+      },
+      "provenance": {
+        "tool": "sar_agreement",
+        "parents": "water_highlight+sar_read"
+      }
+    },
+    {
+      "id": "E7",
+      "predicate": "built_up_agreement",
+      "value": "withheld_no_tool",
+      "region": "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\demo\\data\\_uploads\\20260914T193347975292Z\\overlay_live.png",
+      "confidence": {
+        "level": "withheld",
+        "basis": "no optical built-up tool and no calibrated SAR built-up mask"
+      },
+      "provenance": {
+        "tool": "sar_agreement"
+      }
+    },
+    {
+      "id": "E8",
+      "predicate": "agreement_iou",
+      "value": 0.011271,
+      "region": "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\demo\\data\\_uploads\\20260914T193347975292Z\\overlay_live.png",
+      "confidence": {
+        "level": "measured",
+        "basis": "intersection/union on common grid"
+      },
+      "provenance": {
+        "tool": "sar_agreement"
+      },
+      "unit": "iou"
+    },
+    {
+      "id": "E9",
+      "predicate": "agreement_grid",
+      "value": "same_grid",
+      "region": "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\demo\\data\\_uploads\\20260914T193347975292Z\\overlay_live.png",
+      "confidence": {
+        "level": "measured",
+        "basis": "comparison grid disclosure"
+      },
+      "provenance": {
+        "tool": "sar_agreement"
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "type": "mask",
+      "path": "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\demo\\data\\_uploads\\20260914T193347975292Z\\overlay_live.png",
+      "grid": "native"
+    },
+    {
+      "type": "overlay",
+      "path": "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\demo\\data\\_uploads\\20260914T193347975292Z\\overlay_live.png",
+      "grid": "native"
+    },
+    {
+      "type": "agreement_map",
+      "path": "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\demo\\data\\_uploads\\20260914T193347975292Z\\agreement_map_live.png",
+      "grid": "native"
+    },
+    {
+      "type": "box",
+      "xyxy": [
+        0,
+        0,
+        256,
+        256
+      ],
+      "grid": "native"
+    }
+  ],
+  "limitations": [
+    "water agreement compares two independent deterministic masks on a common grid; it is not pixel-level optical/SAR fusion."
+  ],
+  "trace": [
+    {
+      "plan_task": "water_identification",
+      "live": true
+    }
+  ],
+  "tool_outputs": {
+    "sar_read": {
+      "vv_db_stats": {
+        "mean": -9.274209976196289,
+        "std": 1.8533762693405151,
+        "p5": -12.18781852722168,
+        "p95": -6.508672714233398
+      },
+      "vh_db_stats": {
+        "mean": -16.902063369750977,
+        "std": 2.3409085273742676,
+        "p5": -20.749385833740234,
+        "p95": -13.285305976867676
+      },
+      "sdwi_stats": {
+        "mean": -11.724723815917969,
+        "std": 0.8218309283256531,
+        "p5": -13.023479461669922,
+        "p95": -10.50821304321289
+      },
+      "sdwi_finite": true,
+      "sdwi_finite_n": 65536,
+      "sdwi_label": "SDWI",
+      "sdwi_units": "ln(10*VV_linear*VH_linear)-8; VV_lin=10**(dB/10)",
+      "water_db_threshold": -16.0,
+      "water_pixels": 266,
+      "water_fraction": 0.004058837890625,
+      "water_calibrated": true,
+      "speckle": "3x3 boxcar (uniform) on dB before threshold",
+      "method": "3x3 boxcar on VV/VH dB; water = (filtered VV_dB < -16.0) + 3x3 morph open; SDWI reported as letters SDWI, not used for mask",
+      "provenance": "tools.sar_read (classical backscatter; VLM did not compute this). 3x3 boxcar on VV/VH dB; water = (filtered VV_dB < -16.0) + 3x3 morph open; SDWI reported as letters SDWI, not used for mask",
+      "ingest_provenance": "SAR raster `cell_48387_p0015.tiff` shape=(256, 256) dtype=float64 calibrated=True"
+    },
+    "water_highlight": {
+      "water_pixels": 10770,
+      "mask_shape": [
+        256,
+        256
+      ],
+      "method": "GeoTIFF bands=4; NIR/green identities unknown (descriptions=[None, None, None, None]); tifffile desc='' shape=(256, 256, 4). RGB Otsu on (B-R), threshold=11.0",
+      "provenance": "tools.water_highlight (deterministic optical mask; VLM did not compute this). GeoTIFF bands=4; NIR/green identities unknown (descriptions=[None, None, None, None]); tifffile desc='' shape=(256, 256, 4). RGB Otsu on (B-R), threshold=11.0"
+    },
+    "sar_agreement": {
+      "verdicts": {
+        "water": "optical_only",
+        "built_up": "withheld_no_tool"
+      },
+      "optical_water_px": 10770,
+      "sar_water_px": 266,
+      "optical_water_fraction": 0.164337,
+      "sar_water_fraction": 0.004059,
+      "intersection_px": 123,
+      "union_px": 10913,
+      "iou": 0.011271,
+      "grid": "same_grid",
+      "sar_calibrated": true,
+      "misreg_shift_px": null,
+      "thresholds": {
+        "iou_t": 0.25,
+        "min_frac": 0.005,
+        "misreg_px": 5.0
+      },
+      "method": "independent optical and SAR water masks compared on a common grid (per-pixel intersection/union IoU and per-modality water fractions)",
+      "provenance": "tools.sar_agreement (deterministic mask agreement; VLM did not compute this). optical=tools.water_highlight mask; sar=tools.sar_read mask. Not pixel fusion."
+    }
+  }
+}

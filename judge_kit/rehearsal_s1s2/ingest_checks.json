@@ -1,0 +1,1136 @@
+[
+  {
+    "patch_id": "cell_25725_p0015",
+    "split": "train",
+    "lon": 77.92821481,
+    "lat": 8.80599736,
+    "single": {
+      "ok": true,
+      "error": null,
+      "gsd_source": "geotransform",
+      "gsd_m": 10.0,
+      "crs": "EPSG:32643",
+      "crs_note": null,
+      "preview": {
+        "exists": true,
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "mean": 108.97,
+        "std": 55.85,
+        "nonzero_frac": 0.9786,
+        "black": false
+      },
+      "note": "Analyzing your uploaded files \u2014 not the built-in examples. GeoTIFF via rasterio `cell_25725_p0015.tiff` bands=4 size=(256, 256) crs=EPSG:32643.",
+      "source_original": "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\gates\\_cache\\data\\rehearsal\\s1s2_india\\cross_modal_dataset\\train\\optical\\cell_25725_p0015.tiff"
+    },
+    "sar": {
+      "ok": true,
+      "error": null,
+      "gsd_source": "geotransform",
+      "gsd_m": 10.0,
+      "crs": "EPSG:32643",
+      "crs_note": null,
+      "calibrated": true,
+      "vv_shape": [
+        256,
+        256
+      ],
+      "vv_dtype": "float32",
+      "vv_minmax": [
+        -25.15,
+        11.64
+      ],
+      "vh_minmax": [
+        -47.1,
+        -2.56
+      ],
+      "vv_eq_vh": false,
+      "sar_preview": {
+        "exists": true,
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "mean": 125.13,
+        "std": 58.32,
+        "nonzero_frac": 0.9793,
+        "black": false
+      },
+      "optical_preview": {
+        "exists": true,
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "mean": 108.97,
+        "std": 55.85,
+        "nonzero_frac": 0.9786,
+        "black": false
+      },
+      "misreg_fields": {
+        "misreg_check": null,
+        "misreg_shift_px": null,
+        "misregistration_note": null
+      },
+      "note": "Analyzing your uploaded files \u2014 not the built-in examples. GeoTIFF via rasterio `cell_25725_p0015.tiff` bands=4 size=(256, 256) crs=EPSG:32643. SAR raster `cell_25725_p0015.tiff` shape=(256, 256) dtype=float64 calibrated=True"
+    }
+  },
+  {
+    "patch_id": "cell_07835_p0015",
+    "split": "train",
+    "lon": 71.12821481,
+    "lat": 21.80599736,
+    "single": {
+      "ok": true,
+      "error": null,
+      "gsd_source": "geotransform",
+      "gsd_m": 10.0,
+      "crs": "EPSG:32642",
+      "crs_note": null,
+      "preview": {
+        "exists": true,
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "mean": 90.13,
+        "std": 54.89,
+        "nonzero_frac": 0.9785,
+        "black": false
+      },
+      "note": "Analyzing your uploaded files \u2014 not the built-in examples. GeoTIFF via rasterio `cell_07835_p0015.tiff` bands=4 size=(256, 256) crs=EPSG:32642.",
+      "source_original": "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\gates\\_cache\\data\\rehearsal\\s1s2_india\\cross_modal_dataset\\train\\optical\\cell_07835_p0015.tiff"
+    },
+    "sar": {
+      "ok": true,
+      "error": null,
+      "gsd_source": "geotransform",
+      "gsd_m": 10.0,
+      "crs": "EPSG:32642",
+      "crs_note": null,
+      "calibrated": true,
+      "vv_shape": [
+        256,
+        256
+      ],
+      "vv_dtype": "float32",
+      "vv_minmax": [
+        -27.29,
+        0.41
+      ],
+      "vh_minmax": [
+        -48.42,
+        -9.46
+      ],
+      "vv_eq_vh": false,
+      "sar_preview": {
+        "exists": true,
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "mean": 134.0,
+        "std": 59.38,
+        "nonzero_frac": 0.9792,
+        "black": false
+      },
+      "optical_preview": {
+        "exists": true,
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "mean": 90.13,
+        "std": 54.89,
+        "nonzero_frac": 0.9785,
+        "black": false
+      },
+      "misreg_fields": {
+        "misreg_check": null,
+        "misreg_shift_px": null,
+        "misregistration_note": null
+      },
+      "note": "Analyzing your uploaded files \u2014 not the built-in examples. GeoTIFF via rasterio `cell_07835_p0015.tiff` bands=4 size=(256, 256) crs=EPSG:32642. SAR raster `cell_07835_p0015.tiff` shape=(256, 256) dtype=float64 calibrated=True"
+    }
+  },
+  {
+    "patch_id": "cell_11582_p0015",
+    "split": "train",
+    "lon": 72.52821481,
+    "lat": 25.50599736,
+    "single": {
+      "ok": true,
+      "error": null,
+      "gsd_source": "geotransform",
+      "gsd_m": 10.0,
+      "crs": "EPSG:32643",
+      "crs_note": null,
+      "preview": {
+        "exists": true,
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "mean": 180.5,
+        "std": 48.47,
+        "nonzero_frac": 0.9498,
+        "black": false
+      },
+      "note": "Analyzing your uploaded files \u2014 not the built-in examples. GeoTIFF via rasterio `cell_11582_p0015.tiff` bands=4 size=(256, 256) crs=EPSG:32643.",
+      "source_original": "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\gates\\_cache\\data\\rehearsal\\s1s2_india\\cross_modal_dataset\\train\\optical\\cell_11582_p0015.tiff"
+    },
+    "sar": {
+      "ok": true,
+      "error": null,
+      "gsd_source": "geotransform",
+      "gsd_m": 10.0,
+      "crs": "EPSG:32643",
+      "crs_note": null,
+      "calibrated": true,
+      "vv_shape": [
+        256,
+        256
+      ],
+      "vv_dtype": "float32",
+      "vv_minmax": [
+        -50.0,
+        7.9
+      ],
+      "vh_minmax": [
+        -50.0,
+        -3.77
+      ],
+      "vv_eq_vh": false,
+      "sar_preview": {
+        "exists": true,
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "mean": 208.69,
+        "std": 50.34,
+        "nonzero_frac": 0.9498,
+        "black": false
+      },
+      "optical_preview": {
+        "exists": true,
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "mean": 180.5,
+        "std": 48.47,
+        "nonzero_frac": 0.9498,
+        "black": false
+      },
+      "misreg_fields": {
+        "misreg_check": null,
+        "misreg_shift_px": null,
+        "misregistration_note": null
+      },
+      "note": "Analyzing your uploaded files \u2014 not the built-in examples. GeoTIFF via rasterio `cell_11582_p0015.tiff` bands=4 size=(256, 256) crs=EPSG:32643. SAR raster `cell_11582_p0015.tiff` shape=(256, 256) dtype=float64 calibrated=True"
+    }
+  },
+  {
+    "patch_id": "cell_32465_p0015",
+    "split": "train",
+    "lon": 80.42821481,
+    "lat": 20.30599736,
+    "single": {
+      "ok": true,
+      "error": null,
+      "gsd_source": "geotransform",
+      "gsd_m": 10.0,
+      "crs": "EPSG:32644",
+      "crs_note": null,
+      "preview": {
+        "exists": true,
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "mean": 64.43,
+        "std": 62.35,
+        "nonzero_frac": 0.9767,
+        "black": false
+      },
+      "note": "Analyzing your uploaded files \u2014 not the built-in examples. GeoTIFF via rasterio `cell_32465_p0015.tiff` bands=4 size=(256, 256) crs=EPSG:32644.",
+      "source_original": "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\gates\\_cache\\data\\rehearsal\\s1s2_india\\cross_modal_dataset\\train\\optical\\cell_32465_p0015.tiff"
+    },
+    "sar": {
+      "ok": true,
+      "error": null,
+      "gsd_source": "geotransform",
+      "gsd_m": 10.0,
+      "crs": "EPSG:32644",
+      "crs_note": null,
+      "calibrated": true,
+      "vv_shape": [
+        256,
+        256
+      ],
+      "vv_dtype": "float32",
+      "vv_minmax": [
+        -21.52,
+        -0.86
+      ],
+      "vh_minmax": [
+        -30.29,
+        -6.93
+      ],
+      "vv_eq_vh": false,
+      "sar_preview": {
+        "exists": true,
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "mean": 137.0,
+        "std": 59.21,
+        "nonzero_frac": 0.9794,
+        "black": false
+      },
+      "optical_preview": {
+        "exists": true,
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "mean": 64.43,
+        "std": 62.35,
+        "nonzero_frac": 0.9767,
+        "black": false
+      },
+      "misreg_fields": {
+        "misreg_check": null,
+        "misreg_shift_px": null,
+        "misregistration_note": null
+      },
+      "note": "Analyzing your uploaded files \u2014 not the built-in examples. GeoTIFF via rasterio `cell_32465_p0015.tiff` bands=4 size=(256, 256) crs=EPSG:32644. SAR raster `cell_32465_p0015.tiff` shape=(256, 256) dtype=float64 calibrated=True"
+    }
+  },
+  {
+    "patch_id": "cell_21156_p0011",
+    "split": "train",
+    "lon": 76.12821481,
+    "lat": 28.90599736,
+    "single": {
+      "ok": true,
+      "error": null,
+      "gsd_source": "geotransform",
+      "gsd_m": 10.0,
+      "crs": "EPSG:32643",
+      "crs_note": null,
+      "preview": {
+        "exists": true,
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "mean": 123.7,
+        "std": 66.85,
+        "nonzero_frac": 0.9789,
+        "black": false
+      },
+      "note": "Analyzing your uploaded files \u2014 not the built-in examples. GeoTIFF via rasterio `cell_21156_p0011.tiff` bands=4 size=(256, 256) crs=EPSG:32643.",
+      "source_original": "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\gates\\_cache\\data\\rehearsal\\s1s2_india\\cross_modal_dataset\\train\\optical\\cell_21156_p0011.tiff"
+    },
+    "sar": {
+      "ok": true,
+      "error": null,
+      "gsd_source": "geotransform",
+      "gsd_m": 10.0,
+      "crs": "EPSG:32643",
+      "crs_note": null,
+      "calibrated": true,
+      "vv_shape": [
+        256,
+        256
+      ],
+      "vv_dtype": "float32",
+      "vv_minmax": [
+        -40.54,
+        7.71
+      ],
+      "vh_minmax": [
+        -51.4,
+        -3.77
+      ],
+      "vv_eq_vh": false,
+      "sar_preview": {
+        "exists": true,
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "mean": 133.9,
+        "std": 55.85,
+        "nonzero_frac": 0.9796,
+        "black": false
+      },
+      "optical_preview": {
+        "exists": true,
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "mean": 123.7,
+        "std": 66.85,
+        "nonzero_frac": 0.9789,
+        "black": false
+      },
+      "misreg_fields": {
+        "misreg_check": null,
+        "misreg_shift_px": null,
+        "misregistration_note": null
+      },
+      "note": "Analyzing your uploaded files \u2014 not the built-in examples. GeoTIFF via rasterio `cell_21156_p0011.tiff` bands=4 size=(256, 256) crs=EPSG:32643. SAR raster `cell_21156_p0011.tiff` shape=(256, 256) dtype=float64 calibrated=True"
+    }
+  },
+  {
+    "patch_id": "cell_30439_p0011",
+    "split": "train",
+    "lon": 79.62821481,
+    "lat": 29.70599736,
+    "single": {
+      "ok": true,
+      "error": null,
+      "gsd_source": "geotransform",
+      "gsd_m": 10.0,
+      "crs": "EPSG:32644",
+      "crs_note": null,
+      "preview": {
+        "exists": true,
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "mean": 92.51,
+        "std": 59.91,
+        "nonzero_frac": 0.9781,
+        "black": false
+      },
+      "note": "Analyzing your uploaded files \u2014 not the built-in examples. GeoTIFF via rasterio `cell_30439_p0011.tiff` bands=4 size=(256, 256) crs=EPSG:32644.",
+      "source_original": "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\gates\\_cache\\data\\rehearsal\\s1s2_india\\cross_modal_dataset\\train\\optical\\cell_30439_p0011.tiff"
+    },
+    "sar": {
+      "ok": true,
+      "error": null,
+      "gsd_source": "geotransform",
+      "gsd_m": 10.0,
+      "crs": "EPSG:32644",
+      "crs_note": null,
+      "calibrated": true,
+      "vv_shape": [
+        256,
+        256
+      ],
+      "vv_dtype": "float32",
+      "vv_minmax": [
+        -32.96,
+        4.13
+      ],
+      "vh_minmax": [
+        -39.78,
+        -4.81
+      ],
+      "vv_eq_vh": false,
+      "sar_preview": {
+        "exists": true,
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "mean": 134.3,
+        "std": 58.54,
+        "nonzero_frac": 0.9794,
+        "black": false
+      },
+      "optical_preview": {
+        "exists": true,
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "mean": 92.51,
+        "std": 59.91,
+        "nonzero_frac": 0.9781,
+        "black": false
+      },
+      "misreg_fields": {
+        "misreg_check": null,
+        "misreg_shift_px": null,
+        "misregistration_note": null
+      },
+      "note": "Analyzing your uploaded files \u2014 not the built-in examples. GeoTIFF via rasterio `cell_30439_p0011.tiff` bands=4 size=(256, 256) crs=EPSG:32644. SAR raster `cell_30439_p0011.tiff` shape=(256, 256) dtype=float64 calibrated=True"
+    }
+  },
+  {
+    "patch_id": "cell_23359_p0015",
+    "split": "val",
+    "lon": 77.02821481,
+    "lat": 10.70599736,
+    "single": {
+      "ok": true,
+      "error": null,
+      "gsd_source": "geotransform",
+      "gsd_m": 10.0,
+      "crs": "EPSG:32643",
+      "crs_note": null,
+      "preview": {
+        "exists": true,
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "mean": 79.18,
+        "std": 69.66,
+        "nonzero_frac": 0.9744,
+        "black": false
+      },
+      "note": "Analyzing your uploaded files \u2014 not the built-in examples. GeoTIFF via rasterio `cell_23359_p0015.tiff` bands=4 size=(256, 256) crs=EPSG:32643.",
+      "source_original": "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\gates\\_cache\\data\\rehearsal\\s1s2_india\\cross_modal_dataset\\val\\optical\\cell_23359_p0015.tiff"
+    },
+    "sar": {
+      "ok": true,
+      "error": null,
+      "gsd_source": "geotransform",
+      "gsd_m": 10.0,
+      "crs": "EPSG:32643",
+      "crs_note": null,
+      "calibrated": true,
+      "vv_shape": [
+        256,
+        256
+      ],
+      "vv_dtype": "float32",
+      "vv_minmax": [
+        -26.17,
+        8.15
+      ],
+      "vh_minmax": [
+        -37.64,
+        -1.61
+      ],
+      "vv_eq_vh": false,
+      "sar_preview": {
+        "exists": true,
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "mean": 140.78,
+        "std": 62.19,
+        "nonzero_frac": 0.9791,
+        "black": false
+      },
+      "optical_preview": {
+        "exists": true,
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "mean": 79.18,
+        "std": 69.66,
+        "nonzero_frac": 0.9744,
+        "black": false
+      },
+      "misreg_fields": {
+        "misreg_check": null,
+        "misreg_shift_px": null,
+        "misregistration_note": null
+      },
+      "note": "Analyzing your uploaded files \u2014 not the built-in examples. GeoTIFF via rasterio `cell_23359_p0015.tiff` bands=4 size=(256, 256) crs=EPSG:32643. SAR raster `cell_23359_p0015.tiff` shape=(256, 256) dtype=float64 calibrated=True"
+    }
+  },
+  {
+    "patch_id": "cell_17093_p0015",
+    "split": "val",
+    "lon": 74.62821481,
+    "lat": 20.10599736,
+    "single": {
+      "ok": true,
+      "error": null,
+      "gsd_source": "geotransform",
+      "gsd_m": 10.0,
+      "crs": "EPSG:32643",
+      "crs_note": null,
+      "preview": {
+        "exists": true,
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "mean": 100.25,
+        "std": 62.84,
+        "nonzero_frac": 0.9784,
+        "black": false
+      },
+      "note": "Analyzing your uploaded files \u2014 not the built-in examples. GeoTIFF via rasterio `cell_17093_p0015.tiff` bands=4 size=(256, 256) crs=EPSG:32643.",
+      "source_original": "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\gates\\_cache\\data\\rehearsal\\s1s2_india\\cross_modal_dataset\\val\\optical\\cell_17093_p0015.tiff"
+    },
+    "sar": {
+      "ok": true,
+      "error": null,
+      "gsd_source": "geotransform",
+      "gsd_m": 10.0,
+      "crs": "EPSG:32643",
+      "crs_note": null,
+      "calibrated": true,
+      "vv_shape": [
+        256,
+        256
+      ],
+      "vv_dtype": "float32",
+      "vv_minmax": [
+        -25.1,
+        8.11
+      ],
+      "vh_minmax": [
+        -37.63,
+        -0.14
+      ],
+      "vv_eq_vh": false,
+      "sar_preview": {
+        "exists": true,
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "mean": 131.09,
+        "std": 58.09,
+        "nonzero_frac": 0.9793,
+        "black": false
+      },
+      "optical_preview": {
+        "exists": true,
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "mean": 100.25,
+        "std": 62.84,
+        "nonzero_frac": 0.9784,
+        "black": false
+      },
+      "misreg_fields": {
+        "misreg_check": null,
+        "misreg_shift_px": null,
+        "misregistration_note": null
+      },
+      "note": "Analyzing your uploaded files \u2014 not the built-in examples. GeoTIFF via rasterio `cell_17093_p0015.tiff` bands=4 size=(256, 256) crs=EPSG:32643. SAR raster `cell_17093_p0015.tiff` shape=(256, 256) dtype=float64 calibrated=True"
+    }
+  },
+  {
+    "patch_id": "cell_30332_p0015",
+    "split": "val",
+    "lon": 79.62821481,
+    "lat": 19.00599736,
+    "single": {
+      "ok": true,
+      "error": null,
+      "gsd_source": "geotransform",
+      "gsd_m": 10.0,
+      "crs": "EPSG:32644",
+      "crs_note": null,
+      "preview": {
+        "exists": true,
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "mean": 64.94,
+        "std": 56.99,
+        "nonzero_frac": 0.9772,
+        "black": false
+      },
+      "note": "Analyzing your uploaded files \u2014 not the built-in examples. GeoTIFF via rasterio `cell_30332_p0015.tiff` bands=4 size=(256, 256) crs=EPSG:32644.",
+      "source_original": "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\gates\\_cache\\data\\rehearsal\\s1s2_india\\cross_modal_dataset\\val\\optical\\cell_30332_p0015.tiff"
+    },
+    "sar": {
+      "ok": true,
+      "error": null,
+      "gsd_source": "geotransform",
+      "gsd_m": 10.0,
+      "crs": "EPSG:32644",
+      "crs_note": null,
+      "calibrated": true,
+      "vv_shape": [
+        256,
+        256
+      ],
+      "vv_dtype": "float32",
+      "vv_minmax": [
+        -25.49,
+        -3.16
+      ],
+      "vh_minmax": [
+        -34.62,
+        -9.74
+      ],
+      "vv_eq_vh": false,
+      "sar_preview": {
+        "exists": true,
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "mean": 141.02,
+        "std": 58.68,
+        "nonzero_frac": 0.9795,
+        "black": false
+      },
+      "optical_preview": {
+        "exists": true,
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "mean": 64.94,
+        "std": 56.99,
+        "nonzero_frac": 0.9772,
+        "black": false
+      },
+      "misreg_fields": {
+        "misreg_check": null,
+        "misreg_shift_px": null,
+        "misregistration_note": null
+      },
+      "note": "Analyzing your uploaded files \u2014 not the built-in examples. GeoTIFF via rasterio `cell_30332_p0015.tiff` bands=4 size=(256, 256) crs=EPSG:32644. SAR raster `cell_30332_p0015.tiff` shape=(256, 256) dtype=float64 calibrated=True"
+    }
+  },
+  {
+    "patch_id": "cell_48387_p0015",
+    "split": "val",
+    "lon": 86.42821481,
+    "lat": 22.50599736,
+    "single": {
+      "ok": true,
+      "error": null,
+      "gsd_source": "geotransform",
+      "gsd_m": 10.0,
+      "crs": "EPSG:32645",
+      "crs_note": null,
+      "preview": {
+        "exists": true,
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "mean": 131.19,
+        "std": 60.9,
+        "nonzero_frac": 0.9782,
+        "black": false
+      },
+      "note": "Analyzing your uploaded files \u2014 not the built-in examples. GeoTIFF via rasterio `cell_48387_p0015.tiff` bands=4 size=(256, 256) crs=EPSG:32645.",
+      "source_original": "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\gates\\_cache\\data\\rehearsal\\s1s2_india\\cross_modal_dataset\\val\\optical\\cell_48387_p0015.tiff"
+    },
+    "sar": {
+      "ok": true,
+      "error": null,
+      "gsd_source": "geotransform",
+      "gsd_m": 10.0,
+      "crs": "EPSG:32645",
+      "crs_note": null,
+      "calibrated": true,
+      "vv_shape": [
+        256,
+        256
+      ],
+      "vv_dtype": "float32",
+      "vv_minmax": [
+        -27.68,
+        6.69
+      ],
+      "vh_minmax": [
+        -35.2,
+        -2.5
+      ],
+      "vv_eq_vh": false,
+      "sar_preview": {
+        "exists": true,
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "mean": 139.05,
+        "std": 58.14,
+        "nonzero_frac": 0.9795,
+        "black": false
+      },
+      "optical_preview": {
+        "exists": true,
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "mean": 131.19,
+        "std": 60.9,
+        "nonzero_frac": 0.9782,
+        "black": false
+      },
+      "misreg_fields": {
+        "misreg_check": null,
+        "misreg_shift_px": null,
+        "misregistration_note": null
+      },
+      "note": "Analyzing your uploaded files \u2014 not the built-in examples. GeoTIFF via rasterio `cell_48387_p0015.tiff` bands=4 size=(256, 256) crs=EPSG:32645. SAR raster `cell_48387_p0015.tiff` shape=(256, 256) dtype=float64 calibrated=True"
+    }
+  },
+  {
+    "patch_id": "cell_18886_p0015",
+    "split": "test",
+    "lon": 75.32821481,
+    "lat": 13.90599736,
+    "single": {
+      "ok": true,
+      "error": null,
+      "gsd_source": "geotransform",
+      "gsd_m": 10.0,
+      "crs": "EPSG:32643",
+      "crs_note": null,
+      "preview": {
+        "exists": true,
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "mean": 52.78,
+        "std": 52.11,
+        "nonzero_frac": 0.9768,
+        "black": false
+      },
+      "note": "Analyzing your uploaded files \u2014 not the built-in examples. GeoTIFF via rasterio `cell_18886_p0015.tiff` bands=4 size=(256, 256) crs=EPSG:32643.",
+      "source_original": "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\gates\\_cache\\data\\rehearsal\\s1s2_india\\cross_modal_dataset\\test\\optical\\cell_18886_p0015.tiff"
+    },
+    "sar": {
+      "ok": true,
+      "error": null,
+      "gsd_source": "geotransform",
+      "gsd_m": 10.0,
+      "crs": "EPSG:32643",
+      "crs_note": null,
+      "calibrated": true,
+      "vv_shape": [
+        256,
+        256
+      ],
+      "vv_dtype": "float32",
+      "vv_minmax": [
+        -26.56,
+        3.26
+      ],
+      "vh_minmax": [
+        -35.28,
+        -4.44
+      ],
+      "vv_eq_vh": false,
+      "sar_preview": {
+        "exists": true,
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "mean": 132.03,
+        "std": 58.63,
+        "nonzero_frac": 0.9793,
+        "black": false
+      },
+      "optical_preview": {
+        "exists": true,
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "mean": 52.78,
+        "std": 52.11,
+        "nonzero_frac": 0.9768,
+        "black": false
+      },
+      "misreg_fields": {
+        "misreg_check": null,
+        "misreg_shift_px": null,
+        "misregistration_note": null
+      },
+      "note": "Analyzing your uploaded files \u2014 not the built-in examples. GeoTIFF via rasterio `cell_18886_p0015.tiff` bands=4 size=(256, 256) crs=EPSG:32643. SAR raster `cell_18886_p0015.tiff` shape=(256, 256) dtype=float64 calibrated=True"
+    }
+  },
+  {
+    "patch_id": "cell_19972_p0015",
+    "split": "test",
+    "lon": 75.72821481,
+    "lat": 16.50599736,
+    "single": {
+      "ok": true,
+      "error": null,
+      "gsd_source": "geotransform",
+      "gsd_m": 10.0,
+      "crs": "EPSG:32643",
+      "crs_note": null,
+      "preview": {
+        "exists": true,
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "mean": 84.32,
+        "std": 50.13,
+        "nonzero_frac": 0.9744,
+        "black": false
+      },
+      "note": "Analyzing your uploaded files \u2014 not the built-in examples. GeoTIFF via rasterio `cell_19972_p0015.tiff` bands=4 size=(256, 256) crs=EPSG:32643.",
+      "source_original": "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\gates\\_cache\\data\\rehearsal\\s1s2_india\\cross_modal_dataset\\test\\optical\\cell_19972_p0015.tiff"
+    },
+    "sar": {
+      "ok": true,
+      "error": null,
+      "gsd_source": "geotransform",
+      "gsd_m": 10.0,
+      "crs": "EPSG:32643",
+      "crs_note": null,
+      "calibrated": true,
+      "vv_shape": [
+        256,
+        256
+      ],
+      "vv_dtype": "float32",
+      "vv_minmax": [
+        -39.09,
+        6.69
+      ],
+      "vh_minmax": [
+        -40.52,
+        -5.73
+      ],
+      "vv_eq_vh": false,
+      "sar_preview": {
+        "exists": true,
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "mean": 164.97,
+        "std": 46.94,
+        "nonzero_frac": 0.9796,
+        "black": false
+      },
+      "optical_preview": {
+        "exists": true,
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "mean": 84.32,
+        "std": 50.13,
+        "nonzero_frac": 0.9744,
+        "black": false
+      },
+      "misreg_fields": {
+        "misreg_check": null,
+        "misreg_shift_px": null,
+        "misregistration_note": null
+      },
+      "note": "Analyzing your uploaded files \u2014 not the built-in examples. GeoTIFF via rasterio `cell_19972_p0015.tiff` bands=4 size=(256, 256) crs=EPSG:32643. SAR raster `cell_19972_p0015.tiff` shape=(256, 256) dtype=float64 calibrated=True"
+    }
+  },
+  {
+    "patch_id": "cell_16356_p0011",
+    "split": "test",
+    "lon": 74.32821481,
+    "lat": 25.90599736,
+    "single": {
+      "ok": true,
+      "error": null,
+      "gsd_source": "geotransform",
+      "gsd_m": 10.0,
+      "crs": "EPSG:32643",
+      "crs_note": null,
+      "preview": {
+        "exists": true,
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "mean": 134.02,
+        "std": 57.83,
+        "nonzero_frac": 0.9793,
+        "black": false
+      },
+      "note": "Analyzing your uploaded files \u2014 not the built-in examples. GeoTIFF via rasterio `cell_16356_p0011.tiff` bands=4 size=(256, 256) crs=EPSG:32643.",
+      "source_original": "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\gates\\_cache\\data\\rehearsal\\s1s2_india\\cross_modal_dataset\\test\\optical\\cell_16356_p0011.tiff"
+    },
+    "sar": {
+      "ok": true,
+      "error": null,
+      "gsd_source": "geotransform",
+      "gsd_m": 10.0,
+      "crs": "EPSG:32643",
+      "crs_note": null,
+      "calibrated": true,
+      "vv_shape": [
+        256,
+        256
+      ],
+      "vv_dtype": "float32",
+      "vv_minmax": [
+        -27.12,
+        1.01
+      ],
+      "vh_minmax": [
+        -37.28,
+        -5.39
+      ],
+      "vv_eq_vh": false,
+      "sar_preview": {
+        "exists": true,
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "mean": 134.11,
+        "std": 59.4,
+        "nonzero_frac": 0.9792,
+        "black": false
+      },
+      "optical_preview": {
+        "exists": true,
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "mean": 134.02,
+        "std": 57.83,
+        "nonzero_frac": 0.9793,
+        "black": false
+      },
+      "misreg_fields": {
+        "misreg_check": null,
+        "misreg_shift_px": null,
+        "misregistration_note": null
+      },
+      "note": "Analyzing your uploaded files \u2014 not the built-in examples. GeoTIFF via rasterio `cell_16356_p0011.tiff` bands=4 size=(256, 256) crs=EPSG:32643. SAR raster `cell_16356_p0011.tiff` shape=(256, 256) dtype=float64 calibrated=True"
+    }
+  },
+  {
+    "patch_id": "cell_30118_p0015",
+    "split": "test",
+    "lon": 79.52821481,
+    "lat": 24.10599736,
+    "single": {
+      "ok": true,
+      "error": null,
+      "gsd_source": "geotransform",
+      "gsd_m": 10.0,
+      "crs": "EPSG:32644",
+      "crs_note": null,
+      "preview": {
+        "exists": true,
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "mean": 99.0,
+        "std": 53.63,
+        "nonzero_frac": 0.9797,
+        "black": false
+      },
+      "note": "Analyzing your uploaded files \u2014 not the built-in examples. GeoTIFF via rasterio `cell_30118_p0015.tiff` bands=4 size=(256, 256) crs=EPSG:32644.",
+      "source_original": "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\gates\\_cache\\data\\rehearsal\\s1s2_india\\cross_modal_dataset\\test\\optical\\cell_30118_p0015.tiff"
+    },
+    "sar": {
+      "ok": true,
+      "error": null,
+      "gsd_source": "geotransform",
+      "gsd_m": 10.0,
+      "crs": "EPSG:32644",
+      "crs_note": null,
+      "calibrated": true,
+      "vv_shape": [
+        256,
+        256
+      ],
+      "vv_dtype": "float32",
+      "vv_minmax": [
+        -50.0,
+        3.39
+      ],
+      "vh_minmax": [
+        -50.0,
+        -6.77
+      ],
+      "vv_eq_vh": false,
+      "sar_preview": {
+        "exists": true,
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "mean": 153.81,
+        "std": 50.28,
+        "nonzero_frac": 0.9799,
+        "black": false
+      },
+      "optical_preview": {
+        "exists": true,
+        "shape": [
+          256,
+          256,
+          3
+        ],
+        "mean": 99.0,
+        "std": 53.63,
+        "nonzero_frac": 0.9797,
+        "black": false
+      },
+      "misreg_fields": {
+        "misreg_check": null,
+        "misreg_shift_px": null,
+        "misregistration_note": null
+      },
+      "note": "Analyzing your uploaded files \u2014 not the built-in examples. GeoTIFF via rasterio `cell_30118_p0015.tiff` bands=4 size=(256, 256) crs=EPSG:32644. SAR raster `cell_30118_p0015.tiff` shape=(256, 256) dtype=float64 calibrated=True"
+    }
+  }
+]

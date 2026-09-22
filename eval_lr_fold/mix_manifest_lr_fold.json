@@ -1,0 +1,85 @@
+{
+  "step": "build_mix_lr_fold",
+  "seed": 42,
+  "n_hr_replay_target": 20000,
+  "n_cap_target": 15000,
+  "count_oversample_lr": 2.5,
+  "eval_n": {
+    "rsvqa_hr_val": 102843,
+    "rsvqa_hr_test": 222684,
+    "rsvqa_hr_test_phili": 105647,
+    "rsvqa_lr_val": 10005,
+    "rsvqa_lr_test": 10004,
+    "vrsbench_vqa": 37409
+  },
+  "eval_ids_file_sha256": {
+    "rsvqa_hr_val": "3cc2518b92fc9c031591819bac7d58da2266dddc538dcd74c465d96f3493ab0b",
+    "rsvqa_hr_test": "196c2a2ff6f6e27e21cb76c0bfb7a84b3dea3d703361831c7bea8756cd985fbf",
+    "rsvqa_hr_test_phili": "9a1c6f00d3915b947cb2bd8f002be26ef9ddb31ab4a443f880d27537261a055c",
+    "rsvqa_lr_val": "81fdedabc5aba181bf154b5f02eb496ded7c6f41916659ed4d0d3d56e2cbb664",
+    "rsvqa_lr_test": "7735643c116bcce5dd2b387deb1c7661fd448cd8c99de2ef707bc5f114f0255b",
+    "vrsbench_vqa": "bd858cb81c6450e231befa3e25caa3c2aefb43c7dd61f6ae561ba4caa7d0eae8"
+  },
+  "lr": {
+    "train_file_entries": 77232,
+    "inactive_stubs": 20009,
+    "active_joined": 57223,
+    "active_no_answer": 0,
+    "uniq_images": 572,
+    "type_counts": {
+      "rural_urban": 572,
+      "presence": 17008,
+      "count": 17089,
+      "comp": 22554
+    },
+    "note": "inactive stubs' qids == lr_val+lr_test eval qids (verified disjoint from active) \u2014 they carry no image/question and are never trainable.",
+    "effective_rows_after_oversample": 82857,
+    "count_effective": 42723,
+    "count_uniq": 17089
+  },
+  "old_mix_sha256": "e60f369567e922e4ca56b509da523d351c31c09a371b5dd8d95180918e1b7332",
+  "overlap": {
+    "rsvqa_lr_id_overlap_n": 0,
+    "rsvqa_lr_id_overlap_sample": [],
+    "rsvqa_lr_image_overlap_n": 0,
+    "rsvqa_hr_id_overlap_n": 0,
+    "rsvqa_hr_id_overlap_sample": [],
+    "vrsb_image_overlap_n": 0,
+    "vrsb_image_overlap_sample": [],
+    "diag_hr_shared_image_ids_n": 0,
+    "note": "id gate is dataset-scoped (LR rows vs LR eval, HR rows vs HR eval). LR image-level gate is literal \u2014 LR splits partition images as well as questions. HR image overlap is diagnostic only (splits partition questions; images repeat) \u2014 same semantics as the original build_mix."
+  },
+  "class_weight_rule": "w = clip(N/(K*freq), 0.25, 4.0) renormalized to mean 1.0 over non-caption rows; caption rows fixed 1.0 \u2014 freq computed on the final mix incl. LR count multiplicity (same as original).",
+  "source_sha256": {
+    "rsvqa/lr/LR_split_train_questions.json": "2f45ac269a78392fc54fff1d7903e48696ec668347f41b02aaecd27f7d863255",
+    "rsvqa/lr/LR_split_train_answers.json": "5ef12c010d6c1d6361340523abd89dedb81061948fa76c7c280e8ae91ae3a3b6",
+    "rsvqa/lr/LR_split_train_images.json": "7eb9b47bf5f2ac13c15e654b96d86d4a94f95cb24c0b0f2871e1d322a0f30950"
+  },
+  "mix": {
+    "total": 117857,
+    "rsvqa_lr_effective": 82857,
+    "rsvqa_lr_unique": 57223,
+    "rsvqa_hr_replay": 20000,
+    "vrsbench_cap": 15000,
+    "hr_replay_by_type": {
+      "count": 9430,
+      "presence": 3744,
+      "comp": 4730,
+      "area": 2096
+    },
+    "lr_effective_by_type": {
+      "rural_urban": 572,
+      "presence": 17008,
+      "comp": 22554,
+      "count": 42723
+    },
+    "caption_frac": 0.1273,
+    "uniq_images": {
+      "rsvqa_lr": 572,
+      "rsvqa_hr": 6009,
+      "vrsbench_cap": 14999
+    }
+  },
+  "mix_sha256": "ce25242f6a12e061cd3e67cb96190cd001219f5ef253126829030c61683cf2c7",
+  "status": "OK"
+}

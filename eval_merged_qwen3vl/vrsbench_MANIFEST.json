@@ -1,0 +1,62 @@
+{
+  "dataset": "vrsbench",
+  "path": "/data/vrsbench",
+  "fetched_utc": "2026-09-14T17:20:05.099422+00:00",
+  "sources": [
+    {
+      "url": "https://huggingface.co/datasets/xiang709/VRSBench",
+      "file": "Annotations_train.zip",
+      "license": "cc-by-4.0"
+    },
+    {
+      "url": "https://huggingface.co/datasets/xiang709/VRSBench",
+      "file": "Annotations_val.zip",
+      "license": "cc-by-4.0"
+    },
+    {
+      "url": "https://huggingface.co/datasets/xiang709/VRSBench",
+      "file": "Images_train.zip",
+      "license": "cc-by-4.0"
+    },
+    {
+      "url": "https://huggingface.co/datasets/xiang709/VRSBench",
+      "file": "Images_val.zip",
+      "license": "cc-by-4.0"
+    },
+    {
+      "url": "https://huggingface.co/datasets/xiang709/VRSBench",
+      "file": "VRSBench_train.json",
+      "license": "cc-by-4.0"
+    },
+    {
+      "url": "https://huggingface.co/datasets/xiang709/VRSBench",
+      "file": "VRSBench_EVAL_vqa.json",
+      "license": "cc-by-4.0"
+    },
+    {
+      "url": "https://huggingface.co/datasets/xiang709/VRSBench",
+      "file": "VRSBench_EVAL_Cap.json",
+      "license": "cc-by-4.0"
+    },
+    {
+      "url": "https://huggingface.co/datasets/xiang709/VRSBench",
+      "file": "VRSBench_EVAL_referring.json",
+      "license": "cc-by-4.0"
+    }
+  ],
+  "license": "CC-BY-4.0",
+  "primary_index": {
+    "path": "VRSBench_train.json",
+    "sha256": "8a126b8342eeeb364e5673c166be09f92ebaae81a60dd43885d64dc084be7e73"
+  },
+  "notes": "Full HF snapshot: Images_*/Annotations_* zips extracted, train + eval JSONs at root.",
+  "run": {
+    "wall_seconds": 365.4,
+    "est_usd": 0.012818,
+    "cpu_cores": 2.0,
+    "memory_gib": 4.0,
+    "pricing": "Modal on-demand list: $0.0000131/core-s + $0.00000222/GiB-s"
+  },
+  "file_count": 88840,
+  "total_bytes": 13224731313
+}

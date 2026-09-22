@@ -1,0 +1,8 @@
+[
+  {
+    "probe": "bi-temporal count",
+    "supported": false,
+    "tools": [],
+    "refusal": "I do not have a counting tool, so I will not invent a count. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks."
+  }
+]

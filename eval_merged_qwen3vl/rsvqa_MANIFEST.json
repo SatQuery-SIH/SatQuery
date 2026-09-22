@@ -1,0 +1,196 @@
+{
+  "dataset": "rsvqa",
+  "path": "/data/rsvqa",
+  "fetched_utc": "2026-09-14T17:19:03.523032+00:00",
+  "sources": [
+    {
+      "url": "https://doi.org/10.5281/zenodo.6344367",
+      "file": "USGS_split_test_phili_answers.json",
+      "license": "cc-by-4.0",
+      "part": "hr"
+    },
+    {
+      "url": "https://doi.org/10.5281/zenodo.6344367",
+      "file": "Images.tar",
+      "license": "cc-by-4.0",
+      "part": "hr"
+    },
+    {
+      "url": "https://doi.org/10.5281/zenodo.6344367",
+      "file": "USGSanswers.json",
+      "license": "cc-by-4.0",
+      "part": "hr"
+    },
+    {
+      "url": "https://doi.org/10.5281/zenodo.6344367",
+      "file": "USGS_split_val_questions.json",
+      "license": "cc-by-4.0",
+      "part": "hr"
+    },
+    {
+      "url": "https://doi.org/10.5281/zenodo.6344367",
+      "file": "USGS_split_val_images.json",
+      "license": "cc-by-4.0",
+      "part": "hr"
+    },
+    {
+      "url": "https://doi.org/10.5281/zenodo.6344367",
+      "file": "USGS_split_val_answers.json",
+      "license": "cc-by-4.0",
+      "part": "hr"
+    },
+    {
+      "url": "https://doi.org/10.5281/zenodo.6344367",
+      "file": "USGS_split_train_questions.json",
+      "license": "cc-by-4.0",
+      "part": "hr"
+    },
+    {
+      "url": "https://doi.org/10.5281/zenodo.6344367",
+      "file": "USGS_split_train_images.json",
+      "license": "cc-by-4.0",
+      "part": "hr"
+    },
+    {
+      "url": "https://doi.org/10.5281/zenodo.6344367",
+      "file": "USGSpeople.json",
+      "license": "cc-by-4.0",
+      "part": "hr"
+    },
+    {
+      "url": "https://doi.org/10.5281/zenodo.6344367",
+      "file": "USGS_split_train_answers.json",
+      "license": "cc-by-4.0",
+      "part": "hr"
+    },
+    {
+      "url": "https://doi.org/10.5281/zenodo.6344367",
+      "file": "USGS_split_test_questions.json",
+      "license": "cc-by-4.0",
+      "part": "hr"
+    },
+    {
+      "url": "https://doi.org/10.5281/zenodo.6344367",
+      "file": "USGS_split_test_phili_questions.json",
+      "license": "cc-by-4.0",
+      "part": "hr"
+    },
+    {
+      "url": "https://doi.org/10.5281/zenodo.6344367",
+      "file": "USGS_split_test_phili_images.json",
+      "license": "cc-by-4.0",
+      "part": "hr"
+    },
+    {
+      "url": "https://doi.org/10.5281/zenodo.6344367",
+      "file": "USGS_split_test_images.json",
+      "license": "cc-by-4.0",
+      "part": "hr"
+    },
+    {
+      "url": "https://doi.org/10.5281/zenodo.6344367",
+      "file": "USGS_split_test_answers.json",
+      "license": "cc-by-4.0",
+      "part": "hr"
+    },
+    {
+      "url": "https://doi.org/10.5281/zenodo.6344367",
+      "file": "USGSquestions.json",
+      "license": "cc-by-4.0",
+      "part": "hr"
+    },
+    {
+      "url": "https://doi.org/10.5281/zenodo.6344367",
+      "file": "USGSimages.json",
+      "license": "cc-by-4.0",
+      "part": "hr"
+    },
+    {
+      "url": "https://doi.org/10.5281/zenodo.6344334",
+      "file": "LR_split_train_images.json",
+      "license": "cc-by-4.0",
+      "part": "lr"
+    },
+    {
+      "url": "https://doi.org/10.5281/zenodo.6344334",
+      "file": "LR_split_train_questions.json",
+      "license": "cc-by-4.0",
+      "part": "lr"
+    },
+    {
+      "url": "https://doi.org/10.5281/zenodo.6344334",
+      "file": "LR_split_val_answers.json",
+      "license": "cc-by-4.0",
+      "part": "lr"
+    },
+    {
+      "url": "https://doi.org/10.5281/zenodo.6344334",
+      "file": "LR_split_val_images.json",
+      "license": "cc-by-4.0",
+      "part": "lr"
+    },
+    {
+      "url": "https://doi.org/10.5281/zenodo.6344334",
+      "file": "all_answers.json",
+      "license": "cc-by-4.0",
+      "part": "lr"
+    },
+    {
+      "url": "https://doi.org/10.5281/zenodo.6344334",
+      "file": "all_questions.json",
+      "license": "cc-by-4.0",
+      "part": "lr"
+    },
+    {
+      "url": "https://doi.org/10.5281/zenodo.6344334",
+      "file": "Images_LR.zip",
+      "license": "cc-by-4.0",
+      "part": "lr"
+    },
+    {
+      "url": "https://doi.org/10.5281/zenodo.6344334",
+      "file": "LR_split_test_answers.json",
+      "license": "cc-by-4.0",
+      "part": "lr"
+    },
+    {
+      "url": "https://doi.org/10.5281/zenodo.6344334",
+      "file": "LR_split_test_images.json",
+      "license": "cc-by-4.0",
+      "part": "lr"
+    },
+    {
+      "url": "https://doi.org/10.5281/zenodo.6344334",
+      "file": "LR_split_test_questions.json",
+      "license": "cc-by-4.0",
+      "part": "lr"
+    },
+    {
+      "url": "https://doi.org/10.5281/zenodo.6344334",
+      "file": "LR_split_train_answers.json",
+      "license": "cc-by-4.0",
+      "part": "lr"
+    },
+    {
+      "url": "https://doi.org/10.5281/zenodo.6344334",
+      "file": "LR_split_val_questions.json",
+      "license": "cc-by-4.0",
+      "part": "lr"
+    }
+  ],
+  "license": "CC-BY-4.0",
+  "primary_index": {
+    "path": "hr/USGSanswers.json",
+    "sha256": "695452099274800d541fdd0dc4f11a60c34658966f0fd75e86b12f140d8b85bb"
+  },
+  "notes": "hr/ = RSVQA-HR (USGS, Images.tar extracted); lr/ = RSVQA-LR (Sentinel-2, Images_LR.zip extracted).",
+  "run": {
+    "wall_seconds": 1300.0,
+    "est_usd": 0.045604,
+    "cpu_cores": 2.0,
+    "memory_gib": 4.0,
+    "pricing": "Modal on-demand list: $0.0000131/core-s + $0.00000222/GiB-s"
+  },
+  "file_count": 22119,
+  "total_bytes": 14639019106
+}

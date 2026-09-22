@@ -1,0 +1,88 @@
+{
+  "query": "Is there a road in this image?",
+  "input_mode": "single",
+  "scene": 1,
+  "live": true,
+  "plan": {
+    "task": "vqa",
+    "input_mode": "single",
+    "tools": [
+      "vqa",
+      "canonical_vqa"
+    ],
+    "vlm_role": "vqa",
+    "supported": true,
+    "refusal": null,
+    "query": "Is there a road in this image?"
+  },
+  "tool_outputs": {
+    "canonical_vqa": {
+      "available": true,
+      "answer": "yes",
+      "text": "Yes",
+      "model": "canonical/Qwen3VL-8B-RSVQA-Q4_K_M.gguf",
+      "gguf_sha256": "a87976860370bf657660ea3badeb59038de89aff1bb3e5b3dce4057d4e21a33f",
+      "mmproj_sha256": "1e15a23a03caed096a56deb60c5347bd025c5f1a2c3dfeabb7a01183f11efb2c",
+      "url": "http://127.0.0.1:8091",
+      "seat": "127.0.0.1:8091",
+      "decode": {
+        "temperature": 0.0,
+        "repeat_penalty": 1.08,
+        "repetition_penalty": 1.08,
+        "max_tokens": 16
+      },
+      "n_images": 1,
+      "image_paths": [
+        "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\demo\\data\\_uploads\\20260914T193228814035Z\\image.png"
+      ],
+      "latency_s": 0.677,
+      "error": null,
+      "provenance": "tools.canonical_vqa (adapted RSVQA specialist on 127.0.0.1:8091; greedy decode; not the :8080 narrator)"
+    }
+  },
+  "answer": "Yes, there are roads visible in the image. They appear as lighter-colored linear features cutting through the darker patches of land, especially noticeable in the central and lower portions of the image.",
+  "first_token_s": 13.97,
+  "complete_s": 15.52,
+  "overlay_path": null,
+  "images": [
+    "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\demo\\data\\_uploads\\20260914T193228814035Z\\image.png"
+  ],
+  "metrics_badge": null,
+  "ingest_note": "Analyzing your uploaded files \u2014 not the built-in examples. GeoTIFF via rasterio `cell_25725_p0015.tiff` bands=4 size=(256, 256) crs=EPSG:32643.",
+  "input_source": "upload",
+  "gsd": {
+    "path": "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\gates\\_cache\\data\\rehearsal\\s1s2_india\\cross_modal_dataset\\train\\optical\\cell_25725_p0015.tiff",
+    "gsd_m": 10.0,
+    "gsd_x_m": null,
+    "gsd_y_m": null,
+    "source": "geotransform",
+    "crs": "EPSG:32643",
+    "crs_note": null,
+    "native_width": 256,
+    "native_height": 256,
+    "backend": "rasterio",
+    "provenance": "rasterio `cell_25725_p0015.tiff` crs=EPSG:32643. projected/local pixel scale (10.0, 10.0) treated as metres; mean used.",
+    "resize_scale": 1.0,
+    "gsd_m_used": 10.0
+  },
+  "misreg_check": null,
+  "misregistration_note": null,
+  "misreg_shift_px": null,
+  "vlm": {
+    "text": "Yes, there are roads visible in the image. They appear as lighter-colored linear features cutting through the darker patches of land, especially noticeable in the central and lower portions of the image.",
+    "model": "qwen3vl",
+    "url": "http://127.0.0.1:8080",
+    "n_images": 1,
+    "image_paths": [
+      "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\demo\\data\\_uploads\\20260914T193228814035Z\\image.png"
+    ],
+    "first_token_s": 13.97,
+    "complete_s": 14.787,
+    "provenance": "tools.vqa (local llama-server; no commercial vision API)"
+  },
+  "narration_check": {
+    "ok": true,
+    "issues": []
+  },
+  "visible_answer": "### Findings (from tools)\n\n- canonical_vqa: answer=yes model=canonical/Qwen3VL-8B-RSVQA-Q4_K_M.gguf seat=127.0.0.1:8091\n\nYes, there are roads visible in the image. They appear as lighter-colored linear features cutting through the darker patches of land, especially noticeable in the central and lower portions of the image."
+}

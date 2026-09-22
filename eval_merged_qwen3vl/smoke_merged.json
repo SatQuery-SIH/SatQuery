@@ -1,0 +1,91 @@
+{
+  "step": "smoke_merged",
+  "n": 200,
+  "tok_exact_em": 0.835,
+  "samples": [
+    {
+      "id": "0:0",
+      "gold": "3",
+      "pred": "3"
+    },
+    {
+      "id": "0:1",
+      "gold": "521m2",
+      "pred": "513m2"
+    },
+    {
+      "id": "0:10",
+      "gold": "0",
+      "pred": "0"
+    },
+    {
+      "id": "0:11",
+      "gold": "no",
+      "pred": "no"
+    },
+    {
+      "id": "0:12",
+      "gold": "no",
+      "pred": "no"
+    },
+    {
+      "id": "0:13",
+      "gold": "0",
+      "pred": "0"
+    },
+    {
+      "id": "0:14",
+      "gold": "yes",
+      "pred": "yes"
+    },
+    {
+      "id": "0:15",
+      "gold": "no",
+      "pred": "no"
+    },
+    {
+      "id": "0:16",
+      "gold": "yes",
+      "pred": "yes"
+    },
+    {
+      "id": "0:17",
+      "gold": "no",
+      "pred": "no"
+    },
+    {
+      "id": "0:18",
+      "gold": "no",
+      "pred": "no"
+    },
+    {
+      "id": "0:19",
+      "gold": "no",
+      "pred": "no"
+    },
+    {
+      "id": "0:2",
+      "gold": "4",
+      "pred": "3"
+    },
+    {
+      "id": "0:20",
+      "gold": "1",
+      "pred": "0"
+    },
+    {
+      "id": "0:21",
+      "gold": "0m2",
+      "pred": "0m2"
+    }
+  ],
+  "status": "OK",
+  "run": {
+    "wall_seconds": 66.5,
+    "est_usd": 0.0787,
+    "gpu_usd_rate_s": 0.000944,
+    "cpu_cores": 2.0,
+    "memory_gib": 96,
+    "pricing": "Modal list: A100-40GB $0.000944/s; CPU $0.0000131/core-s; mem $0.00000222/GiB-s"
+  }
+}

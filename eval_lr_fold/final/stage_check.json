@@ -1,0 +1,125 @@
+{
+  "step": "stage_check",
+  "checks": {
+    "ckpt": {
+      "adapter_model.safetensors": "60f1be46174b568f311e8f8e2aebf28a875a102c917c6f23ced5de884a4eeb68",
+      "adapter_config.json": "4ee89ba31cc7534008c725d668735a618170ba79c0e8742ef1eadec65f923dab",
+      "merger.pt": "1331936df4275a7c550341de3e9414c4d40ee3b902ee02c64517aadecdb28cf2",
+      "combined": "143bbfd550c00643f0ce6a5ff3b287fc1dba47476b6d5dae1316eb32dbd7972d"
+    },
+    "eval_ids": {
+      "rsvqa_hr_val_eval_ids.json": "3cc2518b92fc9c03",
+      "rsvqa_hr_test_eval_ids.json": "196c2a2ff6f6e27e",
+      "rsvqa_hr_test_phili_eval_ids.json": "9a1c6f00d3915b94",
+      "rsvqa_lr_val_eval_ids.json": "81fdedabc5aba181",
+      "rsvqa_lr_test_eval_ids.json": "7735643c116bcce5",
+      "vrsbench_vqa_eval_ids.json": "bd858cb81c6450e2"
+    },
+    "gold": {
+      "rsvqa_hr_val.jsonl": "825ca775cfb3670b",
+      "rsvqa_hr_test.jsonl": "ddbfe342f5ed4314",
+      "rsvqa_hr_test_phili.jsonl": "f19fbcbca7847d06",
+      "rsvqa_lr_val.jsonl": "38e064f49fc6446e",
+      "rsvqa_lr_test.jsonl": "773af16fb177886f",
+      "vrsbench_vqa.jsonl": "3bc512282fd79ed8"
+    },
+    "vocab.json": "2559751ed0a47eff",
+    "dataset_source": {
+      "rsvqa/hr/USGS_split_train_questions.json": "08a29d70d9ea0a1e",
+      "rsvqa/hr/USGS_split_train_answers.json": "8d1db1ff9639afbb",
+      "rsvqa/hr/USGS_split_train_images.json": "cc8aae453e37700c",
+      "vrsbench/VRSBench_EVAL_vqa.json": "4a797f5fc456331a"
+    },
+    "images": {
+      "rsvqa_hr_val": {
+        "rows": 102843,
+        "uniq_images": 1028,
+        "missing": 0,
+        "missing_sample": []
+      },
+      "rsvqa_hr_test": {
+        "rows": 222684,
+        "uniq_images": 2226,
+        "missing": 0,
+        "missing_sample": []
+      },
+      "rsvqa_hr_test_phili": {
+        "rows": 105647,
+        "uniq_images": 1056,
+        "missing": 0,
+        "missing_sample": []
+      },
+      "rsvqa_lr_val": {
+        "rows": 10005,
+        "uniq_images": 100,
+        "missing": 0,
+        "missing_sample": []
+      },
+      "rsvqa_lr_test": {
+        "rows": 10004,
+        "uniq_images": 100,
+        "missing": 0,
+        "missing_sample": []
+      },
+      "vrsbench_vqa": {
+        "rows": 37409,
+        "uniq_images": 9349,
+        "missing": 0,
+        "missing_sample": []
+      }
+    },
+    "image_dir_sizes": {
+      "/data/rsvqa/hr/Data": 21318,
+      "/data/rsvqa/lr/Images_LR": 772,
+      "/data/vrsbench/Images_val": 9350
+    },
+    "id_gold_alignment": {
+      "rsvqa_hr_val": {
+        "n_ids": 102843,
+        "n_gold": 102843,
+        "order_identical": true,
+        "set_overlap": 102843
+      },
+      "rsvqa_hr_test": {
+        "n_ids": 222684,
+        "n_gold": 222684,
+        "order_identical": true,
+        "set_overlap": 222684
+      },
+      "rsvqa_hr_test_phili": {
+        "n_ids": 105647,
+        "n_gold": 105647,
+        "order_identical": true,
+        "set_overlap": 105647
+      },
+      "rsvqa_lr_val": {
+        "n_ids": 10005,
+        "n_gold": 10005,
+        "order_identical": true,
+        "set_overlap": 10005
+      },
+      "rsvqa_lr_test": {
+        "n_ids": 10004,
+        "n_gold": 10004,
+        "order_identical": true,
+        "set_overlap": 10004
+      },
+      "vrsbench_vqa": {
+        "n_ids": 37409,
+        "n_gold": 37409,
+        "order_identical": true,
+        "set_overlap": 37409
+      }
+    }
+  },
+  "status": "OK",
+  "failures": [],
+  "run": {
+    "wall_seconds": 14.0,
+    "est_usd": 0.0017,
+    "gpu_usd_rate_s": 0.0,
+    "cpu_cores": 4.0,
+    "memory_gib": 32,
+    "pricing": "Modal list: A100-40GB $0.000944/s; CPU $0.0000131/core-s; mem $0.00000222/GiB-s"
+  }
+}

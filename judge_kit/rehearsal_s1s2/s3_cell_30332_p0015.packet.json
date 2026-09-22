@@ -1,0 +1,156 @@
+{
+  "schema_version": "1.0",
+  "run_id": "47445f811946df2f81e62c1c71fc49b758d96942f9d848279803fa2992b03dfb",
+  "task": "water_highlight",
+  "input_contract": {
+    "valid": true,
+    "modality": "single",
+    "gsd_m": 10.0
+  },
+  "canonical_answer": "small",
+  "claims": [
+    {
+      "id": "E1",
+      "predicate": "water_method",
+      "value": "GeoTIFF bands=4; NIR/green identities unknown (descriptions=[None, None, None, None]); tifffile desc='' shape=(256, 256, 4). RGB Otsu on (B-R), threshold=14.0",
+      "region": "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\demo\\data\\_uploads\\20260914T193253848480Z\\water_overlay_live.png",
+      "confidence": {
+        "level": "measured",
+        "basis": "optical water tool metadata"
+      },
+      "provenance": {
+        "tool": "water_highlight"
+      }
+    },
+    {
+      "id": "E2",
+      "predicate": "water_pixels",
+      "value": 22528,
+      "region": "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\demo\\data\\_uploads\\20260914T193253848480Z\\water_overlay_live.png",
+      "confidence": {
+        "level": "measured",
+        "basis": "GeoTIFF bands=4; NIR/green identities unknown (descriptions=[None, None, None, None]); tifffile desc='' shape=(256, 256, 4). RGB Otsu on (B-R), threshold=14.0"
+      },
+      "provenance": {
+        "tool": "water_highlight"
+      }
+    },
+    {
+      "id": "E3",
+      "predicate": "area_m2",
+      "value": 2252800.0,
+      "region": "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\demo\\data\\_uploads\\20260914T193253848480Z\\water_overlay_live.png",
+      "confidence": {
+        "level": "measured",
+        "basis": "area_m2 = count(mask>0) * gsd_m^2"
+      },
+      "provenance": {
+        "tool": "area_calc"
+      },
+      "unit": "m2"
+    },
+    {
+      "id": "E4",
+      "predicate": "canonical_answer",
+      "value": "small",
+      "region": null,
+      "confidence": {
+        "level": "measured",
+        "basis": "adapted RSVQA model, deterministic greedy decode on 127.0.0.1:8091"
+      },
+      "provenance": {
+        "tool": "canonical_vqa",
+        "model": "canonical/Qwen3VL-8B-RSVQA-Q4_K_M.gguf",
+        "gguf_sha256": "a87976860370bf657660ea3badeb59038de89aff1bb3e5b3dce4057d4e21a33f",
+        "seat": "127.0.0.1:8091",
+        "decode": "greedy temp=0 repeat_penalty=1.08 max_tokens=16"
+      }
+    }
+  ],
+  "artifacts": [
+    {
+      "type": "mask",
+      "path": "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\demo\\data\\_uploads\\20260914T193253848480Z\\water_overlay_live.png",
+      "grid": "native"
+    },
+    {
+      "type": "overlay",
+      "path": "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\demo\\data\\_uploads\\20260914T193253848480Z\\water_overlay_live.png",
+      "grid": "native"
+    },
+    {
+      "type": "box",
+      "xyxy": [
+        0,
+        0,
+        256,
+        256
+      ],
+      "grid": "native"
+    }
+  ],
+  "limitations": [
+    "canonical_answer is the adapted Qwen3VL-8B-RSVQA model's short answer (greedy decode, seat 127.0.0.1:8091); it is a model claim, not a measured number."
+  ],
+  "trace": [
+    {
+      "plan_task": "water_highlight",
+      "live": true
+    }
+  ],
+  "tool_outputs": {
+    "water_highlight": {
+      "water_pixels": 22528,
+      "mask_shape": [
+        256,
+        256
+      ],
+      "method": "GeoTIFF bands=4; NIR/green identities unknown (descriptions=[None, None, None, None]); tifffile desc='' shape=(256, 256, 4). RGB Otsu on (B-R), threshold=14.0",
+      "provenance": "tools.water_highlight (deterministic optical mask; VLM did not compute this). GeoTIFF bands=4; NIR/green identities unknown (descriptions=[None, None, None, None]); tifffile desc='' shape=(256, 256, 4). RGB Otsu on (B-R), threshold=14.0"
+    },
+    "area_calc": {
+      "label": "water",
+      "changed_pixels": 22528,
+      "total_pixels": 65536,
+      "gsd_m": 10.0,
+      "gsd_source": "geotransform",
+      "pixel_area_m2": 100.0,
+      "area_m2": 2252800.0,
+      "area_km2": 2.2528,
+      "percent_of_image": 34.375,
+      "quadrants": {
+        "NW": 6694,
+        "NE": 6078,
+        "SW": 4746,
+        "SE": 5010
+      },
+      "dominant_quadrant": "NW",
+      "north_fraction": 0.5669389204545454,
+      "formula": "area_m2 = count(mask>0) * gsd_m^2",
+      "provenance": "tools.area_calc (raster math; VLM did not compute this) | rasterio `cell_30332_p0015.tiff` crs=EPSG:32644. projected/local pixel scale (10.0, 10.0) treated as metres; mean used."
+    },
+    "canonical_vqa": {
+      "available": true,
+      "answer": "small",
+      "text": "small",
+      "model": "canonical/Qwen3VL-8B-RSVQA-Q4_K_M.gguf",
+      "gguf_sha256": "a87976860370bf657660ea3badeb59038de89aff1bb3e5b3dce4057d4e21a33f",
+      "mmproj_sha256": "1e15a23a03caed096a56deb60c5347bd025c5f1a2c3dfeabb7a01183f11efb2c",
+      "url": "http://127.0.0.1:8091",
+      "seat": "127.0.0.1:8091",
+      "decode": {
+        "temperature": 0.0,
+        "repeat_penalty": 1.08,
+        "repetition_penalty": 1.08,
+        "max_tokens": 16
+      },
+      "n_images": 1,
+      "image_paths": [
+        "C:\\Users\\Harsha Vardhan\\Documents\\Smart-India-Hackathon-SIH-2026-Problem-Statements-main\\SatQuery\\demo\\data\\_uploads\\20260914T193253848480Z\\image.png"
+      ],
+      "latency_s": 4.649,
+      "error": null,
+      "provenance": "tools.canonical_vqa (adapted RSVQA specialist on 127.0.0.1:8091; greedy decode; not the :8080 narrator)"
+    }
+  }
+}

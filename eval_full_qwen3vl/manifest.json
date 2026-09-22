@@ -1,0 +1,282 @@
+{
+  "task": "RSVQA-ADAPT",
+  "ckpt_tag": "full_qwen3vl",
+  "model_id": "Qwen/Qwen3-VL-8B-Instruct",
+  "ckpt_sha256": {
+    "adapter_model.safetensors": "88d82e090e557f1e70c3f9a32650e325965f4d4c293e0ba8ebde5f9eecca5bd3",
+    "merger.pt": "7c77c99a3abaff393cfa06637ff7a5e3696713cb3da85b222f17c9166ab240dc"
+  },
+  "ckpt_combined_sha256": "8fccee8dd09970c29e742d4053a60cb7433d2dbf463a219e5f057f0a0e5b5c99",
+  "hyperparams": {
+    "lora_r": 16,
+    "lora_alpha": 32,
+    "lora_lr": 0.0001,
+    "proj_lr": 1e-05,
+    "eff_batch": 48,
+    "micro_b": 8,
+    "epochs": 2,
+    "warmup_frac": 0.03,
+    "max_pixels": 589824,
+    "seed": 42,
+    "loss": "masked (-100 prompt+vision), per-sample mean CE x inverse-freq class weight (clip 0.25-4, mean 1)",
+    "decode": "greedy + rep_penalty 1.08, max_new 16"
+  },
+  "train": {
+    "n_rows": 120264,
+    "opt_steps": 5011,
+    "resumed_leg": {
+      "wall_seconds": 9229.0,
+      "est_usd": 11.5765,
+      "gpu_usd_rate_s": 0.000944,
+      "cpu_cores": 2.0,
+      "memory_gib": 128,
+      "pricing": "Modal list: A100-40GB $0.000944/s; CPU $0.0000131/core-s; mem $0.00000222/GiB-s"
+    },
+    "mix_sha256": "e60f369567e922e4ca56b509da523d351c31c09a371b5dd8d95180918e1b7332",
+    "overlap_train_vs_eval": 0
+  },
+  "eval": {
+    "frozen_id_sha256_16": {
+      "ben_lulc_eval_ids.json": "5985956bd025c89c",
+      "ben_vqa_eval_ids.json": "8de124ede3741dd6",
+      "cdvqa_test2_eval_ids.json": "a2ec0794174fd99b",
+      "cdvqa_test_eval_ids.json": "1eaf914e55fa6c92",
+      "rsvqa_hr_test_eval_ids.json": "196c2a2ff6f6e27e",
+      "rsvqa_hr_test_phili_eval_ids.json": "9a1c6f00d3915b94",
+      "rsvqa_hr_val_eval_ids.json": "3cc2518b92fc9c03",
+      "rsvqa_lr_test_eval_ids.json": "7735643c116bcce5",
+      "rsvqa_lr_val_eval_ids.json": "81fdedabc5aba181",
+      "vrsbench_caption_eval_ids.json": "2724642ded370444",
+      "vrsbench_referring_eval_ids.json": "0896b0e416ed414a",
+      "vrsbench_vqa_eval_ids.json": "bd858cb81c6450e2"
+    },
+    "columns": {
+      "rsvqa_hr_val": {
+        "n_preds": 102843,
+        "n_gold": 102843,
+        "coverage": 1.0,
+        "oa_raw_em": 0.8137,
+        "oa_token_exact_em": 0.8138,
+        "oa_normalized_em": 0.8139,
+        "aa_token_exact": 0.7814,
+        "per_family_token_exact": {
+          "area": {
+            "n": 15199,
+            "acc": 0.575
+          },
+          "comp": {
+            "n": 33175,
+            "acc": 0.9245
+          },
+          "count": {
+            "n": 27239,
+            "acc": 0.6939
+          },
+          "presence": {
+            "n": 27230,
+            "acc": 0.9321
+          }
+        }
+      },
+      "rsvqa_hr_test": {
+        "n_preds": 222684,
+        "n_gold": 222684,
+        "coverage": 1.0,
+        "oa_raw_em": 0.8166,
+        "oa_token_exact_em": 0.8167,
+        "oa_normalized_em": 0.8167,
+        "aa_token_exact": 0.7849,
+        "per_family_token_exact": {
+          "area": {
+            "n": 33067,
+            "acc": 0.5868
+          },
+          "comp": {
+            "n": 72923,
+            "acc": 0.9231
+          },
+          "count": {
+            "n": 58149,
+            "acc": 0.7047
+          },
+          "presence": {
+            "n": 58545,
+            "acc": 0.9252
+          }
+        }
+      },
+      "rsvqa_hr_test_phili": {
+        "n_preds": 105647,
+        "n_gold": 105647,
+        "coverage": 1.0,
+        "oa_raw_em": 0.7804,
+        "oa_token_exact_em": 0.7811,
+        "oa_normalized_em": 0.7813,
+        "aa_token_exact": 0.7457,
+        "per_family_token_exact": {
+          "area": {
+            "n": 15535,
+            "acc": 0.5343
+          },
+          "comp": {
+            "n": 35019,
+            "acc": 0.9073
+          },
+          "count": {
+            "n": 27558,
+            "acc": 0.6405
+          },
+          "presence": {
+            "n": 27535,
+            "acc": 0.9008
+          }
+        }
+      },
+      "rsvqa_lr_val": {
+        "n_preds": 10005,
+        "n_gold": 10005,
+        "coverage": 1.0,
+        "oa_raw_em": 0.5418,
+        "oa_token_exact_em": 0.5427,
+        "oa_normalized_em": 0.5427,
+        "aa_token_exact": 0.5414,
+        "per_family_token_exact": {
+          "comp": {
+            "n": 4020,
+            "acc": 0.7933
+          },
+          "count": {
+            "n": 2966,
+            "acc": 0.2276
+          },
+          "presence": {
+            "n": 2919,
+            "acc": 0.5149
+          },
+          "rural_urban": {
+            "n": 100,
+            "acc": 0.63
+          }
+        }
+      },
+      "rsvqa_lr_test": {
+        "n_preds": 10004,
+        "n_gold": 10004,
+        "coverage": 1.0,
+        "oa_raw_em": 0.5582,
+        "oa_token_exact_em": 0.5597,
+        "oa_normalized_em": 0.5597,
+        "aa_token_exact": 0.5793,
+        "per_family_token_exact": {
+          "comp": {
+            "n": 4002,
+            "acc": 0.8001
+          },
+          "count": {
+            "n": 2947,
+            "acc": 0.247
+          },
+          "presence": {
+            "n": 2955,
+            "acc": 0.5401
+          },
+          "rural_urban": {
+            "n": 100,
+            "acc": 0.73
+          }
+        }
+      },
+      "vrsbench_vqa": {
+        "n_preds": 37409,
+        "n_gold": 37409,
+        "coverage": 1.0,
+        "oa_raw_em": 0.5094,
+        "oa_token_exact_em": 0.6597,
+        "oa_normalized_em": 0.6624,
+        "aa_token_exact": 0.6502,
+        "per_family_token_exact": {
+          "image": {
+            "n": 1129,
+            "acc": 0.8583
+          },
+          "object category": {
+            "n": 5434,
+            "acc": 0.6159
+          },
+          "object color": {
+            "n": 3550,
+            "acc": 0.5434
+          },
+          "object direction": {
+            "n": 477,
+            "acc": 0.5577
+          },
+          "object existence": {
+            "n": 7789,
+            "acc": 0.9142
+          },
+          "object position": {
+            "n": 5828,
+            "acc": 0.5285
+          },
+          "object quantity": {
+            "n": 6374,
+            "acc": 0.6161
+          },
+          "object shape": {
+            "n": 1423,
+            "acc": 0.5383
+          },
+          "object size": {
+            "n": 1011,
+            "acc": 0.549
+          },
+          "reasoning": {
+            "n": 902,
+            "acc": 0.6951
+          },
+          "rural or urban": {
+            "n": 295,
+            "acc": 0.8068
+          },
+          "scene type": {
+            "n": 3197,
+            "acc": 0.5793
+          }
+        }
+      }
+    },
+    "contract": {
+      "raw_em": "pred.strip() == gold.strip()",
+      "token_exact_em": "tok_exact(): strip+casefold+ws-collapse+rstrip('.') \u2014 reconstruction of the wiped 0.5077 scorer; bar metric",
+      "normalized_em": "canon() (units, digit-words, commas) + nearest-vocab projection onto TRAIN answer vocab (cutoff 0.85)",
+      "vocab_source": "train answers only \u2014 no eval gold used",
+      "decode": "greedy, repetition_penalty=1.08, max_new_tokens=16"
+    },
+    "bar": {
+      "column": "rsvqa_hr_val",
+      "target": 0.5077,
+      "achieved_token_exact": 0.8138,
+      "achieved_normalized": 0.8139,
+      "verdict": "BEAT"
+    }
+  },
+  "spend": {
+    "preflight_usd": 0.12,
+    "mix_usd": 0.006,
+    "smoke_usd": 0.45,
+    "bakeoff_sanity_usd": 3.78,
+    "full_train_leg1_usd_est": 40.0,
+    "full_train_resumed_leg_usd": 11.58,
+    "dataset_replication_usd": 0.05,
+    "eval_usd_18of20_shards_measured": 39.66,
+    "score_usd": 0.006
+  },
+  "artifacts": {
+    "volume": "satquery-data @ geethadmohan1980",
+    "preds": "runs/rsvqa_adapt/eval/full_qwen3vl/<column>/preds_*.jsonl",
+    "metrics": "runs/rsvqa_adapt/eval/full_qwen3vl/metrics.json",
+    "local_mirror": "eval_full_qwen3vl/ + modal_volume_backup/"
+  },
+  "written_utc": "2026-09-14T12:40:59Z"
+}

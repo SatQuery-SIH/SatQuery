@@ -1,0 +1,13 @@
+{
+  "ts": 1789477502.9628098,
+  "utc": "2026-09-15T13:05:02Z",
+  "event": "train_done",
+  "status": "OK",
+  "opt_steps": 4910,
+  "wall_seconds": 12623.0,
+  "adapter_sha256": {
+    "adapter_model.safetensors": "60f1be46174b568f311e8f8e2aebf28a875a102c917c6f23ced5de884a4eeb68",
+    "merger.pt": "1331936df4275a7c550341de3e9414c4d40ee3b902ee02c64517aadecdb28cf2"
+  },
+  "ckpt_combined_sha256": "143bbfd550c00643f0ce6a5ff3b287fc1dba47476b6d5dae1316eb32dbd7972d"
+}
