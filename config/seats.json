@@ -1,0 +1,32 @@
+{
+  "profile": "local",
+  "seats": {
+    "narrator": {
+      "local_url": "http://127.0.0.1:8080",
+      "cloud_url": "https://proxynanmaga--narrator.modal.run",
+      "model": "Qwen/Qwen3-VL-8B-Instruct",
+      "sha": "0c351dd01ed87e9c1b53cbc748cba10e6187ff3b",
+      "cloud_served_id": "Qwen/Qwen3-VL-8B-Instruct"
+    },
+    "canonical": {
+      "local_url": "http://127.0.0.1:8091",
+      "cloud_url": "https://proxynanmaga--canonical.modal.run",
+      "model": "canonical-lrfold",
+      "sha": "3a4fecb0521ddaf42ed297ec8ca391f9b5d94bd6c884bf51cbab0c4562c7f11c",
+      "cloud_served_id": "canonical-lrfold",
+      "local_sha": "a87976860370bf657660ea3badeb59038de89aff1bb3e5b3dce4057d4e21a33f"
+    }
+  },
+  "cloud": {
+    "provider": "modal",
+    "account": "proxynanmaga",
+    "app": "satquery-serve",
+    "auth": "modal-proxy-auth",
+    "auth_env": ["SATQUERY_MODAL_KEY", "SATQUERY_MODAL_SECRET"],
+    "auth_headers": ["Modal-Key", "Modal-Secret"],
+    "scale_to_zero": true,
+    "min_containers": 0,
+    "scaledown_window_s": 600,
+    "warmup_probe": "GET {cloud_url}/v1/models (triggers scale-up; poll, do not single-shot)"
+  }
+}

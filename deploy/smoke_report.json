@@ -1,0 +1,210 @@
+{
+  "t_utc": "2026-09-22T12:59:49Z",
+  "endpoints": {
+    "narrator": "https://proxynanmaga--narrator.modal.run",
+    "canonical": "https://proxynanmaga--canonical.modal.run"
+  },
+  "models": {
+    "narrator": "Qwen/Qwen3-VL-8B-Instruct",
+    "canonical": "canonical-lrfold"
+  },
+  "canonical_smoke": {
+    "n": 20,
+    "em_tok_exact": 0.85,
+    "decode": {
+      "temperature": 0.0,
+      "repetition_penalty": 1.08,
+      "max_tokens": 16
+    },
+    "frozen_ids_head": [
+      "0:0",
+      "0:1",
+      "0:10"
+    ],
+    "latency_s": {
+      "mean": 2.53,
+      "max": 7.023
+    },
+    "rows": [
+      {
+        "id": "0:0",
+        "type": "count",
+        "gold": "3",
+        "pred": "3",
+        "em": true,
+        "latency_s": 7.023
+      },
+      {
+        "id": "0:1",
+        "type": "area",
+        "gold": "521m2",
+        "pred": "390m2",
+        "em": false,
+        "latency_s": 2.379
+      },
+      {
+        "id": "0:10",
+        "type": "count",
+        "gold": "0",
+        "pred": "0",
+        "em": true,
+        "latency_s": 2.38
+      },
+      {
+        "id": "0:11",
+        "type": "comp",
+        "gold": "no",
+        "pred": "no",
+        "em": true,
+        "latency_s": 2.256
+      },
+      {
+        "id": "0:12",
+        "type": "presence",
+        "gold": "no",
+        "pred": "no",
+        "em": true,
+        "latency_s": 2.282
+      },
+      {
+        "id": "0:13",
+        "type": "count",
+        "gold": "0",
+        "pred": "0",
+        "em": true,
+        "latency_s": 2.236
+      },
+      {
+        "id": "0:14",
+        "type": "presence",
+        "gold": "yes",
+        "pred": "yes",
+        "em": true,
+        "latency_s": 2.211
+      },
+      {
+        "id": "0:15",
+        "type": "comp",
+        "gold": "no",
+        "pred": "no",
+        "em": true,
+        "latency_s": 2.157
+      },
+      {
+        "id": "0:16",
+        "type": "presence",
+        "gold": "yes",
+        "pred": "yes",
+        "em": true,
+        "latency_s": 2.256
+      },
+      {
+        "id": "0:17",
+        "type": "comp",
+        "gold": "no",
+        "pred": "no",
+        "em": true,
+        "latency_s": 2.192
+      },
+      {
+        "id": "0:18",
+        "type": "presence",
+        "gold": "no",
+        "pred": "no",
+        "em": true,
+        "latency_s": 2.357
+      },
+      {
+        "id": "0:19",
+        "type": "presence",
+        "gold": "no",
+        "pred": "no",
+        "em": true,
+        "latency_s": 2.315
+      },
+      {
+        "id": "0:2",
+        "type": "count",
+        "gold": "4",
+        "pred": "4",
+        "em": true,
+        "latency_s": 2.175
+      },
+      {
+        "id": "0:20",
+        "type": "count",
+        "gold": "1",
+        "pred": "0",
+        "em": false,
+        "latency_s": 2.27
+      },
+      {
+        "id": "0:21",
+        "type": "area",
+        "gold": "0m2",
+        "pred": "0m2",
+        "em": true,
+        "latency_s": 2.407
+      },
+      {
+        "id": "0:22",
+        "type": "area",
+        "gold": "14m2",
+        "pred": "107m2",
+        "em": false,
+        "latency_s": 2.382
+      },
+      {
+        "id": "0:23",
+        "type": "count",
+        "gold": "0",
+        "pred": "0",
+        "em": true,
+        "latency_s": 2.216
+      },
+      {
+        "id": "0:24",
+        "type": "area",
+        "gold": "0m2",
+        "pred": "0m2",
+        "em": true,
+        "latency_s": 2.32
+      },
+      {
+        "id": "0:25",
+        "type": "area",
+        "gold": "0m2",
+        "pred": "0m2",
+        "em": true,
+        "latency_s": 2.315
+      },
+      {
+        "id": "0:26",
+        "type": "comp",
+        "gold": "no",
+        "pred": "no",
+        "em": true,
+        "latency_s": 2.5
+      }
+    ]
+  },
+  "narrator_probe": {
+    "status": 200,
+    "latency_s": 11.12,
+    "text": "This satellite image shows a residential area with predominantly bare deciduous trees, indicating it\u2019s likely winter or early spring. The land cover is a mix of grassy patches, dirt paths, and scattered leaf litter, with some areas appearing muddy or disturbed. Visible structures include a few houses \u2014 one with a light-colored roof near the center-left \u2014 along with driveways and what appears to be a small circular feature (possibly a pond or well) surrounded by trees. Notably, the terrain is gently sloped and irregular, with winding unpaved roads and dense tree clusters creating a fragmented, wooded suburban landscape."
+  },
+  "cold_start_s": {
+    "narrator": [
+      83.2,
+      84.3
+    ],
+    "canonical": [
+      191.7,
+      263.5
+    ],
+    "note": "zero-scaled -> first 200 on /v1/models; two independent boots each, weights + vLLM compile cache on volume; spread is Modal scheduling/cache variance",
+    "auth_rejected_no_token": 401,
+    "gpu": "A10G 24GB"
+  },
+  "warmup_probe": "GET /v1/models triggers scale-up; poll, don't single-shot"
+}
