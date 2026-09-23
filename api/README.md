@@ -77,13 +77,21 @@ SAR accepts GeoTIFF / PNG / `.npz` (keys `vv`[, `vh`]). Runs the real
               "bands": 1, "dtype": "uint8", "calibrated": null,
               "files": {"<role>": {"file","gsd_m","gsd_source","crs","crs_note",
                                    "bands","dtype","inspect_backend","provenance"}}},
- "warnings": ["…"], "ingest_note": "…"}
+ "warnings": ["…"], "ingest_note": "…",
+ "previews": [{"role": "image", "url": "/uploads/<upload_id>/preview/image"}]}
 ```
 
 `detected` is flat per the contract; the nested `files` map is additive
 per-file detail. `calibrated` is set for the SAR input (`optical+sar`),
 `null` otherwise. GSD is the *used* value (native × resize factor when the
 preview was downscaled) — exactly what `area_calc` will use.
+
+`previews` is additive: one entry per role in canonical order, each pointing
+at the PNG `bind_inputs` materializes into the upload workdir — the same
+pixels the tools and VLM see. Optical/`image` previews come from
+`ingest.materialize_rgb` (percentile stretch, ≤1024 px edge); the SAR preview
+is a VV percentile-stretch grayscale (`tools.vv_to_preview`). Uploads made
+before this field existed have no `previews`.
 
 Errors: `422` missing role (`incomplete_upload`) / bad `mode` (`bad_mode`) /
 ingest failure (`ingest_failed`); `413` over the byte cap.
@@ -196,6 +204,15 @@ exports). `name` must match a basename in the run's `artifacts` list; the
 resolved path must stay inside the run's artifact root (the ingest workdir
 for upload runs, the scene data dir for prepared runs). `400`/`403`/`404` on
 bad name, escape, or unknown.
+
+### `GET /uploads/{upload_id}/preview/{role}`
+
+Serves a preview PNG recorded in the upload's `previews` map (`image`,
+`before`/`after`, or `optical`/`sar` depending on mode). The resolved path
+must stay inside the upload's workdir — same confinement as `/artifacts`.
+Errors: `404` unknown upload (`unknown_upload`) / role not in the upload's
+previews (`unknown_preview`) / file gone from disk (`preview_gone`); `403`
+resolved path outside the workdir (`escape`).
 
 ## Errors
 

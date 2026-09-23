@@ -186,6 +186,108 @@ class ApiTests(unittest.TestCase):
         self.assertEqual(r.status_code, 200, r.text)
         self.assertTrue(r.json()["upload_id"])
 
+    # --- upload previews ----------------------------------------------------
+
+    def test_upload_previews_single_geotiff(self) -> None:
+        tif = self._tif()
+        with tif.open("rb") as fh:
+            r = self._upload("single", {"image": ("s.tif", fh, "image/tiff")})
+        self.assertEqual(r.status_code, 200, r.text)
+        body = r.json()
+        uid = body["upload_id"]
+        self.assertEqual(
+            body["previews"],
+            [{"role": "image", "url": f"/uploads/{uid}/preview/image"}],
+        )
+        r = self.client.get(body["previews"][0]["url"])
+        self.assertEqual(r.status_code, 200)
+        self.assertTrue(r.headers["content-type"].startswith("image/png"))
+        self.assertTrue(r.content.startswith(b"\x89PNG"))
+        for key in ("upload_id", "workdir", "detected", "warnings"):
+            self.assertIn(key, body)
+
+    def test_upload_previews_all_modes_roles(self) -> None:
+        before = TMP / "bt_before.png"
+        after = TMP / "bt_after.png"
+        Image.new("RGB", (16, 16), (10, 20, 30)).save(before)
+        Image.new("RGB", (16, 16), (40, 50, 60)).save(after)
+        with before.open("rb") as fb, after.open("rb") as fa:
+            r = self._upload(
+                "bi-temporal",
+                {
+                    "before": ("bt_before.png", fb, "image/png"),
+                    "after": ("bt_after.png", fa, "image/png"),
+                },
+            )
+        self.assertEqual(r.status_code, 200, r.text)
+        body = r.json()
+        self.assertEqual([p["role"] for p in body["previews"]], ["before", "after"])
+        for p in body["previews"]:
+            g = self.client.get(p["url"])
+            self.assertEqual(g.status_code, 200, p["url"])
+            self.assertTrue(g.content.startswith(b"\x89PNG"))
+
+        opt = self._tif("opt.tif")
+        npz = TMP / "sar.npz"
+        rng = np.random.default_rng(0)
+        np.savez(
+            str(npz),
+            vv=rng.random((16, 16), dtype=np.float32),
+            vh=rng.random((16, 16), dtype=np.float32),
+        )
+        with opt.open("rb") as fo, npz.open("rb") as fs:
+            r = self._upload(
+                "optical+sar",
+                {
+                    "optical": ("opt.tif", fo, "image/tiff"),
+                    "sar": ("sar.npz", fs, "application/octet-stream"),
+                },
+            )
+        self.assertEqual(r.status_code, 200, r.text)
+        body = r.json()
+        self.assertEqual([p["role"] for p in body["previews"]], ["optical", "sar"])
+        for p in body["previews"]:
+            g = self.client.get(p["url"])
+            self.assertEqual(g.status_code, 200, p["url"])
+            self.assertTrue(g.content.startswith(b"\x89PNG"))
+
+    def test_upload_preview_confinement(self) -> None:
+        r = self.client.get("/uploads/nope/preview/image")
+        self.assertEqual(r.status_code, 404)
+        self.assertEqual(r.json()["error"], "unknown_upload")
+
+        tif = self._tif()
+        with tif.open("rb") as fh:
+            up = self._upload("single", {"image": ("s.tif", fh, "image/tiff")})
+        self.assertEqual(up.status_code, 200, up.text)
+        uid = up.json()["upload_id"]
+
+        r = self.client.get(f"/uploads/{uid}/preview/sar")
+        self.assertEqual(r.status_code, 404)
+        self.assertEqual(r.json()["error"], "unknown_preview")
+
+        r = self.client.get(f"/uploads/{uid}/preview/..%2F..%2Fx")
+        self.assertIn(r.status_code, (400, 404))
+
+        outside = TMP / "outside.png"
+        Image.new("RGB", (4, 4)).save(outside)
+        rec = self.store.get_upload(uid)
+        rec["previews"]["image"] = str(outside.resolve())
+        self.store.put_upload(rec)
+        r = self.client.get(f"/uploads/{uid}/preview/image")
+        self.assertEqual(r.status_code, 403)
+        self.assertEqual(r.json()["error"], "escape")
+
+        with tif.open("rb") as fh:
+            up2 = self._upload("single", {"image": ("s.tif", fh, "image/tiff")})
+        self.assertEqual(up2.status_code, 200, up2.text)
+        uid2 = up2.json()["upload_id"]
+        rec2 = self.store.get_upload(uid2)
+        Path(rec2["previews"]["image"]).unlink()
+        r = self.client.get(f"/uploads/{uid2}/preview/image")
+        self.assertEqual(r.status_code, 404)
+        self.assertEqual(r.json()["error"], "preview_gone")
+
     # --- query / runs --------------------------------------------------------
 
     def test_query_mocked_bundle_and_runs(self) -> None:

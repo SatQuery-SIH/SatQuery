@@ -74,6 +74,15 @@ ROLE_ORDER = {
     "bi-temporal": ["before", "after"],
     "optical+sar": ["optical", "sar"],
 }
+# Role -> key in bound["paths"] for the PNG bind_inputs materializes into the
+# upload workdir (the same pixels the pipeline tools/VLM consume; no re-render).
+PREVIEW_PATH_KEY = {
+    "image": "image",
+    "before": "before",
+    "after": "after",
+    "optical": "optical",
+    "sar": "sar_vv",
+}
 # Role whose file anchors the flat `detected` block (mirrors which file the
 # pipeline prefers for GSD: bi-temporal reads `after` first, then `before`).
 PRIMARY_ROLE = {"single": "image", "bi-temporal": "after", "optical+sar": "optical"}
@@ -517,6 +526,17 @@ def create_app(store: Any = None) -> FastAPI:
         # dedupe, order-preserving
         warnings = list(dict.fromkeys(warnings))
         workdir = bound.get("workdir")
+        preview_paths: dict[str, str] = {}
+        if workdir:
+            wd_root = Path(workdir).resolve()
+            bound_paths = bound.get("paths") or {}
+            for role in ROLE_ORDER[mode]:
+                p = bound_paths.get(PREVIEW_PATH_KEY[role])
+                if not p:
+                    continue
+                rp = Path(p).resolve()
+                if rp.is_file() and rp.is_relative_to(wd_root):
+                    preview_paths[role] = str(rp)
         record = {
             "upload_id": upload_id,
             "ts": _now(),
@@ -528,6 +548,7 @@ def create_app(store: Any = None) -> FastAPI:
             "detected": detected,
             "warnings": warnings,
             "ingest_note": bound.get("ingest_note"),
+            "previews": preview_paths,
         }
         app.state.store.put_upload(record)
         return {
@@ -536,6 +557,10 @@ def create_app(store: Any = None) -> FastAPI:
             "detected": detected,
             "warnings": warnings,
             "ingest_note": bound.get("ingest_note"),
+            "previews": [
+                {"role": r, "url": f"/uploads/{upload_id}/preview/{r}"}
+                for r in preview_paths
+            ],
         }
 
     def _resolve_uploads(req: QueryRequest) -> dict[str, str] | None:
@@ -732,6 +757,30 @@ def create_app(store: Any = None) -> FastAPI:
                 404, f"artifact {name!r} missing on disk", slug="artifact_gone"
             )
         return FileResponse(path)
+
+    @app.get("/uploads/{upload_id}/preview/{role}")
+    def get_upload_preview(upload_id: str, role: str) -> FileResponse:
+        rec = app.state.store.get_upload(upload_id)
+        if rec is None:
+            raise _error(
+                404, f"unknown upload_id {upload_id!r}", slug="unknown_upload"
+            )
+        previews = rec.get("previews") or {}
+        if role not in previews:
+            raise _error(
+                404,
+                f"no preview {role!r} on upload {upload_id}",
+                slug="unknown_preview",
+            )
+        path = Path(previews[role]).resolve()
+        workdir = rec.get("workdir")
+        if not workdir or not path.is_relative_to(Path(workdir).resolve()):
+            raise _error(403, "preview escapes upload workdir", slug="escape")
+        if not path.is_file():
+            raise _error(
+                404, f"preview {role!r} missing on disk", slug="preview_gone"
+            )
+        return FileResponse(path, media_type="image/png")
 
     return app
 

@@ -1,0 +1,33 @@
+event: stage
+data: {"stage": "plan", "status": "start", "ts": 9847.0113747}
+
+event: stage
+data: {"stage": "plan", "status": "done", "ts": 9847.0114557, "data": {"supported": true, "task": "water_highlight", "tools": ["water_highlight", "area_calc", "vqa"], "vlm_role": "narrate"}}
+
+event: stage
+data: {"stage": "bind", "status": "start", "ts": 9847.0115066}
+
+event: stage
+data: {"stage": "bind", "status": "done", "ts": 9847.0121167, "data": {"source": "prepared", "scene": 1, "gsd_m": null, "gsd_source": "none", "misreg_shift_px": null, "coreg_shift_px": null, "error": null}}
+
+event: stage
+data: {"stage": "tool", "status": "start", "ts": 9847.0124656, "tool": "water_highlight"}
+
+event: stage
+data: {"stage": "tool", "status": "done", "ts": 9847.0598971, "tool": "water_highlight", "data": {"latency_s": 0.047, "water_pixels": 15077, "method": "RGB Otsu on (B-R), threshold=4.0"}}
+
+event: stage
+data: {"stage": "tool", "status": "start", "ts": 9847.0599749, "tool": "area_calc"}
+
+event: stage
+data: {"stage": "tool", "status": "done", "ts": 9847.0604312, "tool": "area_calc", "data": {"latency_s": 0.0, "gsd_m": null, "area_m2": null}}
+
+event: stage
+data: {"stage": "narration", "status": "start", "ts": 9847.0605498, "data": {"vlm_role": "narrate", "n_images": 1, "url": "http://127.0.0.1:8080"}}
+
+event: stage
+data: {"stage": "narration", "status": "fail", "ts": 9851.1599802, "data": {"error": "URLError: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"}}
+
+event: error
+data: {"error": "pipeline_error", "detail": "run_query failed: URLError: <urlopen error [WinError 10061] No connection could be made because the target machine actively refused it>"}
+

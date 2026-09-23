@@ -1,0 +1,27 @@
+event: stage
+data: {"stage": "plan", "status": "start", "ts": 9837.8261595}
+
+event: stage
+data: {"stage": "plan", "status": "done", "ts": 9837.8271775, "data": {"supported": false, "task": "unsupported", "tools": [], "vlm_role": "none"}}
+
+event: stage
+data: {"stage": "bind", "status": "start", "ts": 9837.8272828}
+
+event: stage
+data: {"stage": "bind", "status": "done", "ts": 9837.9209337, "data": {"source": "prepared", "scene": 2, "gsd_m": 0.5, "gsd_source": "benchmark_constant", "misreg_shift_px": 4.0, "coreg_shift_px": null, "error": null}}
+
+event: stage
+data: {"stage": "plan", "status": "withheld", "ts": 9837.9214739, "data": {"refusal": "I do not have a counting tool, so I will not invent a count. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks."}}
+
+event: stage
+data: {"stage": "packet", "status": "start", "ts": 9837.9215387}
+
+event: stage
+data: {"stage": "packet", "status": "done", "ts": 9837.930035, "data": {"ok": true, "error": null}}
+
+event: stage
+data: {"stage": "done", "status": "done", "ts": 9837.9301409, "data": {"supported": false, "tools": [], "scene": 2, "input_source": "prepared", "complete_s": 0.095, "n_images": 0, "has_overlay": false, "has_packet": true}}
+
+event: done
+data: {"run_id": "d74b2fa224a64a7fb7c4e35941906e32", "answer": "I do not have a counting tool, so I will not invent a count. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks.", "visible_answer": "### Findings (from tools)\n\nNo tool measurements this run.\n\nI do not have a counting tool, so I will not invent a count. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks.", "plan": {"task": "unsupported", "input_mode": "bi-temporal", "tools": [], "vlm_role": "none", "supported": false, "refusal": "I do not have a counting tool, so I will not invent a count. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks.", "query": "how many buildings changed?"}, "tool_outputs": {}, "evidence_packet": {"schema_version": "1.0", "run_id": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a", "task": "unsupported", "input_contract": {"valid": true, "modality": "bi-temporal", "gsd_m": 0.5}, "canonical_answer": null, "claims": [], "artifacts": [{"type": "mask", "path": "<repo>\\demo\\data\\scene2\\pred_mask.png", "grid": "native"}, {"type": "box", "xyxy": [0, 0, 1024, 1024], "grid": "native"}], "limitations": ["No tool-owned canonical answer; Qwen text is not canonical."], "trace": [{"plan_task": "unsupported", "live": false}], "tool_outputs": {}}, "trace": {"query": "how many buildings changed?", "input_mode": "bi-temporal", "scene": 2, "live": false, "first_token_s": null, "complete_s": 0.095, "overlay_path": null, "images": [], "metrics_badge": {"n": 20, "mean_iou": 0.7922297500000001, "mean_f1": 0.8802787499999999, "rung": "changeformer_v6", "provenance": "tools.mask_metrics on fixed LEVIR-CD subset (not VLM)"}, "ingest_note": "Built-in examples below. Attach your own files on any tab to analyze them instead.", "input_source": "prepared", "gsd": {"gsd_m": 0.5, "source": "benchmark_constant", "provenance": "LEVIR-CD documented 0.5 m GSD (prepared Scene 2 PNG)."}, "misreg_check": "ok", "misregistration_note": null, "misreg_shift_px": 4.0}, "report": {"findings": "### Findings (from tools)\n\nNo tool measurements this run.", "measurement": "### Measurement card (tool `area_calc` \u2014 VLM did not compute these)\n\nNo `area_calc` on this run (caption/VQA/refusal).", "confidence": "### Confidence hierarchy (honesty, not a fake 0.99)\n\n**Tool measurements** \u2014 raster math / ChangeFormer / SAR threshold. These are the numbers a judge should cite.\n- None this run (planner refused or caption-only).\n\n**VLM interpretation (not a measurement)** \u2014 role `none`; tools selected: []. The answer paragraph may mis-attach numbers. Do not treat prose km\u00b2 as independent evidence.\n- Refusal (not a count/area): I do not have a counting tool, so I will not invent a count. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks.", "limitations": ["No tool-owned canonical answer; Qwen text is not canonical."], "narration_check": null}, "artifacts": []}
+

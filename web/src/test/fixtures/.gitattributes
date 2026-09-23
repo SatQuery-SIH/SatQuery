@@ -1,0 +1,2 @@
+# Recorded SSE frames from the real API: keep bytes exactly as captured (no EOL conversion).
+*.txt -text
