@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { api } from "../api";
 import type { DetectedBlock, InputMode, UploadResponse } from "../types";
 
@@ -42,6 +42,60 @@ export function DetectedCard({ d, warnings }: { d: DetectedBlock; warnings?: str
   );
 }
 
+function isInstantImage(f: File): boolean {
+  if (f.type === "image/png" || f.type === "image/jpeg") return true;
+  return /\.(png|jpe?g)$/i.test(f.name);
+}
+
+// Object URL lifecycle is owned by an effect keyed on the File — revoke on
+// replace / clear / unmount / mode change (StrictMode-safe).
+function LocalThumb({ file, onError }: { file: File; onError: () => void }) {
+  const [url, setUrl] = useState<string | null>(null);
+  useEffect(() => {
+    const u = URL.createObjectURL(file);
+    setUrl(u);
+    return () => URL.revokeObjectURL(u);
+  }, [file]);
+  return url ? <img src={url} alt={file.name} onError={onError} /> : null;
+}
+
+type SlotState =
+  | "empty"
+  | "local"
+  | "pending-server"
+  | "server"
+  | "no-preview"
+  | "error";
+
+function SlotPreview({
+  state,
+  file,
+  serverUrl,
+  onImgError,
+}: {
+  state: SlotState;
+  file?: File;
+  serverUrl?: string;
+  onImgError: () => void;
+}) {
+  return (
+    <div className="slot-preview" data-state={state}>
+      {state === "empty" && <span className="slot-hint">drop file or click</span>}
+      {state === "local" && file && (
+        <LocalThumb file={file} onError={onImgError} />
+      )}
+      {state === "pending-server" && (
+        <span className="slot-hint">preview rendered by the API after upload</span>
+      )}
+      {state === "server" && serverUrl && (
+        <img src={serverUrl} alt={file?.name ?? "preview"} onError={onImgError} />
+      )}
+      {state === "no-preview" && <span className="slot-hint">no preview</span>}
+      {state === "error" && <span className="slot-hint">preview failed to load</span>}
+    </div>
+  );
+}
+
 export function UploadPanel({
   mode,
   onUploaded,
@@ -50,6 +104,10 @@ export function UploadPanel({
   onUploaded: (u: UploadResponse) => void;
 }) {
   const [files, setFiles] = useState<Record<string, File>>({});
+  // null = no upload yet this panel; per-role url | null once uploaded
+  const [serverPrev, setServerPrev] = useState<Record<string, string | null> | null>(null);
+  // role -> File | server url that failed to render (resets when it changes)
+  const [errFor, setErrFor] = useState<Record<string, File | string | null>>({});
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [dragOver, setDragOver] = useState<string | null>(null);
@@ -62,6 +120,8 @@ export function UploadPanel({
       else delete n[role];
       return n;
     });
+    // replacing any file invalidates this panel's server previews
+    setServerPrev(null);
   };
 
   const complete = MODE_ROLES[mode].every((r) => files[r.role]);
@@ -71,6 +131,11 @@ export function UploadPanel({
     setErr(null);
     try {
       const res = await api.upload(mode, files);
+      const map: Record<string, string | null> = {};
+      for (const r of MODE_ROLES[mode])
+        map[r.role] =
+          res.previews?.find((p) => p.role === r.role)?.url ?? null;
+      setServerPrev(map);
       onUploaded(res);
     } catch (e) {
       setErr(e instanceof Error ? e.message : String(e));
@@ -79,39 +144,66 @@ export function UploadPanel({
     }
   };
 
+  const slotState = (role: string): SlotState => {
+    const f = files[role];
+    const sp = serverPrev?.[role];
+    const src = sp ? api.previewUrl(sp) : null;
+    const curKey: File | string | null = src ?? f ?? null;
+    if (curKey != null && errFor[role] === curKey) return "error";
+    if (src) return "server";
+    if (!f) return "empty";
+    if (serverPrev && sp === null) return "no-preview";
+    return isInstantImage(f) ? "local" : "pending-server";
+  };
+
   return (
     <div className="upload-panel">
-      {MODE_ROLES[mode].map((r) => (
-        <div
-          key={r.role}
-          className={`drop-slot ${files[r.role] ? "has-file" : ""} ${dragOver === r.role ? "drag" : ""}`}
-          onDragOver={(e) => {
-            e.preventDefault();
-            setDragOver(r.role);
-          }}
-          onDragLeave={() => setDragOver(null)}
-          onDrop={(e) => {
-            e.preventDefault();
-            setDragOver(null);
-            setFile(r.role, e.dataTransfer.files?.[0]);
-          }}
-          onClick={() => inputs.current[r.role]?.click()}
-        >
-          <input
-            type="file"
-            accept={r.accept}
-            hidden
-            ref={(el) => {
-              inputs.current[r.role] = el;
+      {MODE_ROLES[mode].map((r) => {
+        const f = files[r.role];
+        const sp = serverPrev?.[r.role];
+        const state = slotState(r.role);
+        return (
+          <div
+            key={r.role}
+            data-testid={`slot-${r.role}`}
+            className={`drop-slot ${f ? "has-file" : ""} ${dragOver === r.role ? "drag" : ""}`}
+            onDragOver={(e) => {
+              e.preventDefault();
+              setDragOver(r.role);
             }}
-            onChange={(e) => setFile(r.role, e.target.files?.[0] ?? undefined)}
-          />
-          <span className="drop-role">{r.label}</span>
-          <span className="drop-name">
-            {files[r.role] ? files[r.role].name : "drop file or click"}
-          </span>
-        </div>
-      ))}
+            onDragLeave={() => setDragOver(null)}
+            onDrop={(e) => {
+              e.preventDefault();
+              setDragOver(null);
+              setFile(r.role, e.dataTransfer.files?.[0]);
+            }}
+            onClick={() => inputs.current[r.role]?.click()}
+          >
+            <input
+              type="file"
+              accept={r.accept}
+              hidden
+              ref={(el) => {
+                inputs.current[r.role] = el;
+              }}
+              onChange={(e) => setFile(r.role, e.target.files?.[0] ?? undefined)}
+            />
+            <span className="drop-role">{r.label}</span>
+            <SlotPreview
+              state={state}
+              file={f}
+              serverUrl={sp ? api.previewUrl(sp) : undefined}
+              onImgError={() =>
+                setErrFor((s) => ({
+                  ...s,
+                  [r.role]: (sp ? api.previewUrl(sp) : f) ?? null,
+                }))
+              }
+            />
+            {f && <span className="drop-name">{f.name}</span>}
+          </div>
+        );
+      })}
       <button className="btn" disabled={!complete || busy} onClick={doUpload}>
         {busy ? "uploading + ingesting…" : "upload & inspect"}
       </button>

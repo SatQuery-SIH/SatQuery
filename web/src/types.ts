@@ -32,12 +32,18 @@ export interface DetectedBlock {
   files?: Record<string, Record<string, unknown>>;
 }
 
+export interface UploadPreview {
+  role: string;
+  url: string;
+}
+
 export interface UploadResponse {
   upload_id: string;
   workdir: string | null;
   detected: DetectedBlock;
   warnings: string[];
   ingest_note?: string;
+  previews?: UploadPreview[]; // additive; older APIs omit it
 }
 
 export interface QueryRequest {
@@ -119,6 +125,17 @@ export interface RunListItem {
 export interface ApiError {
   error: string;
   detail: string;
+}
+
+// POST /query/stream stage event (see api/README.md SSE wire format).
+// stage: plan | bind | tool | narration | packet | done
+// status: start | done | fail | withheld
+export interface StageEvent {
+  stage: string;
+  status: string;
+  ts?: number;
+  tool?: string;
+  data?: Record<string, unknown>;
 }
 
 // --- withold convention (demo/evidence_packet.py) ---

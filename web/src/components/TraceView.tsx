@@ -1,18 +1,21 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { RunBundle } from "../types";
 import { isWithheldClaim } from "../types";
+import { formatSecs } from "../format";
+import type { LiveTrace } from "../liveTrace";
+import { stageDetail, stageDuration } from "../liveTrace";
 
-// The agentic-trace stage view. Today it replays the completed run bundle
-// (labeled as replay — never fake "live" on a finished bundle). When the
-// backend ships POST /query/stream SSE, the same component can be driven by
-// live events: the stage list + per-stage detail rendering are identical.
+// The agentic-trace stage view, in two honest modes:
+//  - live: driven by POST /query/stream stage events as they arrive
+//  - replay: replays a completed run bundle, labeled as replay — never
+//    fake "live" on a finished bundle.
 
-type StageState = "pending" | "running" | "done" | "failed" | "withheld";
+type ReplayStageState = "pending" | "running" | "done" | "failed" | "withheld";
 
 interface Stage {
   id: string;
   title: string;
-  state: StageState;
+  state: ReplayStageState;
   detail: React.ReactNode;
 }
 
@@ -109,10 +112,92 @@ export function buildStages(bundle: RunBundle): Stage[] {
   return stages;
 }
 
-export function TraceView({ bundle }: { bundle: RunBundle }) {
+function badgeText(state: string): string {
+  return state === "skipped" ? "not run" : state;
+}
+
+function LiveTraceView({ trace, running }: { trace: LiveTrace; running: boolean }) {
+  const [manual, setManual] = useState<boolean | null>(null);
+  const anyFailed = trace.stages.some((s) => s.state === "failed");
+  const autoExpanded = running || anyFailed;
+  const expanded = manual ?? autoExpanded;
+  const failed = trace.stages.find((s) => s.state === "failed");
+  const completeS = trace.summary?.complete_s;
+  const headline = running
+    ? "streaming POST /query/stream"
+    : trace.finished
+      ? `live run · completed in ${typeof completeS === "number" ? completeS : "?"} s`
+      : `live run · failed at ${failed?.label ?? "unknown stage"}`;
+
+  return (
+    <div className="trace-view" data-testid="trace-view">
+      <div className="trace-head">
+        <span className="trace-title">execution trace</span>
+        <span className={`live-badge${running ? " pulsing" : ""}`}>● LIVE</span>
+        <span className="trace-note">{headline}</span>
+        {!autoExpanded && (
+          <button className="btn-mini" onClick={() => setManual(!(manual ?? autoExpanded))}>
+            {expanded ? "details ▴" : "details ▾"}
+          </button>
+        )}
+      </div>
+      {running && (
+        <div className="warming" data-testid="warming">
+          narrator + canonical are 8B vision-language models — on a cold GPU
+          seat the first call can take a minute.
+        </div>
+      )}
+      {expanded ? (
+        <ol className="trace-stages">
+          {trace.stages.map((s) => {
+            const dur = stageDuration(s);
+            const det = stageDetail(s);
+            return (
+              <li
+                key={s.key}
+                className={`trace-stage state-${s.state}${s.state === "running" ? " running" : ""}`}
+              >
+                <div className="stage-row">
+                  <span className={`stage-badge st-${s.state}`}>{badgeText(s.state)}</span>
+                  <span className="stage-title">{s.label}</span>
+                  {dur != null && <span className="stage-dur">{formatSecs(dur)}</span>}
+                </div>
+                {det && <div className="stage-detail">{det}</div>}
+              </li>
+            );
+          })}
+        </ol>
+      ) : (
+        <div className="step-chips">
+          {trace.stages.map((s) => {
+            const dur = stageDuration(s);
+            return (
+              <span key={s.key} className={`step-chip st-${s.state}`}>
+                {s.label}
+                {dur != null ? ` · ${formatSecs(dur)}` : ""}
+              </span>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ReplayTraceView({ bundle, note }: { bundle: RunBundle; note?: string }) {
   const stages = useMemo(() => buildStages(bundle), [bundle]);
   const [reveal, setReveal] = useState(stages.length);
   const [replaying, setReplaying] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const timers = useRef<number[]>([]);
+
+  useEffect(() => setReveal(stages.length), [bundle, stages.length]);
+  useEffect(
+    () => () => {
+      for (const t of timers.current) clearTimeout(t);
+    },
+    [],
+  );
 
   // staged reveal — labeled replay of a completed bundle (real data, real order)
   const replay = () => {
@@ -122,34 +207,55 @@ export function TraceView({ bundle }: { bundle: RunBundle }) {
     const step = () => {
       i++;
       setReveal(i);
-      if (i < stages.length) setTimeout(step, 550);
+      if (i < stages.length) timers.current.push(window.setTimeout(step, 550));
       else setReplaying(false);
     };
-    setTimeout(step, 550);
+    timers.current.push(window.setTimeout(step, 550));
   };
 
-  useEffect(() => setReveal(stages.length), [bundle, stages.length]);
-
+  const showFull = expanded || replaying;
   return (
     <div className="trace-view" data-testid="trace-view">
       <div className="trace-head">
         <span className="trace-title">execution trace</span>
+        <span className="replay-badge">▶ replay of recorded run</span>
         <button className="btn-mini" onClick={replay} disabled={replaying}>
           {replaying ? "replaying…" : "▶ replay pipeline"}
         </button>
-        <span className="trace-note">replay of recorded run — live SSE stream lands with the backend spec</span>
+        <button className="btn-mini" onClick={() => setExpanded((e) => !e)}>
+          {expanded ? "details ▴" : "details ▾"}
+        </button>
+        {note && <span className="trace-note">{note}</span>}
       </div>
-      <ol className="trace-stages">
-        {stages.slice(0, reveal).map((s) => (
-          <li key={s.id} className={`trace-stage state-${s.state}`}>
-            <div className="stage-row">
-              <span className={`stage-badge st-${s.state}`}>{s.state}</span>
-              <span className="stage-title">{s.title}</span>
-            </div>
-            {s.detail}
-          </li>
-        ))}
-      </ol>
+      {showFull ? (
+        <ol className="trace-stages">
+          {stages.slice(0, reveal).map((s) => (
+            <li key={s.id} className={`trace-stage state-${s.state}`}>
+              <div className="stage-row">
+                <span className={`stage-badge st-${s.state}`}>{badgeText(s.state)}</span>
+                <span className="stage-title">{s.title}</span>
+              </div>
+              {s.detail}
+            </li>
+          ))}
+        </ol>
+      ) : (
+        <div className="step-chips">
+          {stages.map((s) => (
+            <span key={s.id} className={`step-chip st-${s.state}`}>{s.title}</span>
+          ))}
+        </div>
+      )}
     </div>
   );
+}
+
+export function TraceView(
+  props:
+    | { mode: "live"; trace: LiveTrace; running: boolean }
+    | { mode: "replay"; bundle: RunBundle; note?: string },
+) {
+  if (props.mode === "live")
+    return <LiveTraceView trace={props.trace} running={props.running} />;
+  return <ReplayTraceView bundle={props.bundle} note={props.note} />;
 }
