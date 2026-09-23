@@ -1,5 +1,5 @@
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor, within } from "@testing-library/react";
 import App from "../App";
 import { makeBundle } from "./fixtures";
 import supported from "./fixtures/sse_supported.txt?raw";
@@ -142,7 +142,9 @@ describe("App — live stream flow", () => {
     );
     expect(screen.getByText(/replay of recorded run/)).toBeInTheDocument();
     expect(
-      screen.getByText(/live stream unavailable .* fell back to POST \/query/),
+      screen.getByText(
+        /live updates unavailable \(failed to fetch\) — showing the recorded run/,
+      ),
     ).toBeInTheDocument();
     expect(calls.some((c) => c.url.endsWith("/query"))).toBe(true);
   });
@@ -155,12 +157,17 @@ describe("App — live stream flow", () => {
     });
     fireEvent.click(screen.getByTestId("run-button"));
     const card = await screen.findByTestId("run-error");
+    // raw slug + detail live inside the collapsed "details" section
+    fireEvent.click(within(card).getByText("details"));
     expect(card).toHaveTextContent("pipeline_error");
     expect(card).toHaveTextContent("WinError 10061");
-    expect(card).toHaveTextContent(/narrator seat may be down/);
+    expect(card).toHaveTextContent(/answer model may be offline/);
     expect(screen.queryByTestId("answer-card")).toBeNull();
-    // the trace tells the truth: failed at the narrator, never "completed"
-    expect(screen.getByText(/live run · failed at frozen narrator/)).toBeInTheDocument();
+    // the trace tells the truth: failed at the report writer, never "completed"
+    fireEvent.click(screen.getByTestId("trace-toggle"));
+    expect(
+      screen.getByText(/live run · failed at report writer/),
+    ).toBeInTheDocument();
     expect(screen.queryByText(/completed in/)).toBeNull();
   });
 
@@ -176,6 +183,7 @@ describe("App — live stream flow", () => {
     fireEvent.click(screen.getByTestId("run-button"));
     const card = await screen.findByTestId("run-error");
     expect(card).toHaveTextContent("request rejected");
+    fireEvent.click(within(card).getByText("details"));
     expect(card).toHaveTextContent("mode_mismatch");
     expect(calls.some((c) => c.url.endsWith("/query"))).toBe(false);
   });
@@ -239,7 +247,14 @@ describe("App — runs history", () => {
       ],
     });
     render(<App />);
-    fireEvent.click(await screen.findByText(/Is there water in this scene\?/));
+    fireEvent.click(screen.getByTestId("runs-open"));
+    const drawer = await screen.findByTestId("runs-drawer");
+    fireEvent.click(
+      within(drawer).getByText(/Is there water in this scene\?/),
+    );
+    await waitFor(() =>
+      expect(screen.queryByTestId("runs-drawer")).toBeNull(),
+    );
     await waitFor(() =>
       expect(screen.getByText(/replay of recorded run/)).toBeInTheDocument(),
     );

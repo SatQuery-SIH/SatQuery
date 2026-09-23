@@ -1,0 +1,351 @@
+{
+ "run_id": "1760a16e07144ab486350cf20a024d10",
+ "answer": "Between the two images, a significant change occurred across 270,610 pixels, representing 25.8% of the total image area. The change is primarily located in the northeastern quadrant, which accounts for 81,882 pixels (30.2% of the changed area). The radiometric_label indicates a brightness decrease of -7.40 within the change mask, suggesting a shift in surface reflectance rather than construction or unchanged built-up. The built_up_direction is not_determined, as the tool lacks class-aware analysis. The change is detected by the ChangeFormerV6 model, which identified a general change with a mean radiometric delta of -7.40. The change is concentrated in the NE quadrant, where the highest pixel count (81,882) was observed. The overall scene transitioned from a partially developed area to a fully developed residential grid.",
+ "visible_answer": "### Findings (from tools)\n\n- change_detect: rung `changeformer_v6` (general change (live)); changed_pixels=270610; radiometric_label=`similar` (delta=-7.403404235839844, eps=8.0); built_up_direction=`not_determined` (not a class map).\n- area_calc: 270610 px; area_m2=None; area_km2=None; GSD=None (percent = count/total; area_m2 withheld (no GSD)).\n- geo_export: change_mask.tif: skipped_no_transform\n\nUNVERIFIED INTERPRETATION — JSON card wins.\n\nBetween the two images, a significant change occurred across 270,610 pixels, representing 25.8% of the total image area. The change is primarily located in the northeastern quadrant, which accounts for 81,882 pixels (30.2% of the changed area). The radiometric_label indicates a brightness decrease of -7.40 within the change mask, suggesting a shift in surface reflectance rather than construction or unchanged built-up. The built_up_direction is not_determined, as the tool lacks class-aware analysis. The change is detected by the ChangeFormerV6 model, which identified a general change with a mean radiometric delta of -7.40. The change is concentrated in the NE quadrant, where the highest pixel count (81,882) was observed. The overall scene transitioned from a partially developed area to a fully developed residential grid.",
+ "plan": {
+  "task": "change_description",
+  "input_mode": "bi-temporal",
+  "tools": [
+   "vqa",
+   "change_detect",
+   "area_calc"
+  ],
+  "vlm_role": "narrate",
+  "supported": true,
+  "refusal": null,
+  "query": "what changed between the two images"
+ },
+ "tool_outputs": {
+  "change_detect": {
+   "rung": "changeformer_v6",
+   "rung_label": "general change (live) — General Change Model (imported); ChangeFormerV6 pretrained on LEVIR-CD (zero extra training)",
+   "checkpoint": "<repo>\\gates\\_cache\\changeformer\\CD_ChangeFormerV6_LEVIR_b16_lr0.0001_adamw_train_test_200_linear_ce_multi_train_True_multi_infer_False_shuffle_AB_False_embed_dim_256\\best_ckpt.pt",
+   "checkpoint_sha256": "db0dd783c3c3f27d02f55f24fa8199d2b2b47c422c7f7bd2e4d96e2fa65d69f2",
+   "domain": "levir",
+   "device": "cpu",
+   "tile": 256,
+   "n_tiles": 16,
+   "elapsed_s": 10.613,
+   "norm": "to_tensor then mean=0.5 std=0.5 (ChangeFormer eval protocol)",
+   "provenance": "tools.change_detect_changeformer",
+   "mask_shape": [
+    1024,
+    1024
+   ],
+   "changed_pixels": 270610,
+   "before_mean": 88.34004974365234,
+   "after_mean": 80.9366455078125,
+   "delta_mean": -7.403404235839844,
+   "radiometric_delta": -7.403404235839844,
+   "radiometric_label": "similar",
+   "built_up_direction": "not_determined",
+   "direction_n_pixels": 270610,
+   "direction_epsilon": 8.0,
+   "direction_provenance": "radiometric_label is mean-RGB brightness inside the change mask (delta=-7.40, eps=8.0, n=270610); NOT construction / unchanged built-up. built_up_direction=not_determined until a class-aware tool exists.",
+   "rung_display": "general change (live)"
+  },
+  "area_calc": {
+   "label": "built-up_change",
+   "changed_pixels": 270610,
+   "total_pixels": 1048576,
+   "gsd_m": null,
+   "gsd_source": "none",
+   "pixel_area_m2": null,
+   "area_m2": null,
+   "area_km2": null,
+   "percent_of_image": 25.80738067626953,
+   "quadrants": {
+    "NW": 76085,
+    "NE": 81882,
+    "SW": 35955,
+    "SE": 76688
+   },
+   "dominant_quadrant": "NE",
+   "north_fraction": 0.5837441336240345,
+   "formula": "percent = count/total; area_m2 withheld (no GSD)",
+   "provenance": "tools.area_calc (raster math; VLM did not compute this) | PNG/JPEG `before__scene2_before.png` has no geotransform. area_m2 withheld unless the caller supplies a benchmark constant for a prepared scene."
+  }
+ },
+ "evidence_packet": {
+  "schema_version": "1.0",
+  "run_id": "e8912feff3b6882791984aeff3b21eed538d771fe1cf1b6d1ff6a352c830fc4d",
+  "task": "change_description",
+  "input_contract": {
+   "valid": true,
+   "modality": "bi-temporal",
+   "gsd_m": null
+  },
+  "canonical_answer": "not_determined",
+  "claims": [
+   {
+    "id": "E1",
+    "predicate": "change_detected",
+    "value": true,
+    "region": "<repo>\\demo\\data\\_uploads\\20260923T162058998297Z\\overlay_live.png",
+    "confidence": {
+     "level": "measured",
+     "basis": "changed_pixels from specialist mask"
+    },
+    "provenance": {
+     "tool": "change_detect",
+     "model": "<repo>\\gates\\_cache\\changeformer\\CD_ChangeFormerV6_LEVIR_b16_lr0.0001_adamw_train_test_200_linear_ce_multi_train_True_multi_infer_False_shuffle_AB_False_embed_dim_256\\best_ckpt.pt",
+     "rung": "changeformer_v6"
+    }
+   },
+   {
+    "id": "E2",
+    "predicate": "changed_pixels",
+    "value": 270610,
+    "region": "<repo>\\demo\\data\\_uploads\\20260923T162058998297Z\\overlay_live.png",
+    "confidence": {
+     "level": "measured",
+     "basis": "count(mask>0)"
+    },
+    "provenance": {
+     "tool": "change_detect",
+     "model": "<repo>\\gates\\_cache\\changeformer\\CD_ChangeFormerV6_LEVIR_b16_lr0.0001_adamw_train_test_200_linear_ce_multi_train_True_multi_infer_False_shuffle_AB_False_embed_dim_256\\best_ckpt.pt",
+     "rung": "changeformer_v6"
+    }
+   },
+   {
+    "id": "E3",
+    "predicate": "radiometric_delta",
+    "value": -7.403404235839844,
+    "region": "<repo>\\demo\\data\\_uploads\\20260923T162058998297Z\\overlay_live.png",
+    "confidence": {
+     "level": "measured",
+     "basis": "deterministic masked mean RGB"
+    },
+    "provenance": {
+     "tool": "change_direction_proxy"
+    },
+    "unit": "mean_rgb_level"
+   },
+   {
+    "id": "E4",
+    "predicate": "radiometric_label",
+    "value": "similar",
+    "region": "<repo>\\demo\\data\\_uploads\\20260923T162058998297Z\\overlay_live.png",
+    "confidence": {
+     "level": "measured",
+     "basis": "eps=8.0 on radiometric_delta"
+    },
+    "provenance": {
+     "tool": "change_direction_proxy"
+    }
+   },
+   {
+    "id": "E5",
+    "predicate": "built_up_direction",
+    "value": "not_determined",
+    "region": "<repo>\\demo\\data\\_uploads\\20260923T162058998297Z\\overlay_live.png",
+    "confidence": {
+     "level": "withheld",
+     "basis": "no class-aware before/after land-cover tool"
+    },
+    "provenance": {
+     "tool": "change_direction_proxy"
+    }
+   },
+   {
+    "id": "E6",
+    "predicate": "dominant_quadrant",
+    "value": "NE",
+    "region": "<repo>\\demo\\data\\_uploads\\20260923T162058998297Z\\overlay_live.png",
+    "confidence": {
+     "level": "measured",
+     "basis": "pixel counts per image quadrant"
+    },
+    "provenance": {
+     "tool": "area_calc"
+    }
+   }
+  ],
+  "artifacts": [
+   {
+    "type": "mask",
+    "path": "<repo>\\demo\\data\\_uploads\\20260923T162058998297Z\\overlay_live.png",
+    "grid": "native"
+   },
+   {
+    "type": "overlay",
+    "path": "<repo>\\demo\\data\\_uploads\\20260923T162058998297Z\\overlay_live.png",
+    "grid": "native"
+   },
+   {
+    "type": "box",
+    "xyxy": [
+     0,
+     0,
+     1024,
+     1024
+    ],
+    "grid": "native"
+   }
+  ],
+  "limitations": [
+   "square metres withheld (no validated GSD).",
+   "The current evidence does not identify the changed land-cover class.",
+   "radiometric_label='similar' is brightness inside the change mask, not a built-up direction."
+  ],
+  "trace": [
+   {
+    "plan_task": "change_description",
+    "live": true
+   }
+  ],
+  "tool_outputs": {
+   "change_detect": {
+    "rung": "changeformer_v6",
+    "rung_label": "general change (live) — General Change Model (imported); ChangeFormerV6 pretrained on LEVIR-CD (zero extra training)",
+    "checkpoint": "<repo>\\gates\\_cache\\changeformer\\CD_ChangeFormerV6_LEVIR_b16_lr0.0001_adamw_train_test_200_linear_ce_multi_train_True_multi_infer_False_shuffle_AB_False_embed_dim_256\\best_ckpt.pt",
+    "checkpoint_sha256": "db0dd783c3c3f27d02f55f24fa8199d2b2b47c422c7f7bd2e4d96e2fa65d69f2",
+    "domain": "levir",
+    "device": "cpu",
+    "tile": 256,
+    "n_tiles": 16,
+    "elapsed_s": 10.613,
+    "norm": "to_tensor then mean=0.5 std=0.5 (ChangeFormer eval protocol)",
+    "provenance": "tools.change_detect_changeformer",
+    "mask_shape": [
+     1024,
+     1024
+    ],
+    "changed_pixels": 270610,
+    "before_mean": 88.34004974365234,
+    "after_mean": 80.9366455078125,
+    "delta_mean": -7.403404235839844,
+    "radiometric_delta": -7.403404235839844,
+    "radiometric_label": "similar",
+    "built_up_direction": "not_determined",
+    "direction_n_pixels": 270610,
+    "direction_epsilon": 8.0,
+    "direction_provenance": "radiometric_label is mean-RGB brightness inside the change mask (delta=-7.40, eps=8.0, n=270610); NOT construction / unchanged built-up. built_up_direction=not_determined until a class-aware tool exists.",
+    "rung_display": "general change (live)"
+   },
+   "area_calc": {
+    "label": "built-up_change",
+    "changed_pixels": 270610,
+    "total_pixels": 1048576,
+    "gsd_m": null,
+    "gsd_source": "none",
+    "pixel_area_m2": null,
+    "area_m2": null,
+    "area_km2": null,
+    "percent_of_image": 25.80738067626953,
+    "quadrants": {
+     "NW": 76085,
+     "NE": 81882,
+     "SW": 35955,
+     "SE": 76688
+    },
+    "dominant_quadrant": "NE",
+    "north_fraction": 0.5837441336240345,
+    "formula": "percent = count/total; area_m2 withheld (no GSD)",
+    "provenance": "tools.area_calc (raster math; VLM did not compute this) | PNG/JPEG `before__scene2_before.png` has no geotransform. area_m2 withheld unless the caller supplies a benchmark constant for a prepared scene."
+   }
+  },
+  "geo_exports": {
+   "change_mask.tif": {
+    "artifact": "change_mask.tif",
+    "status": "skipped_no_transform",
+    "source": "<repo>\\api\\_data\\uploads\\2ba0b791377948b2a31939545bffd949\\before__scene2_before.png"
+   }
+  }
+ },
+ "trace": {
+  "query": "what changed between the two images",
+  "input_mode": "bi-temporal",
+  "scene": 2,
+  "live": true,
+  "first_token_s": 30.358,
+  "complete_s": 45.894,
+  "overlay_path": "<repo>\\demo\\data\\_uploads\\20260923T162058998297Z\\overlay_live.png",
+  "images": [
+   "<repo>\\demo\\data\\_uploads\\20260923T162058998297Z\\before.png",
+   "<repo>\\demo\\data\\_uploads\\20260923T162058998297Z\\after.png"
+  ],
+  "metrics_badge": null,
+  "ingest_note": "Analyzing your uploaded files — not the built-in examples. RGB `after__scene2_after.png` 1024×1024. Housing Change Specialist (SECOND-tuned) is for SECOND-style detailed pairs (SECOND = Semantic Change Detection dataset); LEVIR-style pairs use the General Change Model (imported); the Housing Change Specialist (SECOND-tuned) regresses on LEVIR — disclosed Land-Cover Change Describer (6-class) is SECOND-style detailed pairs type-family only; uploads skip it — disclosed",
+  "input_source": "upload",
+  "gsd": {
+   "path": "<repo>\\api\\_data\\uploads\\2ba0b791377948b2a31939545bffd949\\before__scene2_before.png",
+   "gsd_m": null,
+   "gsd_x_m": null,
+   "gsd_y_m": null,
+   "source": "none",
+   "crs": null,
+   "crs_note": null,
+   "native_width": 1024,
+   "native_height": 1024,
+   "provenance": "PNG/JPEG `before__scene2_before.png` has no geotransform. area_m2 withheld unless the caller supplies a benchmark constant for a prepared scene.",
+   "resize_scale": 1.0,
+   "gsd_m_used": null
+  },
+  "misreg_check": "ok",
+  "misregistration_note": null,
+  "misreg_shift_px": 4.0,
+  "geo_exports": {
+   "change_mask.tif": {
+    "artifact": "change_mask.tif",
+    "status": "skipped_no_transform",
+    "source": "<repo>\\api\\_data\\uploads\\2ba0b791377948b2a31939545bffd949\\before__scene2_before.png"
+   }
+  },
+  "vlm": {
+   "text": "Between the two images, a significant change occurred across 270,610 pixels, representing 25.8% of the total image area. The change is primarily located in the northeastern quadrant, which accounts for 81,882 pixels (30.2% of the changed area). The radiometric_label indicates a brightness decrease of -7.40 within the change mask, suggesting a shift in surface reflectance rather than construction or unchanged built-up. The built_up_direction is not_determined, as the tool lacks class-aware analysis. The change is detected by the ChangeFormerV6 model, which identified a general change with a mean radiometric delta of -7.40. The change is concentrated in the NE quadrant, where the highest pixel count (81,882) was observed. The overall scene transitioned from a partially developed area to a fully developed residential grid.",
+   "model": "qwen3vl",
+   "url": "http://127.0.0.1:8080",
+   "n_images": 2,
+   "image_paths": [
+    "<repo>\\demo\\data\\_uploads\\20260923T162058998297Z\\before.png",
+    "<repo>\\demo\\data\\_uploads\\20260923T162058998297Z\\after.png"
+   ],
+   "first_token_s": 30.358,
+   "complete_s": 33.943,
+   "provenance": "tools.vqa (local llama-server; no commercial vision API)"
+  },
+  "narration_check": {
+   "ok": false,
+   "issues": [
+    "invented number 30.2"
+   ]
+  }
+ },
+ "report": {
+  "findings": "### Findings (from tools)\n\n- change_detect: rung `changeformer_v6` (general change (live)); changed_pixels=270610; radiometric_label=`similar` (delta=-7.403404235839844, eps=8.0); built_up_direction=`not_determined` (not a class map).\n- area_calc: 270610 px; area_m2=None; area_km2=None; GSD=None (percent = count/total; area_m2 withheld (no GSD)).\n- geo_export: change_mask.tif: skipped_no_transform",
+  "measurement": "### Measurement card (tool `area_calc` — VLM did not compute these)\n\n- **label:** `built-up_change`\n- **changed_pixels (WHOLE IMAGE):** 270,610\n- **GSD:** withheld (none)\n- **formula:** `percent = count/total; area_m2 withheld (no GSD)`\n- **area_m2 (whole):** None\n- **area_km2 (whole):** None\n- **percent_of_image (whole):** 25.80738067626953\n- **quadrants (pixels):** NW=76085 NE=81882 SW=35955 SE=76688\n- **dominant_quadrant:** NE\n- **provenance:** tools.area_calc (raster math; VLM did not compute this) | PNG/JPEG `before__scene2_before.png` has no geotransform. area_m2 withheld unless the caller supplies a benchmark constant for a prepared scene.\n\n**Do not conflate:**\n- Whole-image `270,610` px; **m² withheld** (no geotransform / GSD).\n- NE quadrant `81,882` px (still not a whole-image percent).\n- If the VLM paragraph invents km², **the JSON card wins.**",
+  "confidence": "### Confidence hierarchy (honesty, not a fake 0.99)\n\n**Tool measurements** — raster math / ChangeFormer / SAR threshold. These are the numbers a judge should cite.\n- `area_calc`: 270610 px → None m² @ None m GSD (tools.area_calc (raster math; VLM did not compute this) | PNG/JPEG `before__scene2_before.png` has no geotransform. area_m2 withheld unless the caller supplies a benchmark constant for a prepared scene.).\n- `change_detect`: rung `changeformer_v6` (general change (live)); no GT IoU this call. radiometric_label=`similar`; built_up_direction=`not_determined`.\n\n**VLM interpretation (not a measurement)** — role `narrate`; tools selected: ['vqa', 'change_detect', 'area_calc']. The answer paragraph may mis-attach numbers. Do not treat prose km² as independent evidence.",
+  "limitations": [
+   "square metres withheld (no validated GSD).",
+   "The current evidence does not identify the changed land-cover class.",
+   "radiometric_label='similar' is brightness inside the change mask, not a built-up direction."
+  ],
+  "narration_check": {
+   "ok": false,
+   "issues": [
+    "invented number 30.2"
+   ]
+  }
+ },
+ "artifacts": [
+  {
+   "type": "image",
+   "path": "<repo>\\demo\\data\\_uploads\\20260923T162058998297Z\\before.png",
+   "name": "before.png",
+   "url": "/artifacts/1760a16e07144ab486350cf20a024d10/before.png"
+  },
+  {
+   "type": "image",
+   "path": "<repo>\\demo\\data\\_uploads\\20260923T162058998297Z\\after.png",
+   "name": "after.png",
+   "url": "/artifacts/1760a16e07144ab486350cf20a024d10/after.png"
+  },
+  {
+   "type": "overlay",
+   "path": "<repo>\\demo\\data\\_uploads\\20260923T162058998297Z\\overlay_live.png",
+   "name": "overlay_live.png",
+   "url": "/artifacts/1760a16e07144ab486350cf20a024d10/overlay_live.png"
+  }
+ ]
+}

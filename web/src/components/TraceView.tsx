@@ -3,7 +3,8 @@ import type { RunBundle } from "../types";
 import { isWithheldClaim } from "../types";
 import { formatSecs } from "../format";
 import type { LiveTrace } from "../liveTrace";
-import { stageDetail, stageDuration } from "../liveTrace";
+import { baseName, humanTool, stageDetail, stageDuration } from "../liveTrace";
+import { humanPredicate, humanValue } from "../verified";
 
 // The agentic-trace stage view, in two honest modes:
 //  - live: driven by POST /query/stream stage events as they arrive
@@ -20,9 +21,8 @@ interface Stage {
 }
 
 function claimText(c: { predicate?: string; value?: unknown; confidence?: { level?: string } }) {
-  const v = c.value;
-  const s = typeof v === "string" ? v : JSON.stringify(v);
-  return `${c.predicate}: ${s}${s.length > 90 ? "…" : ""}`;
+  const s = humanValue(c.value);
+  return `${humanPredicate(String(c.predicate))}: ${s}${s.length > 90 ? "…" : ""}`;
 }
 
 export function buildStages(bundle: RunBundle): Stage[] {
@@ -35,7 +35,7 @@ export function buildStages(bundle: RunBundle): Stage[] {
 
   stages.push({
     id: "ingest",
-    title: "input binding + ingest contract",
+    title: "your images",
     state: t.input_source ? "done" : "pending",
     detail: (
       <div className="stage-detail">
@@ -48,13 +48,13 @@ export function buildStages(bundle: RunBundle): Stage[] {
 
   stages.push({
     id: "plan",
-    title: "planner",
+    title: "plan",
     state: refused ? "withheld" : "done",
     detail: (
       <div className="stage-detail">
         {refused
           ? `unsupported — ${plan.refusal ?? "refused"}`
-          : `tools: ${(plan.tools ?? []).join(", ") || "—"}`}
+          : `planned: ${(plan.tools ?? []).map((k) => humanTool(String(k))).join(" → ") || "—"}`}
       </div>
     ),
   });
@@ -62,12 +62,14 @@ export function buildStages(bundle: RunBundle): Stage[] {
   if (!refused) {
     stages.push({
       id: "tools",
-      title: `tool execution (${tools.length})`,
+      title: `tools (${tools.length})`,
       state: tools.length ? "done" : "pending",
       detail: (
         <div className="stage-detail">
           {tools.map((k) => (
-            <span className="tool-chip" key={k}>{k}</span>
+            <span className="tool-chip" key={k} title={k}>
+              {humanTool(k)}
+            </span>
           ))}
         </div>
       ),
@@ -76,7 +78,7 @@ export function buildStages(bundle: RunBundle): Stage[] {
     const nWithheld = claims.filter(isWithheldClaim).length;
     stages.push({
       id: "packet",
-      title: `evidence packet (${claims.length} claims)`,
+      title: `evidence (${claims.length} claims)`,
       state: nWithheld === claims.length && claims.length ? "withheld" : "done",
       detail: (
         <div className="stage-detail">
@@ -95,14 +97,16 @@ export function buildStages(bundle: RunBundle): Stage[] {
 
     stages.push({
       id: "narrate",
-      title: "frozen narrator",
+      title: "report writer",
       state: bundle.answer || bundle.visible_answer ? "done" : "pending",
       detail: (
         <div className="stage-detail">
-          {t.vlm ? `seat: ${(t.vlm as Record<string, unknown>).url ?? "narrator"}` : ""}
+          {(t.vlm as Record<string, unknown> | undefined)?.model
+            ? `model: ${baseName(String((t.vlm as Record<string, unknown>).model))}`
+            : ""}
           {t.first_token_s != null ? ` · first token ${t.first_token_s}s` : ""}
           {t.narration_check
-            ? ` · audit ${(t.narration_check as { ok?: boolean }).ok ? "passed" : "flagged"}`
+            ? ` · report check ${(t.narration_check as { ok?: boolean }).ok ? "passed" : "flagged"}`
             : ""}
         </div>
       ),
@@ -116,15 +120,25 @@ function badgeText(state: string): string {
   return state === "skipped" ? "not run" : state;
 }
 
-function LiveTraceView({ trace, running }: { trace: LiveTrace; running: boolean }) {
+function LiveTraceView({
+  trace,
+  running,
+  embedded = false,
+}: {
+  trace: LiveTrace;
+  running: boolean;
+  embedded?: boolean;
+}) {
   const [manual, setManual] = useState<boolean | null>(null);
   const anyFailed = trace.stages.some((s) => s.state === "failed");
   const autoExpanded = running || anyFailed;
-  const expanded = manual ?? autoExpanded;
+  // embedded under the stepper: always the full stage list — expand/collapse
+  // is owned by the stepper's toggle, so the badge/details button drop out
+  const expanded = embedded ? true : (manual ?? autoExpanded);
   const failed = trace.stages.find((s) => s.state === "failed");
   const completeS = trace.summary?.complete_s;
   const headline = running
-    ? "streaming POST /query/stream"
+    ? "running…"
     : trace.outcome === "error"
       ? `live run · failed at ${failed?.label ?? "unknown stage"}`
       : `live run · completed in ${typeof completeS === "number" ? completeS : "?"} s${
@@ -134,25 +148,26 @@ function LiveTraceView({ trace, running }: { trace: LiveTrace; running: boolean 
   return (
     <div className="trace-view" data-testid="trace-view">
       <div className="trace-head">
-        <span className="trace-title">execution trace</span>
-        <span
-          className={`live-badge${running ? " pulsing" : ""}${
-            trace.outcome === "error" ? " failed" : ""
-          }`}
-        >
-          ● LIVE
-        </span>
+        <span className="trace-title">how it answered</span>
+        {!embedded && (
+          <span
+            className={`live-badge${running ? " pulsing" : ""}${
+              trace.outcome === "error" ? " failed" : ""
+            }`}
+          >
+            ● LIVE
+          </span>
+        )}
         <span className="trace-note">{headline}</span>
-        {!autoExpanded && (
+        {!embedded && !autoExpanded && (
           <button className="btn-mini" onClick={() => setManual(!(manual ?? autoExpanded))}>
             {expanded ? "details ▴" : "details ▾"}
           </button>
         )}
       </div>
-      {running && (
+      {running && !embedded && (
         <div className="warming" data-testid="warming">
-          narrator + canonical are 8B vision-language models — on a cold GPU
-          seat the first call can take a minute.
+          the vision-language models can take up to a minute on a cold start.
         </div>
       )}
       {expanded ? (
@@ -192,7 +207,15 @@ function LiveTraceView({ trace, running }: { trace: LiveTrace; running: boolean 
   );
 }
 
-function ReplayTraceView({ bundle, note }: { bundle: RunBundle; note?: string }) {
+function ReplayTraceView({
+  bundle,
+  note,
+  embedded = false,
+}: {
+  bundle: RunBundle;
+  note?: string;
+  embedded?: boolean;
+}) {
   const stages = useMemo(() => buildStages(bundle), [bundle]);
   const [reveal, setReveal] = useState(stages.length);
   const [replaying, setReplaying] = useState(false);
@@ -221,8 +244,8 @@ function ReplayTraceView({ bundle, note }: { bundle: RunBundle; note?: string })
     timers.current.push(window.setTimeout(step, 550));
   };
 
-  const showFull = expanded || replaying;
-  // which stored run this is — the left column may still show unrelated inputs
+  const showFull = embedded || expanded || replaying;
+  // which stored run this is — the stage may still show unrelated inputs
   const t = bundle.trace ?? {};
   const q = String(t.query ?? "");
   const runCtx = `run ${bundle.run_id.slice(0, 8)} · ${String(
@@ -231,15 +254,19 @@ function ReplayTraceView({ bundle, note }: { bundle: RunBundle; note?: string })
   return (
     <div className="trace-view" data-testid="trace-view">
       <div className="trace-head">
-        <span className="trace-title">execution trace</span>
-        <span className="replay-badge">▶ replay of recorded run</span>
+        <span className="trace-title">how it answered</span>
+        {!embedded && (
+          <span className="replay-badge">▶ replay of recorded run</span>
+        )}
         <span className="run-context">{runCtx}</span>
         <button className="btn-mini" onClick={replay} disabled={replaying}>
           {replaying ? "replaying…" : "▶ replay pipeline"}
         </button>
-        <button className="btn-mini" onClick={() => setExpanded((e) => !e)}>
-          {expanded ? "details ▴" : "details ▾"}
-        </button>
+        {!embedded && (
+          <button className="btn-mini" onClick={() => setExpanded((e) => !e)}>
+            {expanded ? "details ▴" : "details ▾"}
+          </button>
+        )}
         {note && <span className="trace-note">{note}</span>}
       </div>
       {showFull ? (
@@ -267,10 +294,22 @@ function ReplayTraceView({ bundle, note }: { bundle: RunBundle; note?: string })
 
 export function TraceView(
   props:
-    | { mode: "live"; trace: LiveTrace; running: boolean }
-    | { mode: "replay"; bundle: RunBundle; note?: string },
+    | { mode: "live"; trace: LiveTrace; running: boolean; embedded?: boolean }
+    | { mode: "replay"; bundle: RunBundle; note?: string; embedded?: boolean },
 ) {
   if (props.mode === "live")
-    return <LiveTraceView trace={props.trace} running={props.running} />;
-  return <ReplayTraceView bundle={props.bundle} note={props.note} />;
+    return (
+      <LiveTraceView
+        trace={props.trace}
+        running={props.running}
+        embedded={props.embedded}
+      />
+    );
+  return (
+    <ReplayTraceView
+      bundle={props.bundle}
+      note={props.note}
+      embedded={props.embedded}
+    />
+  );
 }

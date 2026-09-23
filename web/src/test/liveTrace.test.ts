@@ -107,7 +107,7 @@ describe("liveTrace — incremental + details", () => {
   it("stageDetail spot checks on the recorded supported run", () => {
     const t = traceOf(supported);
     expect(stageDetail(byKey(t, "plan"))).toBe(
-      "task water_highlight · plan: water_highlight → area_calc → vqa",
+      "planned: water mapping → area measurement → visual Q&A",
     );
     expect(stageDetail(byKey(t, "bind"))).toBe(
       "prepared · scene 1 · gsd not detected (none)",

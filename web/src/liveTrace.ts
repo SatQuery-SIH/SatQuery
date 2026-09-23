@@ -33,16 +33,39 @@ export interface LiveTrace {
   outcome?: "done" | "error";
 }
 
+// Plain-words tool names for the surface; the raw tool id stays in `title`.
+const TOOL_LABELS: Record<string, string> = {
+  vqa: "visual Q&A",
+  canonical_vqa: "remote-sensing Q&A",
+  cdvqa: "change Q&A",
+  cdvqa_map: "change-map Q&A",
+  change_detect: "change detection",
+  area_calc: "area measurement",
+  water_highlight: "water mapping",
+  sar_read: "SAR read",
+  sar_agreement: "optical/SAR agreement",
+  coreg_check: "co-registration check",
+  semantic: "land-cover read",
+};
+
+export function humanTool(id: string): string {
+  return TOOL_LABELS[id] ?? id.replace(/_/g, " ");
+}
+
+export function baseName(p: string): string {
+  return p.split(/[\\/]/).pop() ?? p;
+}
+
 // Skeleton in real execution order; the `tools` row is a placeholder replaced
 // by per-tool rows as `tool` events arrive.
 export function initialLiveTrace(): LiveTrace {
   return {
     stages: [
-      { key: "plan", kind: "plan", label: "planner", state: "pending" },
-      { key: "bind", kind: "bind", label: "input binding + ingest", state: "pending" },
-      { key: "tools", kind: "tools", label: "tool execution", state: "pending" },
-      { key: "narration", kind: "narration", label: "frozen narrator", state: "pending" },
-      { key: "packet", kind: "packet", label: "evidence packet", state: "pending" },
+      { key: "plan", kind: "plan", label: "plan", state: "pending" },
+      { key: "bind", kind: "bind", label: "your images", state: "pending" },
+      { key: "tools", kind: "tools", label: "tools", state: "pending" },
+      { key: "narration", kind: "narration", label: "report writer", state: "pending" },
+      { key: "packet", kind: "packet", label: "evidence", state: "pending" },
     ],
     finished: false,
     events: 0,
@@ -68,7 +91,7 @@ export function applyStageEvent(t: LiveTrace, ev: StageEvent): LiveTrace {
     const row: LiveStage = {
       key,
       kind: "tool",
-      label: tool,
+      label: humanTool(tool),
       tool,
       state: "running",
     };
@@ -216,8 +239,10 @@ export function stageDetail(s: LiveStage): string {
       if (s.state === "withheld") return `refused — ${d.refusal ?? ""}`;
       if (s.state === "done") {
         if (d.supported === false) return `unsupported · task ${d.task ?? "?"}`;
-        const tools = Array.isArray(d.tools) ? d.tools.join(" → ") : "";
-        return `task ${d.task ?? "?"} · plan: ${tools}`;
+        const tools = Array.isArray(d.tools)
+          ? d.tools.map((t) => humanTool(String(t))).join(" → ")
+          : "";
+        return `planned: ${tools}`;
       }
       if (s.state === "failed") return `failed — ${d.error ?? ""}`;
       return "";
@@ -245,16 +270,16 @@ export function stageDetail(s: LiveStage): string {
       return "";
     case "narration":
       if (s.state === "running")
-        return `waiting for narrator · ${d.url ?? "?"} · ${d.n_images ?? "?"} image(s)`;
+        return `waiting for the report writer · ${d.n_images ?? "?"} image(s)`;
       if (s.state === "done")
         return `first token ${d.first_token_s ?? "?"}s · complete ${d.complete_s ?? "?"}s${
-          d.model ? ` · ${d.model}` : ""
+          d.model ? ` · ${baseName(String(d.model))}` : ""
         }`;
       if (s.state === "withheld") return `withheld — ${d.reason ?? ""}`;
       if (s.state === "failed") return `failed — ${d.error ?? ""}`;
       return "";
     case "packet":
-      if (s.state === "failed") return `packet error — ${d.error ?? ""}`;
+      if (s.state === "failed") return `evidence error — ${d.error ?? ""}`;
       if (s.state === "done") return "assembled";
       return "";
     case "tools":

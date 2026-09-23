@@ -1,0 +1,228 @@
+{
+ "run_id": "cc3f49c89a234e31ad9f997a19eb9692",
+ "answer": null,
+ "visible_answer": "### Findings (from tools)\n\n- area_calc: 15077 px; area_m2=None; area_km2=None; GSD=None (percent = count/total; area_m2 withheld (no GSD)).\n- water_highlight: water_pixels=15077; method=RGB Otsu on (B-R), threshold=4.0.\n- geo_export: water_mask.tif: skipped_no_transform",
+ "plan": {
+  "task": "water_highlight",
+  "input_mode": "single",
+  "tools": [
+   "water_highlight",
+   "area_calc",
+   "vqa"
+  ],
+  "vlm_role": "narrate",
+  "supported": true,
+  "refusal": null,
+  "query": "highlight the water"
+ },
+ "tool_outputs": {
+  "water_highlight": {
+   "water_pixels": 15077,
+   "mask_shape": [
+    512,
+    512
+   ],
+   "method": "RGB Otsu on (B-R), threshold=4.0",
+   "provenance": "tools.water_highlight (deterministic optical mask; VLM did not compute this). RGB Otsu on (B-R), threshold=4.0"
+  },
+  "area_calc": {
+   "label": "water",
+   "changed_pixels": 15077,
+   "total_pixels": 262144,
+   "gsd_m": null,
+   "gsd_source": "none",
+   "pixel_area_m2": null,
+   "area_m2": null,
+   "area_km2": null,
+   "percent_of_image": 5.7514190673828125,
+   "quadrants": {
+    "NW": 1424,
+    "NE": 830,
+    "SW": 1208,
+    "SE": 11615
+   },
+   "dominant_quadrant": "SE",
+   "north_fraction": 0.14949923724878955,
+   "formula": "percent = count/total; area_m2 withheld (no GSD)",
+   "provenance": "tools.area_calc (raster math; VLM did not compute this) | Scene 1 has no area_calc."
+  }
+ },
+ "evidence_packet": {
+  "schema_version": "1.0",
+  "run_id": "020823206e2218c4b396e92540db0f3c940a8a04f97e02bcd4e8ccf7a94d611d",
+  "task": "water_highlight",
+  "input_contract": {
+   "valid": true,
+   "modality": "single",
+   "gsd_m": null
+  },
+  "canonical_answer": null,
+  "claims": [
+   {
+    "id": "E1",
+    "predicate": "water_method",
+    "value": "RGB Otsu on (B-R), threshold=4.0",
+    "region": "<repo>\\demo\\data\\scene1\\water_overlay_live.png",
+    "confidence": {
+     "level": "measured",
+     "basis": "optical water tool metadata"
+    },
+    "provenance": {
+     "tool": "water_highlight"
+    }
+   },
+   {
+    "id": "E2",
+    "predicate": "water_pixels",
+    "value": 15077,
+    "region": "<repo>\\demo\\data\\scene1\\water_overlay_live.png",
+    "confidence": {
+     "level": "measured",
+     "basis": "RGB Otsu on (B-R), threshold=4.0"
+    },
+    "provenance": {
+     "tool": "water_highlight"
+    }
+   }
+  ],
+  "artifacts": [
+   {
+    "type": "mask",
+    "path": "<repo>\\demo\\data\\scene1\\water_overlay_live.png",
+    "grid": "native"
+   },
+   {
+    "type": "overlay",
+    "path": "<repo>\\demo\\data\\scene1\\water_overlay_live.png",
+    "grid": "native"
+   },
+   {
+    "type": "box",
+    "xyxy": [
+     0,
+     0,
+     512,
+     512
+    ],
+    "grid": "native"
+   }
+  ],
+  "limitations": [
+   "square metres withheld (no validated GSD)."
+  ],
+  "trace": [
+   {
+    "plan_task": "water_highlight",
+    "live": false
+   }
+  ],
+  "tool_outputs": {
+   "water_highlight": {
+    "water_pixels": 15077,
+    "mask_shape": [
+     512,
+     512
+    ],
+    "method": "RGB Otsu on (B-R), threshold=4.0",
+    "provenance": "tools.water_highlight (deterministic optical mask; VLM did not compute this). RGB Otsu on (B-R), threshold=4.0"
+   },
+   "area_calc": {
+    "label": "water",
+    "changed_pixels": 15077,
+    "total_pixels": 262144,
+    "gsd_m": null,
+    "gsd_source": "none",
+    "pixel_area_m2": null,
+    "area_m2": null,
+    "area_km2": null,
+    "percent_of_image": 5.7514190673828125,
+    "quadrants": {
+     "NW": 1424,
+     "NE": 830,
+     "SW": 1208,
+     "SE": 11615
+    },
+    "dominant_quadrant": "SE",
+    "north_fraction": 0.14949923724878955,
+    "formula": "percent = count/total; area_m2 withheld (no GSD)",
+    "provenance": "tools.area_calc (raster math; VLM did not compute this) | Scene 1 has no area_calc."
+   }
+  },
+  "geo_exports": {
+   "water_mask.tif": {
+    "artifact": "water_mask.tif",
+    "status": "skipped_no_transform",
+    "source": "<repo>\\demo\\data\\scene1\\05867_0000.png"
+   }
+  }
+ },
+ "trace": {
+  "query": "highlight the water",
+  "input_mode": "single",
+  "scene": 1,
+  "live": false,
+  "first_token_s": null,
+  "complete_s": 0.146,
+  "overlay_path": "<repo>\\demo\\data\\scene1\\water_overlay_live.png",
+  "images": [
+   "<repo>\\demo\\data\\scene1\\05867_0000.png"
+  ],
+  "metrics_badge": {
+   "n": 20,
+   "mean_iou": 0.7922297500000001,
+   "mean_f1": 0.8802787499999999,
+   "rung": "changeformer_v6",
+   "provenance": "tools.mask_metrics on fixed LEVIR-CD subset (not VLM)"
+  },
+  "ingest_note": "Built-in examples below. Attach your own files on any tab to analyze them instead.",
+  "input_source": "prepared",
+  "gsd": {
+   "gsd_m": null,
+   "source": "none",
+   "provenance": "Scene 1 has no area_calc."
+  },
+  "misreg_check": null,
+  "misregistration_note": null,
+  "misreg_shift_px": null,
+  "geo_exports": {
+   "water_mask.tif": {
+    "artifact": "water_mask.tif",
+    "status": "skipped_no_transform",
+    "source": "<repo>\\demo\\data\\scene1\\05867_0000.png"
+   }
+  },
+  "vlm": {
+   "skipped": "cached mode"
+  },
+  "narration_check": {
+   "ok": true,
+   "issues": []
+  }
+ },
+ "report": {
+  "findings": "### Findings (from tools)\n\n- area_calc: 15077 px; area_m2=None; area_km2=None; GSD=None (percent = count/total; area_m2 withheld (no GSD)).\n- water_highlight: water_pixels=15077; method=RGB Otsu on (B-R), threshold=4.0.\n- geo_export: water_mask.tif: skipped_no_transform",
+  "measurement": "### Measurement card (tool `area_calc` — VLM did not compute these)\n\n- **label:** `water`\n- **changed_pixels (WHOLE IMAGE):** 15,077\n- **GSD:** withheld (none)\n- **formula:** `percent = count/total; area_m2 withheld (no GSD)`\n- **area_m2 (whole):** None\n- **area_km2 (whole):** None\n- **percent_of_image (whole):** 5.7514190673828125\n- **quadrants (pixels):** NW=1424 NE=830 SW=1208 SE=11615\n- **dominant_quadrant:** SE\n- **provenance:** tools.area_calc (raster math; VLM did not compute this) | Scene 1 has no area_calc.\n\n**Do not conflate:**\n- Whole-image `15,077` px; **m² withheld** (no geotransform / GSD).\n- NE quadrant `830` px (still not a whole-image percent).\n- If the VLM paragraph invents km², **the JSON card wins.**",
+  "confidence": "### Confidence hierarchy (honesty, not a fake 0.99)\n\n**Tool measurements** — raster math / ChangeFormer / SAR threshold. These are the numbers a judge should cite.\n- `area_calc`: 15077 px → None m² @ None m GSD (tools.area_calc (raster math; VLM did not compute this) | Scene 1 has no area_calc.).\n- `water_highlight`: water_pixels=15077 (RGB Otsu on (B-R), threshold=4.0).\n\n**VLM interpretation (not a measurement)** — role `narrate`; tools selected: ['water_highlight', 'area_calc', 'vqa']. The answer paragraph may mis-attach numbers. Do not treat prose km² as independent evidence.",
+  "limitations": [
+   "square metres withheld (no validated GSD)."
+  ],
+  "narration_check": {
+   "ok": true,
+   "issues": []
+  }
+ },
+ "artifacts": [
+  {
+   "type": "image",
+   "path": "<repo>\\demo\\data\\scene1\\05867_0000.png",
+   "name": "05867_0000.png",
+   "url": "/artifacts/cc3f49c89a234e31ad9f997a19eb9692/05867_0000.png"
+  },
+  {
+   "type": "overlay",
+   "path": "<repo>\\demo\\data\\scene1\\water_overlay_live.png",
+   "name": "water_overlay_live.png",
+   "url": "/artifacts/cc3f49c89a234e31ad9f997a19eb9692/water_overlay_live.png"
+  }
+ ]
+}

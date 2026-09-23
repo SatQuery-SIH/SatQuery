@@ -18,23 +18,23 @@ describe("Results — answer card + refusal", () => {
     const card = container.querySelector(".answer-card.refused");
     expect(card).toBeInTheDocument();
     expect(screen.getByTestId("answer-card")).toHaveTextContent(
-      "unsupported query — refused by the planner",
+      "can't answer this with the available tools",
     );
     expect(container.querySelector(".run-error")).toBeNull();
     expect(screen.queryByTestId("run-error")).toBeNull();
   });
 
-  it("answer card carries audit + duration chips when present", () => {
+  it("answer card carries report-check + duration chips when present", () => {
     render(<Results bundle={makeBundle()} />);
     const card = screen.getByTestId("answer-card");
-    expect(card).toHaveTextContent("narration audit passed");
+    expect(card).toHaveTextContent("report check: passed");
   });
 
   it("planner reason shows only when it adds information to the answer", () => {
     // refusal text differs from the visible answer → shown
     const { unmount } = render(<Results bundle={refusedBundle} />);
     expect(
-      screen.getByText(/planner reason: needs two co-registered images/),
+      screen.getByText(/plan reason: needs two co-registered images/),
     ).toBeInTheDocument();
     unmount();
     // visible_answer already contains the refusal → not repeated
@@ -44,23 +44,28 @@ describe("Results — answer card + refusal", () => {
       visible_answer: "I do not have a counting tool, so I refuse.",
     });
     render(<Results bundle={dup} />);
-    expect(screen.queryByText(/planner reason:/)).toBeNull();
+    expect(screen.queryByText(/plan reason:/)).toBeNull();
   });
 });
 
 describe("ArtifactsGrid — groups, lightbox, GeoTIFF hints", () => {
+  const openArtifacts = () =>
+    fireEvent.click(screen.getByText("downloadable artifacts"));
+
   it("groups by API type with fixed-order headers", () => {
     render(<Results bundle={makeBundle()} />);
+    openArtifacts();
     expect(screen.getByTestId("artifact-group-overlay")).toHaveTextContent(
       "overlays (1)",
     );
     expect(screen.getByTestId("artifact-group-geo_export")).toHaveTextContent(
-      "GeoTIFF exports (1)",
+      "map-ready GeoTIFFs (1)",
     );
   });
 
   it("clicking an image tile opens the lightbox; Escape closes it", () => {
     render(<Results bundle={makeBundle()} />);
+    openArtifacts();
     fireEvent.click(screen.getByText("overlay_live.png"));
     const lb = screen.getByTestId("lightbox");
     expect(lb).toBeInTheDocument();
@@ -80,6 +85,7 @@ describe("ArtifactsGrid — groups, lightbox, GeoTIFF hints", () => {
       ),
     );
     render(<Results bundle={makeBundle()} />);
+    openArtifacts();
     await waitFor(() => expect(screen.getByText("1.2 MB")).toBeInTheDocument());
     expect(screen.getByText(/GeoTIFF · download/)).toBeInTheDocument();
   });

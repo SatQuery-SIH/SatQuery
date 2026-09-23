@@ -25,7 +25,7 @@ export function DetectedCard({ d, warnings }: { d: DetectedBlock; warnings?: str
   if (d.calibrated != null) rows.push(["sar calibrated", d.calibrated ? "yes" : "no"]);
   return (
     <div className="detected-card" data-testid="detected-card">
-      <div className="detected-title">detected — ingest contract</div>
+      <div className="detected-title">image details</div>
       <div className="detected-grid">
         {rows.map(([k, v]) => (
           <div className="detected-row" key={k}>
@@ -99,9 +99,12 @@ function SlotPreview({
 export function UploadPanel({
   mode,
   onUploaded,
+  onFilesChange,
 }: {
   mode: InputMode;
   onUploaded: (u: UploadResponse) => void;
+  // lifted so the imagery stage can name the files in its "your images" line
+  onFilesChange?: (names: Record<string, string>) => void;
 }) {
   const [files, setFiles] = useState<Record<string, File>>({});
   // null = no upload yet this panel; per-role url | null once uploaded
@@ -114,12 +117,13 @@ export function UploadPanel({
   const inputs = useRef<Record<string, HTMLInputElement | null>>({});
 
   const setFile = (role: string, f: File | undefined) => {
-    setFiles((s) => {
-      const n = { ...s };
-      if (f) n[role] = f;
-      else delete n[role];
-      return n;
-    });
+    const n = { ...files };
+    if (f) n[role] = f;
+    else delete n[role];
+    setFiles(n);
+    onFilesChange?.(
+      Object.fromEntries(Object.entries(n).map(([r, x]) => [r, x.name])),
+    );
     // replacing any file invalidates this panel's server previews
     setServerPrev(null);
   };

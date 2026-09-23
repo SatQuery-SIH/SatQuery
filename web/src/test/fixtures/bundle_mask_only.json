@@ -1,0 +1,289 @@
+{
+ "run_id": "c20d6120a7384c29b4ffc1718f278ca9",
+ "answer": "Change mask produced by the change_detect tool. {\n  \"rung\": \"changeformer_v6\",\n  \"rung_label\": \"ChangeFormerV6 pretrained on LEVIR-CD (zero extra training)\",\n  \"checkpoint\": \"<repo>\\\\gates\\\\_cache\\\\changeformer\\\\CD_ChangeFormerV6_LEVIR_b16_lr0.0001_adamw_train_test_200_linear_ce_multi_train_True_multi_infer_False_shuffle_AB_False_embed_dim_256\\\\best_ckpt.pt\",\n  \"changed_pixels\": 270611,\n  \"vs_gt\": {\n    \"tp\": 245757,\n    \"fp\": 24854,\n    \"fn\": 17766,\n    \"tn\": 760199,\n    \"iou\": 0.852207,\n    \"precision\": 0.908156,\n    \"recall\": 0.932583,\n    \"f1\": 0.920207,\n    \"n_pixels\": 1048576,\n    \"provenance\": \"tools.mask_metrics (pixel confusion matrix, not VLM)\"\n  },\n  \"note\": \"mask loaded from pred_mask.png (same weights; not a fake live VLM path)\",\n  \"provenance\": \"tools.change_detect / pred_mask.png\",\n  \"before_mean\": 88.33993530273438,\n  \"after_mean\": 80.93710327148438,\n  \"delta_mean\": -7.40283203125,\n  \"radiometric_delta\": -7.40283203125,\n  \"radiometric_label\": \"similar\",\n  \"built_up_direction\": \"not_determined\",\n  \"direction_n_pixels\": 270611,\n  \"direction_epsilon\": 8.0,\n  \"direction_provenance\": \"radiometric_label is mean-RGB brightness inside the change mask (delta=-7.40, eps=8.0, n=270611); NOT construction / unchanged built-up. built_up_direction=not_determined until a class-aware tool exists.\",\n  \"rung_display\": \"general change (live)\"\n}",
+ "visible_answer": "### Findings (from tools)\n\n- change_detect: rung `changeformer_v6` (general change (live)); changed_pixels=270611; radiometric_label=`similar` (delta=-7.40283203125, eps=8.0); built_up_direction=`not_determined` (not a class map).\n- geo_export: change_mask.tif: skipped_no_transform\n\nChange mask produced by the change_detect tool. {\n  \"rung\": \"changeformer_v6\",\n  \"rung_label\": \"ChangeFormerV6 pretrained on LEVIR-CD (zero extra training)\",\n  \"checkpoint\": \"<repo>\\\\gates\\\\_cache\\\\changeformer\\\\CD_ChangeFormerV6_LEVIR_b16_lr0.0001_adamw_train_test_200_linear_ce_multi_train_True_multi_infer_False_shuffle_AB_False_embed_dim_256\\\\best_ckpt.pt\",\n  \"changed_pixels\": 270611,\n  \"vs_gt\": {\n    \"tp\": 245757,\n    \"fp\": 24854,\n    \"fn\": 17766,\n    \"tn\": 760199,\n    \"iou\": 0.852207,\n    \"precision\": 0.908156,\n    \"recall\": 0.932583,\n    \"f1\": 0.920207,\n    \"n_pixels\": 1048576,\n    \"provenance\": \"tools.mask_metrics (pixel confusion matrix, not VLM)\"\n  },\n  \"note\": \"mask loaded from pred_mask.png (same weights; not a fake live VLM path)\",\n  \"provenance\": \"tools.change_detect / pred_mask.png\",\n  \"before_mean\": 88.33993530273438,\n  \"after_mean\": 80.93710327148438,\n  \"delta_mean\": -7.40283203125,\n  \"radiometric_delta\": -7.40283203125,\n  \"radiometric_label\": \"similar\",\n  \"built_up_direction\": \"not_determined\",\n  \"direction_n_pixels\": 270611,\n  \"direction_epsilon\": 8.0,\n  \"direction_provenance\": \"radiometric_label is mean-RGB brightness inside the change mask (delta=-7.40, eps=8.0, n=270611); NOT construction / unchanged built-up. built_up_direction=not_determined until a class-aware tool exists.\",\n  \"rung_display\": \"general change (live)\"\n}",
+ "plan": {
+  "task": "change_mask",
+  "input_mode": "bi-temporal",
+  "tools": [
+   "change_detect"
+  ],
+  "vlm_role": "none",
+  "supported": true,
+  "refusal": null,
+  "query": "show the change mask only"
+ },
+ "tool_outputs": {
+  "change_detect": {
+   "rung": "changeformer_v6",
+   "rung_label": "ChangeFormerV6 pretrained on LEVIR-CD (zero extra training)",
+   "checkpoint": "<repo>\\gates\\_cache\\changeformer\\CD_ChangeFormerV6_LEVIR_b16_lr0.0001_adamw_train_test_200_linear_ce_multi_train_True_multi_infer_False_shuffle_AB_False_embed_dim_256\\best_ckpt.pt",
+   "changed_pixels": 270611,
+   "vs_gt": {
+    "tp": 245757,
+    "fp": 24854,
+    "fn": 17766,
+    "tn": 760199,
+    "iou": 0.852207,
+    "precision": 0.908156,
+    "recall": 0.932583,
+    "f1": 0.920207,
+    "n_pixels": 1048576,
+    "provenance": "tools.mask_metrics (pixel confusion matrix, not VLM)"
+   },
+   "note": "mask loaded from pred_mask.png (same weights; not a fake live VLM path)",
+   "provenance": "tools.change_detect / pred_mask.png",
+   "before_mean": 88.33993530273438,
+   "after_mean": 80.93710327148438,
+   "delta_mean": -7.40283203125,
+   "radiometric_delta": -7.40283203125,
+   "radiometric_label": "similar",
+   "built_up_direction": "not_determined",
+   "direction_n_pixels": 270611,
+   "direction_epsilon": 8.0,
+   "direction_provenance": "radiometric_label is mean-RGB brightness inside the change mask (delta=-7.40, eps=8.0, n=270611); NOT construction / unchanged built-up. built_up_direction=not_determined until a class-aware tool exists.",
+   "rung_display": "general change (live)"
+  }
+ },
+ "evidence_packet": {
+  "schema_version": "1.0",
+  "run_id": "325d3e51e209d33ab2c98455401e57b1eefec1c8b5db1c061a845fb2cc825afb",
+  "task": "change_mask",
+  "input_contract": {
+   "valid": true,
+   "modality": "bi-temporal",
+   "gsd_m": 0.5
+  },
+  "canonical_answer": "not_determined",
+  "claims": [
+   {
+    "id": "E1",
+    "predicate": "change_detected",
+    "value": true,
+    "region": "<repo>\\demo\\data\\scene2\\pred_mask.png",
+    "confidence": {
+     "level": "measured",
+     "basis": "changed_pixels from specialist mask"
+    },
+    "provenance": {
+     "tool": "change_detect",
+     "model": "<repo>\\gates\\_cache\\changeformer\\CD_ChangeFormerV6_LEVIR_b16_lr0.0001_adamw_train_test_200_linear_ce_multi_train_True_multi_infer_False_shuffle_AB_False_embed_dim_256\\best_ckpt.pt",
+     "rung": "changeformer_v6"
+    }
+   },
+   {
+    "id": "E2",
+    "predicate": "changed_pixels",
+    "value": 270611,
+    "region": "<repo>\\demo\\data\\scene2\\pred_mask.png",
+    "confidence": {
+     "level": "measured",
+     "basis": "count(mask>0)"
+    },
+    "provenance": {
+     "tool": "change_detect",
+     "model": "<repo>\\gates\\_cache\\changeformer\\CD_ChangeFormerV6_LEVIR_b16_lr0.0001_adamw_train_test_200_linear_ce_multi_train_True_multi_infer_False_shuffle_AB_False_embed_dim_256\\best_ckpt.pt",
+     "rung": "changeformer_v6"
+    }
+   },
+   {
+    "id": "E3",
+    "predicate": "radiometric_delta",
+    "value": -7.40283203125,
+    "region": "<repo>\\demo\\data\\scene2\\pred_mask.png",
+    "confidence": {
+     "level": "measured",
+     "basis": "deterministic masked mean RGB"
+    },
+    "provenance": {
+     "tool": "change_direction_proxy"
+    },
+    "unit": "mean_rgb_level"
+   },
+   {
+    "id": "E4",
+    "predicate": "radiometric_label",
+    "value": "similar",
+    "region": "<repo>\\demo\\data\\scene2\\pred_mask.png",
+    "confidence": {
+     "level": "measured",
+     "basis": "eps=8.0 on radiometric_delta"
+    },
+    "provenance": {
+     "tool": "change_direction_proxy"
+    }
+   },
+   {
+    "id": "E5",
+    "predicate": "built_up_direction",
+    "value": "not_determined",
+    "region": "<repo>\\demo\\data\\scene2\\pred_mask.png",
+    "confidence": {
+     "level": "withheld",
+     "basis": "no class-aware before/after land-cover tool"
+    },
+    "provenance": {
+     "tool": "change_direction_proxy"
+    }
+   },
+   {
+    "id": "E6",
+    "predicate": "iou_vs_gt",
+    "value": 0.852207,
+    "region": "<repo>\\demo\\data\\scene2\\pred_mask.png",
+    "confidence": {
+     "level": "measured",
+     "basis": "tools.mask_metrics pixel confusion"
+    },
+    "provenance": {
+     "tool": "mask_metrics"
+    }
+   }
+  ],
+  "artifacts": [
+   {
+    "type": "mask",
+    "path": "<repo>\\demo\\data\\scene2\\pred_mask.png",
+    "grid": "native"
+   },
+   {
+    "type": "overlay",
+    "path": "<repo>\\demo\\data\\scene2\\overlay_live.png",
+    "grid": "native"
+   },
+   {
+    "type": "box",
+    "xyxy": [
+     0,
+     0,
+     1024,
+     1024
+    ],
+    "grid": "native"
+   }
+  ],
+  "limitations": [
+   "The current evidence does not identify the changed land-cover class.",
+   "radiometric_label='similar' is brightness inside the change mask, not a built-up direction."
+  ],
+  "trace": [
+   {
+    "plan_task": "change_mask",
+    "live": true
+   }
+  ],
+  "tool_outputs": {
+   "change_detect": {
+    "rung": "changeformer_v6",
+    "rung_label": "ChangeFormerV6 pretrained on LEVIR-CD (zero extra training)",
+    "checkpoint": "<repo>\\gates\\_cache\\changeformer\\CD_ChangeFormerV6_LEVIR_b16_lr0.0001_adamw_train_test_200_linear_ce_multi_train_True_multi_infer_False_shuffle_AB_False_embed_dim_256\\best_ckpt.pt",
+    "changed_pixels": 270611,
+    "vs_gt": {
+     "tp": 245757,
+     "fp": 24854,
+     "fn": 17766,
+     "tn": 760199,
+     "iou": 0.852207,
+     "precision": 0.908156,
+     "recall": 0.932583,
+     "f1": 0.920207,
+     "n_pixels": 1048576,
+     "provenance": "tools.mask_metrics (pixel confusion matrix, not VLM)"
+    },
+    "note": "mask loaded from pred_mask.png (same weights; not a fake live VLM path)",
+    "provenance": "tools.change_detect / pred_mask.png",
+    "before_mean": 88.33993530273438,
+    "after_mean": 80.93710327148438,
+    "delta_mean": -7.40283203125,
+    "radiometric_delta": -7.40283203125,
+    "radiometric_label": "similar",
+    "built_up_direction": "not_determined",
+    "direction_n_pixels": 270611,
+    "direction_epsilon": 8.0,
+    "direction_provenance": "radiometric_label is mean-RGB brightness inside the change mask (delta=-7.40, eps=8.0, n=270611); NOT construction / unchanged built-up. built_up_direction=not_determined until a class-aware tool exists.",
+    "rung_display": "general change (live)"
+   }
+  },
+  "geo_exports": {
+   "change_mask.tif": {
+    "artifact": "change_mask.tif",
+    "status": "skipped_no_transform",
+    "source": "<repo>\\demo\\data\\scene2\\before.png"
+   }
+  }
+ },
+ "trace": {
+  "query": "show the change mask only",
+  "input_mode": "bi-temporal",
+  "scene": 2,
+  "live": true,
+  "first_token_s": null,
+  "complete_s": 0.383,
+  "overlay_path": "<repo>\\demo\\data\\scene2\\overlay_live.png",
+  "images": [
+   "<repo>\\demo\\data\\scene2\\before.png",
+   "<repo>\\demo\\data\\scene2\\after.png"
+  ],
+  "metrics_badge": {
+   "n": 20,
+   "mean_iou": 0.7922297500000001,
+   "mean_f1": 0.8802787499999999,
+   "rung": "changeformer_v6",
+   "provenance": "tools.mask_metrics on fixed LEVIR-CD subset (not VLM)"
+  },
+  "ingest_note": "Built-in examples below. Attach your own files on any tab to analyze them instead.",
+  "input_source": "prepared",
+  "gsd": {
+   "gsd_m": 0.5,
+   "source": "benchmark_constant",
+   "provenance": "LEVIR-CD documented 0.5 m GSD (prepared Scene 2 PNG)."
+  },
+  "misreg_check": "ok",
+  "misregistration_note": null,
+  "misreg_shift_px": 4.0,
+  "geo_exports": {
+   "change_mask.tif": {
+    "artifact": "change_mask.tif",
+    "status": "skipped_no_transform",
+    "source": "<repo>\\demo\\data\\scene2\\before.png"
+   }
+  },
+  "narration_check": {
+   "ok": true,
+   "issues": []
+  }
+ },
+ "report": {
+  "findings": "### Findings (from tools)\n\n- change_detect: rung `changeformer_v6` (general change (live)); changed_pixels=270611; radiometric_label=`similar` (delta=-7.40283203125, eps=8.0); built_up_direction=`not_determined` (not a class map).\n- geo_export: change_mask.tif: skipped_no_transform",
+  "measurement": "### Measurement card (tool `area_calc` — VLM did not compute these)\n\nNo `area_calc` on this run (caption/VQA/refusal).",
+  "confidence": "### Confidence hierarchy (honesty, not a fake 0.99)\n\n**Tool measurements** — raster math / ChangeFormer / SAR threshold. These are the numbers a judge should cite.\n- `change_detect`: rung `changeformer_v6` (general change (live)); IoU vs GT 0.852207 (mask_metrics). radiometric_label=`similar`; built_up_direction=`not_determined`.\n\n**VLM interpretation (not a measurement)** — role `none`; tools selected: ['change_detect']. The answer paragraph may mis-attach numbers. Do not treat prose km² as independent evidence.",
+  "limitations": [
+   "The current evidence does not identify the changed land-cover class.",
+   "radiometric_label='similar' is brightness inside the change mask, not a built-up direction."
+  ],
+  "narration_check": {
+   "ok": true,
+   "issues": []
+  }
+ },
+ "artifacts": [
+  {
+   "type": "image",
+   "path": "<repo>\\demo\\data\\scene2\\before.png",
+   "name": "before.png",
+   "url": "/artifacts/c20d6120a7384c29b4ffc1718f278ca9/before.png"
+  },
+  {
+   "type": "image",
+   "path": "<repo>\\demo\\data\\scene2\\after.png",
+   "name": "after.png",
+   "url": "/artifacts/c20d6120a7384c29b4ffc1718f278ca9/after.png"
+  },
+  {
+   "type": "overlay",
+   "path": "<repo>\\demo\\data\\scene2\\overlay_live.png",
+   "name": "overlay_live.png",
+   "url": "/artifacts/c20d6120a7384c29b4ffc1718f278ca9/overlay_live.png"
+  }
+ ]
+}

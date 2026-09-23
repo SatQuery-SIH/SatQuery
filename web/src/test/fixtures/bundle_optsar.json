@@ -1,0 +1,608 @@
+{
+ "run_id": "40b7bab3cb4440a9af541deb335ad634",
+ "answer": "Water is confirmed in this scene, with both SAR and optical tools detecting it. The SAR tool identifies 35,877 water pixels (54.7% of the scene), while the optical tool detects 34,900 water pixels (53.3%). The two masks agree strongly, with an Intersection over Union (IoU) of 0.892, indicating high consistency. The water detection threshold used by SAR was -16.0 dB, and the SDWI metric was computed but not used for the final mask. The water is concentrated in the large turquoise area, which appears to be a river or estuary, bordered by land on the left and right. The coregistration check shows a weak peak, but the grids are aligned to within 19 pixels in the x-direction, which is acceptable for this analysis.",
+ "visible_answer": "### Findings (from tools)\n\n- water_highlight: water_pixels=34900; method=GeoTIFF bands=4; NIR/green identities unknown (descriptions=[None, None, None, None]); tifffile desc='' shape=(256, 256, 4). RGB Otsu on (B-R), threshold=32.0.\n- sar_read: water_pixels=35877; water_calibrated=True; SDWI mean=-14.791261672973633 (write SDWI, do not expand).\n- sar_agreement: water=both_support built_up=withheld_no_tool\n- coreg: shift=inconclusive(weak_peak); transform_offset_m=0.0; same_res=True\n- geo_export: water_sar_mask.tif -> water_sar_mask.tif [EPSG:32645]; water_optical_mask.tif -> water_optical_mask.tif [EPSG:32645]; agreement_map_live.tif -> agreement_map_live.tif [EPSG:32645]\n\nWater is confirmed in this scene, with both SAR and optical tools detecting it. The SAR tool identifies 35,877 water pixels (54.7% of the scene), while the optical tool detects 34,900 water pixels (53.3%). The two masks agree strongly, with an Intersection over Union (IoU) of 0.892, indicating high consistency. The water detection threshold used by SAR was -16.0 dB, and the SDWI metric was computed but not used for the final mask. The water is concentrated in the large turquoise area, which appears to be a river or estuary, bordered by land on the left and right. The coregistration check shows a weak peak, but the grids are aligned to within 19 pixels in the x-direction, which is acceptable for this analysis.",
+ "plan": {
+  "task": "water_identification",
+  "input_mode": "optical+sar",
+  "tools": [
+   "vqa",
+   "sar_read",
+   "sar_agreement"
+  ],
+  "vlm_role": "narrate",
+  "supported": true,
+  "refusal": null,
+  "query": "Is there water in this scene?"
+ },
+ "tool_outputs": {
+  "sar_read": {
+   "vv_db_stats": {
+    "mean": -17.00970458984375,
+    "std": 8.866384506225586,
+    "p5": -26.30474853515625,
+    "p95": -6.307708740234375
+   },
+   "vh_db_stats": {
+    "mean": -22.48436737060547,
+    "std": 7.025293827056885,
+    "p5": -28.748950958251953,
+    "p95": -13.469844818115234
+   },
+   "sdwi_stats": {
+    "mean": -14.791261672973633,
+    "std": 3.61907696723938,
+    "p5": -17.99844741821289,
+    "p95": -10.42063045501709
+   },
+   "sdwi_finite": true,
+   "sdwi_finite_n": 65536,
+   "sdwi_label": "SDWI",
+   "sdwi_units": "ln(10*VV_linear*VH_linear)-8; VV_lin=10**(dB/10)",
+   "water_db_threshold": -16.0,
+   "water_pixels": 35877,
+   "water_fraction": 0.5474395751953125,
+   "water_calibrated": true,
+   "speckle": "3x3 boxcar (uniform) on dB before threshold",
+   "method": "3x3 boxcar on VV/VH dB; water = (filtered VV_dB < -16.0) + 3x3 morph open; SDWI reported as letters SDWI, not used for mask",
+   "provenance": "tools.sar_read (classical backscatter; VLM did not compute this). 3x3 boxcar on VV/VH dB; water = (filtered VV_dB < -16.0) + 3x3 morph open; SDWI reported as letters SDWI, not used for mask",
+   "ingest_provenance": "SAR raster `sar__sundarbans_sar.tiff` shape=(256, 256) dtype=float64 calibrated=True"
+  },
+  "water_highlight": {
+   "water_pixels": 34900,
+   "mask_shape": [
+    256,
+    256
+   ],
+   "method": "GeoTIFF bands=4; NIR/green identities unknown (descriptions=[None, None, None, None]); tifffile desc='' shape=(256, 256, 4). RGB Otsu on (B-R), threshold=32.0",
+   "provenance": "tools.water_highlight (deterministic optical mask; VLM did not compute this). GeoTIFF bands=4; NIR/green identities unknown (descriptions=[None, None, None, None]); tifffile desc='' shape=(256, 256, 4). RGB Otsu on (B-R), threshold=32.0"
+  },
+  "sar_agreement": {
+   "verdicts": {
+    "water": "both_support",
+    "built_up": "withheld_no_tool"
+   },
+   "optical_water_px": 34900,
+   "sar_water_px": 35877,
+   "optical_water_fraction": 0.532532,
+   "sar_water_fraction": 0.54744,
+   "intersection_px": 33367,
+   "union_px": 37410,
+   "iou": 0.891927,
+   "grid": "same_grid",
+   "sar_calibrated": true,
+   "misreg_shift_px": null,
+   "thresholds": {
+    "iou_t": 0.25,
+    "min_frac": 0.005,
+    "misreg_px": 5.0
+   },
+   "method": "independent optical and SAR water masks compared on a common grid (per-pixel intersection/union IoU and per-modality water fractions)",
+   "provenance": "tools.sar_agreement (deterministic mask agreement; VLM did not compute this). optical=tools.water_highlight mask; sar=tools.sar_read mask. Not pixel fusion."
+  },
+  "coreg_check": {
+   "transform": {
+    "status": "measured",
+    "offset_m": 0.0,
+    "dx_m": 0.0,
+    "dy_m": 0.0,
+    "same_res": true,
+    "optical_res_m": [
+     10.0,
+     10.0
+    ],
+    "sar_res_m": [
+     10.0,
+     10.0
+    ],
+    "basis": "affine transform comparison (rasterio .transform)"
+   },
+   "pixel": {
+    "status": "inconclusive",
+    "shift_px": null,
+    "dx_px": 19.0,
+    "dy_px": 0.0,
+    "peak": 0.0224,
+    "reason": "weak_peak",
+    "method": "FFT phase cross-correlation (normalized cross-power spectrum) on 0-1 optical-grayscale vs SAR-VV grids; sub-pixel via parabolic peak fit",
+    "caveat": "cross-modal optical-vs-SAR correlation is noisy; measured-with-caveat, not ground truth"
+   },
+   "shift_px": null,
+   "provenance": "tools.coreg_check (deterministic; VLM did not compute this). transform level: affine transform comparison (rasterio .transform)"
+  }
+ },
+ "evidence_packet": {
+  "schema_version": "1.0",
+  "run_id": "0b002b8ae3b2ce52e3375fab25bb1a13d3e79126fdfd2f3769335aa7fc434136",
+  "task": "water_identification",
+  "input_contract": {
+   "valid": true,
+   "modality": "optical+sar",
+   "gsd_m": 10.0
+  },
+  "canonical_answer": null,
+  "claims": [
+   {
+    "id": "E1",
+    "predicate": "water_method",
+    "value": "GeoTIFF bands=4; NIR/green identities unknown (descriptions=[None, None, None, None]); tifffile desc='' shape=(256, 256, 4). RGB Otsu on (B-R), threshold=32.0",
+    "region": "<repo>\\demo\\data\\_uploads\\20260923T161925084008Z\\overlay_live.png",
+    "confidence": {
+     "level": "measured",
+     "basis": "optical water tool metadata"
+    },
+    "provenance": {
+     "tool": "water_highlight"
+    }
+   },
+   {
+    "id": "E2",
+    "predicate": "water_pixels",
+    "value": 34900,
+    "region": "<repo>\\demo\\data\\_uploads\\20260923T161925084008Z\\overlay_live.png",
+    "confidence": {
+     "level": "measured",
+     "basis": "GeoTIFF bands=4; NIR/green identities unknown (descriptions=[None, None, None, None]); tifffile desc='' shape=(256, 256, 4). RGB Otsu on (B-R), threshold=32.0"
+    },
+    "provenance": {
+     "tool": "water_highlight"
+    }
+   },
+   {
+    "id": "E3",
+    "predicate": "water_calibrated",
+    "value": true,
+    "region": "<repo>\\demo\\data\\_uploads\\20260923T161925084008Z\\overlay_live.png",
+    "confidence": {
+     "level": "measured",
+     "basis": "ingest calibration flag"
+    },
+    "provenance": {
+     "tool": "sar_read"
+    }
+   },
+   {
+    "id": "E4",
+    "predicate": "sdwi_label",
+    "value": "SDWI",
+    "region": "<repo>\\demo\\data\\_uploads\\20260923T161925084008Z\\overlay_live.png",
+    "confidence": {
+     "level": "measured",
+     "basis": "tool metadata; render as SDWI"
+    },
+    "provenance": {
+     "tool": "sar_read"
+    }
+   },
+   {
+    "id": "E5",
+    "predicate": "water_pixels",
+    "value": 35877,
+    "region": "<repo>\\demo\\data\\_uploads\\20260923T161925084008Z\\overlay_live.png",
+    "confidence": {
+     "level": "measured",
+     "basis": "3x3 boxcar on VV/VH dB; water = (filtered VV_dB < -16.0) + 3x3 morph open; SDWI reported as letters SDWI, not used for mask"
+    },
+    "provenance": {
+     "tool": "sar_read"
+    }
+   },
+   {
+    "id": "E6",
+    "predicate": "water_agreement",
+    "value": "both_support",
+    "region": "<repo>\\demo\\data\\_uploads\\20260923T161925084008Z\\overlay_live.png",
+    "confidence": {
+     "level": "measured",
+     "basis": "sar_agreement verdict on common grid"
+    },
+    "provenance": {
+     "tool": "sar_agreement",
+     "parents": "water_highlight+sar_read"
+    }
+   },
+   {
+    "id": "E7",
+    "predicate": "built_up_agreement",
+    "value": "withheld_no_tool",
+    "region": "<repo>\\demo\\data\\_uploads\\20260923T161925084008Z\\overlay_live.png",
+    "confidence": {
+     "level": "withheld",
+     "basis": "no optical built-up tool and no calibrated SAR built-up mask"
+    },
+    "provenance": {
+     "tool": "sar_agreement"
+    }
+   },
+   {
+    "id": "E8",
+    "predicate": "agreement_iou",
+    "value": 0.891927,
+    "region": "<repo>\\demo\\data\\_uploads\\20260923T161925084008Z\\overlay_live.png",
+    "confidence": {
+     "level": "measured",
+     "basis": "intersection/union on common grid"
+    },
+    "provenance": {
+     "tool": "sar_agreement"
+    },
+    "unit": "iou"
+   },
+   {
+    "id": "E9",
+    "predicate": "agreement_grid",
+    "value": "same_grid",
+    "region": "<repo>\\demo\\data\\_uploads\\20260923T161925084008Z\\overlay_live.png",
+    "confidence": {
+     "level": "measured",
+     "basis": "comparison grid disclosure"
+    },
+    "provenance": {
+     "tool": "sar_agreement"
+    }
+   },
+   {
+    "id": "E10",
+    "predicate": "coreg_transform_offset_m",
+    "value": 0.0,
+    "region": null,
+    "confidence": {
+     "level": "measured",
+     "basis": "affine transform comparison"
+    },
+    "provenance": {
+     "tool": "coreg_check"
+    },
+    "unit": "m"
+   },
+   {
+    "id": "E11",
+    "predicate": "coreg_same_res",
+    "value": true,
+    "region": null,
+    "confidence": {
+     "level": "measured",
+     "basis": "affine transform comparison"
+    },
+    "provenance": {
+     "tool": "coreg_check"
+    }
+   },
+   {
+    "id": "E12",
+    "predicate": "coreg_shift_px",
+    "value": "withheld",
+    "region": null,
+    "confidence": {
+     "level": "withheld",
+     "basis": "pixel shift inconclusive: weak_peak"
+    },
+    "provenance": {
+     "tool": "coreg_check"
+    }
+   }
+  ],
+  "artifacts": [
+   {
+    "type": "mask",
+    "path": "<repo>\\demo\\data\\_uploads\\20260923T161925084008Z\\overlay_live.png",
+    "grid": "native"
+   },
+   {
+    "type": "overlay",
+    "path": "<repo>\\demo\\data\\_uploads\\20260923T161925084008Z\\overlay_live.png",
+    "grid": "native"
+   },
+   {
+    "type": "agreement_map",
+    "path": "<repo>\\demo\\data\\_uploads\\20260923T161925084008Z\\agreement_map_live.png",
+    "grid": "native"
+   },
+   {
+    "type": "box",
+    "xyxy": [
+     0,
+     0,
+     256,
+     256
+    ],
+    "grid": "native"
+   },
+   {
+    "type": "geotiff",
+    "path": "<repo>\\demo\\data\\_uploads\\20260923T161925084008Z\\water_sar_mask.tif",
+    "grid": "native",
+    "crs": "EPSG:32645",
+    "source": "<repo>\\api\\_data\\uploads\\86947b64c39449729f2f550d4d74bcc9\\sar__sundarbans_sar.tiff"
+   },
+   {
+    "type": "geotiff",
+    "path": "<repo>\\demo\\data\\_uploads\\20260923T161925084008Z\\water_optical_mask.tif",
+    "grid": "native",
+    "crs": "EPSG:32645",
+    "source": "<repo>\\api\\_data\\uploads\\86947b64c39449729f2f550d4d74bcc9\\optical__sundarbans_optical.tiff"
+   },
+   {
+    "type": "geotiff",
+    "path": "<repo>\\demo\\data\\_uploads\\20260923T161925084008Z\\agreement_map_live.tif",
+    "grid": "native",
+    "crs": "EPSG:32645",
+    "source": "<repo>\\api\\_data\\uploads\\86947b64c39449729f2f550d4d74bcc9\\optical__sundarbans_optical.tiff"
+   }
+  ],
+  "limitations": [
+   "water agreement compares two independent deterministic masks on a common grid; it is not pixel-level optical/SAR fusion.",
+   "co-registration is measured (transform + phase-correlation levels), not assumed; the pair is not realigned."
+  ],
+  "trace": [
+   {
+    "plan_task": "water_identification",
+    "live": true
+   }
+  ],
+  "tool_outputs": {
+   "sar_read": {
+    "vv_db_stats": {
+     "mean": -17.00970458984375,
+     "std": 8.866384506225586,
+     "p5": -26.30474853515625,
+     "p95": -6.307708740234375
+    },
+    "vh_db_stats": {
+     "mean": -22.48436737060547,
+     "std": 7.025293827056885,
+     "p5": -28.748950958251953,
+     "p95": -13.469844818115234
+    },
+    "sdwi_stats": {
+     "mean": -14.791261672973633,
+     "std": 3.61907696723938,
+     "p5": -17.99844741821289,
+     "p95": -10.42063045501709
+    },
+    "sdwi_finite": true,
+    "sdwi_finite_n": 65536,
+    "sdwi_label": "SDWI",
+    "sdwi_units": "ln(10*VV_linear*VH_linear)-8; VV_lin=10**(dB/10)",
+    "water_db_threshold": -16.0,
+    "water_pixels": 35877,
+    "water_fraction": 0.5474395751953125,
+    "water_calibrated": true,
+    "speckle": "3x3 boxcar (uniform) on dB before threshold",
+    "method": "3x3 boxcar on VV/VH dB; water = (filtered VV_dB < -16.0) + 3x3 morph open; SDWI reported as letters SDWI, not used for mask",
+    "provenance": "tools.sar_read (classical backscatter; VLM did not compute this). 3x3 boxcar on VV/VH dB; water = (filtered VV_dB < -16.0) + 3x3 morph open; SDWI reported as letters SDWI, not used for mask",
+    "ingest_provenance": "SAR raster `sar__sundarbans_sar.tiff` shape=(256, 256) dtype=float64 calibrated=True"
+   },
+   "water_highlight": {
+    "water_pixels": 34900,
+    "mask_shape": [
+     256,
+     256
+    ],
+    "method": "GeoTIFF bands=4; NIR/green identities unknown (descriptions=[None, None, None, None]); tifffile desc='' shape=(256, 256, 4). RGB Otsu on (B-R), threshold=32.0",
+    "provenance": "tools.water_highlight (deterministic optical mask; VLM did not compute this). GeoTIFF bands=4; NIR/green identities unknown (descriptions=[None, None, None, None]); tifffile desc='' shape=(256, 256, 4). RGB Otsu on (B-R), threshold=32.0"
+   },
+   "sar_agreement": {
+    "verdicts": {
+     "water": "both_support",
+     "built_up": "withheld_no_tool"
+    },
+    "optical_water_px": 34900,
+    "sar_water_px": 35877,
+    "optical_water_fraction": 0.532532,
+    "sar_water_fraction": 0.54744,
+    "intersection_px": 33367,
+    "union_px": 37410,
+    "iou": 0.891927,
+    "grid": "same_grid",
+    "sar_calibrated": true,
+    "misreg_shift_px": null,
+    "thresholds": {
+     "iou_t": 0.25,
+     "min_frac": 0.005,
+     "misreg_px": 5.0
+    },
+    "method": "independent optical and SAR water masks compared on a common grid (per-pixel intersection/union IoU and per-modality water fractions)",
+    "provenance": "tools.sar_agreement (deterministic mask agreement; VLM did not compute this). optical=tools.water_highlight mask; sar=tools.sar_read mask. Not pixel fusion."
+   },
+   "coreg_check": {
+    "transform": {
+     "status": "measured",
+     "offset_m": 0.0,
+     "dx_m": 0.0,
+     "dy_m": 0.0,
+     "same_res": true,
+     "optical_res_m": [
+      10.0,
+      10.0
+     ],
+     "sar_res_m": [
+      10.0,
+      10.0
+     ],
+     "basis": "affine transform comparison (rasterio .transform)"
+    },
+    "pixel": {
+     "status": "inconclusive",
+     "shift_px": null,
+     "dx_px": 19.0,
+     "dy_px": 0.0,
+     "peak": 0.0224,
+     "reason": "weak_peak",
+     "method": "FFT phase cross-correlation (normalized cross-power spectrum) on 0-1 optical-grayscale vs SAR-VV grids; sub-pixel via parabolic peak fit",
+     "caveat": "cross-modal optical-vs-SAR correlation is noisy; measured-with-caveat, not ground truth"
+    },
+    "shift_px": null,
+    "provenance": "tools.coreg_check (deterministic; VLM did not compute this). transform level: affine transform comparison (rasterio .transform)"
+   }
+  },
+  "geo_exports": {
+   "water_sar_mask.tif": {
+    "artifact": "water_sar_mask.tif",
+    "status": "written",
+    "path": "<repo>\\demo\\data\\_uploads\\20260923T161925084008Z\\water_sar_mask.tif",
+    "crs": "EPSG:32645",
+    "source": "<repo>\\api\\_data\\uploads\\86947b64c39449729f2f550d4d74bcc9\\sar__sundarbans_sar.tiff",
+    "transform_scaled": false,
+    "provenance": "tools.export_mask_geotiff (deterministic copy of the source raster's crs+transform; VLM did not compute this)."
+   },
+   "water_optical_mask.tif": {
+    "artifact": "water_optical_mask.tif",
+    "status": "written",
+    "path": "<repo>\\demo\\data\\_uploads\\20260923T161925084008Z\\water_optical_mask.tif",
+    "crs": "EPSG:32645",
+    "source": "<repo>\\api\\_data\\uploads\\86947b64c39449729f2f550d4d74bcc9\\optical__sundarbans_optical.tiff",
+    "transform_scaled": false,
+    "provenance": "tools.export_mask_geotiff (deterministic copy of the source raster's crs+transform; VLM did not compute this)."
+   },
+   "agreement_map_live.tif": {
+    "artifact": "agreement_map_live.tif",
+    "status": "written",
+    "path": "<repo>\\demo\\data\\_uploads\\20260923T161925084008Z\\agreement_map_live.tif",
+    "crs": "EPSG:32645",
+    "source": "<repo>\\api\\_data\\uploads\\86947b64c39449729f2f550d4d74bcc9\\optical__sundarbans_optical.tiff",
+    "transform_scaled": false,
+    "provenance": "tools.export_mask_geotiff (deterministic copy of the source raster's crs+transform; VLM did not compute this)."
+   }
+  }
+ },
+ "trace": {
+  "query": "Is there water in this scene?",
+  "input_mode": "optical+sar",
+  "scene": 3,
+  "live": true,
+  "first_token_s": 2.438,
+  "complete_s": 6.182,
+  "overlay_path": "<repo>\\demo\\data\\_uploads\\20260923T161925084008Z\\overlay_live.png",
+  "images": [
+   "<repo>\\demo\\data\\_uploads\\20260923T161925084008Z\\optical.png",
+   "<repo>\\demo\\data\\_uploads\\20260923T161925084008Z\\sar_vv.png",
+   "<repo>\\demo\\data\\_uploads\\20260923T161925084008Z\\agreement_map_live.png"
+  ],
+  "metrics_badge": null,
+  "ingest_note": "Analyzing your uploaded files — not the built-in examples. GeoTIFF via rasterio `optical__sundarbans_optical.tiff` bands=4 size=(256, 256) crs=EPSG:32645. SAR raster `sar__sundarbans_sar.tiff` shape=(256, 256) dtype=float64 calibrated=True",
+  "input_source": "upload",
+  "gsd": {
+   "path": "<repo>\\api\\_data\\uploads\\86947b64c39449729f2f550d4d74bcc9\\optical__sundarbans_optical.tiff",
+   "gsd_m": 10.0,
+   "gsd_x_m": null,
+   "gsd_y_m": null,
+   "source": "geotransform",
+   "crs": "EPSG:32645",
+   "crs_note": null,
+   "native_width": 256,
+   "native_height": 256,
+   "backend": "rasterio",
+   "provenance": "rasterio `optical__sundarbans_optical.tiff` crs=EPSG:32645. projected/local pixel scale (10.0, 10.0) treated as metres; mean used.",
+   "resize_scale": 1.0,
+   "gsd_m_used": 10.0
+  },
+  "misreg_check": null,
+  "misregistration_note": null,
+  "misreg_shift_px": null,
+  "geo_exports": {
+   "water_sar_mask.tif": {
+    "artifact": "water_sar_mask.tif",
+    "status": "written",
+    "path": "<repo>\\demo\\data\\_uploads\\20260923T161925084008Z\\water_sar_mask.tif",
+    "crs": "EPSG:32645",
+    "source": "<repo>\\api\\_data\\uploads\\86947b64c39449729f2f550d4d74bcc9\\sar__sundarbans_sar.tiff",
+    "transform_scaled": false,
+    "provenance": "tools.export_mask_geotiff (deterministic copy of the source raster's crs+transform; VLM did not compute this)."
+   },
+   "water_optical_mask.tif": {
+    "artifact": "water_optical_mask.tif",
+    "status": "written",
+    "path": "<repo>\\demo\\data\\_uploads\\20260923T161925084008Z\\water_optical_mask.tif",
+    "crs": "EPSG:32645",
+    "source": "<repo>\\api\\_data\\uploads\\86947b64c39449729f2f550d4d74bcc9\\optical__sundarbans_optical.tiff",
+    "transform_scaled": false,
+    "provenance": "tools.export_mask_geotiff (deterministic copy of the source raster's crs+transform; VLM did not compute this)."
+   },
+   "agreement_map_live.tif": {
+    "artifact": "agreement_map_live.tif",
+    "status": "written",
+    "path": "<repo>\\demo\\data\\_uploads\\20260923T161925084008Z\\agreement_map_live.tif",
+    "crs": "EPSG:32645",
+    "source": "<repo>\\api\\_data\\uploads\\86947b64c39449729f2f550d4d74bcc9\\optical__sundarbans_optical.tiff",
+    "transform_scaled": false,
+    "provenance": "tools.export_mask_geotiff (deterministic copy of the source raster's crs+transform; VLM did not compute this)."
+   }
+  },
+  "agreement_map_path": "<repo>\\demo\\data\\_uploads\\20260923T161925084008Z\\agreement_map_live.png",
+  "vlm": {
+   "text": "Water is confirmed in this scene, with both SAR and optical tools detecting it. The SAR tool identifies 35,877 water pixels (54.7% of the scene), while the optical tool detects 34,900 water pixels (53.3%). The two masks agree strongly, with an Intersection over Union (IoU) of 0.892, indicating high consistency. The water detection threshold used by SAR was -16.0 dB, and the SDWI metric was computed but not used for the final mask. The water is concentrated in the large turquoise area, which appears to be a river or estuary, bordered by land on the left and right. The coregistration check shows a weak peak, but the grids are aligned to within 19 pixels in the x-direction, which is acceptable for this analysis.",
+   "model": "qwen3vl",
+   "url": "http://127.0.0.1:8080",
+   "n_images": 2,
+   "image_paths": [
+    "<repo>\\demo\\data\\_uploads\\20260923T161925084008Z\\optical.png",
+    "<repo>\\demo\\data\\_uploads\\20260923T161925084008Z\\sar_vv.png"
+   ],
+   "first_token_s": 2.438,
+   "complete_s": 5.998,
+   "provenance": "tools.vqa (local llama-server; no commercial vision API)"
+  },
+  "narration_check": {
+   "ok": true,
+   "issues": []
+  }
+ },
+ "report": {
+  "findings": "### Findings (from tools)\n\n- water_highlight: water_pixels=34900; method=GeoTIFF bands=4; NIR/green identities unknown (descriptions=[None, None, None, None]); tifffile desc='' shape=(256, 256, 4). RGB Otsu on (B-R), threshold=32.0.\n- sar_read: water_pixels=35877; water_calibrated=True; SDWI mean=-14.791261672973633 (write SDWI, do not expand).\n- sar_agreement: water=both_support built_up=withheld_no_tool\n- coreg: shift=inconclusive(weak_peak); transform_offset_m=0.0; same_res=True\n- geo_export: water_sar_mask.tif -> water_sar_mask.tif [EPSG:32645]; water_optical_mask.tif -> water_optical_mask.tif [EPSG:32645]; agreement_map_live.tif -> agreement_map_live.tif [EPSG:32645]",
+  "measurement": "### Measurement card (tool `area_calc` — VLM did not compute these)\n\nNo `area_calc` on this run (caption/VQA/refusal).",
+  "confidence": "### Confidence hierarchy (honesty, not a fake 0.99)\n\n**Tool measurements** — raster math / ChangeFormer / SAR threshold. These are the numbers a judge should cite.\n- `water_highlight`: water_pixels=34900 (GeoTIFF bands=4; NIR/green identities unknown (descriptions=[None, None, None, None]); tifffile desc='' shape=(256, 256, 4). RGB Otsu on (B-R), threshold=32.0).\n- `sar_read`: water_pixels=35877 (tools.sar_read (classical backscatter; VLM did not compute this). 3x3 boxcar on VV/VH dB; water = (filtered VV_dB < -16.0) + 3x3 morph open; SDWI reported as letters SDWI, not used for mask).\n\n**VLM interpretation (not a measurement)** — role `narrate`; tools selected: ['vqa', 'sar_read', 'sar_agreement']. The answer paragraph may mis-attach numbers. Do not treat prose km² as independent evidence.",
+  "limitations": [
+   "water agreement compares two independent deterministic masks on a common grid; it is not pixel-level optical/SAR fusion.",
+   "co-registration is measured (transform + phase-correlation levels), not assumed; the pair is not realigned."
+  ],
+  "narration_check": {
+   "ok": true,
+   "issues": []
+  }
+ },
+ "artifacts": [
+  {
+   "type": "image",
+   "path": "<repo>\\demo\\data\\_uploads\\20260923T161925084008Z\\optical.png",
+   "name": "optical.png",
+   "url": "/artifacts/40b7bab3cb4440a9af541deb335ad634/optical.png"
+  },
+  {
+   "type": "image",
+   "path": "<repo>\\demo\\data\\_uploads\\20260923T161925084008Z\\sar_vv.png",
+   "name": "sar_vv.png",
+   "url": "/artifacts/40b7bab3cb4440a9af541deb335ad634/sar_vv.png"
+  },
+  {
+   "type": "image",
+   "path": "<repo>\\demo\\data\\_uploads\\20260923T161925084008Z\\agreement_map_live.png",
+   "name": "agreement_map_live.png",
+   "url": "/artifacts/40b7bab3cb4440a9af541deb335ad634/agreement_map_live.png"
+  },
+  {
+   "type": "overlay",
+   "path": "<repo>\\demo\\data\\_uploads\\20260923T161925084008Z\\overlay_live.png",
+   "name": "overlay_live.png",
+   "url": "/artifacts/40b7bab3cb4440a9af541deb335ad634/overlay_live.png"
+  },
+  {
+   "type": "geo_export",
+   "path": "<repo>\\demo\\data\\_uploads\\20260923T161925084008Z\\water_sar_mask.tif",
+   "name": "water_sar_mask.tif",
+   "url": "/artifacts/40b7bab3cb4440a9af541deb335ad634/water_sar_mask.tif"
+  },
+  {
+   "type": "geo_export",
+   "path": "<repo>\\demo\\data\\_uploads\\20260923T161925084008Z\\water_optical_mask.tif",
+   "name": "water_optical_mask.tif",
+   "url": "/artifacts/40b7bab3cb4440a9af541deb335ad634/water_optical_mask.tif"
+  },
+  {
+   "type": "geo_export",
+   "path": "<repo>\\demo\\data\\_uploads\\20260923T161925084008Z\\agreement_map_live.tif",
+   "name": "agreement_map_live.tif",
+   "url": "/artifacts/40b7bab3cb4440a9af541deb335ad634/agreement_map_live.tif"
+  }
+ ]
+}

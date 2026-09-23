@@ -6,16 +6,25 @@ import {
   StreamPipelineError,
   StreamTransportError,
 } from "./api";
-import type { InputMode, QueryRequest, RunBundle, UploadResponse } from "./types";
+import type {
+  InputMode,
+  QueryRequest,
+  RunBundle,
+  RunListItem,
+  UploadResponse,
+} from "./types";
 import { SeatBar } from "./components/SeatBar";
 import { PresetPicker } from "./components/Presets";
 import { DetectedCard, UploadPanel } from "./components/UploadPanel";
-import { InputsStrip } from "./components/InputsStrip";
 import { Results } from "./components/Results";
 import { RunsPanel } from "./components/RunsPanel";
 import { TraceView } from "./components/TraceView";
+import { Stepper } from "./components/Stepper";
+import { ImageryStage } from "./components/ImageryStage";
+import { Collapsible } from "./components/Collapsible";
 import {
   applyStageEvent,
+  baseName,
   finalizeLiveTrace,
   initialLiveTrace,
   type LiveTrace,
@@ -29,7 +38,7 @@ const MODES: { id: InputMode; label: string }[] = [
   { id: "optical+sar", label: "optical + SAR" },
 ];
 
-// API role order per mode (mirrors api/README.md) — for the InputsStrip only.
+// API role order per mode (mirrors api/README.md).
 const ROLE_ORDER: Record<InputMode, string[]> = {
   single: ["image"],
   "bi-temporal": ["before", "after"],
@@ -66,21 +75,26 @@ function isAbort(e: unknown): boolean {
 
 function RunErrorCard({ e }: { e: RunError }) {
   const rejected = REQUEST_REJECTION.has(e.slug);
-  const narratorFailed = (e.stage ?? "").toLowerCase().includes("narrator");
+  const writerFailed = /narrator|report writer/i.test(e.stage ?? "");
   return (
     <div className="run-error" data-testid="run-error">
       <div className="run-error-head">
-        <strong>{rejected ? "request rejected" : "run failed"}</strong>
-        <span className="slug-chip">{e.slug}</span>
+        <strong>
+          {rejected
+            ? "request rejected"
+            : `run failed${e.stage ? ` at ${e.stage}` : ""}`}
+        </strong>
       </div>
-      {e.stage && <div className="muted">failed stage: {e.stage}</div>}
-      <div className="run-error-detail">{e.detail}</div>
-      {narratorFailed && (
+      {writerFailed && (
         <div className="run-error-hint">
-          the narrator seat may be down or still loading — check the seat pills
-          above
+          the answer model may be offline or still loading — check the status
+          dots at the top
         </div>
       )}
+      <Collapsible className="run-error-details" summary="details">
+        <div className="slug-chip">{e.slug}</div>
+        <div className="run-error-detail">{e.detail}</div>
+      </Collapsible>
     </div>
   );
 }
@@ -91,6 +105,7 @@ export default function App() {
   const [upload, setUpload] = useState<UploadResponse | null>(null);
   const [scene, setScene] = useState<number | null>(null);
   const [boundPreset, setBoundPreset] = useState<Preset | null>(null);
+  const [inputNames, setInputNames] = useState<Record<string, string>>({});
   const [bundle, setBundle] = useState<RunBundle | null>(null);
   const [busy, setBusy] = useState(false);
   const [runError, setRunError] = useState<RunError | null>(null);
@@ -99,12 +114,42 @@ export default function App() {
     phase: "uploading" | "running";
   } | null>(null);
   const [runView, setRunView] = useState<RunView>({ kind: "idle" });
-  const [runsCollapsed, setRunsCollapsed] = useState(false);
-  // bumped whenever a run lands so the runs panel reloads itself
+  const [traceOpen, setTraceOpen] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [runs, setRuns] = useState<RunListItem[]>([]);
+  const [runsErr, setRunsErr] = useState(false);
+  // bumped whenever a run lands so the drawer reloads itself
   const [runsRefresh, setRunsRefresh] = useState(0);
 
   const ctlRef = useRef<AbortController | null>(null);
   useEffect(() => () => ctlRef.current?.abort(), []);
+
+  const loadRuns = () =>
+    api.runs(50).then(setRuns).catch(() => setRunsErr(true));
+  useEffect(() => {
+    void loadRuns();
+  }, [runsRefresh]);
+
+  const running = runView.kind === "live" && runView.running;
+  // a finished live run collapses the full trace back to the slim stepper
+  const wasRunning = useRef(false);
+  useEffect(() => {
+    if (wasRunning.current && !running) setTraceOpen(false);
+    wasRunning.current = running;
+  }, [running]);
+
+  // on run start bring the stepper into view — it sits just below the stage
+  const stepperAnchor = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    if (!running) return;
+    const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    const el = stepperAnchor.current;
+    if (typeof el?.scrollIntoView === "function")
+      el.scrollIntoView({
+        block: "nearest",
+        behavior: reduce ? "auto" : "smooth",
+      });
+  }, [running]);
 
   // Explicit-args run: mode/uploadId/scene are parameters, never read from
   // closure state after an await (preset clicks used to run with stale mode).
@@ -123,6 +168,7 @@ export default function App() {
     setBusy(true);
     setRunError(null);
     setBundle(null);
+    setTraceOpen(false);
     // per-run trace state — a late frame from an aborted run must never
     // patch the next run's view
     let trace = initialLiveTrace();
@@ -148,7 +194,7 @@ export default function App() {
     const fallbackToQuery = async (reason: string) => {
       setRunView({
         kind: "replay",
-        note: `live stream unavailable (${reason}) — fell back to POST /query`,
+        note: `live updates unavailable (${reason}) — showing the recorded run`,
       });
       try {
         const b = await api.query(req, signal);
@@ -194,7 +240,7 @@ export default function App() {
         stopRunning();
         setRunError({
           slug: "stream_interrupted",
-          detail: `connection lost after ${e.eventsSeen} events — the run may still finish server-side; check the runs panel`,
+          detail: `connection lost after ${e.eventsSeen} events — the run may still finish server-side; check the runs drawer`,
         });
       } else if (e instanceof StreamTransportError || e instanceof ApiHttpError) {
         const reason =
@@ -224,6 +270,11 @@ export default function App() {
         setUpload(null);
         setScene(p.scene ?? null);
         setBoundPreset(p);
+        setInputNames(
+          Object.fromEntries(
+            (p.previews ?? []).map((x) => [x.role, baseName(x.url)]),
+          ),
+        );
         setPresetPhase({ id: p.id, phase: "running" });
         await runQuery({ text: p.query, mode: p.mode, scene: p.scene });
       } else {
@@ -233,6 +284,9 @@ export default function App() {
           const blob = await fetchPresetFile(f);
           files[f.role] = new File([blob], f.name, { type: mimeForName(f.name) });
         }
+        setInputNames(
+          Object.fromEntries((p.files ?? []).map((f) => [f.role, f.name])),
+        );
         const up = await api.upload(p.mode, files);
         setUpload(up);
         setScene(null);
@@ -256,6 +310,7 @@ export default function App() {
   const onLoadRun = (id: string) => {
     ctlRef.current?.abort();
     setRunError(null);
+    setTraceOpen(false);
     api
       .run(id)
       .then((b) => {
@@ -271,56 +326,18 @@ export default function App() {
   };
 
   const blocked = busy || presetPhase != null;
-
-  const inputsNode = (() => {
-    if (upload) {
-      const items = ROLE_ORDER[mode].map((role) => {
-        const pv = upload.previews?.find((p) => p.role === role);
-        return {
-          role,
-          label: role === "sar" ? "SAR" : role,
-          src: pv ? api.previewUrl(pv.url) : null,
-        };
-      });
-      return (
-        <InputsStrip
-          title={`uploaded files · ${upload.upload_id.slice(0, 8)}`}
-          source="upload"
-          items={items}
-          gsd={{
-            gsd_m: upload.detected.gsd_m,
-            gsd_source: upload.detected.gsd_source,
-          }}
-        />
-      );
-    }
-    if (boundPreset && scene != null) {
-      return (
-        <InputsStrip
-          title={`prepared scene ${scene} · built-in example`}
-          source="prepared"
-          items={(boundPreset.previews ?? []).map((p) => ({
-            role: p.role,
-            label: p.label,
-            src: p.url,
-          }))}
-          gsd={null}
-        />
-      );
-    }
-    return (
-      <div className="muted">
-        no files bound — the API uses this mode's prepared scene
-      </div>
-    );
-  })();
+  const namesOrdered = ROLE_ORDER[mode]
+    .map((r) => inputNames[r])
+    .filter(Boolean) as string[];
 
   return (
     <div className="app">
-      <SeatBar />
-      <div className="layout">
-        <div className="col-inputs">
-          <div className="section-label">1 · input mode</div>
+      <SeatBar
+        runsCount={runs.length}
+        onOpenRuns={() => setDrawerOpen(true)}
+      />
+      <div className="page">
+        <div className="controls">
           <div className="mode-tabs">
             {MODES.map((m) => (
               <button
@@ -333,6 +350,13 @@ export default function App() {
                   setUpload(null);
                   setScene(null);
                   setBoundPreset(null);
+                  setInputNames({});
+                  // the previous run's answer belongs to the old inputs —
+                  // clear it so the stage can't show a foreign-mode result
+                  setBundle(null);
+                  setRunView({ kind: "idle" });
+                  setRunError(null);
+                  setTraceOpen(false);
                 }}
               >
                 {m.label}
@@ -340,7 +364,6 @@ export default function App() {
             ))}
           </div>
 
-          <div className="section-label">2 · demo presets</div>
           <PresetPicker
             mode={mode}
             disabled={blocked}
@@ -348,7 +371,6 @@ export default function App() {
             onRun={(p) => void runPreset(p)}
           />
 
-          <div className="section-label">3 · or upload imagery</div>
           <UploadPanel
             key={mode}
             mode={mode}
@@ -356,17 +378,15 @@ export default function App() {
               setUpload(u);
               setScene(null);
               setBoundPreset(null);
+              // new inputs invalidate the displayed run
+              setBundle(null);
+              setRunView({ kind: "idle" });
+              setRunError(null);
+              setTraceOpen(false);
             }}
+            onFilesChange={setInputNames}
           />
 
-          <div className="section-label">bound inputs</div>
-          {inputsNode}
-
-          {upload && (
-            <DetectedCard d={upload.detected} warnings={upload.warnings} />
-          )}
-
-          <div className="section-label">4 · ask</div>
           <div className="query-row">
             <input
               className="query-input"
@@ -402,45 +422,72 @@ export default function App() {
           </div>
         </div>
 
-        <div className="col-results">
-          {runView.kind === "idle" && !bundle && !runError && (
-            <div className="panel empty-state" data-testid="empty-state">
-              <div className="empty-title">Results appear here.</div>
-              <div className="muted">
-                Pick a preset or upload imagery, then ask — the execution trace
-                streams live from the pipeline.
-              </div>
-            </div>
-          )}
-          {runView.kind === "live" && (
-            <TraceView mode="live" trace={runView.trace} running={runView.running} />
-          )}
-          {runView.kind === "replay" && bundle && (
-            <TraceView mode="replay" bundle={bundle} note={runView.note} />
-          )}
-          {runView.kind === "replay" && !bundle && (
-            <div className="panel pending-card">
-              {runView.note && <div className="muted">{runView.note}</div>}
-              <div className="muted">
-                …waiting for POST /query; the trace will be a replay of the
-                recorded run
-              </div>
-            </div>
-          )}
-          {runError && <RunErrorCard e={runError} />}
-          {bundle && <Results bundle={bundle} />}
-        </div>
+        <ImageryStage
+          mode={mode}
+          bundle={bundle}
+          upload={upload}
+          boundPreset={boundPreset}
+          inputNames={namesOrdered}
+        />
 
-        <aside>
-          <RunsPanel
-            onLoad={onLoadRun}
-            collapsed={runsCollapsed}
-            onToggle={() => setRunsCollapsed((c) => !c)}
-            refreshKey={runsRefresh}
-            currentRunId={bundle?.run_id}
-          />
-        </aside>
+        {upload && !bundle && (
+          <Collapsible className="panel" summary="image details">
+            <DetectedCard d={upload.detected} warnings={upload.warnings} />
+          </Collapsible>
+        )}
+
+        {runView.kind === "live" && (
+          <div ref={stepperAnchor}>
+            <Stepper
+              view={runView}
+              expanded={traceOpen}
+              onToggle={() => setTraceOpen((o) => !o)}
+            />
+            {traceOpen && (
+              <TraceView
+                mode="live"
+                trace={runView.trace}
+                running={runView.running}
+                embedded
+              />
+            )}
+          </div>
+        )}
+        {runView.kind === "replay" && bundle && (
+          <div ref={stepperAnchor}>
+            <Stepper
+              view={{ kind: "replay", bundle }}
+              expanded={traceOpen}
+              onToggle={() => setTraceOpen((o) => !o)}
+            />
+            {runView.note && <div className="trace-note">{runView.note}</div>}
+            {traceOpen && (
+              <TraceView mode="replay" bundle={bundle} embedded />
+            )}
+          </div>
+        )}
+        {runView.kind === "replay" && !bundle && (
+          <div className="panel pending-card">
+            {runView.note && <div className="muted">{runView.note}</div>}
+            <div className="muted">
+              waiting for the result… steps will show as a replay of the
+              recorded run
+            </div>
+          </div>
+        )}
+        {runError && <RunErrorCard e={runError} />}
+        {bundle && <Results bundle={bundle} upload={upload} />}
       </div>
+
+      <RunsPanel
+        open={drawerOpen}
+        runs={runs}
+        error={runsErr}
+        onClose={() => setDrawerOpen(false)}
+        onLoad={onLoadRun}
+        onRefresh={loadRuns}
+        currentRunId={bundle?.run_id}
+      />
     </div>
   );
 }

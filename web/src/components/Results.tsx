@@ -1,16 +1,33 @@
 import { useEffect, useState } from "react";
 import { api } from "../api";
 import { Markdown } from "../md";
-import { formatBytes } from "../format";
-import type { ArtifactRef, Claim, RunBundle } from "../types";
+import { formatBytes, formatSecs } from "../format";
+import {
+  composeVerified,
+  humanPredicate,
+  humanValue,
+  reportCheck,
+  splitAnswer,
+} from "../verified";
+import type { ArtifactRef, Claim, RunBundle, UploadResponse } from "../types";
 import { isWithheldClaim } from "../types";
+import { baseName } from "../liveTrace";
+import { Collapsible } from "./Collapsible";
+import { Lightbox } from "./Lightbox";
+
+// "answer model" / "remote-sensing model" for the two known seat roles; raw
+// values for anything else (collapsed section only — real names allowed here)
+const SEAT_WORDS: Record<string, string> = {
+  narrator: "answer model",
+  canonical: "remote-sensing model",
+};
 
 function ProvenanceChips({ c }: { c: Claim }) {
   const p = c.provenance ?? {};
   const bits: [string, string | undefined][] = [
     ["tool", p.tool],
-    ["model", p.model],
-    ["seat", p.seat],
+    ["model", p.model ? baseName(p.model) : undefined],
+    ["model role", p.seat ? (SEAT_WORDS[p.seat] ?? p.seat) : undefined],
     ["sha", p.sha256 ?? p.gguf_sha256],
   ];
   return (
@@ -30,20 +47,25 @@ function ProvenanceChips({ c }: { c: Claim }) {
 }
 
 export function ClaimList({ claims }: { claims: Claim[] }) {
-  if (!claims.length) return <div className="muted">no claims in packet</div>;
+  if (!claims.length) return <div className="muted">no claims recorded</div>;
   return (
     <div className="claim-list">
       {claims.map((c) => {
         const w = isWithheldClaim(c);
-        const value = typeof c.value === "string" ? c.value : JSON.stringify(c.value);
+        const raw = typeof c.value === "string" ? c.value : JSON.stringify(c.value);
+        const value = humanValue(c.value);
         return (
           <div key={c.id} className={`claim ${w ? "claim-withheld" : ""}`}>
             <div className="claim-head">
-              <span className="claim-id">{c.id}</span>
-              <span className="claim-pred">{c.predicate}</span>
+              <span
+                className="claim-pred"
+                title={`${c.predicate} · ${c.id}`}
+              >
+                {humanPredicate(c.predicate)}
+              </span>
               {w && <span className="withheld-badge">withheld</span>}
             </div>
-            <div className="claim-value" title={value}>
+            <div className="claim-value" title={raw}>
               {value}
             </div>
             {c.confidence?.basis && (
@@ -100,21 +122,12 @@ function GeoTiffTile({ a }: { a: ArtifactRef }) {
 const ART_GROUPS: [string, string][] = [
   ["overlay", "overlays"],
   ["image", "images"],
-  ["geo_export", "GeoTIFF exports"],
+  ["geo_export", "map-ready GeoTIFFs"],
 ];
 
 export function ArtifactsGrid({ bundle }: { bundle: RunBundle }) {
   const arts = bundle.artifacts ?? [];
   const [lightbox, setLightbox] = useState<ArtifactRef | null>(null);
-
-  useEffect(() => {
-    if (!lightbox) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setLightbox(null);
-    };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [lightbox]);
 
   if (!arts.length) return null;
 
@@ -190,79 +203,217 @@ export function ArtifactsGrid({ bundle }: { bundle: RunBundle }) {
         </div>
       ))}
       {lightbox && (
-        <div
-          className="lightbox"
-          role="dialog"
-          aria-modal="true"
-          data-testid="lightbox"
-          onClick={(e) => {
-            if (e.target === e.currentTarget) setLightbox(null);
-          }}
-        >
-          <div className="lightbox-body">
-            <img src={api.artifactUrl(lightbox.url)} alt={lightbox.name} />
-            <div className="lightbox-caption">
-              {lightbox.name} · {lightbox.type}
-            </div>
-            <div className="lightbox-actions">
-              <a
-                href={api.artifactUrl(lightbox.url)}
-                target="_blank"
-                rel="noreferrer"
-              >
-                open original ↗
-              </a>
-              <button className="btn-mini" autoFocus onClick={() => setLightbox(null)}>
-                close
-              </button>
-            </div>
-          </div>
-        </div>
+        <Lightbox
+          src={api.artifactUrl(lightbox.url)}
+          name={lightbox.name}
+          type={lightbox.type}
+          onClose={() => setLightbox(null)}
+        />
       )}
     </div>
   );
 }
 
-export function Results({ bundle }: { bundle: RunBundle }) {
+// "image details" rows — works for a bound upload's detected block and for a
+// run bundle's trace.gsd record (same gsd vocabulary, different shape)
+export function ImageDetails({
+  bundle,
+  upload,
+}: {
+  bundle?: RunBundle | null;
+  upload?: UploadResponse | null;
+}) {
+  const g = (bundle?.trace?.gsd ?? null) as Record<string, unknown> | null;
+  const d = upload?.detected ?? null;
+  const rows: [string, string][] = [];
+  const push = (k: string, v: unknown) => {
+    if (v != null && v !== "") rows.push([k, String(v)]);
+  };
+  if (g) {
+    push("pixel size", g.gsd_m != null ? `${g.gsd_m} m/px` : "not detected");
+    push("source", g.source);
+    push("crs", g.crs);
+    push("native size", g.native_width && g.native_height ? `${g.native_width}×${g.native_height}` : null);
+    push("ingest", g.backend);
+  } else if (d) {
+    push("pixel size", d.gsd_m != null ? `${d.gsd_m} m/px` : "not detected");
+    push("source", d.gsd_source);
+    push("crs", d.crs);
+    push("bands", d.bands);
+    push("dtype", d.dtype);
+    push("sar calibrated", d.calibrated == null ? null : d.calibrated ? "yes" : "no");
+  }
+  const notes = [
+    g?.crs_note,
+    g?.provenance,
+    bundle?.trace?.ingest_note ?? upload?.ingest_note,
+    ...(upload?.warnings ?? []),
+  ].filter((x): x is string => typeof x === "string" && !!x);
+  if (!rows.length && !notes.length) return null;
+  return (
+    <div className="image-details" data-testid="image-details">
+      <div className="detected-grid">
+        {rows.map(([k, v]) => (
+          <div className="detected-row" key={k}>
+            <span className="detected-key">{k}</span>
+            <span className="detected-val">{v}</span>
+          </div>
+        ))}
+      </div>
+      {notes.length > 0 && (
+        <ul className="detail-notes">
+          {notes.map((n, i) => (
+            <li key={i}>{n}</li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+export function Results({
+  bundle,
+  upload,
+}: {
+  bundle: RunBundle;
+  upload?: UploadResponse | null;
+}) {
   const claims = bundle.evidence_packet?.claims ?? [];
   const rep = bundle.report ?? {};
   const refused = bundle.plan?.supported === false;
-  const answerText = bundle.visible_answer ?? bundle.answer ?? "(no answer)";
-  const audit = rep.narration_check as { ok?: boolean } | null | undefined;
+  const parts = splitAnswer(bundle);
+  const check = reportCheck(bundle);
   const completeS = bundle.trace?.complete_s;
   const refusal = bundle.plan?.refusal;
+  const query = bundle.trace?.query;
+
+  if (refused) {
+    const answerText = bundle.visible_answer ?? bundle.answer ?? "";
+    return (
+      <div className="results">
+        <section className="answer-card refused" data-testid="answer-card">
+          <div className="answer-head">
+            <h3>{"can't answer this with the available tools"}</h3>
+            <span className="answer-chips">
+              {completeS != null && (
+                <span className="audit-chip">{formatSecs(completeS)}</span>
+              )}
+            </span>
+          </div>
+          <div className="answer-body">
+            <Markdown text={parts.prose || answerText || "(no answer)"} />
+          </div>
+          {refusal != null &&
+            !answerText.includes(String(refusal).trim()) && (
+              <div className="refusal-reason">plan reason: {String(refusal)}</div>
+            )}
+        </section>
+      </div>
+    );
+  }
+
+  const { measured, withheld } = composeVerified(bundle);
+  const hasFacts = measured.length + withheld.length > 0;
+  const reportChip =
+    parts.proseByModel && check
+      ? check.ok
+        ? { text: "report check: passed", cls: "ok", title: "" }
+        : { text: "report check: flagged", cls: "bad", title: check.issues.join("\n") }
+      : null;
+
   return (
     <div className="results">
-      <section className={`answer-card${refused ? " refused" : ""}`} data-testid="answer-card">
+      <section className="answer-card" data-testid="answer-card">
         <div className="answer-head">
-          <h3>{refused ? "unsupported query — refused by the planner" : "answer"}</h3>
+          <h3>{query ? `“${query}”` : "answer"}</h3>
           <span className="answer-chips">
-            {audit && (
-              <span className={`audit-chip ${audit.ok ? "ok" : "bad"}`}>
-                narration audit {audit.ok ? "passed" : "flagged"}
+            {reportChip && (
+              <span className={`audit-chip ${reportChip.cls}`} title={reportChip.title}>
+                {reportChip.text}
               </span>
             )}
-            {completeS != null && <span className="audit-chip">{completeS} s</span>}
+            {completeS != null && (
+              <span className="audit-chip">{formatSecs(completeS)}</span>
+            )}
           </span>
         </div>
-        <div className="answer-body">
-          <Markdown text={answerText} />
-        </div>
-        {refused &&
-          refusal != null &&
-          !answerText.includes(String(refusal).trim()) && (
-            <div className="refusal-reason">planner reason: {String(refusal)}</div>
-          )}
+
+        {hasFacts ? (
+          <div className="facts">
+            {measured.length === 0 && (
+              <div className="fact fact-none">
+                Nothing here could be measured with confidence.
+              </div>
+            )}
+            {measured.map((f) => (
+              <div
+                key={f.key}
+                className="fact fact-measured"
+                data-testid="fact-measured"
+                title={f.exact}
+              >
+                {f.text}
+              </div>
+            ))}
+            {withheld.map((f) => (
+              <div
+                key={f.key}
+                className="fact fact-withheld"
+                data-testid="fact-withheld"
+                title={f.exact}
+              >
+                <span className="withheld-tag">withheld</span>{" "}
+                {f.text}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="muted fact-none">
+            No tool measurements for this question.
+          </div>
+        )}
+
+        {parts.prose && (
+          <Collapsible
+            className="interpretation"
+            summary={
+              parts.proseByModel
+                ? "interpretation — model-written, unverified"
+                : "tool note"
+            }
+            badge={
+              parts.flag ? (
+                <span className="flag-tag">{parts.flag}</span>
+              ) : undefined
+            }
+            defaultOpen={!hasFacts}
+          >
+            <div className="answer-body">
+              <Markdown text={parts.prose} />
+            </div>
+            {check && !check.ok && check.issues.length > 0 && (
+              <ul className="detail-notes flagged">
+                {check.issues.map((i, k) => (
+                  <li key={k}>{i}</li>
+                ))}
+              </ul>
+            )}
+          </Collapsible>
+        )}
       </section>
 
-      <section className="panel">
-        <h3>
-          evidence packet{" "}
-          <span className="muted">
-            {claims.length} claims ·{" "}
-            {claims.filter(isWithheldClaim).length} withheld
-          </span>
-        </h3>
+      <Collapsible
+        className="panel"
+        summary={
+          <>
+            evidence &amp; measurements{" "}
+            <span className="muted">
+              {claims.length} claims ·{" "}
+              {claims.filter(isWithheldClaim).length} withheld
+            </span>
+          </>
+        }
+      >
         <ClaimList claims={claims} />
         {(bundle.evidence_packet?.limitations ?? []).length > 0 && (
           <div className="limitations">
@@ -274,24 +425,27 @@ export function Results({ bundle }: { bundle: RunBundle }) {
             </ul>
           </div>
         )}
-      </section>
-
-      <ArtifactsGrid bundle={bundle} />
-
-      <details className="panel report">
-        <summary>
-          report · findings · measurement card · confidence hierarchy
-        </summary>
-        {rep.findings && <Markdown text={rep.findings} />}
         {rep.measurement && <Markdown text={rep.measurement} />}
         {rep.confidence && <Markdown text={rep.confidence} />}
-        {rep.narration_check && (
-          <div className="muted">
-            narration audit:{" "}
-            {(rep.narration_check as { ok?: boolean }).ok ? "passed" : "flagged"}
-          </div>
+        {parts.toolFindings && (
+          <>
+            <h4 className="tool-log-title">tool log</h4>
+            <Markdown text={parts.toolFindings} />
+          </>
         )}
-      </details>
+      </Collapsible>
+
+      {(bundle.artifacts ?? []).length > 0 && (
+        <Collapsible className="panel" summary="downloadable artifacts">
+          <ArtifactsGrid bundle={bundle} />
+        </Collapsible>
+      )}
+
+      {(bundle.trace?.gsd || upload) && (
+        <Collapsible className="panel" summary="image details">
+          <ImageDetails bundle={bundle} upload={upload} />
+        </Collapsible>
+      )}
     </div>
   );
 }

@@ -1,33 +1,42 @@
 import { useEffect, useState } from "react";
 import { api, ApiHttpError } from "../api";
-import type { HealthResponse, SeatProfile, SeatsResponse } from "../types";
+import { baseName } from "../liveTrace";
+import type { HealthResponse, SeatProfile, SeatState, SeatsResponse } from "../types";
 
 const PROFILE_TIP = "local = llama.cpp · cloud = Modal GPU";
 
-function SeatPill({
-  name,
+// two status dots, no seat names on the surface — the model + state live in
+// the tooltip/aria-label: "answer model — <basename> · online|offline|unknown"
+function StatusDot({
+  role,
   seat,
 }: {
-  name: string;
-  seat?: { url: string; model: string | null; up: boolean | null };
+  role: string;
+  seat?: SeatState;
 }) {
-  const up = seat?.up === true;
-  const down = seat?.up === false;
+  const state = seat?.up === true ? "online" : seat?.up === false ? "offline" : "unknown";
+  const model = seat?.model ? baseName(seat.model) : "no model reported";
+  const label = `${role} — ${model} · ${state}`;
   return (
     <span
-      className={`seat-pill ${up ? "seat-up" : down ? "seat-down" : "seat-unknown"}`}
-      title={seat ? `${seat.url}${seat.model ? ` — ${seat.model}` : ""}` : "no seat"}
-    >
-      <span className="seat-dot" />
-      {name}: {up ? "up" : down ? "down" : "?"}
-    </span>
+      className={`status-dot st-${state}`}
+      title={label}
+      aria-label={label}
+      role="img"
+    />
   );
 }
 
-export function SeatBar() {
+export function SeatBar({
+  runsCount,
+  onOpenRuns,
+}: {
+  runsCount: number;
+  onOpenRuns: () => void;
+}) {
   const [health, setHealth] = useState<HealthResponse | null>(null);
   const [seats, setSeats] = useState<SeatsResponse | null>(null);
-  const [pendingNote, setPendingNote] = useState<string | null>(null);
+  const [pendingNote, setPendingNote] = useState<{ text: string; title: string } | null>(null);
   const [apiDown, setApiDown] = useState(false);
 
   const refresh = () => {
@@ -44,8 +53,12 @@ export function SeatBar() {
     } catch (e) {
       // cloud → 501 until CLOUD-SEAT lands: render as pending, never an error toast
       if (e instanceof ApiHttpError && e.status === 501) {
-        setPendingNote(`cloud profile pending — ${e.message}`);
-      } else setPendingNote(`seat switch failed: ${e instanceof Error ? e.message : e}`);
+        setPendingNote({ text: "cloud not available yet", title: e.message });
+      } else
+        setPendingNote({
+          text: "seat switch failed",
+          title: e instanceof Error ? e.message : String(e),
+        });
     }
   };
 
@@ -56,8 +69,8 @@ export function SeatBar() {
       <span className="tagline">agentic remote-sensing assistant</span>
       <span className="seat-bar-right">
         {apiDown && <span className="seat-pill seat-down">API unreachable</span>}
-        <SeatPill name="narrator" seat={health?.seats?.narrator} />
-        <SeatPill name="canonical" seat={health?.seats?.canonical} />
+        <StatusDot role="answer model" seat={health?.seats?.narrator} />
+        <StatusDot role="remote-sensing model" seat={health?.seats?.canonical} />
         <span className="profile-toggle" title={PROFILE_TIP}>
           <button
             className={profile === "local" ? "on" : ""}
@@ -74,8 +87,19 @@ export function SeatBar() {
             cloud
           </button>
         </span>
+        <button
+          className="btn-mini runs-open"
+          data-testid="runs-open"
+          onClick={onOpenRuns}
+        >
+          runs{runsCount ? ` (${runsCount})` : ""}
+        </button>
       </span>
-      {pendingNote && <div className="pending-note">{pendingNote}</div>}
+      {pendingNote && (
+        <div className="pending-note" title={pendingNote.title}>
+          {pendingNote.text}
+        </div>
+      )}
     </div>
   );
 }

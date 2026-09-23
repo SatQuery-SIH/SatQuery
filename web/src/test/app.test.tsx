@@ -43,12 +43,17 @@ describe("App shell", () => {
     expect(screen.getByText("optical + SAR")).toBeInTheDocument();
   });
 
-  it("seat pills show canonical down + local profile", async () => {
+  it("status dots name the models + state in tooltips (no seat names)", async () => {
     render(<App />);
-    await waitFor(() =>
-      expect(screen.getByText(/canonical: down/)).toBeInTheDocument(),
-    );
-    expect(screen.getByText(/narrator: up/)).toBeInTheDocument();
+    await waitFor(() => {
+      const dots = document.querySelectorAll(".status-dot");
+      expect(dots.length).toBe(2);
+      expect(dots[0]).toHaveAttribute("title", "answer model — m · online");
+      expect(dots[1]).toHaveAttribute(
+        "title",
+        "remote-sensing model — m2 · offline",
+      );
+    });
   });
 
   it("profile toggle explains local vs cloud seats", async () => {
@@ -97,21 +102,26 @@ describe("DetectedCard (ingest instrumentation)", () => {
 describe("Results — evidence + withholding", () => {
   it("renders claims with provenance + withheld styling", () => {
     render(<Results bundle={makeBundle()} />);
-    // withheld claim gets the badge + class
+    // claim counts are in the collapsed summary row
+    expect(screen.getByText(/3 claims · 1 withheld/)).toBeInTheDocument();
+    // open the section → withheld claim gets the badge + class
+    fireEvent.click(screen.getByText(/evidence & measurements/));
     const badge = document.querySelector(".withheld-badge");
     expect(badge).toBeInTheDocument();
     expect(badge).toHaveTextContent("withheld");
-    // provenance visible: seat + model sha
-    expect(screen.getByText(/seat=127\.0\.0\.1:8091/)).toBeInTheDocument();
+    // provenance visible: model role + model sha
+    expect(
+      screen.getByText(/model role=127\.0\.0\.1:8091/),
+    ).toBeInTheDocument();
     expect(screen.getByText(/a8797686/)).toBeInTheDocument();
-    // claim counts surfaced
-    expect(screen.getByText(/3 claims · 1 withheld/)).toBeInTheDocument();
   });
 
   it("refused runs render distinctly", () => {
     render(<Results bundle={refusedBundle} />);
     expect(screen.getByText(/bi-temporal pair/)).toBeInTheDocument();
-    expect(screen.getByText(/unsupported/)).toBeInTheDocument();
+    expect(
+      screen.getByText(/can't answer this with the available tools/),
+    ).toBeInTheDocument();
   });
 
   it("trace stages built from the bundle with withheld marker", () => {
