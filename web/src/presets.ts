@@ -4,16 +4,18 @@
 // (Lives outside components/ on purpose: Windows resolves "./Presets"
 // case-insensitively, which would collide with components/Presets.tsx.)
 import type { InputMode } from "./types";
-import opticalTiffB64 from "./assets/sundarbans_optical.tiff.b64?raw";
-import sarTiffB64 from "./assets/sundarbans_sar.tiff.b64?raw";
 
-// Embedded copies of the bundled GeoTIFFs (base64). Some managed-network
-// filters strip image/tiff responses entirely — the public fetch comes
-// back 204 with no body — so fetchPresetFile falls back to these bytes,
-// which never traverse the network.
-const PRESET_INLINE: Record<string, string> = {
-  "/presets/sundarbans_optical.tiff": opticalTiffB64,
-  "/presets/sundarbans_sar.tiff": sarTiffB64,
+// Verified on the dev laptop: browser fetches of image/tiff and
+// application/octet-stream responses arrive as an empty HTTP 204, while
+// the same bytes served as image/png arrive intact (cause unknown;
+// curl/Node unaffected). Fall back to byte-exact embedded copies so the
+// real /upload path still gets the real file. Loaded lazily so the main
+// bundle stays small — the base64 is only imported when the fetch fails.
+const PRESET_INLINE: Record<string, () => Promise<{ default: string }>> = {
+  "/presets/sundarbans_optical.tiff": () =>
+    import("./assets/sundarbans_optical.tiff.b64?raw"),
+  "/presets/sundarbans_sar.tiff": () =>
+    import("./assets/sundarbans_sar.tiff.b64?raw"),
 };
 
 function base64Blob(b64: string, type: string): Blob {
@@ -154,7 +156,7 @@ export async function fetchPresetFile(file: PresetFile): Promise<Blob> {
     /* fall through to the embedded copy */
   }
   const inline = PRESET_INLINE[file.url];
-  if (inline) return base64Blob(inline, mimeForName(file.name));
+  if (inline) return base64Blob((await inline()).default, mimeForName(file.name));
   throw new Error(`preset fetch failed: ${file.url}`);
 }
 

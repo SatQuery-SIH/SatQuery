@@ -29,6 +29,23 @@ describe("Results — answer card + refusal", () => {
     const card = screen.getByTestId("answer-card");
     expect(card).toHaveTextContent("narration audit passed");
   });
+
+  it("planner reason shows only when it adds information to the answer", () => {
+    // refusal text differs from the visible answer → shown
+    const { unmount } = render(<Results bundle={refusedBundle} />);
+    expect(
+      screen.getByText(/planner reason: needs two co-registered images/),
+    ).toBeInTheDocument();
+    unmount();
+    // visible_answer already contains the refusal → not repeated
+    const dup = makeBundle({
+      plan: { supported: false, refusal: "I do not have a counting tool" },
+      answer: "I do not have a counting tool, so I refuse.",
+      visible_answer: "I do not have a counting tool, so I refuse.",
+    });
+    render(<Results bundle={dup} />);
+    expect(screen.queryByText(/planner reason:/)).toBeNull();
+  });
 });
 
 describe("ArtifactsGrid — groups, lightbox, GeoTIFF hints", () => {

@@ -12,5 +12,6 @@ export function formatSecs(n: number): string {
   if (!Number.isFinite(n)) return "";
   if (n >= 10) return `${n.toFixed(1)}s`;
   if (n >= 1) return `${n.toFixed(2)}s`;
-  return `${n.toFixed(3)}s`;
+  if (n >= 0.001) return `${n.toFixed(3)}s`;
+  return "<1 ms";
 }

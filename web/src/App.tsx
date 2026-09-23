@@ -99,9 +99,11 @@ export default function App() {
     phase: "uploading" | "running";
   } | null>(null);
   const [runView, setRunView] = useState<RunView>({ kind: "idle" });
+  const [runsCollapsed, setRunsCollapsed] = useState(false);
+  // bumped whenever a run lands so the runs panel reloads itself
+  const [runsRefresh, setRunsRefresh] = useState(0);
 
   const ctlRef = useRef<AbortController | null>(null);
-  const traceRef = useRef<LiveTrace>(initialLiveTrace());
   useEffect(() => () => ctlRef.current?.abort(), []);
 
   // Explicit-args run: mode/uploadId/scene are parameters, never read from
@@ -121,8 +123,10 @@ export default function App() {
     setBusy(true);
     setRunError(null);
     setBundle(null);
-    traceRef.current = initialLiveTrace();
-    setRunView({ kind: "live", trace: traceRef.current, running: true });
+    // per-run trace state — a late frame from an aborted run must never
+    // patch the next run's view
+    let trace = initialLiveTrace();
+    setRunView({ kind: "live", trace, running: true });
 
     const req: QueryRequest = {
       query: text,
@@ -133,11 +137,10 @@ export default function App() {
     };
 
     const patchTrace = (fn: (t: LiveTrace) => LiveTrace) => {
-      traceRef.current = fn(traceRef.current);
       if (signal.aborted) return;
-      setRunView((v) =>
-        v.kind === "live" ? { ...v, trace: traceRef.current } : v,
-      );
+      trace = fn(trace);
+      const snap = trace;
+      setRunView((v) => (v.kind === "live" ? { ...v, trace: snap } : v));
     };
     const stopRunning = () =>
       setRunView((v) => (v.kind === "live" ? { ...v, running: false } : v));
@@ -151,6 +154,7 @@ export default function App() {
         const b = await api.query(req, signal);
         if (signal.aborted) return;
         setBundle(b);
+        setRunsRefresh((k) => k + 1);
       } catch (e) {
         if (signal.aborted || isAbort(e)) return;
         if (e instanceof ApiHttpError)
@@ -173,15 +177,14 @@ export default function App() {
       patchTrace((t) => finalizeLiveTrace(t, "done"));
       stopRunning();
       setBundle(b);
+      setRunsRefresh((k) => k + 1);
     } catch (e) {
       if (signal.aborted || isAbort(e)) {
         /* aborted — silent */
       } else if (e instanceof StreamPipelineError) {
         patchTrace((t) => finalizeLiveTrace(t, "error"));
         stopRunning();
-        const failed = traceRef.current.stages.find(
-          (s) => s.state === "failed",
-        );
+        const failed = trace.stages.find((s) => s.state === "failed");
         setRunError({ slug: e.slug, detail: e.detail, stage: failed?.label });
       } else if (e instanceof ApiHttpError && REQUEST_REJECTION.has(e.slug)) {
         setRunView({ kind: "idle" });
@@ -317,6 +320,7 @@ export default function App() {
       <SeatBar />
       <div className="layout">
         <div className="col-inputs">
+          <div className="section-label">1 · input mode</div>
           <div className="mode-tabs">
             {MODES.map((m) => (
               <button
@@ -336,6 +340,7 @@ export default function App() {
             ))}
           </div>
 
+          <div className="section-label">2 · demo presets</div>
           <PresetPicker
             mode={mode}
             disabled={blocked}
@@ -343,6 +348,7 @@ export default function App() {
             onRun={(p) => void runPreset(p)}
           />
 
+          <div className="section-label">3 · or upload imagery</div>
           <UploadPanel
             key={mode}
             mode={mode}
@@ -353,12 +359,14 @@ export default function App() {
             }}
           />
 
+          <div className="section-label">bound inputs</div>
           {inputsNode}
 
           {upload && (
             <DetectedCard d={upload.detected} warnings={upload.warnings} />
           )}
 
+          <div className="section-label">4 · ask</div>
           <div className="query-row">
             <input
               className="query-input"
@@ -395,6 +403,15 @@ export default function App() {
         </div>
 
         <div className="col-results">
+          {runView.kind === "idle" && !bundle && !runError && (
+            <div className="panel empty-state" data-testid="empty-state">
+              <div className="empty-title">Results appear here.</div>
+              <div className="muted">
+                Pick a preset or upload imagery, then ask — the execution trace
+                streams live from the pipeline.
+              </div>
+            </div>
+          )}
           {runView.kind === "live" && (
             <TraceView mode="live" trace={runView.trace} running={runView.running} />
           )}
@@ -415,7 +432,13 @@ export default function App() {
         </div>
 
         <aside>
-          <RunsPanel onLoad={onLoadRun} />
+          <RunsPanel
+            onLoad={onLoadRun}
+            collapsed={runsCollapsed}
+            onToggle={() => setRunsCollapsed((c) => !c)}
+            refreshKey={runsRefresh}
+            currentRunId={bundle?.run_id}
+          />
         </aside>
       </div>
     </div>

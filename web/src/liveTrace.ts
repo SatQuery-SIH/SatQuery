@@ -27,6 +27,10 @@ export interface LiveTrace {
   finished: boolean;
   summary?: Record<string, unknown>;
   events: number;
+  // "done" when the run's done stage arrived (or finalize("done") ran),
+  // "error" when the run ended in a pipeline/transport error. Absent while
+  // the run is still streaming — the headline reads it, not `finished`.
+  outcome?: "done" | "error";
 }
 
 // Skeleton in real execution order; the `tools` row is a placeholder replaced
@@ -83,7 +87,9 @@ export function applyStageEvent(t: LiveTrace, ev: StageEvent): LiveTrace {
       } else if (ev.status === "done" || ev.status === "withheld" || ev.status === "fail") {
         s.state =
           ev.status === "done" ? "done" : ev.status === "fail" ? "failed" : "withheld";
-        s.tEnd = ts;
+        // first terminal status wins — a later withheld/re-emit must not
+        // stretch the duration past the stage's real completion time
+        if (s.tEnd == null) s.tEnd = ts;
         merge(s);
       }
       break;
@@ -96,7 +102,7 @@ export function applyStageEvent(t: LiveTrace, ev: StageEvent): LiveTrace {
         s.tStart = ts;
       } else if (ev.status === "done" || ev.status === "fail") {
         s.state = ev.status === "done" ? "done" : "failed";
-        s.tEnd = ts;
+        if (s.tEnd == null) s.tEnd = ts;
         merge(s);
       }
       break;
@@ -117,7 +123,7 @@ export function applyStageEvent(t: LiveTrace, ev: StageEvent): LiveTrace {
         );
         if (!s) s = insertToolRow(tool);
         s.state = ev.status === "done" ? "done" : "failed";
-        s.tEnd = ts;
+        if (s.tEnd == null) s.tEnd = ts;
         merge(s);
       }
       break;
@@ -132,7 +138,7 @@ export function applyStageEvent(t: LiveTrace, ev: StageEvent): LiveTrace {
       } else if (ev.status === "done" || ev.status === "withheld" || ev.status === "fail") {
         s.state =
           ev.status === "done" ? "done" : ev.status === "fail" ? "failed" : "withheld";
-        s.tEnd = ts;
+        if (s.tEnd == null) s.tEnd = ts;
         merge(s);
       }
       break;
@@ -145,17 +151,18 @@ export function applyStageEvent(t: LiveTrace, ev: StageEvent): LiveTrace {
         s.tStart = ts;
       } else if (ev.status === "done") {
         s.state = ev.data?.ok === false ? "failed" : "done";
-        s.tEnd = ts;
+        if (s.tEnd == null) s.tEnd = ts;
         merge(s);
       } else if (ev.status === "fail") {
         s.state = "failed";
-        s.tEnd = ts;
+        if (s.tEnd == null) s.tEnd = ts;
         merge(s);
       }
       break;
     }
     case "done": {
       next.finished = true;
+      next.outcome = "done";
       next.summary = ev.data;
       for (const s of stages) if (s.state === "pending") s.state = "skipped";
       break;
@@ -180,7 +187,7 @@ export function finalizeLiveTrace(
     }
     return n;
   });
-  return { ...t, stages, finished: true };
+  return { ...t, stages, finished: true, outcome };
 }
 
 function scalarEntries(
@@ -217,7 +224,11 @@ export function stageDetail(s: LiveStage): string {
     case "bind":
       if (s.state === "failed") return `bind failed — ${d.error ?? ""}`;
       if (s.state === "done") {
-        let out = `${d.source ?? "?"}${d.scene != null ? ` · scene ${d.scene}` : ""} · gsd ${
+        // the pipeline reports an inferred scene even for uploads — only
+        // prepared scenes actually ran through scene binding
+        let out = `${d.source ?? "?"}${
+          d.source === "prepared" && d.scene != null ? ` · scene ${d.scene}` : ""
+        } · gsd ${
           d.gsd_m != null ? `${d.gsd_m} m (${d.gsd_source})` : `not detected (${d.gsd_source})`
         }`;
         if (d.misreg_shift_px != null) out += ` · misreg ≈ ${d.misreg_shift_px} px`;

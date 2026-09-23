@@ -51,6 +51,15 @@ describe("App shell", () => {
     expect(screen.getByText(/narrator: up/)).toBeInTheDocument();
   });
 
+  it("profile toggle explains local vs cloud seats", async () => {
+    render(<App />);
+    const tip = "local = llama.cpp · cloud = Modal GPU";
+    const toggle = document.querySelector(".profile-toggle");
+    expect(toggle).toHaveAttribute("title", tip);
+    for (const b of toggle!.querySelectorAll("button"))
+      expect(b).toHaveAttribute("title", tip);
+  });
+
   it("upload slots follow the selected mode", async () => {
     render(<App />);
     // default single: one slot

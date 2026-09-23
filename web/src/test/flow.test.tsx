@@ -159,6 +159,9 @@ describe("App — live stream flow", () => {
     expect(card).toHaveTextContent("WinError 10061");
     expect(card).toHaveTextContent(/narrator seat may be down/);
     expect(screen.queryByTestId("answer-card")).toBeNull();
+    // the trace tells the truth: failed at the narrator, never "completed"
+    expect(screen.getByText(/live run · failed at frozen narrator/)).toBeInTheDocument();
+    expect(screen.queryByText(/completed in/)).toBeNull();
   });
 
   it("422 mode_mismatch → request rejected, POST /query never called", async () => {

@@ -125,15 +125,23 @@ function LiveTraceView({ trace, running }: { trace: LiveTrace; running: boolean 
   const completeS = trace.summary?.complete_s;
   const headline = running
     ? "streaming POST /query/stream"
-    : trace.finished
-      ? `live run · completed in ${typeof completeS === "number" ? completeS : "?"} s`
-      : `live run · failed at ${failed?.label ?? "unknown stage"}`;
+    : trace.outcome === "error"
+      ? `live run · failed at ${failed?.label ?? "unknown stage"}`
+      : `live run · completed in ${typeof completeS === "number" ? completeS : "?"} s${
+          failed ? ` · ${failed.label} failed` : ""
+        }`;
 
   return (
     <div className="trace-view" data-testid="trace-view">
       <div className="trace-head">
         <span className="trace-title">execution trace</span>
-        <span className={`live-badge${running ? " pulsing" : ""}`}>● LIVE</span>
+        <span
+          className={`live-badge${running ? " pulsing" : ""}${
+            trace.outcome === "error" ? " failed" : ""
+          }`}
+        >
+          ● LIVE
+        </span>
         <span className="trace-note">{headline}</span>
         {!autoExpanded && (
           <button className="btn-mini" onClick={() => setManual(!(manual ?? autoExpanded))}>
@@ -214,11 +222,18 @@ function ReplayTraceView({ bundle, note }: { bundle: RunBundle; note?: string })
   };
 
   const showFull = expanded || replaying;
+  // which stored run this is — the left column may still show unrelated inputs
+  const t = bundle.trace ?? {};
+  const q = String(t.query ?? "");
+  const runCtx = `run ${bundle.run_id.slice(0, 8)} · ${String(
+    t.input_mode ?? "?",
+  )} · “${q.length > 60 ? `${q.slice(0, 60)}…` : q}”`;
   return (
     <div className="trace-view" data-testid="trace-view">
       <div className="trace-head">
         <span className="trace-title">execution trace</span>
         <span className="replay-badge">▶ replay of recorded run</span>
+        <span className="run-context">{runCtx}</span>
         <button className="btn-mini" onClick={replay} disabled={replaying}>
           {replaying ? "replaying…" : "▶ replay pipeline"}
         </button>

@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { api, ApiHttpError } from "../api";
 import type { HealthResponse, SeatProfile, SeatsResponse } from "../types";
 
+const PROFILE_TIP = "local = llama.cpp · cloud = Modal GPU";
+
 function SeatPill({
   name,
   seat,
@@ -56,16 +58,18 @@ export function SeatBar() {
         {apiDown && <span className="seat-pill seat-down">API unreachable</span>}
         <SeatPill name="narrator" seat={health?.seats?.narrator} />
         <SeatPill name="canonical" seat={health?.seats?.canonical} />
-        <span className="profile-toggle">
+        <span className="profile-toggle" title={PROFILE_TIP}>
           <button
             className={profile === "local" ? "on" : ""}
             onClick={() => profile !== "local" && toggle("local")}
+            title={PROFILE_TIP}
           >
             local
           </button>
           <button
             className={profile === "cloud" ? "on" : ""}
             onClick={() => profile !== "cloud" && toggle("cloud")}
+            title={PROFILE_TIP}
           >
             cloud
           </button>

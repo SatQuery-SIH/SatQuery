@@ -248,9 +248,11 @@ export function Results({ bundle }: { bundle: RunBundle }) {
         <div className="answer-body">
           <Markdown text={answerText} />
         </div>
-        {refused && refusal != null && String(refusal) !== answerText && (
-          <div className="refusal-reason">planner reason: {String(refusal)}</div>
-        )}
+        {refused &&
+          refusal != null &&
+          !answerText.includes(String(refusal).trim()) && (
+            <div className="refusal-reason">planner reason: {String(refusal)}</div>
+          )}
       </section>
 
       <section className="panel">
@@ -276,8 +278,10 @@ export function Results({ bundle }: { bundle: RunBundle }) {
 
       <ArtifactsGrid bundle={bundle} />
 
-      <section className="panel report">
-        <h3>report</h3>
+      <details className="panel report">
+        <summary>
+          report · findings · measurement card · confidence hierarchy
+        </summary>
         {rep.findings && <Markdown text={rep.findings} />}
         {rep.measurement && <Markdown text={rep.measurement} />}
         {rep.confidence && <Markdown text={rep.confidence} />}
@@ -287,7 +291,7 @@ export function Results({ bundle }: { bundle: RunBundle }) {
             {(rep.narration_check as { ok?: boolean }).ok ? "passed" : "flagged"}
           </div>
         )}
-      </section>
+      </details>
     </div>
   );
 }

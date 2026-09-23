@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { parseSseText } from "../sse";
+import { formatSecs } from "../format";
 import {
   applyStageEvent,
   finalizeLiveTrace,
@@ -41,8 +42,19 @@ describe("liveTrace — refusal fixture", () => {
     expect(byKey(t, "packet").state).toBe("done");
 
     expect(t.finished).toBe(true);
+    expect(t.outcome).toBe("done");
     expect(t.summary?.complete_s).toBe(0.095);
     expect(t.events).toBe(8); // stage events only — the done bundle isn't a stage
+  });
+
+  it("plan duration ends at plan/done, not the later withheld event", () => {
+    // plan/done ts 9837.8271775 − plan/start ts 9837.8261595 ≈ 0.001018 s;
+    // the withheld event (≈0.095 s later) must not overwrite tEnd
+    const plan = byKey(t, "plan");
+    expect(stageDuration(plan)).toBeCloseTo(
+      9837.8271775 - 9837.8261595,
+      6,
+    );
   });
 });
 
@@ -76,6 +88,7 @@ describe("liveTrace — seat_down fixture + finalize(error)", () => {
     expect(byKey(t, "packet").state).toBe("skipped");
     expect(t.stages.every((s) => s.state !== "running")).toBe(true);
     expect(t.finished).toBe(true);
+    expect(t.outcome).toBe("error");
   });
 });
 
@@ -114,5 +127,40 @@ describe("liveTrace — incremental + details", () => {
     expect(stageDetail(byKey(t, "bind"))).toContain("gsd 0.5 m (benchmark_constant)");
     const fresh = initialLiveTrace();
     expect(stageDetail(byKey(fresh, "bind"))).toBe("");
+  });
+
+  it("bind detail shows the scene only for prepared sources", () => {
+    let t = applyStageEvent(initialLiveTrace(), {
+      stage: "bind",
+      status: "start",
+      ts: 1,
+    });
+    t = applyStageEvent(t, {
+      stage: "bind",
+      status: "done",
+      ts: 2,
+      data: {
+        source: "upload",
+        scene: 1,
+        gsd_m: 10,
+        gsd_source: "geotransform",
+      },
+    });
+    // uploads infer a scene server-side but never bound one
+    expect(stageDetail(byKey(t, "bind"))).toBe(
+      "upload · gsd 10 m (geotransform)",
+    );
+    // prepared scenes still show it (real fixture)
+    expect(stageDetail(byKey(traceOf(supported), "bind"))).toContain(
+      "scene 1",
+    );
+  });
+
+  it("formatSecs renders sub-millisecond durations honestly", () => {
+    expect(formatSecs(0.0004)).toBe("<1 ms");
+    expect(formatSecs(0)).toBe("<1 ms");
+    expect(formatSecs(0.0012)).toBe("0.001s");
+    expect(formatSecs(2.5)).toBe("2.50s");
+    expect(formatSecs(12)).toBe("12.0s");
   });
 });

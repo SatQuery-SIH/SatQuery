@@ -38,8 +38,34 @@ export function Markdown({ text }: { text: string }) {
       list = [];
     }
   };
-  lines.forEach((ln, i) => {
-    const t = ln.trimEnd();
+  for (let i = 0; i < lines.length; i++) {
+    const t = lines[i].trimEnd();
+    const trimmed = t.trim();
+    // A line ending in "{" opens a JSON block: the text before the brace
+    // (if any) is a paragraph, then `{` + following lines through the first
+    // exact `}` line render verbatim inside one <pre>. Without a closing
+    // line the lines render exactly like any other paragraph text.
+    if (trimmed.endsWith("{")) {
+      let close = -1;
+      for (let j = i + 1; j < lines.length; j++) {
+        if (lines[j].trim() === "}") {
+          close = j;
+          break;
+        }
+      }
+      if (close !== -1) {
+        flush();
+        const before = trimmed.slice(0, -1).trim();
+        if (before) out.push(<p key={`pj${i}`}>{inline(before, `pj${i}`)}</p>);
+        out.push(
+          <pre className="md-pre" key={`pre${i}`}>
+            {["{", ...lines.slice(i + 1, close + 1)].join("\n")}
+          </pre>,
+        );
+        i = close;
+        continue;
+      }
+    }
     if (/^#{2,4}\s/.test(t)) {
       flush();
       const level = t.match(/^#+/)![0].length;
@@ -53,7 +79,7 @@ export function Markdown({ text }: { text: string }) {
       flush();
       out.push(<p key={i}>{inline(t, `p${i}`)}</p>);
     }
-  });
+  }
   flush();
   return <>{out}</>;
 }
