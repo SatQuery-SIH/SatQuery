@@ -251,6 +251,15 @@ def findings_header(trace: dict[str, Any] | None) -> str:
     return "\n".join(lines)
 
 
+# Inserted between the findings header and the written answer when the
+# narration check fails — product-voice marker that the summary is prose.
+INTERPRETATION_NOTE = (
+    "\n\n### Interpretation\n\n"
+    "Measured values are computed by the tools; the written summary may "
+    "restate them approximately — cite the measurement card.\n\n"
+)
+
+
 def compose_visible_answer(trace: dict[str, Any] | None) -> str:
     """Findings header above the VLM paragraph. Flag unverified interpretation."""
     header = findings_header(trace)
@@ -267,11 +276,7 @@ def compose_visible_answer(trace: dict[str, Any] | None) -> str:
         if not raw:
             return header
         if not check["ok"]:
-            return (
-                header
-                + "\n\nUNVERIFIED INTERPRETATION — JSON card wins.\n\n"
-                + raw
-            )
+            return header + INTERPRETATION_NOTE + raw
         return header + "\n\n" + raw
     if not raw:
         return header
@@ -288,7 +293,7 @@ def measurement_markdown(trace: dict[str, Any] | None) -> str:
         return "_No run yet. Run a scene to fill this card._"
     area = (trace.get("tool_outputs") or {}).get("area_calc")
     lines = [
-        "### Measurement card (tool `area_calc` — VLM did not compute these)",
+        "### Measurement card (tool `area_calc` — deterministic tool measurement)",
         "",
     ]
     if not area:
@@ -313,13 +318,13 @@ def measurement_markdown(trace: dict[str, Any] | None) -> str:
         f"- **dominant_quadrant:** {area.get('dominant_quadrant')}",
         f"- **provenance:** {area.get('provenance')}",
         "",
-        "**Do not conflate:**",
+        "**Reading these numbers:**",
     ]
     if gsd is None or px_m2 is None:
         lines += [
             f"- Whole-image `{whole:,}` px; **m² withheld** (no geotransform / GSD).",
             f"- NE quadrant `{ne:,}` px (still not a whole-image percent).",
-            "- If the VLM paragraph invents km², **the JSON card wins.**",
+            "- Area in km² is withheld; cite this card, not the written summary.",
         ]
         return "\n".join(lines)
     ne_m2 = ne * float(px_m2)
@@ -328,7 +333,7 @@ def measurement_markdown(trace: dict[str, Any] | None) -> str:
         f"({float(area.get('percent_of_image') or 0):.4f}% of image).",
         f"- NE quadrant `{ne:,}` px × {px_m2} m²/px = **{ne_m2} m²** "
         f"(not the whole-image km² / percent).",
-        "- If the VLM paragraph attaches NE pixels to whole-image percent, **the JSON card wins.**",
+        "- The NE figure is quadrant-only; cite this card for whole-image values.",
     ]
     return "\n".join(lines)
 
@@ -340,10 +345,10 @@ def confidence_markdown(trace: dict[str, Any] | None) -> str:
     tools = plan.get("tools") or []
     vlm_role = plan.get("vlm_role")
     lines = [
-        "### Confidence hierarchy (honesty, not a fake 0.99)",
+        "### Confidence",
         "",
         "**Tool measurements** — raster math / ChangeFormer / SAR threshold. "
-        "These are the numbers a judge should cite.",
+        "These are the values to cite.",
     ]
     tout = trace.get("tool_outputs") or {}
     if "area_calc" in tout:
@@ -383,8 +388,8 @@ def confidence_markdown(trace: dict[str, Any] | None) -> str:
         lines.append("- None this run (planner refused or caption-only).")
     lines += [
         "",
-        f"**VLM interpretation (not a measurement)** — role `{vlm_role}`; tools selected: {tools}. "
-        "The answer paragraph may mis-attach numbers. Do not treat prose km² as independent evidence.",
+        f"**Interpretation (written summary)** — model role `{vlm_role}`; tools selected: {tools}. "
+        "The summary may restate measured values approximately; cite the tool measurements above.",
     ]
     if not plan.get("supported"):
         lines.append(f"- Refusal (not a count/area): {plan.get('refusal')}")
@@ -422,7 +427,7 @@ def write_report(trace: dict[str, Any], extra_note: str = "") -> Path:
         "",
         confidence_markdown(trace),
         "",
-        "## Answer (VLM interpretation — not a measurement)",
+        "## Answer (interpretation)",
         "",
         trace.get("answer") or "_empty_",
         "",

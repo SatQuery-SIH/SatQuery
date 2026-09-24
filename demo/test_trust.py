@@ -74,7 +74,8 @@ class TrustTests(unittest.TestCase):
                 "vlm": {"text": "IoU is 0.99 on this pair."},
             }
         )
-        self.assertIn("UNVERIFIED INTERPRETATION — JSON card wins.", vis)
+        self.assertIn("### Interpretation", vis)
+        self.assertIn("cite the measurement card", vis)
         self.assertLess(vis.index("### Findings (from tools)"), vis.index("0.99"))
         self.assertTrue(vis.strip().endswith("IoU is 0.99 on this pair."))
 
@@ -297,10 +298,15 @@ class RealScene2NarrationTests(unittest.TestCase):
             }
         )
         self.assertIn("### Findings (from tools)", vis)
-        self.assertIn("UNVERIFIED INTERPRETATION — JSON card wins.", vis)
+        self.assertIn("### Interpretation", vis)
+        self.assertIn("cite the measurement card", vis)
         self.assertLess(
             vis.index("### Findings (from tools)"),
-            vis.index("UNVERIFIED INTERPRETATION — JSON card wins."),
+            vis.index("### Interpretation"),
+        )
+        self.assertLess(
+            vis.index("### Interpretation"),
+            vis.index("Pair IoU is 0.99 versus the ground-truth mask."),
         )
         self.assertTrue(
             vis.strip().endswith("Pair IoU is 0.99 versus the ground-truth mask.")

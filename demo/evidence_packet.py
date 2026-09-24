@@ -16,7 +16,12 @@ from typing import Any
 
 from PIL import Image
 
-from report import check_narration, findings_header, tool_outputs_sha256
+from report import (
+    INTERPRETATION_NOTE,
+    check_narration,
+    findings_header,
+    tool_outputs_sha256,
+)
 
 DEMO = Path(__file__).resolve().parent
 SAT = DEMO.parent
@@ -963,13 +968,7 @@ def render_product(
         return header + "\n\n" + body_mid
     check = check_packet_narration(raw, packet)
     if not check["ok"]:
-        return (
-            header
-            + "\n\n"
-            + body_mid
-            + "\n\nUNVERIFIED INTERPRETATION — JSON card wins.\n\n"
-            + raw
-        )
+        return header + "\n\n" + body_mid + INTERPRETATION_NOTE + raw
     return header + "\n\n" + body_mid + "\n\n" + raw
 
 

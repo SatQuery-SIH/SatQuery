@@ -113,11 +113,13 @@ class RendererTests(unittest.TestCase):
         self.assertFalse(pkt["ok"], pkt)
         vis = render_product(self.packet, qwen_text=invented)
         self.assertTrue(vis.startswith("### Findings (from tools)"))
-        self.assertIn("UNVERIFIED INTERPRETATION — JSON card wins.", vis)
+        self.assertIn("### Interpretation", vis)
+        self.assertIn("cite the measurement card", vis)
         self.assertLess(
             vis.index("### Findings (from tools)"),
-            vis.index("UNVERIFIED INTERPRETATION — JSON card wins."),
+            vis.index("### Interpretation"),
         )
+        self.assertLess(vis.index("### Interpretation"), vis.index(invented))
         self.assertTrue(vis.strip().endswith(invented))
 
     def test_cited_tool_numbers_pass_gate(self) -> None:
@@ -127,7 +129,7 @@ class RendererTests(unittest.TestCase):
         pkt = check_packet_narration(ok_text, self.packet)
         self.assertTrue(pkt["ok"], pkt)
         vis = render_product(self.packet, qwen_text=ok_text)
-        self.assertNotIn("UNVERIFIED INTERPRETATION", vis)
+        self.assertNotIn("### Interpretation", vis)
         self.assertTrue(vis.startswith("### Findings (from tools)"))
 
     def test_unknown_claim_id_fails(self) -> None:
@@ -165,7 +167,8 @@ class PreparedScene2DumpTests(unittest.TestCase):
             any("0.99" in i for i in self.report["invented_0.99_check_narration"]["issues"])
         )
         bad = (CACHE / "scene2_product_invented_099.md").read_text(encoding="utf-8")
-        self.assertIn("UNVERIFIED INTERPRETATION — JSON card wins.", bad)
+        self.assertIn("### Interpretation", bad)
+        self.assertIn("cite the measurement card", bad)
         self.assertEqual(validate_packet(self.packet), [])
         radio = [c for c in self.packet["claims"] if c["predicate"] == "radiometric_label"]
         self.assertEqual(radio[0]["value"], "similar")

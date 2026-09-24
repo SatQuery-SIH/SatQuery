@@ -120,11 +120,13 @@ class PacketWireTests(unittest.TestCase):
         paths = write_report_bundle(trace)
         product = paths["product"].read_text(encoding="utf-8")
         self.assertTrue(product.startswith("### Findings (from tools)"))
-        self.assertIn("UNVERIFIED INTERPRETATION — JSON card wins.", product)
+        self.assertIn("### Interpretation", product)
+        self.assertIn("cite the measurement card", product)
         self.assertLess(
             product.index("### Findings (from tools)"),
-            product.index("UNVERIFIED INTERPRETATION — JSON card wins."),
+            product.index("### Interpretation"),
         )
+        self.assertLess(product.index("### Interpretation"), product.index(INVENTED))
         vis = trace.get("visible_answer") or ""
         self.assertIn("### Findings (from tools)", vis)
 

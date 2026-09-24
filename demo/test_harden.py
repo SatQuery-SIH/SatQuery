@@ -20,7 +20,7 @@ class HardenTests(unittest.TestCase):
         card = measurement_markdown(trace)
         self.assertIn("270,611", card)
         self.assertIn("81,882", card)
-        self.assertIn("Do not conflate", card)
+        self.assertIn("Reading these numbers", card)
         self.assertIn("20470.5", card)
         path = write_report(trace)
         text = path.read_text(encoding="utf-8")

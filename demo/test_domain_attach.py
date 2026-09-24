@@ -20,7 +20,7 @@ if str(DEMO) not in sys.path:
 
 TEAM_SHA = "cbfefe6564613571e824cb2cee0f971b4793ca0dda6c1a5c5741cbcdf4c76fe6"
 IMPORTED_SHA = "db0dd783c3c3f27d02f55f24fa8199d2b2b47c422c7f7bd2e4d96e2fa65d69f2"
-SCENE2_TOOL_SHA = "cfe8f6ec85df0a53d643c716de351697161c54b841d70bd6d69b95d7718c8f27"  # additive rung_display; core 7a83e510… unchanged
+SCENE2_TOOL_SHA = "11ccb8da1bb7f9467c15dd0a62c8d42560feaac8da9f959d0bde3957f16a9964"  # 2026-09-24 authorized WEB-POLISH-V3
 PRED = DEMO / "data" / "scene2" / "pred_mask.png"
 PRED_SHA = "d531400303e1c76c47ed76885808b72be1ab6fffbc5dcf683876d5d67d665b14"
 APP_PY = DEMO / "app.py"

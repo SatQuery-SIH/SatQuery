@@ -214,7 +214,7 @@ def area_calc(
         area_km2 = None
         formula = "percent = count/total; area_m2 withheld (no GSD)"
     meta = gsd_meta or {}
-    provenance = "tools.area_calc (raster math; VLM did not compute this)"
+    provenance = "tools.area_calc (raster math; deterministic tool measurement)"
     if meta.get("provenance"):
         provenance = provenance + " | " + str(meta["provenance"])
     return {
@@ -399,7 +399,7 @@ def water_highlight(
         "mask_shape": list(mask.shape),
         "method": method,
         "provenance": (
-            "tools.water_highlight (deterministic optical mask; VLM did not compute this). "
+            "tools.water_highlight (optical mask; deterministic tool measurement). "
             + method
         ),
     }
@@ -849,7 +849,7 @@ def sar_read(
             "water_calibrated": False,
             "speckle": "not applied (uncalibrated preview)",
             "method": method,
-            "provenance": "tools.sar_read (preview DN; VLM did not compute this). " + method,
+            "provenance": "tools.sar_read (preview DN; deterministic tool measurement). " + method,
         }
 
     def _to_db(x: np.ndarray) -> np.ndarray:
@@ -903,7 +903,7 @@ def sar_read(
         "water_calibrated": True,
         "speckle": "3x3 boxcar (uniform) on dB before threshold",
         "method": method,
-        "provenance": "tools.sar_read (classical backscatter; VLM did not compute this). " + method,
+        "provenance": "tools.sar_read (classical backscatter; deterministic tool measurement). " + method,
     }
 
 
@@ -1010,8 +1010,8 @@ def sar_agreement(
             "(per-pixel intersection/union IoU and per-modality water fractions)"
         ),
         "provenance": (
-            "tools.sar_agreement (deterministic mask agreement; VLM did not "
-            "compute this). optical=tools.water_highlight mask; "
+            "tools.sar_agreement (mask agreement; deterministic tool "
+            "measurement). optical=tools.water_highlight mask; "
             "sar=tools.sar_read mask. Not pixel fusion."
         ),
     }
@@ -1177,7 +1177,7 @@ def coreg_check(
         "pixel": pixel,
         "shift_px": pixel.get("shift_px") if pixel.get("status") == "measured" else None,
         "provenance": (
-            "tools.coreg_check (deterministic; VLM did not compute this). "
+            "tools.coreg_check (deterministic tool measurement). "
             "transform level: " + str(transform.get("basis"))
         ),
     }
@@ -1240,8 +1240,8 @@ def export_mask_geotiff(
         "crs": str(crs) if crs is not None else None,
         "source": str(src_raster),
         "transform_scaled": bool(scale_x != 1.0 or scale_y != 1.0),
-        "provenance": "tools.export_mask_geotiff (deterministic copy of the "
-        "source raster's crs+transform; VLM did not compute this).",
+        "provenance": "tools.export_mask_geotiff (copy of the "
+        "source raster's crs+transform; deterministic tool measurement).",
     }
 
 
@@ -1459,7 +1459,7 @@ def cdvqa_map(
         "question_side": None,
         "method": "cdvqa_map_v1 (deterministic packet->vocab map over second_semantic features)",
         "provenance": (
-            "tools.cdvqa_map (deterministic; VLM did not compute this). "
+            "tools.cdvqa_map (deterministic tool measurement). "
             "source=second_semantic packet features over tools.change_detect "
             "mask. Not learned."
         ),
