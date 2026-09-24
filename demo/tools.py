@@ -252,7 +252,12 @@ def _uniform3(x: np.ndarray) -> np.ndarray:
 
 
 def _rgb_water_index_mask(rgb: np.ndarray) -> tuple[np.ndarray, str]:
-    """Otsu (or fallback threshold) on (B−R). Blue water vs dark/red land."""
+    """Otsu (or fallback threshold) on (B−R). Blue water vs dark/red land.
+
+    On land-dominated RGB scenes Otsu's auto-threshold sits low and shadows /
+    asphalt / dark vegetation pass as "water". Two guards: a floor on the
+    (B−R) cut, and a 3x3 morphological open to drop single-pixel speckle.
+    """
     r = rgb[..., 0].astype(np.float32)
     b = rgb[..., 2].astype(np.float32)
     index = b - r
@@ -260,9 +265,13 @@ def _rgb_water_index_mask(rgb: np.ndarray) -> tuple[np.ndarray, str]:
     try:
         import cv2
 
-        thr, binm = cv2.threshold(idx_u8, 0, 1, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-        mask = binm.astype(np.uint8)
-        method = f"RGB Otsu on (B-R), threshold={float(thr):.1f}"
+        thr, _binm = cv2.threshold(idx_u8, 0, 1, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+        thr_eff = max(float(thr), 18.0)
+        mask = (index > thr_eff).astype(np.uint8)
+        mask = cv2.morphologyEx(mask, cv2.MORPH_OPEN, np.ones((3, 3), np.uint8))
+        method = (
+            f"RGB Otsu on (B-R), threshold={thr_eff:.1f} (floored); 3x3 open"
+        )
     except Exception:
         mask = (index > 20.0).astype(np.uint8)
         method = "RGB heuristic (B-R) > 20 (Otsu unavailable)"

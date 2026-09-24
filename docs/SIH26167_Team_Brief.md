@@ -1,5 +1,11 @@
 # SIH26167 "SatQuery AI" — Team Brief
 
+> **Era note (2026-09-24):** written for the internal show — internals
+> are **done** (team nominated). Keep the PS-compliance analysis; treat
+> stack/timeline/queue claims as dated: routing is now **model-primary**
+> (D-016), seats api/web/canonical are live, and the §4 timeline is
+> history. Live truth: `../ops/NEXT_TASKS.md`, `../ops/DECISIONS.md`.
+
 **Read this before the internal show (16–17 Sep 2026).** Idea-submission deadline: **20 Sep 2026**. Architecture and PS-compliance detail: `SIH26167_Final_Plan.md`. Product map: `../README.md`.
 
 This brief is the single reference for what we are building, what the problem statement demands, and what has already been proven or ruled out. Where something is unverified, it says so. It is a product brief — it does not track live GPU jobs.

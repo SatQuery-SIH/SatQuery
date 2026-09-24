@@ -2,6 +2,15 @@
 
 Stable product architecture. Not a live GPU log. Team FAQ: `SIH26167_Team_Brief.md`. Repo map: `../README.md`.
 
+> **Era note (2026-09-24):** this is the pre-internal plan document —
+> internals are **done** (team nominated). Its architecture and numbers
+> are dated: routing is now **model-primary** (D-016 — narrator seat
+> routes live queries; regex is the refusal/fallback layer, not the
+> router), the stack grew (api :8000, web :5173, canonical :8091,
+> scene 4 uploads), and demo-suite counts are higher. Locked numbers
+> below are historical — live truth: `../ops/NEXT_TASKS.md`,
+> `../ops/DECISIONS.md`, `../strategy/MASTER_PLAN_V2.md`.
+
 **Internal show:** 16–17 Sep 2026. **Idea deadline:** 20 Sep 2026.
 
 **Base narrator:** Qwen3-VL-8B-Instruct (llama.cpp Q4_K_M + mmproj), currently **zero-shot**.

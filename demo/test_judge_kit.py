@@ -40,11 +40,11 @@ SHARED = (
     DEMO / "serve.ps1",
 )
 SHARED_SHA = {
-    "tools.py": "2bc1a7811b0fbd450db3c719fd03cc62cfa46f568f28ef7a2ff94ed300f074fa",  # 2026-09-24 authorized WEB-POLISH-V3
+    "tools.py": "b5d2431969b39759d4d809b04912b49e3b9afa8303788378f695653ff3a8fab7",  # 2026-09-24 authorized WATER-HL-SPECKLE (B-R Otsu floor + 3x3 open)
     "app.py": "be1f0ee9e58a2a3800674ac631f76a79cda271c9ee9f298bf7eb9b1089a87bf6",  # 2026-09-13 human-authorized Tab 2 copy edit (readable legend; needles unchanged)
-    "pipeline.py": "1e33e2f6ff5b6245b7366cfea5e64e3bd76476dc450ab5698ad8b18feb9b4606",  # 2026-09-22 authorized API-STREAM
+    "pipeline.py": "f69109a870ecaaad02cba9d10d19e9390a06259d5f13b340ea70543698ddc273",  # 2026-09-24 authorized MODEL-FIRST-ROUTER (model-primary live routing, regex fallback, refusals stay deterministic)
     "report.py": "bbf5370bd67deacda91a817844797f166f793eeb79df03066eb54af52a0fdff6",  # 2026-09-24 authorized WEB-POLISH-V3
-    "planner.py": "532bc066e3f4bd4510a393521863b40d1c6c4cf56f11635b533246623e868938",  # 2026-09-14 authorized WIRE-8091
+    "planner.py": "31c20c8f97056aacab425e9a0310491e1d00909236078809126db07b7fe1cee3",  # 2026-09-24 authorized ROUTE-PROBE (cdvqa_map→change_detect validator coupling; dead-tool fix)
     "ingest.py": "64cbf87d953a348914db627017c6c0bd27b35c07378ccf7923f3adade3bd975b",  # 2026-09-14 authorized TIFF-GSD-FIX
     "serve.ps1": "19287c44083cd94fd4f91ff6cbae5e66b2c33b30978a0df2bc5b99a0f14dd172",
 }

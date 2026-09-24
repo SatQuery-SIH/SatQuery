@@ -18,7 +18,7 @@ from ingest import (
     read_sar_arrays,
     scale_gsd_for_resize,
 )
-from planner import plan
+from planner import MODEL_FIRST, needs_fallback, plan, plan_model
 from tools import (
     LEVIR_GSD_M,
     S2_GSD_M,
@@ -726,6 +726,27 @@ def run_query(
 
     _emit("plan", "start")
     the_plan = plan(query, input_mode)
+    # MODEL-FIRST-ROUTER: the regex plan runs first as the deterministic
+    # safety layer — refusals/mode guards never reach the model. For live
+    # runs the narrator seat is the primary router for every non-refusal
+    # query (validator still gates); the regex plan is the routing
+    # fallback. MODEL_FIRST=0 restores regex-primary with bare-plan
+    # fallback. live=False never calls the seat.
+    router = "regex"
+    if live and the_plan.get("supported"):
+        if MODEL_FIRST:
+            fb = plan_model(query, input_mode, url=vlm_url)
+            if fb is not None:
+                the_plan = fb
+                router = "model"
+            else:
+                router = "regex-fallback"
+        elif needs_fallback(the_plan):
+            fb = plan_model(query, input_mode, url=vlm_url)
+            if fb is not None:
+                the_plan = fb
+                router = "model-fallback"
+    the_plan["router"] = router
     _emit(
         "plan",
         "done",
@@ -734,6 +755,7 @@ def run_query(
             "task": the_plan.get("task"),
             "tools": the_plan.get("tools"),
             "vlm_role": the_plan.get("vlm_role"),
+            "router": router,
         },
     )
     _emit("bind", "start")

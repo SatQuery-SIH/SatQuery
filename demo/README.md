@@ -1,6 +1,12 @@
-# demo/ — the 3-scene offline Gradio app
+# demo/ — the deterministic core: tools, planner, pipeline, scenes, tests
 
-The product. Three scenes, one planner, fully offline — this is what runs on stage.
+The product engine. Four scenes, the model-primary planner (narrator
+seat routes every non-refusal live query; regex `plan()` is the
+deterministic refusal/mode-guard layer and routing fallback —
+`SATQUERY_MODEL_FIRST=0` restores bare-plan escalation), the tool
+registry, evidence packet, and report — this is what `api/` serves and
+`web/` renders. A Gradio app here remains as the offline fallback
+client; the primary UI is `../web/` (:5173).
 
 **Narrator status:** zero-shot Qwen3-VL-8B. Adapters exist (06, 08, X1) but **none has cleared its attach bars**, so none is served. Do not point `serve.ps1` at a parked adapter.
 
@@ -30,12 +36,13 @@ Empty file boxes on each tab use the **prepared** scenes (16–17 rehearsal). At
 - **Cached trapdoor:** if the GPU dies or llama-server won't start, the cached rehearsal replays every scene with real outputs in under a second — visibly labeled CACHED in the UI, so the audience is never misled.
 - **Recorded fallback:** `fallback_recording.mp4` captures the live scene outputs and tool numbers.
 
-## The three scenes
+## The scenes
 
 | Scene | Input | What the audience sees |
 |---|---|---|
 | 1 — single image | one satellite PNG | VQA + caption |
 | 2 — bi-temporal *(the money scene)* | before/after pair | ChangeFormer mask → area in km² from the raster tool → VLM narration quoting those exact figures |
 | 3 — optical+SAR | Sentinel-2 RGB + Sentinel-1 VV/VH | classical SAR water threshold + optical reading, fused at the VLM layer |
+| 4 — uploads | user GeoTIFF/PNG/JPEG | live adapted forward (`team_second`/`second_semantic`) — the adaptation proof |
 
-Every number on screen traces to a tool output in the agent-trace panel. Architecture: `docs/SIH26167_Final_Plan.md`. Internal show: **16–17 Sep**.
+Every number on screen traces to a tool output in the agent-trace panel. Architecture: `docs/SIH26167_Final_Plan.md`.

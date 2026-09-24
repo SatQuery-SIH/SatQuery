@@ -6,8 +6,8 @@ Built for **Smart India Hackathon 2026**, problem statement SIH26167 (ISRO / Spa
 
 | Key dates | |
 |---|---|
-| Internal hackathon | 16–17 Sep 2026 |
-| SIH idea-submission deadline | 20 Sep 2026 |
+| Internal hackathon | 16–17 Sep 2026 — **done, team nominated** |
+| SIH idea-submission deadline | 20 Sep 2026 — **done** |
 
 ---
 

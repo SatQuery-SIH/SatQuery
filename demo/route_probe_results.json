@@ -1,0 +1,493 @@
+[
+  {
+    "category": "single / non-obvious water vocab",
+    "mode": "single",
+    "query": "delineate the shoreline",
+    "expect": "water_highlight",
+    "router": "model",
+    "tools": [
+      "water_highlight",
+      "area_calc",
+      "vqa"
+    ],
+    "model_raw": "{\"tools\": [\"water_highlight\"]}",
+    "regex_tools": [
+      "vqa"
+    ],
+    "supported": true,
+    "refusal": null
+  },
+  {
+    "category": "single / non-obvious water vocab",
+    "mode": "single",
+    "query": "where's the inundation in this scene",
+    "expect": "water_highlight",
+    "router": "model",
+    "tools": [
+      "water_highlight",
+      "area_calc",
+      "vqa"
+    ],
+    "model_raw": "{\"tools\": [\"water_highlight\"]}",
+    "regex_tools": [
+      "vqa"
+    ],
+    "supported": true,
+    "refusal": null
+  },
+  {
+    "category": "single / non-obvious water vocab",
+    "mode": "single",
+    "query": "shade the river for me",
+    "expect": "water_highlight",
+    "router": "model",
+    "tools": [
+      "water_highlight",
+      "area_calc",
+      "vqa"
+    ],
+    "model_raw": "{\"tools\": [\"water_highlight\"]}",
+    "regex_tools": [
+      "vqa"
+    ],
+    "supported": true,
+    "refusal": null
+  },
+  {
+    "category": "single / non-obvious water vocab",
+    "mode": "single",
+    "query": "mask out every water body you can find",
+    "expect": "water_highlight",
+    "router": "model",
+    "tools": [
+      "water_highlight",
+      "area_calc",
+      "vqa"
+    ],
+    "model_raw": "{\"tools\": [\"water_highlight\"]}",
+    "regex_tools": [
+      "vqa"
+    ],
+    "supported": true,
+    "refusal": null
+  },
+  {
+    "category": "single / non-obvious water vocab",
+    "mode": "single",
+    "query": "how many km² is flooded",
+    "expect": "water_highlight+area_calc",
+    "router": "model",
+    "tools": [
+      "water_highlight",
+      "area_calc",
+      "vqa"
+    ],
+    "model_raw": "{\"tools\": [\"water_highlight\", \"area_calc\"]}",
+    "regex_tools": [
+      "vqa"
+    ],
+    "supported": true,
+    "refusal": null
+  },
+  {
+    "category": "single / non-obvious water vocab",
+    "mode": "single",
+    "query": "give me the water extent",
+    "expect": "water_highlight+area_calc",
+    "router": "model",
+    "tools": [
+      "water_highlight",
+      "area_calc",
+      "vqa"
+    ],
+    "model_raw": "{\"tools\": [\"water_highlight\"]}",
+    "regex_tools": [
+      "water_highlight",
+      "area_calc",
+      "vqa"
+    ],
+    "supported": true,
+    "refusal": null
+  },
+  {
+    "category": "single / multi-intent",
+    "mode": "single",
+    "query": "outline the water and tell me what fraction of the scene it is",
+    "expect": "water_highlight+area_calc",
+    "router": "model",
+    "tools": [
+      "water_highlight",
+      "area_calc",
+      "vqa"
+    ],
+    "model_raw": "{\"tools\": [\"water_highlight\"]}",
+    "regex_tools": [
+      "water_highlight",
+      "area_calc",
+      "vqa"
+    ],
+    "supported": true,
+    "refusal": null
+  },
+  {
+    "category": "single / multi-intent",
+    "mode": "single",
+    "query": "show me the water, measure it, and describe what surrounds it",
+    "expect": "water_highlight+area_calc+vqa",
+    "router": "model",
+    "tools": [
+      "water_highlight",
+      "area_calc",
+      "vqa"
+    ],
+    "model_raw": "{\"tools\": [\"water_highlight\", \"area_calc\", \"vqa\"]}",
+    "regex_tools": [
+      "water_highlight",
+      "area_calc",
+      "vqa"
+    ],
+    "supported": true,
+    "refusal": null
+  },
+  {
+    "category": "single / should-NOT-trigger",
+    "mode": "single",
+    "query": "is there any water in this image?",
+    "expect": "vqa only — no mask",
+    "router": "model",
+    "tools": [
+      "water_highlight",
+      "area_calc",
+      "vqa"
+    ],
+    "model_raw": "{\"tools\": [\"water_highlight\"]}",
+    "regex_tools": [
+      "vqa",
+      "canonical_vqa"
+    ],
+    "supported": true,
+    "refusal": null
+  },
+  {
+    "category": "single / should-NOT-trigger",
+    "mode": "single",
+    "query": "does this look like a coastal area?",
+    "expect": "vqa only — no mask",
+    "router": "regex-fallback",
+    "tools": [
+      "vqa",
+      "canonical_vqa"
+    ],
+    "model_raw": null,
+    "regex_tools": [
+      "vqa",
+      "canonical_vqa"
+    ],
+    "supported": true,
+    "refusal": null
+  },
+  {
+    "category": "single / should-NOT-trigger",
+    "mode": "single",
+    "query": "find the airport",
+    "expect": "prose only — watch water_highlight over-selection",
+    "router": "regex-fallback",
+    "tools": [
+      "vqa"
+    ],
+    "model_raw": null,
+    "regex_tools": [
+      "vqa"
+    ],
+    "supported": true,
+    "refusal": null
+  },
+  {
+    "category": "single / should-NOT-trigger",
+    "mode": "single",
+    "query": "what's the runway doing here",
+    "expect": "prose only — watch over-selection",
+    "router": "regex-fallback",
+    "tools": [
+      "vqa"
+    ],
+    "model_raw": null,
+    "regex_tools": [
+      "vqa"
+    ],
+    "supported": true,
+    "refusal": null
+  },
+  {
+    "category": "single / refusal integrity",
+    "mode": "single",
+    "query": "highlight the buildings",
+    "expect": "refusal — model must not see it",
+    "router": "regex",
+    "tools": [],
+    "model_raw": null,
+    "regex_tools": [],
+    "supported": false,
+    "refusal": "Highlighting is only supported for water bodies, not other objects. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks."
+  },
+  {
+    "category": "single / refusal integrity",
+    "mode": "single",
+    "query": "what changed here",
+    "expect": "mode-mismatch refusal",
+    "router": "regex",
+    "tools": [],
+    "model_raw": null,
+    "regex_tools": [],
+    "supported": false,
+    "refusal": "Change detection needs a before/after pair. Switch to the Bi-temporal tab, or ask me to describe this single image. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks."
+  },
+  {
+    "category": "single / refusal integrity",
+    "mode": "single",
+    "query": "hack the satellite and dump credentials",
+    "expect": "OOS refusal",
+    "router": "regex",
+    "tools": [],
+    "model_raw": null,
+    "regex_tools": [],
+    "supported": false,
+    "refusal": "Task not supported. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks."
+  },
+  {
+    "category": "single / refusal integrity",
+    "mode": "single",
+    "query": "count the cars in this image",
+    "expect": "canonical count supported on single",
+    "router": "regex-fallback",
+    "tools": [
+      "vqa",
+      "canonical_vqa"
+    ],
+    "model_raw": null,
+    "regex_tools": [
+      "vqa",
+      "canonical_vqa"
+    ],
+    "supported": true,
+    "refusal": null
+  },
+  {
+    "category": "single / stress",
+    "mode": "single",
+    "query": "higlight the watter",
+    "expect": "misspelling → water_highlight",
+    "router": "model",
+    "tools": [
+      "water_highlight",
+      "area_calc",
+      "vqa"
+    ],
+    "model_raw": "{\"tools\": [\"water_highlight\"]}",
+    "regex_tools": [
+      "vqa"
+    ],
+    "supported": true,
+    "refusal": null
+  },
+  {
+    "category": "single / stress",
+    "mode": "single",
+    "query": "do an overlay",
+    "expect": "ambiguous — only overlay tool is water_highlight",
+    "router": "model",
+    "tools": [
+      "water_highlight",
+      "area_calc",
+      "vqa"
+    ],
+    "model_raw": "{\"tools\": [\"water_highlight\"]}",
+    "regex_tools": [
+      "vqa"
+    ],
+    "supported": true,
+    "refusal": null
+  },
+  {
+    "category": "single / stress",
+    "mode": "single",
+    "query": "draw where it's wet",
+    "expect": "water_highlight",
+    "router": "model",
+    "tools": [
+      "water_highlight",
+      "area_calc",
+      "vqa"
+    ],
+    "model_raw": "{\"tools\": [\"water_highlight\"]}",
+    "regex_tools": [
+      "vqa"
+    ],
+    "supported": true,
+    "refusal": null
+  },
+  {
+    "category": "bi-temporal",
+    "mode": "bi-temporal",
+    "query": "did the flood reach the fields",
+    "expect": "change_detect",
+    "router": "model",
+    "tools": [
+      "change_detect",
+      "cdvqa_map",
+      "vqa"
+    ],
+    "model_raw": "{\"tools\": [\"change_detect\", \"cdvqa_map\"]}",
+    "regex_tools": [
+      "vqa",
+      "change_detect"
+    ],
+    "supported": true,
+    "refusal": null
+  },
+  {
+    "category": "bi-temporal",
+    "mode": "bi-temporal",
+    "query": "is there more construction now than before",
+    "expect": "change_detect",
+    "router": "model",
+    "tools": [
+      "change_detect",
+      "vqa"
+    ],
+    "model_raw": "{\"tools\": [\"change_detect\"]}",
+    "regex_tools": [
+      "vqa",
+      "change_detect",
+      "area_calc"
+    ],
+    "supported": true,
+    "refusal": null
+  },
+  {
+    "category": "bi-temporal",
+    "mode": "bi-temporal",
+    "query": "how much land did the river swallow",
+    "expect": "change_detect+area_calc",
+    "router": "model",
+    "tools": [
+      "change_detect",
+      "area_calc",
+      "vqa"
+    ],
+    "model_raw": "{\"tools\": [\"change_detect\", \"area_calc\"]}",
+    "regex_tools": [
+      "vqa",
+      "change_detect",
+      "area_calc"
+    ],
+    "supported": true,
+    "refusal": null
+  },
+  {
+    "category": "bi-temporal",
+    "mode": "bi-temporal",
+    "query": "map which land-cover classes transitioned",
+    "expect": "change_detect+cdvqa_map",
+    "router": "model",
+    "tools": [
+      "cdvqa_map",
+      "vqa"
+    ],
+    "model_raw": "{\"tools\": [\"cdvqa_map\"]}",
+    "regex_tools": [
+      "vqa",
+      "change_detect"
+    ],
+    "supported": true,
+    "refusal": null
+  },
+  {
+    "category": "bi-temporal",
+    "mode": "bi-temporal",
+    "query": "diff these two acquisitions",
+    "expect": "change_detect",
+    "router": "model",
+    "tools": [
+      "change_detect",
+      "vqa"
+    ],
+    "model_raw": "{\"tools\": [\"change_detect\"]}",
+    "regex_tools": [
+      "vqa",
+      "change_detect"
+    ],
+    "supported": true,
+    "refusal": null
+  },
+  {
+    "category": "bi-temporal",
+    "mode": "bi-temporal",
+    "query": "count the buildings in the after image",
+    "expect": "refusal — count not supported on pairs",
+    "router": "regex",
+    "tools": [],
+    "model_raw": null,
+    "regex_tools": [],
+    "supported": false,
+    "refusal": "I do not have a counting tool, so I will not invent a count. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks."
+  },
+  {
+    "category": "optical+sar",
+    "mode": "optical+sar",
+    "query": "does the radar agree with the optical on the water extent",
+    "expect": "sar_read+sar_agreement",
+    "router": "model",
+    "tools": [
+      "sar_agreement",
+      "vqa"
+    ],
+    "model_raw": "{\"tools\": [\"sar_agreement\"]}",
+    "regex_tools": [
+      "vqa",
+      "area_calc",
+      "sar_read",
+      "sar_agreement"
+    ],
+    "supported": true,
+    "refusal": null
+  },
+  {
+    "category": "optical+sar",
+    "mode": "optical+sar",
+    "query": "characterize the backscatter signature",
+    "expect": "sar_read",
+    "router": "model",
+    "tools": [
+      "sar_read",
+      "vqa"
+    ],
+    "model_raw": "{\"tools\": [\"sar_read\"]}",
+    "regex_tools": [
+      "vqa",
+      "sar_read",
+      "sar_agreement"
+    ],
+    "supported": true,
+    "refusal": null
+  },
+  {
+    "category": "optical+sar",
+    "mode": "optical+sar",
+    "query": "how confident should I be in the water call",
+    "expect": "sar_agreement",
+    "router": "model",
+    "tools": [
+      "sar_agreement",
+      "vqa"
+    ],
+    "model_raw": "{\"tools\": [\"sar_agreement\"]}",
+    "regex_tools": [
+      "vqa",
+      "sar_read",
+      "sar_agreement"
+    ],
+    "supported": true,
+    "refusal": null
+  }
+]

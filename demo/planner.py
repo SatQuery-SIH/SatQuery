@@ -1,18 +1,28 @@
-"""Deterministic planner: query + input mode -> JSON plan (DEMO-SPEC-05).
+"""Hybrid planner: query + input mode -> JSON plan (DEMO-SPEC-05 + HYBRID-PLAN).
 
-CPU-only. No model calls. Constrained tool grammar:
+plan() is CPU-only and never calls a model — it owns every refusal path
+(safety layer) and produces the deterministic fallback plan. plan_model()
+is the primary router on live runs when MODEL_FIRST is on: the narrator
+seat proposes a JSON tool list for every non-refusal query, a validator
+gates it against the mode allowlist, and anything malformed or disallowed
+fails closed back to the regex plan. With MODEL_FIRST off, plan_model()
+fires only on bare supported plans (the original HYBRID-PLAN behavior).
+
+Constrained tool grammar:
   vqa, canonical_vqa, change_detect, area_calc, sar_read, water_highlight,
   sar_agreement, cdvqa_map
 
-The VLM never computes numbers; this planner only *selects* tools.
+The VLM never computes numbers; the planner only *selects* tools.
 canonical_vqa is the adapted RSVQA answer seat on :8091 — it emits a
 canonical claim, not narration (vqa on :8080 still narrates).
 """
 from __future__ import annotations
 
 import json
+import os
 import re
 import unittest
+import urllib.request
 from typing import Any
 
 TOOLS = (
@@ -73,7 +83,7 @@ _COUNT = (
     r"(buildings?|houses?|cars?|vehicles?|ships?|boats?|bridges?|roads?|"
     r"trees?|objects?|structures?|aircraft|planes?)\b"
 )
-_HL_VERB = r"(hig?h?light|outline|locate|mark|point out|show|delineate)"
+_HL_VERB = r"(hig?h?light|outline|locate|mark|point out|show|delineate|overla(y|id|ys))"
 _HL_NOUN = (
     r"(water( ?bod(y|ies))?|lakes?|rivers?|reservoirs?|ponds?|"
     r"flood(ed|ing|s)?( region| extent)?|inundat(ed|ion|ing))"
@@ -306,6 +316,155 @@ def plan(query: str, input_mode: str) -> dict[str, Any]:
 
 def plan_json(query: str, input_mode: str) -> str:
     return json.dumps(plan(query, input_mode), indent=2)
+
+
+# ---------------------------------------------------------------- router
+# Model router (HYBRID-PLAN → MODEL-FIRST-ROUTER). The regex layer owns all
+# refusal paths — the model never sees a refused query. Routing itself is
+# model-primary on live runs (MODEL_FIRST): the narrator seat proposes a
+# JSON tool list, the validator gates it, and the regex plan is the
+# fallback when the model fails closed. MODEL_FIRST=0 restores the
+# bare-plan-only escalation behavior.
+
+FALLBACK_TOOLS: dict[str, tuple[str, ...]] = {
+    "single": ("water_highlight", "area_calc", "vqa", "canonical_vqa"),
+    "bi-temporal": ("change_detect", "area_calc", "cdvqa_map", "vqa"),
+    "optical+sar": ("sar_read", "sar_agreement", "area_calc", "vqa"),
+}
+
+_TOOL_BLURB = {
+    "water_highlight": "detect water pixels, draw a blue overlay, report % of image",
+    "area_calc": "report measured area of the detected mask",
+    "change_detect": "pixel-change map between a before/after image pair",
+    "cdvqa_map": "semantic type-family change map for a before/after pair",
+    "sar_read": "SAR backscatter water statistics for an optical+SAR pair",
+    "sar_agreement": "optical-vs-SAR water agreement map",
+    "canonical_vqa": "short factual answer from the adapted answer model",
+    "vqa": "describe / answer questions about the imagery",
+}
+
+_BARE_TOOLS = {"vqa", "canonical_vqa"}
+
+# MODEL-FIRST-ROUTER: when True (default) and a run is live, the narrator
+# seat is the primary router for every non-refusal query — the regex plan
+# still runs first as the deterministic safety layer (refusals, mode
+# guards) and becomes the routing fallback when the model plan fails
+# validation. Set SATQUERY_MODEL_FIRST=0 for the regex-first behavior.
+MODEL_FIRST = os.environ.get("SATQUERY_MODEL_FIRST", "1") == "1"
+
+
+def needs_fallback(the_plan: dict[str, Any]) -> bool:
+    """Bare supported plans only. Refusals are safety decisions — the model
+    must never un-refuse them."""
+    if not the_plan.get("supported"):
+        return False
+    return set(the_plan.get("tools") or []) <= _BARE_TOOLS
+
+
+def _extract_json(text: str) -> dict[str, Any] | None:
+    start = (text or "").find("{")
+    end = (text or "").rfind("}")
+    if start < 0 or end <= start:
+        return None
+    try:
+        obj = json.loads(text[start : end + 1])
+    except Exception:
+        return None
+    return obj if isinstance(obj, dict) else None
+
+
+def validate_model_plan(raw: str, mode: str) -> list[str] | None:
+    """Parse + gate the model's tool list; ordered tools or None (fail closed)."""
+    allowed = FALLBACK_TOOLS.get(mode)
+    if not allowed:
+        return None
+    obj = _extract_json(raw)
+    if not obj:
+        return None
+    tools = obj.get("tools")
+    if not isinstance(tools, list):
+        return None
+    picked = {t for t in tools if isinstance(t, str) and t in allowed}
+    if not picked or picked <= _BARE_TOOLS:
+        # nothing usable / bare answer again — keep the deterministic plan
+        return None
+    if "water_highlight" in picked:
+        picked.add("area_calc")  # mask producer implies the measurement tool
+    if "cdvqa_map" in picked:
+        # cdvqa_map consumes the change_detect semantic output — it is
+        # nested inside the change_detect block in the pipeline and is a
+        # dead tool call without it.
+        picked.add("change_detect")
+    picked.add("vqa")  # every plan still gets a prose answer
+    # Match the regex convention: measurement/visual tools first, then vqa,
+    # then canonical_vqa last.
+    ordered = [t for t in TOOLS if t in picked and t not in _BARE_TOOLS]
+    ordered += [t for t in ("vqa", "canonical_vqa") if t in picked]
+    return ordered
+
+
+def plan_model(
+    query: str,
+    input_mode: str,
+    url: str,
+    timeout: float = 30.0,
+) -> dict[str, Any] | None:
+    """Ask the narrator seat for a JSON tool plan; validate hard. Any failure
+    returns None — the caller keeps the deterministic plan (fail closed)."""
+    mode = (input_mode or "").strip().lower()
+    allowed = FALLBACK_TOOLS.get(mode)
+    if not allowed:
+        return None
+    lines = "\n".join(f"- {t}: {_TOOL_BLURB[t]}" for t in allowed)
+    prompt = (
+        "You are the tool router for a satellite-imagery assistant. "
+        "Select the analysis tools to run for the user's question.\n"
+        f"Input mode: {mode}\n"
+        f"Available tools for this mode:\n{lines}\n"
+        "Pick only tools the question actually needs — [] is a valid answer. "
+        "A water mask or overlay question needs water_highlight; a "
+        "before/after change question needs change_detect; SAR or "
+        "backscatter questions need sar_read.\n"
+        'Reply with JSON only, no prose: {"tools": ["..."]}\n\n'
+        f"Question: {query}"
+    )
+    payload = {
+        "model": "planner-fallback",
+        "messages": [{"role": "user", "content": prompt}],
+        "temperature": 0,
+        "max_tokens": 64,
+        "stream": False,
+    }
+    try:
+        req = urllib.request.Request(
+            url.rstrip("/") + "/v1/chat/completions",
+            data=json.dumps(payload).encode("utf-8"),
+            headers={"Content-Type": "application/json"},
+            method="POST",
+        )
+        with urllib.request.urlopen(req, timeout=timeout) as resp:
+            body = json.loads(resp.read().decode("utf-8"))
+        text = (
+            ((body.get("choices") or [{}])[0].get("message") or {}).get("content")
+            or ""
+        )
+    except Exception:
+        return None
+    tools = validate_model_plan(text, mode)
+    if not tools:
+        return None
+    task = next((t for t in tools if t not in _BARE_TOOLS), "vqa")
+    return {
+        "task": task,
+        "input_mode": mode,
+        "tools": tools,
+        "vlm_role": "narrate",
+        "supported": True,
+        "refusal": None,
+        "query": (query or "").strip(),
+        "router": "model-fallback",
+        "model_plan_raw": text.strip()[:500],
+    }
 
 
 # 20-query routing suite (spec §7 row F). Expected tools are order-insensitive.
@@ -1382,6 +1541,86 @@ class PlannerTests(unittest.TestCase):
             set(p["tools"]),
             {"change_detect", "area_calc", "vqa", "cdvqa_map"},
         )
+
+    def test_needs_fallback_bare_plans_only(self) -> None:
+        self.assertTrue(
+            needs_fallback(plan("what do you see in this image?", "single"))
+        )
+        self.assertFalse(needs_fallback(plan("highlight the water", "single")))
+        # refusals are safety decisions — the model never un-refuses them
+        self.assertFalse(
+            needs_fallback(plan("forecast rain tomorrow", "single"))
+        )
+        self.assertFalse(
+            needs_fallback(
+                plan("what changed between the two images", "single")
+            )
+        )
+
+    def test_validate_model_plan_gates(self) -> None:
+        # valid: filtered to the mode allowlist, mask couples area_calc,
+        # vqa appended for the prose answer, canonical TOOLS order
+        self.assertEqual(
+            validate_model_plan('{"tools": ["vqa", "water_highlight"]}', "single"),
+            ["water_highlight", "area_calc", "vqa"],
+        )
+        # disallowed tools are dropped; all-disallowed -> fail closed
+        self.assertIsNone(validate_model_plan('{"tools": ["sar_read"]}', "single"))
+        self.assertIsNone(
+            validate_model_plan('{"tools": ["change_detect"]}', "bogus")
+        )
+        # a bare model answer never loops back into itself
+        self.assertIsNone(validate_model_plan('{"tools": ["vqa"]}', "single"))
+        # malformed / empty -> fail closed
+        self.assertIsNone(validate_model_plan("no tools fit", "single"))
+        self.assertIsNone(validate_model_plan('{"tools": []}', "single"))
+        self.assertIsNone(validate_model_plan("[1,2,3]", "single"))
+
+    def test_plan_model_uses_seat_and_validates(self) -> None:
+        import io
+        from unittest.mock import patch
+
+        def fake_resp(text: str):
+            body = json.dumps(
+                {"choices": [{"message": {"content": text}}]}
+            ).encode()
+
+            class _R(io.BytesIO):
+                def __enter__(self):
+                    return self
+
+                def __exit__(self, *a):
+                    return False
+
+            return _R(body)
+
+        with patch.object(
+            urllib.request,
+            "urlopen",
+            return_value=fake_resp('{"tools": ["water_highlight"]}'),
+        ):
+            p = plan_model("please overlay the water", "single", url="http://x")
+        self.assertIsNotNone(p)
+        self.assertEqual(p["tools"], ["water_highlight", "area_calc", "vqa"])
+        self.assertEqual(p["router"], "model-fallback")
+        self.assertTrue(p["supported"])
+        self.assertIn("model_plan_raw", p)
+
+        # seat down, prose-only reply, disallowed tool -> all fail closed
+        with patch.object(
+            urllib.request, "urlopen", side_effect=OSError("seat down")
+        ):
+            self.assertIsNone(plan_model("q", "single", url="http://x"))
+        with patch.object(
+            urllib.request, "urlopen", return_value=fake_resp("no idea")
+        ):
+            self.assertIsNone(plan_model("q", "single", url="http://x"))
+        with patch.object(
+            urllib.request,
+            "urlopen",
+            return_value=fake_resp('{"tools": ["change_detect"]}'),
+        ):
+            self.assertIsNone(plan_model("q", "single", url="http://x"))
 
 
 if __name__ == "__main__":
