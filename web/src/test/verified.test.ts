@@ -7,6 +7,7 @@ import {
   humanValue,
   imageSummary,
   reportCheck,
+  sanitizeCopy,
   splitAnswer,
 } from "../verified";
 import bitemporal from "./fixtures/bundle_bitemporal_flagged.json";
@@ -125,6 +126,88 @@ describe("splitAnswer", () => {
   it("deterministic tool text is not labeled model prose", () => {
     expect(splitAnswer(B(maskOnly)).proseByModel).toBe(false);
     expect(splitAnswer(B(nogsd)).prose).toBe("");
+  });
+});
+
+describe("sanitizeCopy — internal-audit phrasing scrubbed at the display layer", () => {
+  it("strips the old UNVERIFIED flag line and tidies the gap", () => {
+    expect(
+      sanitizeCopy("### Findings\n\nUNVERIFIED INTERPRETATION — JSON card wins.\n\nThe answer."),
+    ).toBe("### Findings\n\nThe answer.");
+  });
+
+  it("strips the new pipeline interpretation-note block", () => {
+    const s =
+      "findings\n\n### Interpretation\n\nMeasured values are computed by the tools; the written summary may restate them approximately — cite the measurement card.\n\nrest";
+    expect(sanitizeCopy(s)).toBe("findings\n\nrest");
+  });
+
+  it("rewrites 'VLM did not compute' provenance phrasing", () => {
+    expect(sanitizeCopy("(VLM did not compute this)")).toBe(
+      "(deterministic tool measurement)",
+    );
+    expect(sanitizeCopy("(VLM did not compute these)")).toBe(
+      "(deterministic tool measurement)",
+    );
+    expect(
+      sanitizeCopy("tools.sar_read (preview DN; VLM did not compute this)."),
+    ).toBe("tools.sar_read (preview DN; deterministic tool measurement).");
+    // no duplicated "deterministic" when the source already had it
+    expect(
+      sanitizeCopy("tools.coreg_check (deterministic; VLM did not compute this)."),
+    ).toBe("tools.coreg_check (deterministic tool measurement).");
+  });
+
+  it("drops the honesty aside and shortens the heading", () => {
+    expect(sanitizeCopy("### Confidence hierarchy (honesty, not a fake 0.99)")).toBe(
+      "### Confidence",
+    );
+  });
+
+  it("relabels interpretation headings and drops '(not a measurement)'", () => {
+    expect(
+      sanitizeCopy("**VLM interpretation (not a measurement)** — role `x`."),
+    ).toBe("**Interpretation (written summary)** — role `x`.");
+    expect(sanitizeCopy("## Answer (VLM interpretation — not a measurement)")).toBe(
+      "## Answer (interpretation)",
+    );
+    expect(sanitizeCopy("card (not a measurement) ok")).toBe("card ok");
+  });
+
+  it("rewrites the audit-voice sentences", () => {
+    expect(
+      sanitizeCopy(
+        "The answer paragraph may mis-attach numbers. Do not treat prose km² as independent evidence.",
+      ),
+    ).toBe(
+      "The summary may restate measured values approximately; cite the tool measurements above.",
+    );
+    expect(sanitizeCopy("**Do not conflate:**")).toBe("**Reading these numbers:**");
+    expect(
+      sanitizeCopy("If the VLM paragraph invents km², **the JSON card wins.**"),
+    ).toBe("Area in km² is withheld; cite this card, not the written summary.");
+    expect(
+      sanitizeCopy(
+        "If the VLM paragraph attaches NE pixels to whole-image percent, **the JSON card wins.**",
+      ),
+    ).toBe("The NE figure is quadrant-only; cite this card for whole-image values.");
+    expect(sanitizeCopy("These are the numbers a judge should cite.")).toBe(
+      "These are the values to cite.",
+    );
+  });
+
+  it("passes the new demo copy through unchanged and is idempotent", () => {
+    const clean =
+      "### Measurement card (tool `area_calc` — deterministic tool measurement)\n\n" +
+      "**Interpretation (written summary)** — model role `narrator`; tools selected: [vqa]. " +
+      "The summary may restate measured values approximately; cite the tool measurements above.\n\n" +
+      "**Reading these numbers:**\n- Area in km² is withheld; cite this card, not the written summary.\n" +
+      "- The NE figure is quadrant-only; cite this card for whole-image values.\n" +
+      "These are the values to cite.";
+    expect(sanitizeCopy(clean)).toBe(clean);
+    const messy =
+      "x (VLM did not compute this) UNVERIFIED INTERPRETATION — JSON card wins. (not a measurement)";
+    expect(sanitizeCopy(sanitizeCopy(messy))).toBe(sanitizeCopy(messy));
   });
 });
 

@@ -307,9 +307,83 @@ export function composeVerified(b: RunBundle): VerifiedFacts {
   return { measured, withheld };
 }
 
+// --- display sanitizer ----------------------------------------------------
+
+// Stored bundles and older pipeline copy carry internal-audit phrasing —
+// scrub it at the display layer so the surface stays product-voiced even
+// when the stored text predates the copy cleanup.
+export function sanitizeCopy(s: string): string {
+  let out = s;
+  // 1. old unverified-interpretation flag line
+  out = out.replace(/\n*UNVERIFIED INTERPRETATION — JSON card wins\.\n*/g, "\n\n");
+  // 2. pipeline interpretation-note block (also stripped from shown text)
+  out = out.replace(
+    /\n*### Interpretation\n+Measured values are computed by the tools; the written summary may restate them approximately — cite the measurement card\.\n*/g,
+    "\n\n",
+  );
+  // 3. "VLM did not compute" provenance phrasing
+  out = out.replace(
+    /deterministic; VLM did not compute this/g,
+    "deterministic tool measurement",
+  );
+  out = out.replace(
+    /\(VLM did not compute this\)/g,
+    "(deterministic tool measurement)",
+  );
+  out = out.replace(
+    /\(VLM did not compute these\)/g,
+    "(deterministic tool measurement)",
+  );
+  out = out.replace(
+    /; VLM did not compute this/g,
+    "; deterministic tool measurement",
+  );
+  out = out.replace(
+    /; VLM did not compute these/g,
+    "; deterministic tool measurement",
+  );
+  out = out.replace(/VLM did not compute these/g, "deterministic tool measurement");
+  out = out.replace(/VLM did not compute this/g, "deterministic tool measurement");
+  // 4. honesty aside + heading
+  out = out.replace(/ \(honesty, not a fake 0\.99\)/g, "");
+  out = out.replace(/Confidence hierarchy/g, "Confidence");
+  // 5. interpretation labels
+  out = out.replace(
+    /\*\*VLM interpretation \(not a measurement\)\*\*/g,
+    "**Interpretation (written summary)**",
+  );
+  out = out.replace(
+    /\(VLM interpretation — not a measurement\)/g,
+    "(interpretation)",
+  );
+  out = out.replace(/ \(not a measurement\)/g, "");
+  // 6–10 sentence rewrites
+  out = out.replace(
+    /The answer paragraph may mis-attach numbers\. Do not treat prose km² as independent evidence\./g,
+    "The summary may restate measured values approximately; cite the tool measurements above.",
+  );
+  out = out.replace(/\*\*Do not conflate:\*\*/g, "**Reading these numbers:**");
+  out = out.replace(
+    /If the VLM paragraph invents km², \*\*the JSON card wins\.\*\*/g,
+    "Area in km² is withheld; cite this card, not the written summary.",
+  );
+  out = out.replace(
+    /If the VLM paragraph attaches NE pixels to whole-image percent, \*\*the JSON card wins\.\*\*/g,
+    "The NE figure is quadrant-only; cite this card for whole-image values.",
+  );
+  out = out.replace(
+    /These are the numbers a judge should cite\./g,
+    "These are the values to cite.",
+  );
+  return out.trim();
+}
+
 // --- answer text split ---------------------------------------------------
 
-export const INTERPRETATION_FLAG = /UNVERIFIED INTERPRETATION[^\n]*/;
+// either flag form marks the written summary as needing a caution chip —
+// detected for the report-check chip, but the marker itself never renders
+export const INTERPRETATION_FLAG =
+  /UNVERIFIED INTERPRETATION[^\n]*|### Interpretation\n+Measured values are computed by the tools[^\n]*/;
 
 export interface AnswerParts {
   // deterministic "Findings (from tools)" block (report.findings)
@@ -332,8 +406,8 @@ export function splitAnswer(b: RunBundle): AnswerParts {
   if (m) rest = rest.replace(m[0], "");
   const vlm = rec(b.trace?.vlm);
   return {
-    toolFindings: findings,
-    prose: rest.trim(),
+    toolFindings: sanitizeCopy(findings),
+    prose: sanitizeCopy(rest),
     flag,
     proseByModel: !!vlm && Object.keys(vlm).length > 0,
   };

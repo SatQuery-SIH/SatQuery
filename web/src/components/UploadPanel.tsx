@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { api } from "../api";
+import { sanitizeCopy } from "../verified";
 import type { DetectedBlock, InputMode, UploadResponse } from "../types";
 
 const MODE_ROLES: Record<InputMode, { role: string; label: string; accept: string }[]> = {
@@ -34,9 +35,11 @@ export function DetectedCard({ d, warnings }: { d: DetectedBlock; warnings?: str
           </div>
         ))}
       </div>
-      {d.crs_note && <div className="detected-note">{d.crs_note}</div>}
+      {d.crs_note && (
+        <div className="detected-note">{sanitizeCopy(d.crs_note)}</div>
+      )}
       {(warnings ?? []).map((w, i) => (
-        <div className="detected-warn" key={i}>⚠ {w}</div>
+        <div className="detected-warn" key={i}>⚠ {sanitizeCopy(w)}</div>
       ))}
     </div>
   );

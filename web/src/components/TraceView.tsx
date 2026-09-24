@@ -4,7 +4,7 @@ import { isWithheldClaim } from "../types";
 import { formatSecs } from "../format";
 import type { LiveTrace } from "../liveTrace";
 import { baseName, humanTool, stageDetail, stageDuration } from "../liveTrace";
-import { humanPredicate, humanValue } from "../verified";
+import { humanPredicate, humanValue, sanitizeCopy } from "../verified";
 
 // The agentic-trace stage view, in two honest modes:
 //  - live: driven by POST /query/stream stage events as they arrive
@@ -22,7 +22,9 @@ interface Stage {
 
 function claimText(c: { predicate?: string; value?: unknown; confidence?: { level?: string } }) {
   const s = humanValue(c.value);
-  return `${humanPredicate(String(c.predicate))}: ${s}${s.length > 90 ? "…" : ""}`;
+  return sanitizeCopy(
+    `${humanPredicate(String(c.predicate))}: ${s}${s.length > 90 ? "…" : ""}`,
+  );
 }
 
 export function buildStages(bundle: RunBundle): Stage[] {
@@ -39,9 +41,11 @@ export function buildStages(bundle: RunBundle): Stage[] {
     state: t.input_source ? "done" : "pending",
     detail: (
       <div className="stage-detail">
-        source: {String(t.input_source ?? "—")} · gsd:{" "}
+        source: {sanitizeCopy(String(t.input_source ?? "—"))} · gsd:{" "}
         {t.gsd ? `${(t.gsd as { gsd_m?: number }).gsd_m ?? "?"} m` : "—"}
-        {t.misregistration_note ? ` · ${t.misregistration_note}` : ""}
+        {t.misregistration_note
+          ? ` · ${sanitizeCopy(String(t.misregistration_note))}`
+          : ""}
       </div>
     ),
   });
@@ -53,7 +57,7 @@ export function buildStages(bundle: RunBundle): Stage[] {
     detail: (
       <div className="stage-detail">
         {refused
-          ? `unsupported — ${plan.refusal ?? "refused"}`
+          ? `unsupported — ${sanitizeCopy(String(plan.refusal ?? "refused"))}`
           : `planned: ${(plan.tools ?? []).map((k) => humanTool(String(k))).join(" → ") || "—"}`}
       </div>
     ),
@@ -102,7 +106,7 @@ export function buildStages(bundle: RunBundle): Stage[] {
       detail: (
         <div className="stage-detail">
           {(t.vlm as Record<string, unknown> | undefined)?.model
-            ? `model: ${baseName(String((t.vlm as Record<string, unknown>).model))}`
+            ? `model: ${sanitizeCopy(baseName(String((t.vlm as Record<string, unknown>).model)))}`
             : ""}
           {t.first_token_s != null ? ` · first token ${t.first_token_s}s` : ""}
           {t.narration_check
@@ -185,7 +189,7 @@ function LiveTraceView({
                   <span className="stage-title">{s.label}</span>
                   {dur != null && <span className="stage-dur">{formatSecs(dur)}</span>}
                 </div>
-                {det && <div className="stage-detail">{det}</div>}
+                {det && <div className="stage-detail">{sanitizeCopy(det)}</div>}
               </li>
             );
           })}

@@ -120,6 +120,19 @@ export default function App() {
   const [runsErr, setRunsErr] = useState(false);
   // bumped whenever a run lands so the drawer reloads itself
   const [runsRefresh, setRunsRefresh] = useState(0);
+  // session-only per-mode results — switching tabs restores that mode's
+  // last finished run as an honest replay instead of losing it
+  const [modeRuns, setModeRuns] = useState<
+    Partial<Record<InputMode, RunBundle>>
+  >({});
+  const cacheBundle = (b: RunBundle, fallbackMode?: InputMode) => {
+    const m = b.trace?.input_mode;
+    const key: InputMode | undefined =
+      m === "single" || m === "bi-temporal" || m === "optical+sar"
+        ? m
+        : fallbackMode;
+    if (key) setModeRuns((r) => ({ ...r, [key]: b }));
+  };
 
   const ctlRef = useRef<AbortController | null>(null);
   useEffect(() => () => ctlRef.current?.abort(), []);
@@ -200,6 +213,7 @@ export default function App() {
         const b = await api.query(req, signal);
         if (signal.aborted) return;
         setBundle(b);
+        cacheBundle(b, args.mode);
         setRunsRefresh((k) => k + 1);
       } catch (e) {
         if (signal.aborted || isAbort(e)) return;
@@ -223,6 +237,7 @@ export default function App() {
       patchTrace((t) => finalizeLiveTrace(t, "done"));
       stopRunning();
       setBundle(b);
+      cacheBundle(b, args.mode);
       setRunsRefresh((k) => k + 1);
     } catch (e) {
       if (signal.aborted || isAbort(e)) {
@@ -315,6 +330,7 @@ export default function App() {
       .run(id)
       .then((b) => {
         setBundle(b);
+        cacheBundle(b);
         setRunView({ kind: "replay" });
       })
       .catch((e) =>
@@ -351,12 +367,18 @@ export default function App() {
                   setScene(null);
                   setBoundPreset(null);
                   setInputNames({});
-                  // the previous run's answer belongs to the old inputs —
-                  // clear it so the stage can't show a foreign-mode result
-                  setBundle(null);
-                  setRunView({ kind: "idle" });
                   setRunError(null);
                   setTraceOpen(false);
+                  // restore that mode's last finished run as a replay; the
+                  // bundle (not stale upload state) drives stage + answer
+                  const cached = modeRuns[m.id];
+                  if (cached) {
+                    setBundle(cached);
+                    setRunView({ kind: "replay" });
+                  } else {
+                    setBundle(null);
+                    setRunView({ kind: "idle" });
+                  }
                 }}
               >
                 {m.label}

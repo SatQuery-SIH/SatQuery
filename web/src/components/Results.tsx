@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { api } from "../api";
 import { Markdown } from "../md";
 import { formatBytes, formatSecs } from "../format";
@@ -7,6 +7,7 @@ import {
   humanPredicate,
   humanValue,
   reportCheck,
+  sanitizeCopy,
   splitAnswer,
 } from "../verified";
 import type { ArtifactRef, Claim, RunBundle, UploadResponse } from "../types";
@@ -34,11 +35,14 @@ function ProvenanceChips({ c }: { c: Claim }) {
     <div className="prov-chips">
       {bits
         .filter(([, v]) => v)
-        .map(([k, v]) => (
-          <span className="prov-chip" key={k} title={v}>
-            {k}={String(v).length > 24 ? `${String(v).slice(0, 10)}…` : v}
-          </span>
-        ))}
+        .map(([k, v]) => {
+          const text = sanitizeCopy(String(v));
+          return (
+            <span className="prov-chip" key={k} title={text}>
+              {k}={text.length > 24 ? `${text.slice(0, 10)}…` : text}
+            </span>
+          );
+        })}
       {c.confidence?.level && (
         <span className={`prov-chip lvl-${c.confidence.level}`}>{c.confidence.level}</span>
       )}
@@ -65,11 +69,11 @@ export function ClaimList({ claims }: { claims: Claim[] }) {
               </span>
               {w && <span className="withheld-badge">withheld</span>}
             </div>
-            <div className="claim-value" title={raw}>
-              {value}
+            <div className="claim-value" title={sanitizeCopy(raw)}>
+              {sanitizeCopy(value)}
             </div>
             {c.confidence?.basis && (
-              <div className="claim-basis">{c.confidence.basis}</div>
+              <div className="claim-basis">{sanitizeCopy(c.confidence.basis)}</div>
             )}
             <ProvenanceChips c={c} />
           </div>
@@ -227,7 +231,7 @@ export function ImageDetails({
   const d = upload?.detected ?? null;
   const rows: [string, string][] = [];
   const push = (k: string, v: unknown) => {
-    if (v != null && v !== "") rows.push([k, String(v)]);
+    if (v != null && v !== "") rows.push([k, sanitizeCopy(String(v))]);
   };
   if (g) {
     push("pixel size", g.gsd_m != null ? `${g.gsd_m} m/px` : "not detected");
@@ -263,7 +267,7 @@ export function ImageDetails({
       {notes.length > 0 && (
         <ul className="detail-notes">
           {notes.map((n, i) => (
-            <li key={i}>{n}</li>
+            <li key={i}>{sanitizeCopy(n)}</li>
           ))}
         </ul>
       )}
@@ -288,7 +292,7 @@ export function Results({
   const query = bundle.trace?.query;
 
   if (refused) {
-    const answerText = bundle.visible_answer ?? bundle.answer ?? "";
+    const answerText = sanitizeCopy(bundle.visible_answer ?? bundle.answer ?? "");
     return (
       <div className="results">
         <section className="answer-card refused" data-testid="answer-card">
@@ -305,7 +309,9 @@ export function Results({
           </div>
           {refusal != null &&
             !answerText.includes(String(refusal).trim()) && (
-              <div className="refusal-reason">plan reason: {String(refusal)}</div>
+              <div className="refusal-reason">
+                plan reason: {sanitizeCopy(String(refusal))}
+              </div>
             )}
         </section>
       </div>
@@ -339,32 +345,37 @@ export function Results({
         </div>
 
         {hasFacts ? (
-          <div className="facts">
+          <div className="measure-strip" data-testid="measure-strip">
             {measured.length === 0 && (
-              <div className="fact fact-none">
-                Nothing here could be measured with confidence.
-              </div>
+              <span className="fact fact-none">
+                Nothing here could be measured with confidence.{" "}
+              </span>
             )}
-            {measured.map((f) => (
-              <div
-                key={f.key}
-                className="fact fact-measured"
-                data-testid="fact-measured"
-                title={f.exact}
-              >
-                {f.text}
-              </div>
+            {measured.map((f, i) => (
+              <Fragment key={f.key}>
+                {i > 0 && <span className="m-sep"> · </span>}
+                <span
+                  className="fact fact-measured"
+                  data-testid="fact-measured"
+                  title={f.exact}
+                >
+                  {f.text}
+                </span>
+              </Fragment>
             ))}
-            {withheld.map((f) => (
-              <div
-                key={f.key}
-                className="fact fact-withheld"
-                data-testid="fact-withheld"
-                title={f.exact}
-              >
-                <span className="withheld-tag">withheld</span>{" "}
-                {f.text}
-              </div>
+            {withheld.map((f, i) => (
+              <Fragment key={f.key}>
+                {(i > 0 || measured.length > 0) && (
+                  <span className="m-sep"> · </span>
+                )}
+                <span
+                  className="fact fact-withheld"
+                  data-testid="fact-withheld"
+                  title={f.exact}
+                >
+                  <span className="withheld-tag">withheld</span> {f.text}
+                </span>
+              </Fragment>
             ))}
           </div>
         ) : (
@@ -374,30 +385,17 @@ export function Results({
         )}
 
         {parts.prose && (
+          <div className="answer-body">
+            <Markdown text={parts.prose} />
+          </div>
+        )}
+
+        {parts.toolFindings && (
           <Collapsible
-            className="interpretation"
-            summary={
-              parts.proseByModel
-                ? "interpretation — model-written, unverified"
-                : "tool note"
-            }
-            badge={
-              parts.flag ? (
-                <span className="flag-tag">{parts.flag}</span>
-              ) : undefined
-            }
-            defaultOpen={!hasFacts}
+            className="tool-measurements"
+            summary="tool measurements for this question"
           >
-            <div className="answer-body">
-              <Markdown text={parts.prose} />
-            </div>
-            {check && !check.ok && check.issues.length > 0 && (
-              <ul className="detail-notes flagged">
-                {check.issues.map((i, k) => (
-                  <li key={k}>{i}</li>
-                ))}
-              </ul>
-            )}
+            <Markdown text={parts.toolFindings} />
           </Collapsible>
         )}
       </section>
@@ -415,18 +413,28 @@ export function Results({
         }
       >
         <ClaimList claims={claims} />
+        {check && !check.ok && check.issues.length > 0 && (
+          <>
+            <h4 className="tool-log-title">report check issues</h4>
+            <ul className="detail-notes flagged">
+              {check.issues.map((i, k) => (
+                <li key={k}>{sanitizeCopy(i)}</li>
+              ))}
+            </ul>
+          </>
+        )}
         {(bundle.evidence_packet?.limitations ?? []).length > 0 && (
           <div className="limitations">
             <strong>limitations:</strong>
             <ul>
               {(bundle.evidence_packet!.limitations as string[]).map((l, i) => (
-                <li key={i}>{l}</li>
+                <li key={i}>{sanitizeCopy(l)}</li>
               ))}
             </ul>
           </div>
         )}
-        {rep.measurement && <Markdown text={rep.measurement} />}
-        {rep.confidence && <Markdown text={rep.confidence} />}
+        {rep.measurement && <Markdown text={sanitizeCopy(rep.measurement)} />}
+        {rep.confidence && <Markdown text={sanitizeCopy(rep.confidence)} />}
         {parts.toolFindings && (
           <>
             <h4 className="tool-log-title">tool log</h4>

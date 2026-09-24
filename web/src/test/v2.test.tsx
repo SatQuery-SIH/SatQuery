@@ -107,35 +107,55 @@ afterEach(() => vi.unstubAllGlobals());
 // ------------------------------------------------------- answer composition
 
 describe("answer card composition (real fixtures)", () => {
-  it("bi-temporal flagged: loud measured + withheld lines, flag on the collapsed summary", () => {
+  it("bi-temporal flagged: strip leads, prose visible, tool log collapsed, check flagged", () => {
     render(<Results bundle={biFlagged} />);
     const card = screen.getByTestId("answer-card");
 
+    // compact measurement strip leads the card — measured bright, withheld
+    // amber, " · "-joined
+    const strip = screen.getByTestId("measure-strip");
+    expect(strip).toBeInTheDocument();
     const measured = screen.getAllByTestId("fact-measured");
     expect(measured[0]).toHaveTextContent(
       "change detected across 25.8% of the image",
     );
     expect(screen.getAllByTestId("fact-withheld")).toHaveLength(2);
-    expect(card).toHaveTextContent("report check: flagged");
+    expect(strip.textContent).toContain(" · ");
 
-    const det = card.querySelector(
-      "details.interpretation",
-    ) as HTMLDetailsElement;
-    expect(det).toBeTruthy();
-    expect(det.open).toBe(false);
-    const summary = det.querySelector("summary")!;
-    expect(summary).toHaveTextContent(
-      "interpretation — model-written, unverified",
-    );
-    // the pipeline's own flag stays visible while collapsed
-    expect(summary).toHaveTextContent(
-      "UNVERIFIED INTERPRETATION — JSON card wins.",
-    );
-    // model prose is not rendered until the section is opened
-    expect(screen.queryByText(/residential/)).toBeNull();
-    fireEvent.click(summary);
+    // the written answer renders directly under the strip — no click needed
+    const body = card.querySelector(".answer-body")!;
+    expect(
+      strip.compareDocumentPosition(body) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
     expect(screen.getByText(/residential/)).toBeInTheDocument();
+
+    // flagged chip stays on the head; issues live in the tooltip + evidence
+    const chip = card.querySelector(".audit-chip.bad")!;
+    expect(chip).toHaveTextContent("report check: flagged");
+    expect(chip.getAttribute("title")).toContain("invented number 30.2");
+    // issues render under "report check issues" in the collapsed evidence
+    // section — not on the card itself
+    expect(screen.queryByText(/invented number 30\.2/)).toBeNull();
+
+    // the verbose tool text is the only collapsed part of the card
+    const tm = card.querySelector(
+      "details.tool-measurements",
+    ) as HTMLDetailsElement;
+    expect(tm).toBeTruthy();
+    expect(tm.open).toBe(false);
+    expect(tm.textContent).not.toContain("Findings (from tools)");
+    fireEvent.click(tm.querySelector("summary")!);
+    expect(tm.textContent).toContain("Findings (from tools)");
+
+    const ev = document.querySelector("details.panel")!;
+    fireEvent.click(ev.querySelector("summary")!);
+    expect(screen.getByText("report check issues")).toBeInTheDocument();
     expect(screen.getByText(/invented number 30\.2/)).toBeInTheDocument();
+
+    // audit wording never renders — not even inside expanded sections
+    expect(document.body.textContent).not.toMatch(
+      /unverified|JSON card wins|not a measurement/i,
+    );
   });
 
   it("withheld-only card leads with the honest headline", () => {
@@ -189,29 +209,38 @@ describe("ImageryStage — mode-driven panels from real bundle artifacts", () =>
     inputNames: [] as string[],
   };
 
-  it("single: one role panel + water overlay layer toggle", () => {
+  it("single: one role panel + water overlay state chip on the panel", () => {
     render(<ImageryStage mode="single" bundle={singleArea} {...props} />);
-    expect(screen.getByTestId("stage-panel-image")).toBeInTheDocument();
+    const panel = screen.getByTestId("stage-panel-image");
+    expect(panel).toBeInTheDocument();
     const toggle = screen.getByTestId("overlay-toggle");
-    expect(toggle).toHaveTextContent("water overlay");
+    // the state is readable without clicking
+    expect(toggle).toHaveTextContent("water overlay: on");
+    expect(toggle).toHaveAttribute("aria-pressed", "true");
+    expect(panel.contains(toggle)).toBe(true);
     // overlay defaults ON as a layer on the image panel
     expect(document.querySelector(".stage-overlay.on")).toBeInTheDocument();
     fireEvent.click(toggle);
+    expect(toggle).toHaveTextContent("water overlay: off");
+    expect(toggle).toHaveAttribute("aria-pressed", "false");
     expect(document.querySelector(".stage-overlay.on")).toBeNull();
     expect(document.querySelector(".stage-overlay")).toBeInTheDocument();
   });
 
-  it("bi-temporal: before|after both visible; overlay is a layer on after", () => {
+  it("bi-temporal: before|after both visible; overlay chip on after", () => {
     render(<ImageryStage mode="bi-temporal" bundle={biFlagged} {...props} />);
     const before = screen.getByTestId("stage-panel-before");
     const after = screen.getByTestId("stage-panel-after");
     expect(before).toBeInTheDocument();
     expect(after).toBeInTheDocument();
     const toggle = screen.getByTestId("overlay-toggle");
-    expect(toggle).toHaveTextContent("change overlay");
+    expect(toggle).toHaveTextContent("change overlay: on");
+    expect(toggle).toHaveAttribute("aria-pressed", "true");
+    expect(after.contains(toggle)).toBe(true);
     // overlay lives on the AFTER panel, off/on never removes the pair
     expect(after.querySelector(".stage-overlay.on")).toBeInTheDocument();
     fireEvent.click(toggle);
+    expect(toggle).toHaveTextContent("change overlay: off");
     expect(after.querySelector(".stage-overlay")).toBeInTheDocument();
     expect(after.querySelector(".stage-overlay.on")).toBeNull();
     expect(before).toBeInTheDocument();
@@ -406,6 +435,67 @@ describe("de-jargon guard", () => {
       "evidence packet",
     ])
       expect(text).not.toContain(w);
+  });
+});
+
+// ---------------------------------------------------- no audit jargon, ever
+
+describe("no unverified/audit wording — every stored fixture", () => {
+  const banned =
+    /unverified|VLM did not compute|fake 0\.99|not a measurement|JSON card wins|do not conflate/i;
+  const fixtures = import.meta.glob("./fixtures/bundle_*.json", {
+    eager: true,
+  }) as Record<string, { default?: unknown } | unknown>;
+
+  it("rendered Results text is clean with all sections opened", () => {
+    for (const [path, mod] of Object.entries(fixtures)) {
+      const bundle = ((mod as { default?: unknown }).default ?? mod) as RunBundle;
+      const { container, unmount } = render(<Results bundle={bundle} />);
+      container
+        .querySelectorAll("details.collapsible > summary")
+        .forEach((s) => fireEvent.click(s));
+      expect(container.textContent ?? "", path).not.toMatch(banned);
+      unmount();
+    }
+  });
+});
+
+// ------------------------------------------------- per-mode run preservation
+
+describe("per-mode run preservation", () => {
+  it("tab away clears, tab back restores the mode's run as an honest replay", async () => {
+    render(<App />);
+    fireEvent.click(screen.getByTestId("preset-sundarbans-single"));
+    await waitFor(() =>
+      expect(screen.getByTestId("answer-card")).toBeInTheDocument(),
+    );
+    const cardText = screen.getByTestId("answer-card").textContent;
+
+    // away: cleared state for a mode with no run yet
+    fireEvent.click(screen.getByTestId("mode-tab-bi-temporal"));
+    expect(screen.queryByTestId("answer-card")).toBeNull();
+    expect(screen.getByTestId("imagery-stage")).toHaveTextContent(
+      /pick an example or upload imagery/,
+    );
+
+    // back: the same answer returns, honestly labeled replay — not "live"
+    fireEvent.click(screen.getByTestId("mode-tab-single"));
+    expect(screen.getByTestId("answer-card")).toBeInTheDocument();
+    expect(screen.getByTestId("answer-card").textContent).toBe(cardText);
+    expect(screen.getByText(/replay of recorded run/)).toBeInTheDocument();
+    expect(screen.queryByText("● LIVE")).toBeNull();
+    // the stage shows the restored bundle's imagery, not the placeholder
+    expect(screen.queryByText(/pick an example or upload imagery/)).toBeNull();
+
+    // a new run for the mode replaces the cached entry
+    fireEvent.click(screen.getByTestId("preset-sundarbans-single"));
+    await waitFor(() =>
+      expect(screen.getByTestId("answer-card")).toBeInTheDocument(),
+    );
+    fireEvent.click(screen.getByTestId("mode-tab-bi-temporal"));
+    expect(screen.queryByTestId("answer-card")).toBeNull();
+    fireEvent.click(screen.getByTestId("mode-tab-single"));
+    expect(screen.getByTestId("answer-card")).toBeInTheDocument();
   });
 });
 

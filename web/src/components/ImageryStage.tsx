@@ -12,9 +12,9 @@ import type { Preset } from "../presets";
 import { Lightbox } from "./Lightbox";
 
 const ROLE_LABELS: Record<InputMode, string[]> = {
-  single: ["image"],
-  "bi-temporal": ["before", "after"],
-  "optical+sar": ["optical", "SAR"],
+  single: ["Image"],
+  "bi-temporal": ["Before", "After"],
+  "optical+sar": ["Optical", "SAR"],
 };
 
 // which panel an overlay stacks on, per mode
@@ -116,7 +116,7 @@ export function ImageryStage({
   if (agreeArt)
     panels.push({
       role: "agreement",
-      label: "agreement map",
+      label: "Agreement map",
       src: api.artifactUrl(agreeArt.url),
       name: agreeArt.name,
     });
@@ -167,13 +167,15 @@ export function ImageryStage({
             className="stage-panel"
             data-testid={`stage-panel-${p.role}`}
           >
-            <button
-              className="stage-img-btn"
-              disabled={!p.src}
-              onClick={() => p.src && setLb({ src: p.src, name: p.name })}
-            >
+            <div className="stage-frame">
               {p.src ? (
-                <img src={p.src} alt={p.label} />
+                <button
+                  className="stage-img-btn"
+                  onClick={() => setLb({ src: p.src!, name: p.name })}
+                  title={`expand ${p.label}`}
+                >
+                  <img src={p.src} alt={p.label} />
+                </button>
               ) : (
                 <div className="stage-empty">no imagery yet</div>
               )}
@@ -184,8 +186,41 @@ export function ImageryStage({
                   alt={`${p.label} overlay`}
                 />
               )}
-            </button>
-            <figcaption className="stage-role">{p.label}</figcaption>
+              <span className="stage-caption">{p.label}</span>
+              <span className="stage-actions">
+                {p.src && (
+                  <button
+                    className="stage-icon"
+                    title={`expand ${p.label}`}
+                    aria-label={`expand ${p.label}`}
+                    onClick={() => setLb({ src: p.src!, name: p.name })}
+                  >
+                    ⤢
+                  </button>
+                )}
+                {p.src && (
+                  <a
+                    className="stage-icon"
+                    href={p.src}
+                    download={p.name}
+                    title={`download ${p.name}`}
+                    aria-label={`download ${p.name}`}
+                  >
+                    ⬇
+                  </a>
+                )}
+              </span>
+              {overlaySrc && p.role === overlayRole && (
+                <button
+                  className={`overlay-chip${overlayOn ? " on" : ""}`}
+                  data-testid="overlay-toggle"
+                  aria-pressed={overlayOn}
+                  onClick={() => setOverlayOn((o) => !o)}
+                >
+                  {OVERLAY_LABEL[stageMode]}: {overlayOn ? "on" : "off"}
+                </button>
+              )}
+            </div>
             {p.role === "agreement" && (
               <div className="stage-legend">
                 {LEGEND.map(([c, l]) => (
@@ -204,16 +239,6 @@ export function ImageryStage({
       <div className="stage-meta">
         <span className="stage-meta-label">your images</span>
         <span className="stage-meta-line">{metaLine}</span>
-        {overlaySrc && (
-          <button
-            className={`overlay-toggle${overlayOn ? " on" : ""}`}
-            data-testid="overlay-toggle"
-            onClick={() => setOverlayOn((o) => !o)}
-          >
-            <span className="overlay-dot" />
-            {OVERLAY_LABEL[stageMode]}
-          </button>
-        )}
       </div>
       )}
       {lb && (
