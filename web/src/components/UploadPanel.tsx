@@ -119,6 +119,10 @@ export function UploadPanel({
   const [dragOver, setDragOver] = useState<string | null>(null);
   const inputs = useRef<Record<string, HTMLInputElement | null>>({});
 
+  // Monotonic upload id — if the user swaps a file mid-upload, only the
+  // newest upload may bind; a stale response must not overwrite it.
+  const uploadSeq = useRef(0);
+
   const setFile = (role: string, f: File | undefined) => {
     const n = { ...files };
     if (f) n[role] = f;
@@ -129,15 +133,20 @@ export function UploadPanel({
     );
     // replacing any file invalidates this panel's server previews
     setServerPrev(null);
+    // auto-bind: once every slot has a file, upload immediately — a staged
+    // thumbnail must never look bound while nothing is actually uploaded
+    if (MODE_ROLES[mode].every((r) => n[r.role])) void doUpload(n);
   };
 
   const complete = MODE_ROLES[mode].every((r) => files[r.role]);
 
-  const doUpload = async () => {
+  const doUpload = async (fset: Record<string, File> = files) => {
+    const seq = ++uploadSeq.current;
     setBusy(true);
     setErr(null);
     try {
-      const res = await api.upload(mode, files);
+      const res = await api.upload(mode, fset);
+      if (seq !== uploadSeq.current) return; // superseded by a newer pick
       const map: Record<string, string | null> = {};
       for (const r of MODE_ROLES[mode])
         map[r.role] =
@@ -145,9 +154,10 @@ export function UploadPanel({
       setServerPrev(map);
       onUploaded(res);
     } catch (e) {
-      setErr(e instanceof Error ? e.message : String(e));
+      if (seq === uploadSeq.current)
+        setErr(e instanceof Error ? e.message : String(e));
     } finally {
-      setBusy(false);
+      if (seq === uploadSeq.current) setBusy(false);
     }
   };
 

@@ -104,6 +104,19 @@ function installFetch(
 beforeEach(() => installFetch());
 afterEach(() => vi.unstubAllGlobals());
 
+// Presets are load-only: click binds inputs, run is a separate explicit click.
+async function loadAndRun(presetId: string, query?: string) {
+  fireEvent.click(screen.getByTestId(`preset-${presetId}`));
+  await waitFor(() =>
+    expect(screen.getByTestId("run-button")).not.toBeDisabled(),
+  );
+  if (query !== undefined)
+    fireEvent.change(screen.getByTestId("query-input"), {
+      target: { value: query },
+    });
+  fireEvent.click(screen.getByTestId("run-button"));
+}
+
 // ------------------------------------------------------- answer composition
 
 describe("answer card composition (real fixtures)", () => {
@@ -290,10 +303,7 @@ describe("slim stepper ↔ full trace", () => {
       ctl.enqueue(enc.encode(frames.slice(from, n).join("\n\n") + "\n\n"));
 
     render(<App />);
-    fireEvent.change(screen.getByTestId("query-input"), {
-      target: { value: "is there water" },
-    });
-    fireEvent.click(screen.getByTestId("run-button"));
+    await loadAndRun("sundarbans-single", "is there water");
     push(5, 0);
 
     await waitFor(() =>
@@ -400,7 +410,7 @@ describe("replay stepper — fixed order", () => {
 describe("stale-run clearing", () => {
   it("switching mode tabs drops the previous run's answer + stage", async () => {
     render(<App />);
-    fireEvent.click(screen.getByTestId("preset-sundarbans-single"));
+    await loadAndRun("sundarbans-single");
     await waitFor(() =>
       expect(screen.getByTestId("answer-card")).toBeInTheDocument(),
     );
@@ -420,7 +430,7 @@ describe("stale-run clearing", () => {
 describe("de-jargon guard", () => {
   it("no pipeline jargon anywhere on the page — idle and after a finished run", async () => {
     render(<App />);
-    fireEvent.click(screen.getByTestId("preset-sundarbans-single"));
+    await loadAndRun("sundarbans-single");
     await waitFor(() =>
       expect(screen.getByTestId("answer-card")).toBeInTheDocument(),
     );
@@ -465,7 +475,7 @@ describe("no unverified/audit wording — every stored fixture", () => {
 describe("per-mode run preservation", () => {
   it("tab away clears, tab back restores the mode's run as an honest replay", async () => {
     render(<App />);
-    fireEvent.click(screen.getByTestId("preset-sundarbans-single"));
+    await loadAndRun("sundarbans-single");
     await waitFor(() =>
       expect(screen.getByTestId("answer-card")).toBeInTheDocument(),
     );
@@ -488,7 +498,7 @@ describe("per-mode run preservation", () => {
     expect(screen.queryByText(/pick an example or upload imagery/)).toBeNull();
 
     // a new run for the mode replaces the cached entry
-    fireEvent.click(screen.getByTestId("preset-sundarbans-single"));
+    await loadAndRun("sundarbans-single");
     await waitFor(() =>
       expect(screen.getByTestId("answer-card")).toBeInTheDocument(),
     );

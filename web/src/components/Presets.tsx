@@ -3,18 +3,18 @@ import { presetsForMode, type Preset } from "../presets";
 
 export type { Preset } from "../presets";
 
-// Cards only — the fetch/upload/query flow lives in App.runPreset so mode,
-// upload_id and scene are passed explicitly (never read from stale closure).
+// Cards only — the fetch/upload binding lives in App.loadPreset: a click
+// fills the query and binds the inputs, it never runs the query itself.
 export function PresetPicker({
   mode,
   disabled,
   active,
-  onRun,
+  onLoad,
 }: {
   mode: InputMode;
   disabled?: boolean;
-  active: { id: string; phase: "uploading" | "running" } | null;
-  onRun: (p: Preset) => void;
+  active: { id: string; phase: "uploading" } | null;
+  onLoad: (p: Preset) => void;
 }) {
   const presets = presetsForMode(mode);
   if (!presets.length) return null;
@@ -28,18 +28,14 @@ export function PresetPicker({
             data-testid={`preset-${p.id}`}
             className={`preset-card${isActive ? " active" : ""}`}
             disabled={disabled || active != null}
-            onClick={() => onRun(p)}
+            onClick={() => onLoad(p)}
           >
             <span className="preset-label">{p.label}</span>
             <span className="preset-tag">
               {p.kind === "upload" ? "real upload" : `prepared scene ${p.scene}`}
             </span>
             <span className="preset-blurb">{p.blurb}</span>
-            {isActive && (
-              <span className="preset-phase">
-                {active.phase === "uploading" ? "uploading…" : "running…"}
-              </span>
-            )}
+            {isActive && <span className="preset-phase">loading…</span>}
           </button>
         );
       })}

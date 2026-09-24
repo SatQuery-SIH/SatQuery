@@ -27,6 +27,21 @@ function pickFile(role: string, file: File) {
 const previewOf = (role: string) =>
   screen.getByTestId(`slot-${role}`).querySelector(".slot-preview")!;
 
+// A fetch that never resolves — keeps an auto-upload in flight so the
+// slot's pre-upload state (local thumb / pending-server) stays observable.
+const pendingFetch = () =>
+  vi.stubGlobal("fetch", vi.fn(() => new Promise<Response>(() => {})));
+
+const stubUpload = (res: unknown = uploadRes) =>
+  vi.stubGlobal(
+    "fetch",
+    vi.fn(async (url: string) =>
+      String(url).endsWith("/upload")
+        ? new Response(JSON.stringify(res), { status: 200 })
+        : new Response("x", { status: 404 }),
+    ),
+  );
+
 const uploadRes = {
   upload_id: "up1",
   workdir: "/w",
@@ -45,6 +60,7 @@ const uploadRes = {
 
 describe("UploadPanel slot previews", () => {
   it("PNG pick → local blob thumbnail", async () => {
+    pendingFetch();
     render(<UploadPanel mode="single" onUploaded={() => {}} />);
     pickFile("image", new File(["x"], "a.png", { type: "image/png" }));
     await waitFor(() => {
@@ -55,6 +71,7 @@ describe("UploadPanel slot previews", () => {
   });
 
   it("TIFF pick → pending-server (no local render)", () => {
+    pendingFetch();
     render(<UploadPanel mode="single" onUploaded={() => {}} />);
     pickFile("image", new File(["x"], "a.tif", { type: "image/tiff" }));
     expect(previewOf("image").getAttribute("data-state")).toBe("pending-server");
@@ -62,45 +79,36 @@ describe("UploadPanel slot previews", () => {
     expect(previewOf("image").querySelector("img")).toBeNull();
   });
 
-  it("upload with previews → server img at API_BASE + url", async () => {
-    vi.stubGlobal(
-      "fetch",
-      vi.fn(async (url: string) =>
-        String(url).endsWith("/upload")
-          ? new Response(JSON.stringify(uploadRes), { status: 200 })
-          : new Response("x", { status: 404 }),
-      ),
-    );
+  it("a complete pick auto-uploads — the button is never needed", async () => {
+    stubUpload();
     const onUploaded = vi.fn();
     render(<UploadPanel mode="single" onUploaded={onUploaded} />);
     pickFile("image", new File(["x"], "a.tif", { type: "image/tiff" }));
-    fireEvent.click(screen.getByText("upload & inspect"));
+    await waitFor(() =>
+      expect(onUploaded).toHaveBeenCalledWith(
+        expect.objectContaining({ upload_id: "up1" }),
+      ),
+    );
     await waitFor(() =>
       expect(previewOf("image").getAttribute("data-state")).toBe("server"),
     );
     const img = previewOf("image").querySelector("img")!;
     expect(img.src).toBe(`${API_BASE}/uploads/up1/preview/image`);
-    expect(onUploaded).toHaveBeenCalledWith(
-      expect.objectContaining({ upload_id: "up1" }),
-    );
   });
 
   it("upload without previews → no-preview", async () => {
     const res = { ...uploadRes };
     delete (res as Record<string, unknown>).previews;
-    vi.stubGlobal(
-      "fetch",
-      vi.fn(async () => new Response(JSON.stringify(res), { status: 200 })),
-    );
+    stubUpload(res);
     render(<UploadPanel mode="single" onUploaded={() => {}} />);
     pickFile("image", new File(["x"], "a.tif", { type: "image/tiff" }));
-    fireEvent.click(screen.getByText("upload & inspect"));
     await waitFor(() =>
       expect(previewOf("image").getAttribute("data-state")).toBe("no-preview"),
     );
   });
 
   it("replacing a PNG revokes the old object URL; unmount revokes too", async () => {
+    pendingFetch();
     const { unmount } = render(
       <UploadPanel mode="single" onUploaded={() => {}} />,
     );
@@ -115,6 +123,7 @@ describe("UploadPanel slot previews", () => {
   });
 
   it("img error → error state; resets when the file changes", async () => {
+    pendingFetch();
     render(<UploadPanel mode="single" onUploaded={() => {}} />);
     pickFile("image", new File(["x"], "a.png", { type: "image/png" }));
     await waitFor(() => previewOf("image").querySelector("img"));

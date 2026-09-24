@@ -105,13 +105,24 @@ const streamBodies = () =>
     .filter((c) => c.url.endsWith("/query/stream") && c.method === "POST")
     .map((c) => c.body!);
 
+// Presets are load-only: a click binds inputs (real /upload for file
+// presets); the run itself is a separate explicit click.
+async function loadAndRun(presetId: string, query?: string) {
+  fireEvent.click(screen.getByTestId(`preset-${presetId}`));
+  await waitFor(() =>
+    expect(screen.getByTestId("run-button")).not.toBeDisabled(),
+  );
+  if (query !== undefined)
+    fireEvent.change(screen.getByTestId("query-input"), {
+      target: { value: query },
+    });
+  fireEvent.click(screen.getByTestId("run-button"));
+}
+
 describe("App — live stream flow", () => {
   it("live success: ● LIVE trace, answer-card, no replay label", async () => {
     render(<App />);
-    fireEvent.change(screen.getByTestId("query-input"), {
-      target: { value: "highlight the water" },
-    });
-    fireEvent.click(screen.getByTestId("run-button"));
+    await loadAndRun("sundarbans-single", "highlight the water");
     await waitFor(() =>
       expect(screen.getByTestId("answer-card")).toBeInTheDocument(),
     );
@@ -133,10 +144,7 @@ describe("App — live stream flow", () => {
       },
     });
     render(<App />);
-    fireEvent.change(screen.getByTestId("query-input"), {
-      target: { value: "highlight the water" },
-    });
-    fireEvent.click(screen.getByTestId("run-button"));
+    await loadAndRun("sundarbans-single", "highlight the water");
     await waitFor(() =>
       expect(screen.getByTestId("answer-card")).toBeInTheDocument(),
     );
@@ -152,10 +160,7 @@ describe("App — live stream flow", () => {
   it("seat down: pipeline error card with the narrator hint, no answer-card", async () => {
     installFetch(calls, { stream: () => sseRes(seatDown) });
     render(<App />);
-    fireEvent.change(screen.getByTestId("query-input"), {
-      target: { value: "highlight the water" },
-    });
-    fireEvent.click(screen.getByTestId("run-button"));
+    await loadAndRun("sundarbans-single", "highlight the water");
     const card = await screen.findByTestId("run-error");
     // raw slug + detail live inside the collapsed "details" section
     fireEvent.click(within(card).getByText("details"));
@@ -177,10 +182,7 @@ describe("App — live stream flow", () => {
         json({ error: "mode_mismatch", detail: "upload is single" }, 422),
     });
     render(<App />);
-    fireEvent.change(screen.getByTestId("query-input"), {
-      target: { value: "q" },
-    });
-    fireEvent.click(screen.getByTestId("run-button"));
+    await loadAndRun("sundarbans-single", "q");
     const card = await screen.findByTestId("run-error");
     expect(card).toHaveTextContent("request rejected");
     fireEvent.click(within(card).getByText("details"));
@@ -192,9 +194,9 @@ describe("App — live stream flow", () => {
 describe("App — preset runs pass explicit args (stale-closure regression)", () => {
   it("levir-pair sends bi-temporal + upload_id; scene3 sends optical+sar + scene 3", async () => {
     render(<App />);
-    // bi-temporal tab → levir-pair upload preset
+    // bi-temporal tab → levir-pair upload preset loads, then an explicit run
     fireEvent.click(screen.getByTestId("mode-tab-bi-temporal"));
-    fireEvent.click(screen.getByTestId("preset-levir-pair"));
+    await loadAndRun("levir-pair");
     await waitFor(() => expect(streamBodies().length).toBe(1));
     expect(streamBodies()[0]).toMatchObject({
       query: "what changed between the two images",
@@ -209,7 +211,7 @@ describe("App — preset runs pass explicit args (stale-closure regression)", ()
       expect(screen.getByTestId("answer-card")).toBeInTheDocument(),
     );
     fireEvent.click(screen.getByTestId("mode-tab-optical+sar"));
-    fireEvent.click(screen.getByTestId("preset-scene3"));
+    await loadAndRun("scene3");
     await waitFor(() => expect(streamBodies().length).toBe(2));
     expect(streamBodies()[1]).toMatchObject({
       query: "Is there water in this scene?",
@@ -217,6 +219,81 @@ describe("App — preset runs pass explicit args (stale-closure regression)", ()
       scene: 3,
     });
     expect(streamBodies()[1].upload_id).toBeUndefined();
+  });
+
+  it("a preset click loads inputs + query but never runs on its own", async () => {
+    render(<App />);
+    fireEvent.click(screen.getByTestId("preset-sundarbans-single"));
+    // the real upload goes out (binding), but no query is fired
+    await waitFor(() =>
+      expect(calls.some((c) => c.url.endsWith("/upload"))).toBe(true),
+    );
+    await waitFor(() =>
+      expect(screen.getByTestId("run-button")).not.toBeDisabled(),
+    );
+    expect(streamBodies()).toHaveLength(0);
+    expect(calls.some((c) => c.url.endsWith("/query"))).toBe(false);
+    // the preset's query is in the box, editable before running
+    expect(screen.getByTestId("query-input")).toHaveValue(
+      "is there a large water body in this image",
+    );
+  });
+
+  it("run is disabled with no bound inputs — never falls back to a default scene", async () => {
+    render(<App />);
+    const run = screen.getByTestId("run-button");
+    expect(run).toBeDisabled();
+    expect(screen.getByTestId("input-hint")).toBeInTheDocument();
+    // typing a question alone is not enough — nothing may run unbound
+    fireEvent.change(screen.getByTestId("query-input"), {
+      target: { value: "is there water?" },
+    });
+    expect(run).toBeDisabled();
+    fireEvent.keyDown(screen.getByTestId("query-input"), { key: "Enter" });
+    expect(streamBodies()).toHaveLength(0);
+    expect(calls.some((c) => c.url.endsWith("/query"))).toBe(false);
+    // binding a preset enables it
+    fireEvent.click(screen.getByTestId("preset-sundarbans-single"));
+    await waitFor(() => expect(run).not.toBeDisabled());
+  });
+
+  it("editing the preset query still runs against the preset's upload", async () => {
+    render(<App />);
+    await loadAndRun("sundarbans-single", "how much water covers the scene");
+    await waitFor(() => expect(streamBodies().length).toBe(1));
+    expect(streamBodies()[0]).toMatchObject({
+      query: "how much water covers the scene",
+      input_mode: "single",
+      upload_id: "up_bt",
+    });
+    expect(streamBodies()[0].scene).toBeUndefined();
+  });
+
+  it("a file dropped in the slot auto-binds — run uses that upload", async () => {
+    render(<App />);
+    const input = screen
+      .getByTestId("slot-image")
+      .querySelector("input[type=file]")!;
+    fireEvent.change(input, {
+      target: {
+        files: [new File(["x"], "mine.tif", { type: "image/tiff" })],
+      },
+    });
+    fireEvent.change(screen.getByTestId("query-input"), {
+      target: { value: "what do you see" },
+    });
+    // no "upload & inspect" click — the pick itself binds the input
+    await waitFor(() =>
+      expect(screen.getByTestId("run-button")).not.toBeDisabled(),
+    );
+    fireEvent.click(screen.getByTestId("run-button"));
+    await waitFor(() => expect(streamBodies().length).toBe(1));
+    expect(streamBodies()[0]).toMatchObject({
+      query: "what do you see",
+      input_mode: "single",
+      upload_id: "up_bt",
+    });
+    expect(streamBodies()[0].scene).toBeUndefined();
   });
 
   it("tab switch changes which preset cards are visible", () => {

@@ -111,7 +111,7 @@ export default function App() {
   const [runError, setRunError] = useState<RunError | null>(null);
   const [presetPhase, setPresetPhase] = useState<{
     id: string;
-    phase: "uploading" | "running";
+    phase: "uploading";
   } | null>(null);
   const [runView, setRunView] = useState<RunView>({ kind: "idle" });
   const [traceOpen, setTraceOpen] = useState(false);
@@ -275,14 +275,22 @@ export default function App() {
     }
   };
 
-  const runPreset = async (p: Preset) => {
+  // A preset click LOADS only: it fills the query and binds the inputs (real
+  // /upload for file presets, scene binding for prepared ones). It never
+  // runs — the user reads/edits the query and presses run themselves.
+  const loadPreset = async (p: Preset) => {
     if (busy || presetPhase) return;
     setMode(p.mode);
     setQuery(p.query);
     setRunError(null);
+    // clear bindings first: if a preset upload fails, nothing stale stays
+    // bound — a run must never silently fall back to another image
+    setUpload(null);
+    setScene(null);
+    setBoundPreset(null);
+    setInputNames({});
     try {
       if (p.kind === "prepared") {
-        setUpload(null);
         setScene(p.scene ?? null);
         setBoundPreset(p);
         setInputNames(
@@ -290,8 +298,6 @@ export default function App() {
             (p.previews ?? []).map((x) => [x.role, baseName(x.url)]),
           ),
         );
-        setPresetPhase({ id: p.id, phase: "running" });
-        await runQuery({ text: p.query, mode: p.mode, scene: p.scene });
       } else {
         setPresetPhase({ id: p.id, phase: "uploading" });
         const files: Record<string, File> = {};
@@ -299,16 +305,17 @@ export default function App() {
           const blob = await fetchPresetFile(f);
           files[f.role] = new File([blob], f.name, { type: mimeForName(f.name) });
         }
+        const up = await api.upload(p.mode, files);
+        setUpload(up);
+        setBoundPreset(null);
         setInputNames(
           Object.fromEntries((p.files ?? []).map((f) => [f.role, f.name])),
         );
-        const up = await api.upload(p.mode, files);
-        setUpload(up);
-        setScene(null);
-        setBoundPreset(null);
-        setPresetPhase({ id: p.id, phase: "running" });
-        await runQuery({ text: p.query, mode: p.mode, uploadId: up.upload_id });
       }
+      // new inputs invalidate the displayed run
+      setBundle(null);
+      setRunView({ kind: "idle" });
+      setTraceOpen(false);
     } catch (e) {
       if (e instanceof ApiHttpError)
         setRunError({ slug: e.slug, detail: e.message });
@@ -342,6 +349,11 @@ export default function App() {
   };
 
   const blocked = busy || presetPhase != null;
+  // Run requires bound inputs. With no upload and no scene the pipeline would
+  // silently fall back to a mode's default prepared scene — the user would
+  // get a confident answer about an image they never chose.
+  const inputsBound = upload != null || scene != null;
+  const canRun = query.trim() !== "" && inputsBound;
   const namesOrdered = ROLE_ORDER[mode]
     .map((r) => inputNames[r])
     .filter(Boolean) as string[];
@@ -375,6 +387,16 @@ export default function App() {
                   if (cached) {
                     setBundle(cached);
                     setRunView({ kind: "replay" });
+                    // prepared-scene runs rebind their scene so re-running
+                    // uses the same inputs; upload runs stay unbound — the
+                    // upload may be gone server-side and must not silently
+                    // fall back to a prepared scene
+                    const sc = cached.trace?.scene;
+                    if (
+                      cached.trace?.input_source === "prepared" &&
+                      typeof sc === "number"
+                    )
+                      setScene(sc);
                   } else {
                     setBundle(null);
                     setRunView({ kind: "idle" });
@@ -390,7 +412,7 @@ export default function App() {
             mode={mode}
             disabled={blocked}
             active={presetPhase}
-            onRun={(p) => void runPreset(p)}
+            onLoad={(p) => void loadPreset(p)}
           />
 
           <UploadPanel
@@ -406,7 +428,14 @@ export default function App() {
               setRunError(null);
               setTraceOpen(false);
             }}
-            onFilesChange={setInputNames}
+            onFilesChange={(names) => {
+              setInputNames(names);
+              // the staged selection changed — the previous upload no longer
+              // matches the slots; unbind until the panel's auto-upload lands
+              setUpload(null);
+              setBundle(null);
+              setRunView({ kind: "idle" });
+            }}
           />
 
           <div className="query-row">
@@ -418,6 +447,7 @@ export default function App() {
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={(e) =>
                 e.key === "Enter" &&
+                canRun &&
                 void runQuery({
                   text: query,
                   mode,
@@ -429,7 +459,7 @@ export default function App() {
             <button
               className="btn primary"
               data-testid="run-button"
-              disabled={blocked || !query.trim()}
+              disabled={blocked || !canRun}
               onClick={() =>
                 void runQuery({
                   text: query,
@@ -442,6 +472,12 @@ export default function App() {
               {busy ? "running…" : "run"}
             </button>
           </div>
+          {!inputsBound && (
+            <div className="input-hint muted" data-testid="input-hint">
+              pick an example or upload imagery first — a run always uses the
+              inputs you bound
+            </div>
+          )}
         </div>
 
         <ImageryStage
