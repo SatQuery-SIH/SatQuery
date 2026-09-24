@@ -45,6 +45,7 @@ def _fake_run(
     uploads=None,
     cd_prefer="changeformer",
     on_event=None,
+    sensor_profile=None,
 ):
     if on_event:
         on_event({"event": "stage", "stage": "plan", "status": "done", "ts": 0.0})

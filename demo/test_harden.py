@@ -237,5 +237,196 @@ class HardenTests(unittest.TestCase):
         self.assertEqual(primary.stat().st_size, size_before)
 
 
+class SensorProfileC1Tests(unittest.TestCase):
+    """C1: band order comes from a declared profile or band metadata, never
+    from band count. Unidentified multispectral/PAN must withhold instead of
+    producing a confident wrong answer on the hidden set."""
+
+    @staticmethod
+    def _mx_tiff(tmp: Path, names=None):
+        """4-band uint16 TIFF in Cartosat-2S MX order B,G,R,NIR.
+        Water = left 12 cols (30%): green high, NIR low -> NDWI>0."""
+        import numpy as np
+        from ingest import write_test_geotiff
+
+        h, w = 40, 40
+        water = np.zeros((h, w), dtype=bool)
+        water[:, :12] = True
+        blue = np.full((h, w), 300, np.uint16)
+        green = np.where(water, 900, 200).astype(np.uint16)
+        red = np.where(water, 150, 500).astype(np.uint16)
+        nir = np.where(water, 40, 700).astype(np.uint16)
+        arr = np.stack([blue, green, red, nir])
+        tif = write_test_geotiff(
+            tmp / "mx.tif", arr, 1.0, 1.0,
+            geographic=False, channel_names=names,
+        )
+        return tif, water
+
+    def test_unnamed_multispectral_withholds(self) -> None:
+        # Mechanism evidence (synthetic, assumed B,G,R,NIR): today the tool
+        # runs the B-R heuristic on swapped bands — the honest answer is
+        # withheld, not a confident number.
+        import numpy as np
+        from tools import water_highlight
+
+        tmp = Path(tempfile.mkdtemp())
+        tif, _water = self._mx_tiff(tmp)
+        rgb = np.zeros((40, 40, 3), np.uint8)
+        wh = water_highlight(rgb, source_path=tif)
+        self.assertTrue(wh.get("withheld"))
+        self.assertEqual(wh.get("withheld_reason"), "no_spectral_basis")
+        self.assertIn(int(wh.get("water_pixels") or 0), (0,))
+
+    def test_declared_profile_drives_ndwi(self) -> None:
+        import numpy as np
+        from tools import water_highlight
+
+        tmp = Path(tempfile.mkdtemp())
+        tif, _water = self._mx_tiff(tmp)
+        rgb = np.zeros((40, 40, 3), np.uint8)
+        wh = water_highlight(rgb, source_path=tif, sensor_profile="cartosat2s_mx")
+        self.assertFalse(wh.get("withheld"))
+        self.assertEqual(wh.get("evidence_class"), "measured_index")
+        self.assertIn("NDWI", wh.get("method", ""))
+        frac = int(wh["water_pixels"]) / int(np.asarray(wh["mask"]).size)
+        self.assertAlmostEqual(frac, 0.30, places=2)
+
+    def test_named_bands_still_ndwi(self) -> None:
+        import numpy as np
+        from tools import water_highlight
+
+        tmp = Path(tempfile.mkdtemp())
+        tif, _water = self._mx_tiff(tmp, names=("blue", "green", "red", "nir"))
+        rgb = np.zeros((40, 40, 3), np.uint8)
+        wh = water_highlight(rgb, source_path=tif)
+        self.assertFalse(wh.get("withheld"))
+        self.assertEqual(wh.get("evidence_class"), "measured_index")
+        frac = int(wh["water_pixels"]) / int(np.asarray(wh["mask"]).size)
+        self.assertAlmostEqual(frac, 0.30, places=2)
+
+    def test_pan_single_band_withholds(self) -> None:
+        # Old behavior: PAN returned a confident 0.0% water.
+        import numpy as np
+        from ingest import write_test_geotiff
+        from tools import water_highlight
+
+        tmp = Path(tempfile.mkdtemp())
+        pan = np.full((40, 40), 500, np.uint16)
+        tif = write_test_geotiff(tmp / "pan.tif", pan, 1.0, 1.0, geographic=False)
+        rgb = np.zeros((40, 40, 3), np.uint8)
+        wh = water_highlight(rgb, source_path=tif)
+        self.assertTrue(wh.get("withheld"))
+        self.assertEqual(wh.get("withheld_reason"), "no_spectral_basis")
+
+    def test_unknown_profile_withholds(self) -> None:
+        import numpy as np
+        from tools import water_highlight
+
+        tmp = Path(tempfile.mkdtemp())
+        tif, _water = self._mx_tiff(tmp)
+        rgb = np.zeros((40, 40, 3), np.uint8)
+        wh = water_highlight(rgb, source_path=tif, sensor_profile="bogus_sat")
+        self.assertTrue(wh.get("withheld"))
+        self.assertEqual(wh.get("withheld_reason"), "unknown_sensor_profile")
+
+    def test_naip_profile_rgbn_order(self) -> None:
+        # NAIP-style R,G,B,NIR ordering must also resolve — the profile, not
+        # the band count, carries the order.
+        import numpy as np
+        from ingest import write_test_geotiff
+        from tools import water_highlight
+
+        tmp = Path(tempfile.mkdtemp())
+        h, w = 40, 40
+        water = np.zeros((h, w), dtype=bool)
+        water[:, :12] = True
+        red = np.where(water, 150, 500).astype(np.uint16)
+        green = np.where(water, 900, 200).astype(np.uint16)
+        blue = np.full((h, w), 300, np.uint16)
+        nir = np.where(water, 40, 700).astype(np.uint16)
+        arr = np.stack([red, green, blue, nir])
+        tif = write_test_geotiff(tmp / "naip.tif", arr, 1.0, 1.0, geographic=False)
+        rgb = np.zeros((40, 40, 3), np.uint8)
+        wh = water_highlight(rgb, source_path=tif, sensor_profile="naip")
+        self.assertFalse(wh.get("withheld"))
+        self.assertEqual(wh.get("evidence_class"), "measured_index")
+        frac = int(wh["water_pixels"]) / int(np.asarray(wh["mask"]).size)
+        self.assertAlmostEqual(frac, 0.30, places=2)
+
+    def test_profile_fixes_display_composite(self) -> None:
+        # The composite that feeds both VLM seats must use profile indices —
+        # on B,G,R,NIR input, channel 0 must be the red band, not band 1.
+        from ingest import _load_rgb_array
+
+        tmp = Path(tempfile.mkdtemp())
+        tif, _water = self._mx_tiff(tmp)
+        prof, _n1 = _load_rgb_array(tif, sensor_profile="cartosat2s_mx")
+        naive, _n2 = _load_rgb_array(tif)
+        self.assertIsNotNone(prof)
+        self.assertIsNotNone(naive)
+        self.assertGreater(prof[..., 0].mean(), prof[..., 2].mean())
+        self.assertLess(naive[..., 0].mean(), naive[..., 2].mean())
+
+    def test_rgb_png_heuristic_unchanged(self) -> None:
+        # Plain RGB imagery keeps the heuristic path, now labelled.
+        import numpy as np
+        from tools import water_highlight
+
+        tmp = Path(tempfile.mkdtemp())
+        rgb = np.zeros((20, 20, 3), np.uint8)
+        rgb[..., 2] = 60
+        png = tmp / "x.png"
+        Image.fromarray(rgb).save(png)
+        wh = water_highlight(png)
+        self.assertFalse(wh.get("withheld"))
+        self.assertEqual(wh.get("evidence_class"), "heuristic_estimate")
+
+    def test_bind_threads_sensor_profile(self) -> None:
+        from pipeline import bind_inputs
+
+        tmp = Path(tempfile.mkdtemp())
+        tif, _water = self._mx_tiff(tmp)
+        bound = bind_inputs(
+            "single", uploads={"image": str(tif)}, sensor_profile="cartosat2s_mx"
+        )
+        self.assertTrue(bound["ok"], bound.get("error"))
+        self.assertEqual(bound.get("sensor_profile"), "cartosat2s_mx")
+
+    def test_sar_named_non_vvvh_polarization_refused(self) -> None:
+        # RISAT hybrid-pol delivers RH/RV (Stokes-derived), not VV/VH —
+        # labelling them VV/VH is an invented claim; refuse instead.
+        import numpy as np
+        from ingest import read_sar_arrays, write_test_geotiff
+
+        tmp = Path(tempfile.mkdtemp())
+        arr = np.stack(
+            [np.full((20, 20), 0.2, np.float32), np.full((20, 20), 0.1, np.float32)]
+        )
+        tif = write_test_geotiff(
+            tmp / "risat.tif", arr, 1.0, 1.0,
+            geographic=False, channel_names=("rh", "rv"),
+        )
+        out = read_sar_arrays(tif)
+        self.assertFalse(out.get("ok"))
+        self.assertIn("polariz", (out.get("error") or "").lower())
+
+    def test_sar_named_vv_vh_verified(self) -> None:
+        import numpy as np
+        from ingest import read_sar_arrays, write_test_geotiff
+
+        tmp = Path(tempfile.mkdtemp())
+        arr = np.stack(
+            [np.full((20, 20), 0.2, np.float32), np.full((20, 20), 0.1, np.float32)]
+        )
+        tif = write_test_geotiff(
+            tmp / "s1.tif", arr, 1.0, 1.0,
+            geographic=False, channel_names=("vv", "vh"),
+        )
+        out = read_sar_arrays(tif)
+        self.assertTrue(out.get("ok"), out.get("error"))
+        self.assertTrue(out.get("pol_verified"))
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

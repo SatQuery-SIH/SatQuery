@@ -267,6 +267,7 @@ def bind_inputs(
     input_mode: str,
     scene: int | None = None,
     uploads: dict[str, Any] | None = None,
+    sensor_profile: str | None = None,
 ) -> dict[str, Any]:
     """Resolve prepared scenes vs uploads. Partial uploads are an error, not a mix."""
     uploads = uploads or {}
@@ -348,6 +349,7 @@ def bind_inputs(
             "workdir": None,
             "ingest_note": PREPARED_NOTE,
             "sar_arrays": None,
+            "sensor_profile": sensor_profile,
         }
         if "before" in paths and "after" in paths:
             _apply_misreg(out, paths["before"], paths["after"])
@@ -371,7 +373,9 @@ def bind_inputs(
 
     wd = _workdir()
     if input_mode == "single":
-        mat = materialize_rgb(provided["image"], wd / "image.png")
+        mat = materialize_rgb(
+            provided["image"], wd / "image.png", sensor_profile=sensor_profile
+        )
         if not mat["ok"]:
             return {
                 "ok": False,
@@ -401,11 +405,16 @@ def bind_inputs(
             "workdir": wd,
             "ingest_note": UPLOAD_NOTE + " " + mat["note"],
             "sar_arrays": None,
+            "sensor_profile": sensor_profile,
         }
 
     if input_mode == "bi-temporal":
-        b = materialize_rgb(provided["before"], wd / "before.png")
-        a = materialize_rgb(provided["after"], wd / "after.png")
+        b = materialize_rgb(
+            provided["before"], wd / "before.png", sensor_profile=sensor_profile
+        )
+        a = materialize_rgb(
+            provided["after"], wd / "after.png", sensor_profile=sensor_profile
+        )
         if not b["ok"] or not a["ok"]:
             return {
                 "ok": False,
@@ -466,11 +475,14 @@ def bind_inputs(
             "ingest_note": UPLOAD_NOTE + " " + a["note"] + " " + UPLOAD_DOMAIN_LIMITATION + " " + SEMANTIC_UPLOAD_LIMITATION,
             "sar_arrays": None,
             "cd_domain": "levir",
+            "sensor_profile": sensor_profile,
         }
         return _apply_misreg(out, b["path"], a["path"])
 
     # optical+sar
-    opt = materialize_rgb(provided["optical"], wd / "optical.png")
+    opt = materialize_rgb(
+        provided["optical"], wd / "optical.png", sensor_profile=sensor_profile
+    )
     sar = read_sar_arrays(provided["sar"])
     if not opt["ok"] or not sar.get("ok"):
         return {
@@ -515,7 +527,9 @@ def bind_inputs(
             "vh": sar["vh"],
             "provenance": sar.get("provenance"),
             "calibrated": sar.get("calibrated", True),
+            "pol_verified": sar.get("pol_verified"),
         },
+        "sensor_profile": sensor_profile,
     }
     return _apply_coreg(
         out,
@@ -636,6 +650,7 @@ def run_query(
     uploads: dict[str, Any] | None = None,
     cd_prefer: str = "changeformer",
     on_event: Callable[[dict], None] | None = None,
+    sensor_profile: str | None = None,
 ) -> dict[str, Any]:
     t_all = time.perf_counter()
 
@@ -759,7 +774,7 @@ def run_query(
         },
     )
     _emit("bind", "start")
-    bound = bind_inputs(input_mode, scene, uploads)
+    bound = bind_inputs(input_mode, scene, uploads, sensor_profile=sensor_profile)
     _emit(
         "bind",
         "done" if bound.get("ok") else "fail",
@@ -938,19 +953,27 @@ def run_query(
         _t0 = _tool_start("water_highlight")
         src = paths["image"]
         orig = paths.get("source_original") or src
-        wh = _call("tool", "water_highlight", water_highlight, src, source_path=orig)
-        overlay = overlay_mask(
-            load_rgb(src), wh["mask"], color=WATER_OVERLAY_RGB, alpha=0.5
+        wh = _call(
+            "tool",
+            "water_highlight",
+            water_highlight,
+            src,
+            source_path=orig,
+            sensor_profile=bound.get("sensor_profile"),
         )
-        overlay_dir = workdir if workdir is not None else (DATA / "scene1")
-        overlay_dir.mkdir(parents=True, exist_ok=True)
-        overlay_path = overlay_dir / "water_overlay_live.png"
-        overlay.save(overlay_path)
-        trace["overlay_path"] = str(overlay_path)
-        _geo_export(
-            trace, bound, wh["mask"], "water_mask.tif",
-            "source_original", overlay_dir,
-        )
+        if not wh.get("withheld"):
+            overlay = overlay_mask(
+                load_rgb(src), wh["mask"], color=WATER_OVERLAY_RGB, alpha=0.5
+            )
+            overlay_dir = workdir if workdir is not None else (DATA / "scene1")
+            overlay_dir.mkdir(parents=True, exist_ok=True)
+            overlay_path = overlay_dir / "water_overlay_live.png"
+            overlay.save(overlay_path)
+            trace["overlay_path"] = str(overlay_path)
+            _geo_export(
+                trace, bound, wh["mask"], "water_mask.tif",
+                "source_original", overlay_dir,
+            )
         numbers["water_highlight"] = _jsonable(wh)
         trace["tool_outputs"]["water_highlight"] = numbers["water_highlight"]
         _tool_done(
@@ -960,15 +983,23 @@ def run_query(
         )
         if "area_calc" in tools_needed:
             _t0 = _tool_start("area_calc")
-            area = _call(
-                "tool",
-                "area_calc",
-                area_calc,
-                wh["mask"],
-                gsd_m=gsd_info.get("gsd_m"),
-                label="water",
-                gsd_meta=gsd_info,
-            )
+            if wh.get("withheld"):
+                area = {
+                    "withheld": True,
+                    "withheld_reason": "water_highlight withheld "
+                    f"({wh.get('withheld_reason')})",
+                    "label": "water",
+                }
+            else:
+                area = _call(
+                    "tool",
+                    "area_calc",
+                    area_calc,
+                    wh["mask"],
+                    gsd_m=gsd_info.get("gsd_m"),
+                    label="water",
+                    gsd_meta=gsd_info,
+                )
             numbers["area_calc"] = area
             trace["tool_outputs"]["area_calc"] = area
             _tool_done(
@@ -1043,46 +1074,61 @@ def run_query(
                 water_highlight,
                 paths["optical"],
                 source_path=paths.get("source_original"),
+                sensor_profile=bound.get("sensor_profile"),
             )
             numbers["water_highlight"] = _jsonable(wh)
             trace["tool_outputs"]["water_highlight"] = numbers["water_highlight"]
-            ag = _call(
-                "tool",
-                "sar_agreement",
-                sar_agreement,
-                wh["mask"],
-                sr["water_mask"],
-                sar_calibrated=sr.get("water_calibrated", True),
-                misreg_shift_px=bound.get("misreg_shift_px"),
-            )
-            amap = _agreement_map_image(ag)
-            amap_dir = workdir if workdir is not None else (DATA / "scene3")
-            amap_dir.mkdir(parents=True, exist_ok=True)
-            amap_path = amap_dir / "agreement_map_live.png"
-            amap.save(amap_path)
-            trace["agreement_map_path"] = str(amap_path)
-            _geo_export(
-                trace, bound, wh["mask"], "water_optical_mask.tif",
-                "source_original", amap_dir,
-            )
-            # Categorical agreement grid: 0=neither 1=optical 2=sar 3=both.
-            cat = ag["optical_mask"].astype(np.uint8) + 2 * ag[
-                "sar_mask"
-            ].astype(np.uint8)
-            _geo_export(
-                trace, bound, cat, "agreement_map_live.tif",
-                "source_original", amap_dir,
-            )
-            numbers["sar_agreement"] = _jsonable(ag)
-            trace["tool_outputs"]["sar_agreement"] = numbers["sar_agreement"]
-            _tool_done(
-                "sar_agreement",
-                _t0,
-                {
-                    "verdicts": _jsonable(ag.get("verdicts")),
-                    "agreement_iou": ag.get("agreement_iou"),
-                },
-            )
+            if wh.get("withheld"):
+                ag = {
+                    "withheld": True,
+                    "withheld_reason": "optical water mask withheld "
+                    f"({wh.get('withheld_reason')})",
+                }
+                numbers["sar_agreement"] = _jsonable(ag)
+                trace["tool_outputs"]["sar_agreement"] = numbers["sar_agreement"]
+                _tool_done(
+                    "sar_agreement",
+                    _t0,
+                    {"withheld": ag["withheld_reason"]},
+                )
+            else:
+                ag = _call(
+                    "tool",
+                    "sar_agreement",
+                    sar_agreement,
+                    wh["mask"],
+                    sr["water_mask"],
+                    sar_calibrated=sr.get("water_calibrated", True),
+                    misreg_shift_px=bound.get("misreg_shift_px"),
+                )
+                amap = _agreement_map_image(ag)
+                amap_dir = workdir if workdir is not None else (DATA / "scene3")
+                amap_dir.mkdir(parents=True, exist_ok=True)
+                amap_path = amap_dir / "agreement_map_live.png"
+                amap.save(amap_path)
+                trace["agreement_map_path"] = str(amap_path)
+                _geo_export(
+                    trace, bound, wh["mask"], "water_optical_mask.tif",
+                    "source_original", amap_dir,
+                )
+                # Categorical agreement grid: 0=neither 1=optical 2=sar 3=both.
+                cat = ag["optical_mask"].astype(np.uint8) + 2 * ag[
+                    "sar_mask"
+                ].astype(np.uint8)
+                _geo_export(
+                    trace, bound, cat, "agreement_map_live.tif",
+                    "source_original", amap_dir,
+                )
+                numbers["sar_agreement"] = _jsonable(ag)
+                trace["tool_outputs"]["sar_agreement"] = numbers["sar_agreement"]
+                _tool_done(
+                    "sar_agreement",
+                    _t0,
+                    {
+                        "verdicts": _jsonable(ag.get("verdicts")),
+                        "agreement_iou": ag.get("agreement_iou"),
+                    },
+                )
 
     if isinstance(bound, dict) and bound.get("coreg"):
         numbers["coreg_check"] = _jsonable(bound["coreg"])

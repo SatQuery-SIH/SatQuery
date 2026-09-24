@@ -66,6 +66,10 @@ class QueryRequest(BaseModel):
     scene: int | None = None
     upload_id: str | None = None
     live: bool = True
+    # C1: declared sensor profile (ingest.SENSOR_PROFILES) — drives band
+    # order for the VLM composite and spectral tools. None = file metadata
+    # only; unidentified bands withhold spectral claims.
+    sensor_profile: str | None = None
 
 
 class ArtifactRef(BaseModel):

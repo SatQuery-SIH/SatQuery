@@ -40,12 +40,12 @@ SHARED = (
     DEMO / "serve.ps1",
 )
 SHARED_SHA = {
-    "tools.py": "b5d2431969b39759d4d809b04912b49e3b9afa8303788378f695653ff3a8fab7",  # 2026-09-24 authorized WATER-HL-SPECKLE (B-R Otsu floor + 3x3 open)
+    "tools.py": "8c56dc12fbe3d9633c9f8bdf328649c8b349d328a8d9e241ceba26036c1433d3",  # 2026-09-24 authorized C1-SENSOR-PROFILE (band identity via declared profile/metadata; unidentified bands withhold; evidence_class)
     "app.py": "be1f0ee9e58a2a3800674ac631f76a79cda271c9ee9f298bf7eb9b1089a87bf6",  # 2026-09-13 human-authorized Tab 2 copy edit (readable legend; needles unchanged)
-    "pipeline.py": "f69109a870ecaaad02cba9d10d19e9390a06259d5f13b340ea70543698ddc273",  # 2026-09-24 authorized MODEL-FIRST-ROUTER (model-primary live routing, regex fallback, refusals stay deterministic)
+    "pipeline.py": "c86ab8a1ea806b02aecae080c5cc46ab3476217c99b513027f4af4ccc1fe559b",  # 2026-09-24 authorized C1-SENSOR-PROFILE (sensor_profile threading; withheld water skips overlay/area/agreement artifacts)
     "report.py": "bbf5370bd67deacda91a817844797f166f793eeb79df03066eb54af52a0fdff6",  # 2026-09-24 authorized WEB-POLISH-V3
     "planner.py": "31c20c8f97056aacab425e9a0310491e1d00909236078809126db07b7fe1cee3",  # 2026-09-24 authorized ROUTE-PROBE (cdvqa_map→change_detect validator coupling; dead-tool fix)
-    "ingest.py": "64cbf87d953a348914db627017c6c0bd27b35c07378ccf7923f3adade3bd975b",  # 2026-09-14 authorized TIFF-GSD-FIX
+    "ingest.py": "f6d0f8bf7c840d5ff2f7b4de375bcd2199771a2c89a91b572e75c36f35ab2e3e",  # 2026-09-24 authorized C1-SENSOR-PROFILE (SENSOR_PROFILES + resolve_band_map; SAR pol verify/refuse; profile-driven true-color)
     "serve.ps1": "19287c44083cd94fd4f91ff6cbae5e66b2c33b30978a0df2bc5b99a0f14dd172",
 }
 

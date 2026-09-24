@@ -278,90 +278,18 @@ def _rgb_water_index_mask(rgb: np.ndarray) -> tuple[np.ndarray, str]:
     return mask, method
 
 
-def _named_green_nir(path: Path) -> tuple[np.ndarray | None, np.ndarray | None, str]:
-    """Return (green, nir) only when the file names those bands. Never invent."""
-    try:
-        import rasterio
-        from rasterio.enums import ColorInterp
-    except Exception:
-        rasterio = None  # type: ignore
-        ColorInterp = None  # type: ignore
-    if rasterio is not None:
-        try:
-            with rasterio.open(path) as ds:
-                n = int(ds.count)
-                if n < 2:
-                    return None, None, f"GeoTIFF bands={n} (<2)"
-                green = nir = None
-                notes = []
-                for i in range(1, n + 1):
-                    desc = (ds.descriptions[i - 1] or "").lower()
-                    try:
-                        ci = ds.colorinterp[i - 1]
-                        ci_name = getattr(ci, "name", str(ci)).lower()
-                    except Exception:
-                        ci_name = ""
-                    blob = f"{desc} {ci_name}"
-                    arr = ds.read(i).astype(np.float32)
-                    if green is None and (
-                        "green" in blob or (ColorInterp is not None and ci == getattr(ColorInterp, "green", None))
-                    ):
-                        green = arr
-                        notes.append(f"green=band{i}({desc or ci_name})")
-                    if nir is None and (
-                        "nir" in blob
-                        or "near-ir" in blob
-                        or "near infrared" in blob
-                        or "b08" in blob
-                        or ci_name in {"nir", "nearinfrared"}
-                    ):
-                        nir = arr
-                        notes.append(f"nir=band{i}({desc or ci_name})")
-                if green is not None and nir is not None:
-                    return green, nir, "named bands: " + ", ".join(notes)
-                rio_note = (
-                    f"GeoTIFF bands={n}; NIR/green identities unknown "
-                    f"(descriptions={list(ds.descriptions)})"
-                )
-        except Exception as e:
-            rio_note = f"rasterio inspect failed {type(e).__name__}: {e}"
-    else:
-        rio_note = "rasterio unavailable"
-    try:
-        import tifffile
-
-        with tifffile.TiffFile(str(path)) as tf:
-            desc = ""
-            if tf.pages:
-                desc = str(getattr(tf.pages[0], "description", None) or "")
-            names: list[str] = []
-            if "channel_names=" in desc:
-                tail = desc.split("channel_names=", 1)[1]
-                names = [x.strip().lower() for x in tail.split(",") if x.strip()]
-            arr = np.asarray(tifffile.imread(str(path)), dtype=np.float32)
-            if arr.ndim == 3 and names:
-                if arr.shape[0] == len(names):
-                    planes = {names[i]: arr[i] for i in range(len(names))}
-                elif arr.shape[-1] == len(names):
-                    planes = {names[i]: arr[..., i] for i in range(len(names))}
-                else:
-                    planes = {}
-                green = planes.get("green")
-                nir = planes.get("nir")
-                if green is not None and nir is not None:
-                    return green, nir, f"tifffile named channels {names}"
-            return None, None, rio_note + f"; tifffile desc={desc!r} shape={arr.shape}"
-    except Exception as e:
-        return None, None, rio_note + f"; tifffile failed {type(e).__name__}: {e}"
-
-
 def water_highlight(
     rgb: np.ndarray | str | Path,
     source_path: str | Path | None = None,
+    sensor_profile: str | None = None,
 ) -> dict[str, Any]:
     """Optical water mask. No m² — pipeline calls area_calc with ingest GSD.
 
-    `source_path` is the original file (GeoTIFF) when `rgb` is a materialized PNG.
+    `source_path` is the original file (GeoTIFF) when `rgb` is a materialized
+    PNG. Band identity comes from `sensor_profile` or the file's own metadata
+    (ingest.resolve_band_map) — never from band count. When the bands cannot
+    be identified the result withholds (`no_spectral_basis`) instead of
+    running the RGB heuristic on an arbitrary band order.
     """
     inspect = Path(source_path) if source_path is not None else None
     if not isinstance(rgb, np.ndarray):
@@ -374,39 +302,82 @@ def water_highlight(
         raise ValueError("water_highlight needs HxWx3 RGB")
     method = ""
     mask = None
+    evidence_class = "heuristic_estimate"
+    withheld_reason = None
     if inspect is not None:
         p = Path(inspect)
         if p.is_file() and p.suffix.lower() in {".tif", ".tiff", ".geotiff"}:
-            green, nir, note = _named_green_nir(p)
-            if green is not None and nir is not None:
-                denom = green + nir
-                ndwi = np.divide(
-                    green - nir, denom, out=np.zeros_like(green), where=denom != 0
-                )
-                mask = (ndwi > 0.0).astype(np.uint8)
-                if mask.shape[:2] != rgb.shape[:2]:
-                    mask = (
-                        np.asarray(
-                            Image.fromarray((mask * 255).astype(np.uint8)).resize(
-                                (rgb.shape[1], rgb.shape[0]), Image.Resampling.NEAREST
+            from ingest import resolve_band_map
+
+            band_map, note = resolve_band_map(p, sensor_profile)
+            if band_map and {"green", "nir"} <= set(band_map):
+                try:
+                    import rasterio
+
+                    with rasterio.open(p) as ds:
+                        green = ds.read(band_map["green"]).astype(np.float32)
+                        nir = ds.read(band_map["nir"]).astype(np.float32)
+                except Exception as e:
+                    green = nir = None
+                    note = note + f"; band read failed {type(e).__name__}: {e}"
+                if green is not None and nir is not None:
+                    denom = green + nir
+                    ndwi = np.divide(
+                        green - nir, denom, out=np.zeros_like(green), where=denom != 0
+                    )
+                    mask = (ndwi > 0.0).astype(np.uint8)
+                    if mask.shape[:2] != rgb.shape[:2]:
+                        mask = (
+                            np.asarray(
+                                Image.fromarray((mask * 255).astype(np.uint8)).resize(
+                                    (rgb.shape[1], rgb.shape[0]), Image.Resampling.NEAREST
+                                )
                             )
-                        )
-                        > 0
-                    ).astype(np.uint8)
-                method = (
-                    "McFeeters NDWI=(G-NIR)/(G+NIR); water = NDWI>0. " + note
+                            > 0
+                        ).astype(np.uint8)
+                    method = (
+                        "McFeeters NDWI=(G-NIR)/(G+NIR); water = NDWI>0. " + note
+                    )
+                    evidence_class = "measured_index"
+            elif band_map is None and sensor_profile:
+                withheld_reason = (
+                    "unknown_sensor_profile"
+                    if "unknown sensor profile" in note
+                    else "no_spectral_basis"
                 )
-            else:
+            elif band_map is None:
+                withheld_reason = "no_spectral_basis"
+            elif not {"red", "green", "blue"} <= set(band_map):
+                withheld_reason = "no_spectral_basis"
+            if mask is None and withheld_reason is None:
                 method = note + ". "
+    if withheld_reason is not None:
+        z = np.zeros(rgb.shape[:2], dtype=np.uint8)
+        method = (method + f" withheld: {withheld_reason}.").strip()
+        return {
+            "mask": z,
+            "water_pixels": None,
+            "mask_shape": list(z.shape),
+            "method": method,
+            "withheld": True,
+            "withheld_reason": withheld_reason,
+            "evidence_class": "none",
+            "provenance": (
+                "tools.water_highlight (withheld — no spectral claim). " + method
+            ),
+        }
     if mask is None:
         mask, rgb_method = _rgb_water_index_mask(rgb)
         method = (method + rgb_method).strip()
+        evidence_class = "heuristic_estimate"
     n = int(mask.sum())
     return {
         "mask": mask,
         "water_pixels": n,
         "mask_shape": list(mask.shape),
         "method": method,
+        "withheld": False,
+        "evidence_class": evidence_class,
         "provenance": (
             "tools.water_highlight (optical mask; deterministic tool measurement). "
             + method

@@ -272,6 +272,11 @@ def _claims_water(
 ) -> list[dict[str, Any]]:
     claims: list[dict[str, Any]] = []
     method = wh.get("method")
+    if wh.get("withheld"):
+        limitations.append(
+            f"water mask withheld ({wh.get('withheld_reason')}): band order "
+            "unidentified — declare a sensor_profile or supply named bands."
+        )
     if method is not None:
         claims.append(
             make_claim(

@@ -376,7 +376,141 @@ def scale_gsd_for_resize(
     return out
 
 
-def _load_rgb_array(path: Path) -> tuple[np.ndarray | None, str]:
+# --- C1: explicit sensor profiles — band order is declared, never guessed ---
+#
+# A 4-band file is NOT automatically B,G,R,NIR (Cartosat-2S MX) — NAIP ships
+# R,G,B,NIR — so band identity must come from a declared profile or from the
+# file's own metadata (descriptions / colorinterp / channel_names). When
+# neither exists the honest answer is "unidentified", and spectral claims
+# withhold rather than guess.
+SENSOR_PROFILES: dict[str, dict[str, int]] = {
+    "cartosat2s_mx": {"blue": 1, "green": 2, "red": 3, "nir": 4},
+    "cartosat_pan": {"pan": 1},
+    "naip": {"red": 1, "green": 2, "blue": 3, "nir": 4},
+    "sentinel2_10m": {"blue": 1, "green": 2, "red": 3, "nir": 4},
+}
+
+_BAND_TOKENS = {
+    "red": {"red"},
+    "green": {"green"},
+    "blue": {"blue"},
+    "nir": {"nir", "nir08", "b08", "b8", "b8a", "nearinfrared"},
+    "pan": {"pan", "panchromatic"},
+}
+
+_SAR_POL_TOKENS = {"vv", "vh", "hh", "hv", "rh", "rv"}
+
+
+def _band_tokens(text: str) -> set[str]:
+    import re
+
+    return set(re.findall(r"[a-z0-9]+", (text or "").lower()))
+
+
+def _tiff_channel_names(path: Path) -> list[str]:
+    """Per-band name strings for band-identity decisions.
+
+    `channel_names=` (page description — our test/product convention and a
+    common writer convention) wins. Otherwise per-band descriptions plus
+    colorinterp — but colorinterp only counts when count <= 3: writers
+    auto-tag 4-sample data as RGB+alpha, which is a display hint, not band
+    identity (a B,G,R,NIR product would be misread as RGBA). [] when nothing
+    names bands.
+    """
+    names: list[str] = []
+    page_desc = ""
+    try:
+        import rasterio
+
+        with rasterio.open(path) as ds:
+            count = int(ds.count)
+            for i in range(1, count + 1):
+                desc = ds.descriptions[i - 1] or ""
+                ci = ""
+                if count <= 3:
+                    try:
+                        ci = getattr(ds.colorinterp[i - 1], "name", "") or ""
+                    except Exception:
+                        ci = ""
+                names.append(" ".join(x for x in (desc, ci) if x))
+            page_desc = str(ds.tags().get("TIFFTAG_IMAGEDESCRIPTION") or "")
+    except Exception:
+        names, page_desc = [], ""
+    try:
+        import tifffile
+
+        with tifffile.TiffFile(str(path)) as tf:
+            if tf.pages:
+                d0 = str(getattr(tf.pages[0], "description", None) or "")
+                if d0:
+                    page_desc = (page_desc + " " + d0).strip()
+    except Exception:
+        pass
+    for blob in names + [page_desc]:
+        if "channel_names=" in blob:
+            tail = blob.split("channel_names=", 1)[1]
+            return [x.strip() for x in tail.split(",") if x.strip()]
+    return names
+
+
+def _map_named_bands(names: list[str]) -> dict[str, int]:
+    out: dict[str, int] = {}
+    for i, raw in enumerate(names, start=1):
+        toks = _band_tokens(raw)
+        for canon, keys in _BAND_TOKENS.items():
+            if canon not in out and toks & keys:
+                out[canon] = i
+    return out
+
+
+def _sar_pol_of(name: str) -> str | None:
+    toks = _band_tokens(name)
+    if toks & {"stokes", "mchi", "m-chi"}:
+        return "stokes"
+    hits = toks & _SAR_POL_TOKENS
+    return sorted(hits)[0] if hits else None
+
+
+def resolve_band_map(
+    path: str | Path, sensor_profile: str | None = None
+) -> tuple[dict[str, int] | None, str]:
+    """({canonical_name: 1-based index} | None, provenance note).
+
+    Evidence order: declared sensor profile → file metadata → None
+    (unidentified — callers must withhold spectral claims, not guess).
+    """
+    p = _path(path)
+    if p is None or not p.is_file():
+        return None, f"missing: {path}"
+    if p.suffix.lower() not in TIFF_SUFFIX:
+        return {"red": 1, "green": 2, "blue": 3}, f"non-TIFF image `{p.name}` (implicit RGB)"
+    if sensor_profile:
+        prof = SENSOR_PROFILES.get(str(sensor_profile).strip().lower())
+        if prof is None:
+            return None, f"unknown sensor profile {sensor_profile!r}"
+        try:
+            import rasterio
+
+            with rasterio.open(p) as ds:
+                n = int(ds.count)
+            if max(prof.values()) > n:
+                return None, (
+                    f"profile {sensor_profile!r} needs band {max(prof.values())}; "
+                    f"`{p.name}` has {n}"
+                )
+        except ImportError:
+            pass
+        return dict(prof), f"declared sensor profile {sensor_profile}"
+    names = _tiff_channel_names(p)
+    m = _map_named_bands(names)
+    if m:
+        return m, f"band metadata {m}"
+    return None, "bands unidentified (no declared profile, no band names/colorinterp)"
+
+
+def _load_rgb_array(
+    path: Path, sensor_profile: str | None = None
+) -> tuple[np.ndarray | None, str]:
     suf = path.suffix.lower()
     if suf in IMAGE_SUFFIX:
         im = Image.open(path).convert("RGB")
@@ -388,12 +522,23 @@ def _load_rgb_array(path: Path) -> tuple[np.ndarray | None, str]:
     try:
         import rasterio
 
+        band_map, bm_note = resolve_band_map(path, sensor_profile)
         with rasterio.open(path) as ds:
             n = ds.count
-            arr = ds.read([1, 2, 3]) if n >= 3 else ds.read(1)
+            if band_map and all(k in band_map for k in ("red", "green", "blue")):
+                sel = [band_map["red"], band_map["green"], band_map["blue"]]
+                sel_note = f" true-color bands={sel} ({bm_note})."
+            else:
+                sel = [1, 2, 3] if n >= 3 else [1]
+                sel_note = (
+                    " Bands 1-3 assumed for display only — band order "
+                    "unidentified; spectral claims withheld."
+                )
+            arr = ds.read(sel) if n >= 3 else ds.read(1)
             im = percentile_stretch(arr)
             return np.asarray(im), (
                 f"GeoTIFF via rasterio `{path.name}` bands={n} size={im.size} crs={ds.crs}."
+                + sel_note
             )
     except ImportError:
         pass
@@ -438,6 +583,7 @@ def materialize_rgb(
     src: str | Path,
     dest: str | Path,
     max_edge: int = MAX_INFER_EDGE,
+    sensor_profile: str | None = None,
 ) -> dict[str, Any]:
     """Write an 8-bit RGB PNG for ChangeFormer / llama.cpp. Returns size + note."""
     path = _path(src)
@@ -445,7 +591,7 @@ def materialize_rgb(
     dest_p.parent.mkdir(parents=True, exist_ok=True)
     if path is None or not path.is_file():
         return {"ok": False, "error": f"missing: {src}", "path": None}
-    rgb, note = _load_rgb_array(path)
+    rgb, note = _load_rgb_array(path, sensor_profile)
     if rgb is None:
         return {"ok": False, "error": note, "path": None}
     native_h, native_w = rgb.shape[:2]
@@ -628,27 +774,53 @@ def read_sar_arrays(src: str | Path) -> dict[str, Any]:
         try:
             import tifffile
 
+            names = _tiff_channel_names(path)
+            pols = [_sar_pol_of(n) for n in names]
+            bad = sorted({p for p in pols if p and p not in {"vv", "vh"}})
+            if bad:
+                return {
+                    "ok": False,
+                    "error": (
+                        f"unsupported polarization {bad} in `{path.name}` — "
+                        "sar_read needs VV/VH; RISAT hybrid-pol products are "
+                        "Stokes-derived, not VV/VH"
+                    ),
+                }
+            vv_i = next((i for i, p in enumerate(pols) if p == "vv"), None)
+            vh_i = next((i for i, p in enumerate(pols) if p == "vh"), None)
+            pol_verified = vv_i is not None and vh_i is not None
+
             arr_raw = np.asarray(tifffile.imread(str(path)))
             calibrated = arr_raw.dtype != np.uint8
             arr = np.asarray(arr_raw, dtype=np.float32)
             if arr.ndim == 3:
-                if arr.shape[0] <= 4 and arr.shape[-1] > 4:
-                    vv = arr[0]
-                    vh = arr[1] if arr.shape[0] > 1 else arr[0]
+                bands_first = arr.shape[0] <= 4 and arr.shape[-1] > 4
+                nb = arr.shape[0] if bands_first else arr.shape[-1]
+                bi = vv_i if vv_i is not None else 0
+                bj = vh_i if vh_i is not None else (1 if nb > 1 else 0)
+                if bands_first:
+                    vv = arr[bi]
+                    vh = arr[bj]
                 else:
-                    vv = arr[..., 0]
-                    vh = arr[..., 1] if arr.shape[-1] > 1 else arr[..., 0]
+                    vv = arr[..., bi]
+                    vh = arr[..., bj]
             else:
                 vv = arr
                 vh = arr.copy()
+            pol_note = (
+                f"polarization vv=band{bi + 1},vh=band{bj + 1} verified from band names"
+                if pol_verified
+                else f"polarization ASSUMED vv=band{bi + 1},vh=band{bj + 1} (unnamed bands — not verified)"
+            )
             return {
                 "ok": True,
                 "vv": vv,
                 "vh": vh,
                 "calibrated": calibrated,
+                "pol_verified": pol_verified,
                 "provenance": (
                     f"SAR raster `{path.name}` shape={tuple(np.asarray(vv).shape)} "
-                    f"dtype={arr_raw.dtype} calibrated={calibrated}"
+                    f"dtype={arr_raw.dtype} calibrated={calibrated}; {pol_note}"
                 ),
             }
         except Exception:

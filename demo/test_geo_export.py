@@ -113,9 +113,12 @@ class TestGeoExportPipeline(unittest.TestCase):
         from pipeline import run_query
 
         o, s = self._pair()
+        # C1: the synthetic optical is an unnamed 4-band TIFF — without a
+        # declared profile the water mask withholds (no spectral basis).
         t = run_query(
             "Is there water in this scene?", "optical+sar",
             uploads={"optical": o, "sar": s}, live=False,
+            sensor_profile="cartosat2s_mx",
         )
         geo = t.get("geo_exports") or {}
         self.assertIn("water_sar_mask.tif", geo)

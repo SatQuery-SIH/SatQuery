@@ -606,6 +606,7 @@ def create_app(store: Any = None) -> FastAPI:
                 device_cd=cfg["device_cd"],
                 uploads=uploads,
                 on_event=on_event,
+                sensor_profile=req.sensor_profile,
             )
         except HTTPException:
             raise

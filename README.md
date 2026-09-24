@@ -138,7 +138,8 @@ All scores are **exact-match accuracy on frozen evaluation question ids** — of
 **Caption (VRSBench, pycocoevalcap, 9,350 frozen ids):** CIDEr **0.2803**, BLEU-4 0.1207, METEOR 0.2170, ROUGE-L 0.3348 — vs **0.0** CIDEr zero-shot (the adapted model answers in caption register, mean length 43 vs 199 words).
 
 **Other measured:**
-- VRSBench grounding: **0.6114** · CDVQA change-detection QA: **0.62 / 0.62 / 0.51** — produced by the deterministic tool+mapping layer (honestly labeled: not a trained change-VQA model)
+- VRSBench grounding acc@0.5: **0.6114** — zero-shot base Qwen3-VL-8B (bf16, Modal), n=16,159 frozen ids, 2026-09-14; raw preds not retained (per policy, the wiped column is not re-run "to confirm"). The live product's `ground` tool is in progress; the adapted seat has not yet been measured on this column.
+- CDVQA change-detection QA: **0.62 / 0.62 / 0.51** — produced by the deterministic tool+mapping layer (honestly labeled: not a trained change-VQA model)
 - Sanity checks on the served 4-bit model (20-question samples, ±10pt noise): HR 16/20 · LR 18/20 · cloud full-precision 17/20
 - LR weakest family: counting questions ~0.25 even after ×2.5 oversampling — the honest residual
 
