@@ -390,6 +390,17 @@ SENSOR_PROFILES: dict[str, dict[str, int]] = {
     "sentinel2_10m": {"blue": 1, "green": 2, "red": 3, "nir": 4},
 }
 
+
+def _profile_key(name: str) -> str:
+    """Loose key for declared sensor profiles — case and separators are
+    inert ("Cartosat-2S MX" == "cartosat2s_mx" == "cartosat 2s.mx").
+    Semantic differences are NOT aliased: "cartosat2s" alone stays
+    unknown because PAN vs MX is a real ambiguity we will not guess."""
+    return "".join(ch for ch in str(name).strip().lower() if ch.isalnum())
+
+
+_PROFILES_NORM = {_profile_key(k): v for k, v in SENSOR_PROFILES.items()}
+
 _BAND_TOKENS = {
     "red": {"red"},
     "green": {"green"},
@@ -485,7 +496,7 @@ def resolve_band_map(
     if p.suffix.lower() not in TIFF_SUFFIX:
         return {"red": 1, "green": 2, "blue": 3}, f"non-TIFF image `{p.name}` (implicit RGB)"
     if sensor_profile:
-        prof = SENSOR_PROFILES.get(str(sensor_profile).strip().lower())
+        prof = _PROFILES_NORM.get(_profile_key(sensor_profile))
         if prof is None:
             return None, f"unknown sensor profile {sensor_profile!r}"
         try:

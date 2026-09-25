@@ -1026,12 +1026,42 @@ def run_query(
                 calibrated=bool(sar_pack.get("calibrated", True)),
             )
             sr["ingest_provenance"] = sar_pack.get("provenance")
+        elif input_mode == "single":
+            # Single SAR is PS scope: the bound image IS the SAR candidate.
+            # Read the ORIGINAL file — materialize_rgb's PNG would destroy
+            # dtype/calibration and band names.
+            sar_src = paths.get("source_original") or paths.get("image")
+            sr_ing = read_sar_arrays(sar_src) if sar_src else {"ok": False, "error": "no bound image"}
+            if sr_ing.get("ok"):
+                sr = _call(
+                    "tool",
+                    "sar_read",
+                    sar_read,
+                    sr_ing["vv"],
+                    sr_ing["vh"],
+                    calibrated=bool(sr_ing.get("calibrated", True)),
+                )
+                sr["ingest_provenance"] = sr_ing.get("provenance")
+                sr["pol_verified"] = sr_ing.get("pol_verified")
+            else:
+                sr = {
+                    "withheld": True,
+                    "withheld_reason": sr_ing.get("error"),
+                    "provenance": (
+                        "tools.sar_read (withheld — ingest refused). "
+                        + str(sr_ing.get("error"))
+                    ),
+                }
         else:
             npz = np.load(paths["sar_npz"])
             sr = _call(
                 "tool", "sar_read", sar_read, npz["vv"], npz["vh"], calibrated=True
             )
-        if "area_calc" in tools_needed and sr.get("water_calibrated") is not False:
+        if (
+            "area_calc" in tools_needed
+            and not sr.get("withheld")
+            and sr.get("water_calibrated") is not False
+        ):
             _ta = _tool_start("area_calc")
             area = _call(
                 "tool",
@@ -1049,16 +1079,21 @@ def run_query(
                 _ta,
                 {"gsd_m": area.get("gsd_m"), "area_m2": area.get("area_m2")},
             )
-        overlay = overlay_mask(load_rgb(paths["optical"]), sr["water_mask"], color=(30, 90, 220), alpha=0.5)
-        overlay_dir = workdir if workdir is not None else (DATA / "scene3")
-        overlay_dir.mkdir(parents=True, exist_ok=True)
-        overlay_path = overlay_dir / "overlay_live.png"
-        overlay.save(overlay_path)
-        trace["overlay_path"] = str(overlay_path)
-        _geo_export(
-            trace, bound, sr["water_mask"], "water_sar_mask.tif",
-            "sar_original", overlay_dir,
-        )
+        if not sr.get("withheld") and sr.get("water_mask") is not None:
+            # single SAR overlays on the materialized image the VLM sees;
+            # optical+sar overlays on the optical.
+            base_key = "image" if input_mode == "single" else "optical"
+            overlay = overlay_mask(load_rgb(paths[base_key]), sr["water_mask"], color=(30, 90, 220), alpha=0.5)
+            overlay_dir = workdir if workdir is not None else (DATA / "scene3")
+            overlay_dir.mkdir(parents=True, exist_ok=True)
+            overlay_path = overlay_dir / "overlay_live.png"
+            overlay.save(overlay_path)
+            trace["overlay_path"] = str(overlay_path)
+            _geo_export(
+                trace, bound, sr["water_mask"], "water_sar_mask.tif",
+                "source_original" if input_mode == "single" else "sar_original",
+                overlay_dir,
+            )
         numbers["sar_read"] = _jsonable(sr)
         trace["tool_outputs"]["sar_read"] = numbers["sar_read"]
         _tool_done(

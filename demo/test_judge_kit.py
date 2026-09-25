@@ -42,10 +42,10 @@ SHARED = (
 SHARED_SHA = {
     "tools.py": "8c56dc12fbe3d9633c9f8bdf328649c8b349d328a8d9e241ceba26036c1433d3",  # 2026-09-24 authorized C1-SENSOR-PROFILE (band identity via declared profile/metadata; unidentified bands withhold; evidence_class)
     "app.py": "be1f0ee9e58a2a3800674ac631f76a79cda271c9ee9f298bf7eb9b1089a87bf6",  # 2026-09-13 human-authorized Tab 2 copy edit (readable legend; needles unchanged)
-    "pipeline.py": "d34e66f017396ebd5e29cba927c8987b4effd2f8a08fa2b3f1773fbd52b0a911",  # 2026-09-25 authorized ROUTER-HARDEN (model_fallback_reason recorded on regex-fallback plans)
+    "pipeline.py": "249851d10c89e82928a27bc1fff78ca1c04b3dedac414dc5e38d1ea19d44e2cb",  # 2026-09-25 authorized D-019 (single-mode sar_read wiring: original-file read, withheld guard, single-mode overlay/geo_export keys)
     "report.py": "bbf5370bd67deacda91a817844797f166f793eeb79df03066eb54af52a0fdff6",  # 2026-09-24 authorized WEB-POLISH-V3
-    "planner.py": "c326fdb5d713ed8adc378aaf280a7b0b9ef4f60d86cc3783865444a7b052b656",  # 2026-09-25 authorized ROUTER-HARDEN (validator mask-only exemption + canonical floor; max_tokens 160; failure-reason out-param)
-    "ingest.py": "f6d0f8bf7c840d5ff2f7b4de375bcd2199771a2c89a91b572e75c36f35ab2e3e",  # 2026-09-24 authorized C1-SENSOR-PROFILE (SENSOR_PROFILES + resolve_band_map; SAR pol verify/refuse; profile-driven true-color)
+    "planner.py": "047ae64629f47e559be540d84d8907a537313ca5760d673063fc9de46f77e3a7",  # 2026-09-25 authorized D-019 (single-SAR un-refusal -> sar_read plan; single allowlist +sar_read; suite ids 57-59 re-pointed)
+    "ingest.py": "975599362a0271f3dd04790a3a4c4b8ee79a056e0801d0d5b70f29eb669cf96c",  # 2026-09-25 authorized PROFILE-ALIAS (case/separator-inert profile lookup; semantic aliases still withheld)
     "serve.ps1": "19287c44083cd94fd4f91ff6cbae5e66b2c33b30978a0df2bc5b99a0f14dd172",
 }
 

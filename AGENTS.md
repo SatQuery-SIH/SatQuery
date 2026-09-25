@@ -68,6 +68,6 @@ out near-instant. The fear was the only real cost.)
 
 - Demo suite: `..\.venv\Scripts\python.exe -m unittest discover -s demo -p "test_*.py"`
 - Planner routing: `..\.venv\Scripts\python.exe demo/planner.py`
-- API tests: `..\.venv\Scripts\python.exe -m pytest api/ -q`
+- API tests: `..\.venv\Scripts\python.exe -m unittest discover -s api -p "test_*.py"` (pytest is not installed)
 - Web: `cd web && npx vitest run && npm run build && npm run lint`
 - Stack health: `curl -s http://127.0.0.1:8000/health`

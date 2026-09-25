@@ -504,5 +504,106 @@ class SensorProfileC1Tests(unittest.TestCase):
         self.assertTrue(out.get("pol_verified"))
 
 
+class SingleSarAndAliasTests(unittest.TestCase):
+    """D-019 part A (single-SAR un-refusal) + sensor-profile alias
+    normalization (review 2026-09-25 item 1)."""
+
+    def test_profile_alias_normalization(self) -> None:
+        import numpy as np
+        from ingest import resolve_band_map, write_test_geotiff
+
+        tmp = Path(tempfile.mkdtemp())
+        arr = np.stack([np.full((8, 8), 100, np.uint16)] * 4)
+        tif = write_test_geotiff(tmp / "x.tif", arr, 1.0, 1.0, geographic=False)
+        for alias in (
+            "cartosat2s_mx",
+            "Cartosat-2S MX",
+            "cartosat-2s-mx",
+            " CARTOSAT_2S_MX ",
+        ):
+            m, _note = resolve_band_map(tif, sensor_profile=alias)
+            self.assertIsNotNone(m, alias)
+            self.assertEqual(m.get("nir"), 4, alias)
+        # Semantic aliases are NOT resolved — "cartosat2s" alone is ambiguous
+        # between PAN and MX products; guessing it is the C1 bug shape.
+        m, note = resolve_band_map(tif, sensor_profile="cartosat2s")
+        self.assertIsNone(m)
+        self.assertIn("unknown sensor profile", note)
+
+    def test_single_sar_plan_shape(self) -> None:
+        from planner import plan
+
+        p = plan("What does the SAR layer show here?", "single")
+        self.assertTrue(p["supported"])
+        self.assertIsNone(p["refusal"])
+        self.assertEqual(p["tools"], ["vqa", "sar_read", "canonical_vqa"])
+
+        p2 = plan("Give me the VV backscatter stats.", "single")
+        self.assertTrue(p2["supported"])
+        self.assertEqual(p2["tools"], ["vqa", "sar_read"])
+
+        p3 = plan("How much water area does this SAR image hold?", "single")
+        self.assertIn("sar_read", p3["tools"])
+        self.assertIn("area_calc", p3["tools"])
+
+        # Caption wording stays a caption — no forced SAR stats.
+        p4 = plan("describe this SAR scene", "single")
+        self.assertEqual(p4["tools"], ["vqa"])
+
+    @staticmethod
+    def _sar_tiff(tmp: Path, names=("vv", "vh")):
+        import numpy as np
+        from ingest import write_test_geotiff
+
+        vv = np.full((24, 24), -10.0, np.float32)
+        vv[:, :6] = -30.0  # dark patch -> below the -16 dB water threshold
+        vh = np.full((24, 24), -20.0, np.float32)
+        return write_test_geotiff(
+            tmp / "sar.tif", np.stack([vv, vh]), 1.0, 1.0,
+            geographic=False, channel_names=names,
+        )
+
+    def test_single_sar_pipeline_runs(self) -> None:
+        from pipeline import run_query
+
+        tmp = Path(tempfile.mkdtemp())
+        tif = self._sar_tiff(tmp)
+        trace = run_query(
+            "Give me the VV backscatter stats.",
+            "single",
+            live=False,
+            uploads={"image": str(tif)},
+        )
+        self.assertTrue(trace["plan"]["supported"])
+        sr = trace["tool_outputs"].get("sar_read") or {}
+        self.assertFalse(sr.get("withheld"), sr)
+        self.assertTrue(sr.get("pol_verified"))
+        self.assertIsNotNone(sr.get("vv_db_stats"))
+        self.assertTrue(sr.get("water_calibrated"))
+        # 6/24 cols below the -16 dB threshold -> ~25% water (boxcar+morph
+        # shifts the edge slightly — assert the band, not an exact figure).
+        frac = sr.get("water_fraction")
+        self.assertIsNotNone(frac)
+        self.assertGreater(frac, 0.15)
+        self.assertLess(frac, 0.40)
+
+    def test_single_sar_pol_refusal_withholds(self) -> None:
+        # Named non-VV/VH (RISAT hybrid RH/RV): ingest refuses, pipeline
+        # records a withheld sar_read instead of invented stats.
+        from pipeline import run_query
+
+        tmp = Path(tempfile.mkdtemp())
+        tif = self._sar_tiff(tmp, names=("rh", "rv"))
+        trace = run_query(
+            "Give me the VV backscatter stats.",
+            "single",
+            live=False,
+            uploads={"image": str(tif)},
+        )
+        sr = trace["tool_outputs"].get("sar_read") or {}
+        self.assertTrue(sr.get("withheld"), sr)
+        self.assertIn("polariz", (sr.get("withheld_reason") or "").lower())
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

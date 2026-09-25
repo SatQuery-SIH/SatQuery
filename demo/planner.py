@@ -200,14 +200,29 @@ def plan(query: str, input_mode: str) -> dict[str, Any]:
             "Bi-temporal tab, or ask me to describe this single image. " + CAN_DO
         )
         return base
-    if wants_water and mode == "single" and not wants_caption:
-        # "is there water in this image" is ordinary VQA on a single optical image.
-        if sar_terms:
-            base["refusal"] = (
-                "SAR / backscatter reading needs a co-registered optical+SAR pair. "
-                "Switch to the Optical+SAR tab. " + CAN_DO
-            )
-            return base
+    if mode == "single" and sar_terms and not wants_caption:
+        # Single SAR is in PS scope ("one optical/multispectral or SAR image").
+        # sar_read emits dB stats + a water mask only when the input is
+        # calibrated; unknown polarization/calibration is flagged in
+        # provenance, never guessed. area only if asked (GSD may be absent
+        # -> percent only).
+        is_question = q.endswith("?") or _match(_COUNT, q)
+        tools = ["sar_read"]
+        if wants_area:
+            tools.append("area_calc")
+        tools.append("vqa")
+        if is_question:
+            tools.append("canonical_vqa")
+        base.update(
+            {
+                "task": "sar_read",
+                "tools": [t for t in TOOLS if t in tools],
+                "vlm_role": "narrate",
+                "supported": True,
+                "refusal": None,
+            }
+        )
+        return base
     if wants_change and mode == "optical+sar":
         base["refusal"] = (
             "Building-change detection is the Bi-temporal tab (two optical dates). "
@@ -327,7 +342,7 @@ def plan_json(query: str, input_mode: str) -> str:
 # bare-plan-only escalation behavior.
 
 FALLBACK_TOOLS: dict[str, tuple[str, ...]] = {
-    "single": ("water_highlight", "area_calc", "vqa", "canonical_vqa"),
+    "single": ("water_highlight", "area_calc", "vqa", "canonical_vqa", "sar_read"),
     "bi-temporal": ("change_detect", "area_calc", "cdvqa_map", "vqa"),
     "optical+sar": ("sar_read", "sar_agreement", "area_calc", "vqa"),
 }
@@ -337,7 +352,7 @@ _TOOL_BLURB = {
     "area_calc": "report measured area of the detected mask",
     "change_detect": "pixel-change map between a before/after image pair",
     "cdvqa_map": "semantic type-family change map for a before/after pair",
-    "sar_read": "SAR backscatter water statistics for an optical+SAR pair",
+    "sar_read": "SAR backscatter water statistics for a SAR image or optical+SAR pair",
     "sar_agreement": "optical-vs-SAR water agreement map",
     "canonical_vqa": "short factual answer from the adapted answer model",
     "vqa": "describe / answer questions about the imagery",
@@ -895,25 +910,27 @@ QUERY_SUITE: list[dict[str, Any]] = [
         "expect_tools": [],
     },
     {
+        # single SAR is PS scope (D-019): sar_read + narration (+canonical on
+        # question shape); withheld on uncalibrated/unknown-pol input.
         "id": 57,
         "query": "What does the SAR layer show for this scene?",
         "input_mode": "single",
-        "expect_supported": False,
-        "expect_tools": [],
+        "expect_supported": True,
+        "expect_tools": ["vqa", "sar_read", "canonical_vqa"],
     },
     {
         "id": 58,
         "query": "Give me the VV backscatter stats.",
         "input_mode": "single",
-        "expect_supported": False,
-        "expect_tools": [],
+        "expect_supported": True,
+        "expect_tools": ["vqa", "sar_read"],
     },
     {
         "id": 59,
         "query": "Use radar to check for water.",
         "input_mode": "single",
-        "expect_supported": False,
-        "expect_tools": [],
+        "expect_supported": True,
+        "expect_tools": ["vqa", "sar_read"],
     },
     {
         "id": 60,
@@ -1597,8 +1614,16 @@ class PlannerTests(unittest.TestCase):
             validate_model_plan('{"tools": ["vqa", "water_highlight"]}', "single"),
             ["water_highlight", "area_calc", "vqa"],
         )
+        # sar_read is allowed in single mode (D-019 single-SAR): the model's
+        # bare sar plan gains narration like the regex plan does.
+        self.assertEqual(
+            validate_model_plan('{"tools": ["sar_read"]}', "single"),
+            ["sar_read", "vqa"],
+        )
         # disallowed tools are dropped; all-disallowed -> fail closed
-        self.assertIsNone(validate_model_plan('{"tools": ["sar_read"]}', "single"))
+        self.assertIsNone(
+            validate_model_plan('{"tools": ["change_detect"]}', "single")
+        )
         self.assertIsNone(
             validate_model_plan('{"tools": ["change_detect"]}', "bogus")
         )
