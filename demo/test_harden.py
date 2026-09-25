@@ -694,6 +694,38 @@ class GroundGateTests(unittest.TestCase):
         self.assertEqual(tag, "parse_fail")
         _, tag = parse_ground_box("<|box_start|>(100,200,300,400)<|box_end|>")
         self.assertEqual(tag, "qwen_native_px")
+        # bbox_2d is schema-declared 0-1000 (Qwen-VL): magnitude is not
+        # consulted — a small keyed box is NOT ambiguous like a bare tuple.
+        _, tag = parse_ground_box('{"bbox_2d": [5, 10, 40, 60]}')
+        self.assertEqual(tag, "bbox2d_1000")
+        # Off-schema values (>1000) are tagged by what was measured and
+        # rejected by the accept set — never silently trusted.
+        _, tag = parse_ground_box('{"bbox_2d": [0, 0, 1024, 1024]}')
+        self.assertEqual(tag, "bbox2d_px")
+
+    def test_ground_presence_head_phrase(self) -> None:
+        from tools import _ground_head_phrase, _ground_presence_question
+
+        self.assertEqual(
+            _ground_head_phrase(
+                "the large yellow vehicle situated closest to the green area"
+            ),
+            "vehicle",
+        )
+        self.assertEqual(
+            _ground_head_phrase("tennis court at the top left"),
+            "tennis court",
+        )
+        self.assertEqual(
+            _ground_presence_question(
+                "the harbor on the left side", mode="head"),
+            "Is there a harbor in the image? Answer yes or no.",
+        )
+        self.assertIn(
+            "situated closest",
+            _ground_presence_question(
+                "vehicle situated closest to the green area", mode="full"),
+        )
 
     def test_ground_decide_gates(self) -> None:
         from tools import ground_decide

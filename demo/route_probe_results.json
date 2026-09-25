@@ -30,6 +30,7 @@
     ],
     "model_raw": "{\"tools\": [\"water_highlight\"]}",
     "regex_tools": [
+      "ground",
       "vqa"
     ],
     "supported": true,
@@ -140,7 +141,7 @@
       "area_calc",
       "vqa"
     ],
-    "model_raw": "{\"tools\": [\"water_highlight\", \"area_calc\", \"vqa\"]}",
+    "model_raw": "{\"tools\": [\"water_highlight\", \"area_calc\", \"vqa\"], \"target\": \"water\"}",
     "regex_tools": [
       "water_highlight",
       "area_calc",
@@ -158,7 +159,8 @@
     "tools": [
       "water_highlight",
       "area_calc",
-      "vqa"
+      "vqa",
+      "canonical_vqa"
     ],
     "model_raw": "{\"tools\": [\"water_highlight\"]}",
     "regex_tools": [
@@ -190,13 +192,15 @@
     "category": "single / should-NOT-trigger",
     "mode": "single",
     "query": "find the airport",
-    "expect": "prose only — watch water_highlight over-selection",
-    "router": "regex-fallback",
+    "expect": "ground+vqa — presence-gated box (post GROUND-v1); watch water_highlight over-selection",
+    "router": "model",
     "tools": [
+      "ground",
       "vqa"
     ],
-    "model_raw": null,
+    "model_raw": "{\"tools\": [\"ground\"], \"target\": \"airport\"}",
     "regex_tools": [
+      "ground",
       "vqa"
     ],
     "supported": true,
@@ -222,13 +226,19 @@
     "category": "single / refusal integrity",
     "mode": "single",
     "query": "highlight the buildings",
-    "expect": "refusal — model must not see it",
-    "router": "regex",
-    "tools": [],
+    "expect": "ground+vqa — presence-gated (was a refusal pre-GROUND-v1)",
+    "router": "regex-fallback",
+    "tools": [
+      "ground",
+      "vqa"
+    ],
     "model_raw": null,
-    "regex_tools": [],
-    "supported": false,
-    "refusal": "Highlighting is only supported for water bodies, not other objects. I can: (1) describe / answer questions about a single satellite image, (2) detect building change on a before/after pair and report area from the change mask, (3) read co-registered optical+SAR pairs for water using SAR backscatter stats. I cannot do 3D, weather forecasts, translation, training, or non-remote-sensing tasks."
+    "regex_tools": [
+      "ground",
+      "vqa"
+    ],
+    "supported": true,
+    "refusal": null
   },
   {
     "category": "single / refusal integrity",
@@ -276,7 +286,7 @@
     "category": "single / stress",
     "mode": "single",
     "query": "higlight the watter",
-    "expect": "misspelling → water_highlight",
+    "expect": "misspelling -> water_highlight",
     "router": "model",
     "tools": [
       "water_highlight",
@@ -375,7 +385,7 @@
       "area_calc",
       "vqa"
     ],
-    "model_raw": "{\"tools\": [\"change_detect\", \"area_calc\"]}",
+    "model_raw": "{\"tools\": [\"change_detect\", \"area_calc\"], \"target\": \"the river\"}",
     "regex_tools": [
       "vqa",
       "change_detect",
@@ -391,6 +401,7 @@
     "expect": "change_detect+cdvqa_map",
     "router": "model",
     "tools": [
+      "change_detect",
       "cdvqa_map",
       "vqa"
     ],

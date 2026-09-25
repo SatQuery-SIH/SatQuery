@@ -32,7 +32,11 @@ $srvProc = $null
 if ($needServer) {
   if (-not (Test-Path $server)) { "MISSING llama-server.exe" | Out-File $log -Append -Encoding ascii; exit 1 }
   if (-not (Test-Path $model)) { "MISSING GGUF" | Out-File $log -Append -Encoding ascii; exit 1 }
-  $argStr = "-m `"$model`" --mmproj `"$mmproj`" -ngl 99 -c 4096 --port 8080 --host 127.0.0.1"
+  # --image-min-tokens 384 (2026-09-26, GROUND-V1): matched-geometry rerun
+  # showed the narrator's grounding lead widens at min-tokens 384 vs
+  # llama.cpp's default (acc@0.5 0.6067 vs 0.5767, eval_ground_local/). It
+  # applies to every image call on this seat (routing, narration, boxes).
+  $argStr = "-m `"$model`" --mmproj `"$mmproj`" -ngl 99 -c 4096 --port 8080 --host 127.0.0.1 --image-min-tokens 384"
   "args: $argStr" | Out-File $log -Append -Encoding ascii
   $srvProc = Start-Process -FilePath $server -ArgumentList $argStr -WindowStyle Hidden -RedirectStandardOutput $srvLog -RedirectStandardError $srvErr -PassThru
   "server PID: $($srvProc.Id)" | Out-File $log -Append -Encoding ascii

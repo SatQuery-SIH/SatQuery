@@ -40,13 +40,13 @@ SHARED = (
     DEMO / "serve.ps1",
 )
 SHARED_SHA = {
-    "tools.py": "1ab0c172d09ea3e6ee188e60df666ba68b89cf66fb13817a39d26ed3efcf79e1",  # 2026-09-26 authorized GROUND-V1 (ground tool: canonical presence oracle -> narrator box; strict frame detection; full-frame reject; overlay_box)
+    "tools.py": "1b1044db52e618c8fe7db6b5a7276b96bf5876d4acf7ac1da45d3f1c16b82ec6",  # 2026-09-26 authorized GROUND-V1-REV1 (bbox_2d schema-declared 0-1000; presence_mode=head variant + _ground_head_phrase for oracle A/B)
     "app.py": "be1f0ee9e58a2a3800674ac631f76a79cda271c9ee9f298bf7eb9b1089a87bf6",  # 2026-09-13 human-authorized Tab 2 copy edit (readable legend; needles unchanged)
     "pipeline.py": "cecd13a20e36046e9a1a7ffc1745a1497d2e0c62179e98845b08f634190aa496",  # 2026-09-26 authorized GROUND-V1 (ground dispatch: presence gate, box overlay artifact, withheld path emits no image)
     "report.py": "79fda1935dae3fa9c163fcdf9b7091ea72cbbfbb76f4c22b414e7d5c406e528f",  # 2026-09-26 authorized GROUND-V1 (ground findings line; estimate-qualifier enforcement for evidence_class!=measured_index claims)
     "planner.py": "f57534d58320c8bf6b0f9a104b7b5d0798284b0ff1b8b8197447db3b50500b7d",  # 2026-09-26 authorized GROUND-V1 (ground in TOOLS/allowlist; locate-route + ground_target extractor; suite +6 cases)
     "ingest.py": "d7adc87c26f64ba8e11248c325f5e61b355666fa4b8a5626246f80ee2158f320",  # 2026-09-26 authorized D-019-MODALITY (SAR_PROFILES + is_sar_profile; read_sar_arrays exposes named_pols/sar_evidence for single-mode gating)
-    "serve.ps1": "19287c44083cd94fd4f91ff6cbae5e66b2c33b30978a0df2bc5b99a0f14dd172",
+    "serve.ps1": "a64b97f2c38b2cb0fb23cfa591e9f28bab814b1579d0db617d3569544927ef1d",  # 2026-09-26 authorized GROUND-V1-REV1 (narrator seat gains --image-min-tokens 384, the matched-geometry winning config; applies to all :8080 image calls)
 }
 
 

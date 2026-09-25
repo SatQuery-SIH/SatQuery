@@ -1846,14 +1846,15 @@ _GROUND_ARR4_RE = re.compile(
     rf"({_GROUND_NUM})\s*,\s*({_GROUND_NUM})\s*[\]\)>]?"
 )
 
-# Frames the tool accepts: explicit keyed 0-1000/0-1 or a clean 4-tuple on
-# those grids. px frames need the server's smart-resize geometry (not
-# exposed over HTTP) and 0-100 grids drift under absent-target pressure —
-# both withhold rather than guess. `first4` (numbers scraped from prose) is
-# never a trustworthy box.
-_GROUND_ACCEPT = frozenset(
-    {"bbox2d_1000", "bbox2d_01", "tuple4_1000", "tuple4_01"}
-)
+# Frames the tool accepts: a keyed `bbox_2d` is Qwen-VL's documented
+# 0-1000 grid — the KEY declares the frame, so its magnitude is not used
+# to guess. Bare 4-tuples have no schema, so they are magnitude-tagged and
+# only unambiguous 0-1000/0-1 grids are accepted (a small tuple4 could be
+# either grid — ambiguous means withhold). px frames need the server's
+# smart-resize geometry (not exposed over HTTP) and 0-100 tuples drift
+# under absent-target pressure — both withhold rather than guess.
+# `first4` (numbers scraped from prose) is never a trustworthy box.
+_GROUND_ACCEPT = frozenset({"bbox2d_1000", "tuple4_1000", "tuple4_01"})
 
 
 def _grid_suffix(v: list[float]) -> str:
@@ -1886,6 +1887,11 @@ def parse_ground_box(text: str) -> tuple[list[float] | None, str]:
         nums = re.findall(_GROUND_NUM, m.group(1))
         if len(nums) >= 4:
             v = [float(x) for x in nums[:4]]
+            # bbox_2d declares Qwen-VL's 0-1000 frame by schema. Values
+            # >1000 are off-schema — tag what was measured and let the
+            # accept-set reject it rather than silently trusting the key.
+            if max(abs(x) for x in v) <= 1000.5:
+                return v, "bbox2d_1000"
             return v, f"bbox2d_{_grid_suffix(v)}"
     v = None
     tag = "tuple4"
@@ -1902,10 +1908,56 @@ def parse_ground_box(text: str) -> tuple[list[float] | None, str]:
     return v, f"{tag}_{_grid_suffix(v)}"
 
 
-def _ground_presence_question(target: str) -> str:
-    """RSVQA presence-family phrasing for the adapted oracle."""
+# Spatial/prepositional cue where the descriptive tail of a referring
+# expression starts ("vehicle positioned at the top-right" -> head ends
+# before "positioned"). Cutting there yields the class-level head the
+# presence oracle was trained on.
+_GROUND_PREP_CUT = re.compile(
+    r"\s+(?:at|on|in|near|next\s+to|beside|behind|by|with|of|that|which|"
+    r"whose|positioned|situated|located|closest|facing|towards?|along|"
+    r"among|above|below|between|inside|outside|under|over)\b.*$", re.I
+)
+_GROUND_ADJ = frozenset(
+    (
+        "large small big tiny huge great yellow red green blue white "
+        "black dark bright left right top bottom upper lower middle "
+        "central new old visible nearby"
+    ).split()
+)
+
+
+def _ground_head_phrase(target: str) -> str:
+    """Reduce a referring expression to its class-level head noun phrase.
+
+    "the small vehicle positioned at the top-right" -> "vehicle";
+    "tennis court at the top left" -> "tennis court" (compound heads
+    survive — only leading scalar/color adjectives are dropped). The
+    adapted oracle trained on short presence questions ("Is there a
+    vehicle?"), so the head phrase matches its distribution better than
+    a 20-word referring expression; the full expression still goes to
+    the box prompt untouched.
+    """
+    t = re.sub(r"^(?:the|a|an|any|all|some|that|this|those|these)\s+", "",
+               target.strip().rstrip("?.!,"), flags=re.I)
+    t = _GROUND_PREP_CUT.sub("", t).strip()
+    words = t.split()
+    while len(words) > 1 and words[0].lower() in _GROUND_ADJ:
+        words.pop(0)
+    return " ".join(words[:3]) or target.strip()
+
+
+def _ground_presence_question(target: str, mode: str = "full") -> str:
+    """RSVQA presence-family phrasing for the adapted oracle.
+
+    mode="full" wraps the whole referring expression; mode="head" asks
+    about just the class-level head noun — a closer match to the RSVQA
+    training distribution. Which variant gates is a measured question
+    (scripts/ground_product_local.py A/B), not an assumption.
+    """
     t = re.sub(r"^(?:the|a|an|any|all|some|that|this|those|these)\s+", "",
                target.strip().rstrip("?.!"), flags=re.I)
+    if mode == "head":
+        t = _ground_head_phrase(t)
     last = (t.split() or [""])[-1].lower()
     plural = last.endswith("s") and not last.endswith(("ss", "us", "is"))
     if plural:
@@ -2000,6 +2052,7 @@ def ground(
     *,
     box_url: str = DEFAULT_VLM_URL,
     presence_url: str = CANONICAL_VLM_URL,
+    presence_mode: str = "full",
     timeout: float = 90.0,
 ) -> dict[str, Any]:
     """Presence-gated referring-expression box. Two seats, one contract:
@@ -2018,11 +2071,11 @@ def ground(
     """
     paths = [str(p) for p in image_paths][:1]
     t0 = time.perf_counter()
-    pres = canonical_vqa(
-        _ground_presence_question(target), paths, url=presence_url
-    )
+    pq = _ground_presence_question(target, mode=presence_mode)
+    pres = canonical_vqa(pq, paths, url=presence_url)
     pres_out = {
-        "question": _ground_presence_question(target),
+        "question": pq,
+        "mode": presence_mode,
         "available": pres.get("available"),
         "answer": pres.get("answer"),
         "seat": pres.get("seat"),
