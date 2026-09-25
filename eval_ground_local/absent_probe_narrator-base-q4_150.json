@@ -1,0 +1,1517 @@
+{
+  "seat": "127.0.0.1:8080",
+  "label": "narrator-base-q4",
+  "n": 150,
+  "invented_boxes": 78,
+  "invention_rate": 0.52,
+  "refusals": 72,
+  "parse_tags": {
+    "bbox2d_0_1000": 78,
+    "parse_fail": 72
+  },
+  "method": "mismatched pairing \u2014 image gets a referring expression from a different image; invention rate is an UPPER BOUND (coincidental matches possible)",
+  "sample_seed": 20260925,
+  "wall_seconds": 1131.2,
+  "preds": [
+    {
+      "image_id": "10171_0000.png",
+      "id": "10171_0000.png#14178",
+      "q_source_image": "P1410_0125.png",
+      "question": "The small vehicle at the top-right is the top-most one among the visible small vehicles.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [826, 617, 902, 677], \"label\": \"The small vehicle at the top-right is the top-most one among the visible small vehicles.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 22.7
+    },
+    {
+      "image_id": "P5789_1971.png",
+      "id": "P5789_1971.png#8099",
+      "q_source_image": "P1463_0005.png",
+      "question": "The vehicle located more to the east in the top-right of the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [886, 18, 1000, 276], \"label\": \"The vehicle located more to the east in the top-right of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 6.0
+    },
+    {
+      "image_id": "07586_0000.png",
+      "id": "07586_0000.png#10910",
+      "q_source_image": "11509_0000.png",
+      "question": "The tennis court is positioned at the bottom-left of the image.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 0.9
+    },
+    {
+      "image_id": "P1809_0017.png",
+      "id": "P1809_0017.png#5206",
+      "q_source_image": "06590_0000.png",
+      "question": "The tennis court positioned at the bottom-right of the image.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 0.6
+    },
+    {
+      "image_id": "P0518_0001.png",
+      "id": "P0518_0001.png#980",
+      "q_source_image": "P1513_0010.png",
+      "question": "The smallest plane visible in the image is located at the middle-left of the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [329, 472, 357, 500], \"label\": \"The smallest plane visible in the image is located at the middle-left of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 6.2
+    },
+    {
+      "image_id": "07427_0000.png",
+      "id": "07427_0000.png#10702",
+      "q_source_image": "07440_0000.png",
+      "question": "The white domed storage tank casting a shadow is located centrally in the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [214, 448, 822, 998], \"label\": \"The white domed storage tank casting a shadow is located centrally in the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 5.9
+    },
+    {
+      "image_id": "11482_0000.png",
+      "id": "11482_0000.png#15853",
+      "q_source_image": "08898_0000.png",
+      "question": "The left-most tennis court located at the bottom of the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [387, 836, 595, 998], \"label\": \"The left-most tennis court located at the bottom of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 5.6
+    },
+    {
+      "image_id": "P0953_0015.png",
+      "id": "P0953_0015.png#1897",
+      "q_source_image": "11113_0000.png",
+      "question": "The basketball court positioned towards the bottom right part of the image, directly underneath another court, is also marked for gameplay.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [690, 763, 936, 998], \"label\": \"The basketball court positioned towards the bottom right part of the image, directly underneath another court, is also marked for gameplay.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 6.7
+    },
+    {
+      "image_id": "P5789_2057.png",
+      "id": "P5789_2057.png#8127",
+      "q_source_image": "P1463_0030.png",
+      "question": "The small vehicle on the top-left side of the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [156, 200, 200, 238], \"label\": \"The small vehicle on the top-left side of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 5.6
+    },
+    {
+      "image_id": "P1570_0077.png",
+      "id": "P1570_0077.png#4763",
+      "q_source_image": "P2541_0030.png",
+      "question": "The roundabout located in the right of the image is the bottom-most of the two roundabouts.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [899, 767, 998, 900], \"label\": \"The roundabout located in the right of the image is the bottom-most of the two roundabouts.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 6.3
+    },
+    {
+      "image_id": "P1982_0009.png",
+      "id": "P1982_0009.png#5674",
+      "q_source_image": "P1397_0072.png",
+      "question": "The plane located at the top of the image.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 4.6
+    },
+    {
+      "image_id": "P1373_0006.png",
+      "id": "P1373_0006.png#3490",
+      "q_source_image": "08972_0000.png",
+      "question": "The baseball field situated to the right of the top-most field.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [284, 127, 567, 438], \"label\": \"The baseball field situated to the right of the top-most field.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 8.3
+    },
+    {
+      "image_id": "P1095_0040.png",
+      "id": "P1095_0040.png#2672",
+      "q_source_image": "08622_0000.png",
+      "question": "The left bottom vehicle is small.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [263, 707, 300, 738], \"label\": \"The left bottom vehicle is small.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 7.9
+    },
+    {
+      "image_id": "08942_0000.png",
+      "id": "08942_0000.png#12627",
+      "q_source_image": "P2794_0012.png",
+      "question": "The small vehicle parked at the middle-right side of the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [845, 710, 881, 758], \"label\": \"The small vehicle parked at the middle-right side of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 10.0
+    },
+    {
+      "image_id": "P0961_0004.png",
+      "id": "P0961_0004.png#1904",
+      "q_source_image": "P0583_0001.png",
+      "question": "The larger harbor located to the left in the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [0, 387, 100, 987], \"label\": \"The larger harbor located to the left in the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 9.7
+    },
+    {
+      "image_id": "P0261_0008.png",
+      "id": "P0261_0008.png#595",
+      "q_source_image": "07563_0000.png",
+      "question": "The overpass is located at the top-left of the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [0, 0, 442, 200], \"label\": \"The overpass is located at the top-left of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 9.7
+    },
+    {
+      "image_id": "10981_0000.png",
+      "id": "10981_0000.png#15213",
+      "q_source_image": "P2802_0041.png",
+      "question": "The small vehicle located towards the top-left part of the tarmac.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [206, 575, 275, 660], \"label\": \"The small vehicle located towards the top-left part of the tarmac.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 10.0
+    },
+    {
+      "image_id": "06997_0000.png",
+      "id": "06997_0000.png#10153",
+      "q_source_image": "11351_0000.png",
+      "question": "The vehicle parked closest to the middle-right edge of the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [684, 684, 972, 780], \"label\": \"The vehicle parked closest to the middle-right edge of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 8.8
+    },
+    {
+      "image_id": "P6687_0065.png",
+      "id": "P6687_0065.png#8302",
+      "q_source_image": "P1086_0005.png",
+      "question": "The tennis court located on the left side of the image.",
+      "raw": "There is no tennis court visible in the image. The image shows an aerial view of a road with several vehicles and a dense area of green trees and vegetation on the left side. There is no tennis court in the provided image.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 9.7
+    },
+    {
+      "image_id": "P0557_0013.png",
+      "id": "P0557_0013.png#1098",
+      "q_source_image": "P0420_0006.png",
+      "question": "The harbor featuring a T-shaped dock that is more centrally positioned in the top.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [153, 294, 333, 442], \"label\": \"The harbor featuring a T-shaped dock that is more centrally positioned in the top.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 11.4
+    },
+    {
+      "image_id": "09327_0000.png",
+      "id": "09327_0000.png#13114",
+      "q_source_image": "P0654_0006.png",
+      "question": "The school bus at the right part of the image.",
+      "raw": "There is no school bus visible in the image. The image is an aerial view of a dam and surrounding landscape, including water, hills, and infrastructure. There are no vehicles, let alone a school bus, depicted in the scene. Therefore, it is not possible to provide a bounding box coordinate for a school bus that does not exist in the image.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 11.7
+    },
+    {
+      "image_id": "P2779_0002.png",
+      "id": "P2779_0002.png#7284",
+      "q_source_image": "07352_0000.png",
+      "question": "The dam is located at the bottom of the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [296, 570, 947, 962], \"label\": \"The dam is located at the bottom of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 9.1
+    },
+    {
+      "image_id": "05986_0000.png",
+      "id": "05986_0000.png#8918",
+      "q_source_image": "P2781_0023.png",
+      "question": "The large vehicle is located bottom-middle part of the image.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 4.9
+    },
+    {
+      "image_id": "09719_0000.png",
+      "id": "09719_0000.png#13615",
+      "q_source_image": "11206_0000.png",
+      "question": "The airport is located on the lower part of the island.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 4.8
+    },
+    {
+      "image_id": "P2462_0007.png",
+      "id": "P2462_0007.png#6364",
+      "q_source_image": "P1397_0028.png",
+      "question": "The small vehicle located at the left edge of the road near the central part of the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [262, 317, 283, 335], \"label\": \"The small vehicle located at the left edge of the road near the central part of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 9.1
+    },
+    {
+      "image_id": "06006_0000.png",
+      "id": "06006_0000.png#8934",
+      "q_source_image": "08539_0000.png",
+      "question": "The ground track field can be identified by its reddish-brown color and oval shape with track lines, positioned centrally towards the right.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [112, 377, 200, 450], \"label\": \"The ground track field can be identified by its reddish-brown color and oval shape with track lines, positioned centrally towards the right.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 10.7
+    },
+    {
+      "image_id": "10352_0000.png",
+      "id": "10352_0000.png#14405",
+      "q_source_image": "07485_0000.png",
+      "question": "The expressway toll station is located toward the bottom-right section of the image.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 5.7
+    },
+    {
+      "image_id": "08964_0000.png",
+      "id": "08964_0000.png#12663",
+      "q_source_image": "10290_0000.png",
+      "question": "The basketball court on the right is identical in appearance to the left one, also seen from above with boundary lines and hoops.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 5.2
+    },
+    {
+      "image_id": "P1095_0025.png",
+      "id": "P1095_0025.png#2666",
+      "q_source_image": "P1806_0005.png",
+      "question": "The elongated large vehicle located at the top-most position in the middle of the image.",
+      "raw": "There is no vehicle in the image. The image shows a satellite view of a lakeside property with docks, houses, and trees. There is no elongated large vehicle visible.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 8.4
+    },
+    {
+      "image_id": "P1023_0005.png",
+      "id": "P1023_0005.png#2383",
+      "q_source_image": "10494_0000.png",
+      "question": "The basketball court located on the centre of the image.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 4.2
+    },
+    {
+      "image_id": "P1384_0022.png",
+      "id": "P1384_0022.png#3703",
+      "q_source_image": "06544_0000.png",
+      "question": "The tennis court in the uppe-left portion of the image is surrounded by a few palm trees on its top and right sides.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [186, 626, 390, 755], \"label\": \"The tennis court in the uppe-left portion of the image is surrounded by a few palm trees on its top and right sides.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 9.5
+    },
+    {
+      "image_id": "P1397_0024.png",
+      "id": "P1397_0024.png#3987",
+      "q_source_image": "07332_0000.png",
+      "question": "The storage tank located towards the middle-right of the image.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 4.8
+    },
+    {
+      "image_id": "08796_0000.png",
+      "id": "08796_0000.png#12443",
+      "q_source_image": "11452_0000.png",
+      "question": "The expressway toll station situated at the bottom of the image, showing a structured rectangular layout.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [340, 632, 666, 852], \"label\": \"The expressway toll station situated at the bottom of the image, showing a structured rectangular layout.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 9.1
+    },
+    {
+      "image_id": "P0027_0003.png",
+      "id": "P0027_0003.png#132",
+      "q_source_image": "07727_0000.png",
+      "question": "The ship at the bottom-most position in the image.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 5.1
+    },
+    {
+      "image_id": "P0998_0003.png",
+      "id": "P0998_0003.png#2174",
+      "q_source_image": "P1342_0006.png",
+      "question": "The bridge located near the bottom-right corner of the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [722, 600, 882, 998], \"label\": \"The bridge located near the bottom-right corner of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 8.7
+    },
+    {
+      "image_id": "P2093_0008.png",
+      "id": "P2093_0008.png#5796",
+      "q_source_image": "P1143_0009.png",
+      "question": "The aircraft with contrasting markings is parked on the tarmac.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 4.8
+    },
+    {
+      "image_id": "05930_0000.png",
+      "id": "05930_0000.png#8856",
+      "q_source_image": "10177_0000.png",
+      "question": "The overpass is the largest structure in the image, stretching horizontally across the entire width of the picture with roads visible beneath it.",
+      "raw": "There is no object in the image that matches the description. The image shows an aerial view of a grassy field with a baseball diamond, some small structures, and a road at the bottom edge. There is no overpass visible.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 8.6
+    },
+    {
+      "image_id": "07336_0000.png",
+      "id": "07336_0000.png#10591",
+      "q_source_image": "07494_0000.png",
+      "question": "The vehicle positioned at the bottom right corner of the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [592, 832, 788, 907], \"label\": \"The vehicle positioned at the bottom right corner of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 9.9
+    },
+    {
+      "image_id": "P2701_0038.png",
+      "id": "P2701_0038.png#6924",
+      "q_source_image": "P1315_0029.png",
+      "question": "The bridge located closer to the bottom of the image spans across the water body.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [0, 373, 666, 819], \"label\": \"The bridge located closer to the bottom of the image spans across the water body.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 9.4
+    },
+    {
+      "image_id": "08364_0000.png",
+      "id": "08364_0000.png#11896",
+      "q_source_image": "08138_0000.png",
+      "question": "The small vehicle is positioned on the bottom-left side of the image.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 5.9
+    },
+    {
+      "image_id": "P0402_0003.png",
+      "id": "P0402_0003.png#853",
+      "q_source_image": "08461_0000.png",
+      "question": "The stadium with a colorful exterior and a large white-covered section is located towards the right-hand side of the image.",
+      "raw": "There is no object in the image that matches the description \"The stadium with a colorful exterior and a large white-covered section\". The image shows two tennis courts with red exteriors and green playing surfaces, and a large green field with white markings, but no stadium with a colorful exterior or a large white-covered section. Therefore, no bounding box can be provided for this non-existent object.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 10.7
+    },
+    {
+      "image_id": "09192_0000.png",
+      "id": "09192_0000.png#12951",
+      "q_source_image": "P5789_1627.png",
+      "question": "The small plane located towards the bottom right corner of the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [658, 563, 873, 904], \"label\": \"The small plane located towards the bottom right corner of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 9.3
+    },
+    {
+      "image_id": "P1732_0019.png",
+      "id": "P1732_0019.png#5023",
+      "q_source_image": "P1332_0043.png",
+      "question": "The ship situated centrally is the centre of the image.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 5.1
+    },
+    {
+      "image_id": "P0974_0001.png",
+      "id": "P0974_0001.png#2041",
+      "q_source_image": "08797_0000.png",
+      "question": "The vehicle located in the left part of the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [317, 408, 416, 486], \"label\": \"The vehicle located in the left part of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 8.3
+    },
+    {
+      "image_id": "11307_0000.png",
+      "id": "11307_0000.png#15628",
+      "q_source_image": "P1377_0023.png",
+      "question": "The large vehicle is parked near the top-right corner of the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [930, 238, 958, 308], \"label\": \"The large vehicle is parked near the top-right corner of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 8.7
+    },
+    {
+      "image_id": "10112_0000.png",
+      "id": "10112_0000.png#14094",
+      "q_source_image": "08854_0000.png",
+      "question": "The tennis court located at the bottom-right corner of the image.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 4.6
+    },
+    {
+      "image_id": "08537_0000.png",
+      "id": "08537_0000.png#12099",
+      "q_source_image": "11293_0000.png",
+      "question": "The windmill positioned in the bottom-left corner.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 4.5
+    },
+    {
+      "image_id": "P2802_0038.png",
+      "id": "P2802_0038.png#7520",
+      "q_source_image": "P1029_0016.png",
+      "question": "The ship positioned closest to the bottom-left corner of the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [79, 537, 648, 987], \"label\": \"The ship positioned closest to the bottom-left corner of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 8.7
+    },
+    {
+      "image_id": "08896_0000.png",
+      "id": "08896_0000.png#12574",
+      "q_source_image": "P2645_0011.png",
+      "question": "The left-most storage tank is fully visible and situated on the upper-left side of the image.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 4.8
+    },
+    {
+      "image_id": "P2330_0025.png",
+      "id": "P2330_0025.png#6094",
+      "q_source_image": "06286_0000.png",
+      "question": "The vehicle with the striking red color is parked on the driveway near the middle-right portion of the image.",
+      "raw": "There is no vehicle with a striking red color in the image. The image shows four ships on dark water, none of which appear to be red or parked on a driveway. Therefore, no bounding box can be provided for the described region.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 9.5
+    },
+    {
+      "image_id": "P8287_0096.png",
+      "id": "P8287_0096.png#8511",
+      "q_source_image": "08791_0000.png",
+      "question": "The airplane located at the center of the image.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 5.4
+    },
+    {
+      "image_id": "08902_0000.png",
+      "id": "08902_0000.png#12583",
+      "q_source_image": "09085_0000.png",
+      "question": "The lower overpass ia situated near the bottom edge of the image similarly intersects the multilane roadway.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 5.9
+    },
+    {
+      "image_id": "P1390_0084.png",
+      "id": "P1390_0084.png#3955",
+      "q_source_image": "P3107_0000.png",
+      "question": "The ground track field can be identified by its distinct rectangular shape with slightly curved ends located in the middle-right area of the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [932, 363, 998, 567], \"label\": \"The ground track field can be identified by its distinct rectangular shape with slightly curved ends located in the middle-right area of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 11.8
+    },
+    {
+      "image_id": "P2429_0006.png",
+      "id": "P2429_0006.png#6313",
+      "q_source_image": "P2231_0008.png",
+      "question": "The right-most plane on the tarmac is small.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [264, 222, 300, 258], \"label\": \"The right-most plane on the tarmac is small.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 9.4
+    },
+    {
+      "image_id": "11405_0000.png",
+      "id": "11405_0000.png#15763",
+      "q_source_image": "08005_0000.png",
+      "question": "The storage tank in the top left corner of the image.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 4.6
+    },
+    {
+      "image_id": "P1738_0010.png",
+      "id": "P1738_0010.png#5041",
+      "q_source_image": "06924_0000.png",
+      "question": "The other clearly demarcated rectangular court, which is situated a small distance below the first tennis court.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [330, 480, 440, 550], \"label\": \"The other clearly demarcated rectangular court, which is situated a small distance below the first tennis court.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 9.8
+    },
+    {
+      "image_id": "P0359_0003.png",
+      "id": "P0359_0003.png#761",
+      "q_source_image": "P0352_0002.png",
+      "question": "The small red vehicle located at the top-middle of the image.",
+      "raw": "There is no small red vehicle located at the top-middle of the image. The image shows an aerial view of three tennis courts, with no vehicles visible. The area at the top-middle is part of the tennis court surface, which is red, but there is no vehicle present.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 9.3
+    },
+    {
+      "image_id": "P2789_0053.png",
+      "id": "P2789_0053.png#7373",
+      "q_source_image": "P1513_0033.png",
+      "question": "The small vehicle located towards the centre of the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [288, 827, 398, 927], \"label\": \"The small vehicle located towards the centre of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 6.0
+    },
+    {
+      "image_id": "P8656_0038.png",
+      "id": "P8656_0038.png#8600",
+      "q_source_image": "07021_0000.png",
+      "question": "The windmill located near the bottom edge in the left half of the image.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 5.2
+    },
+    {
+      "image_id": "11696_0000.png",
+      "id": "11696_0000.png#16121",
+      "q_source_image": "07522_0000.png",
+      "question": "The expressway service area is occupying a significant portion of the scenery.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 5.6
+    },
+    {
+      "image_id": "06276_0000.png",
+      "id": "06276_0000.png#9268",
+      "q_source_image": "P4151_0002.png",
+      "question": "The ship situated at the top-right of the image.",
+      "raw": "There is no ship visible in the image. The image shows an aerial view of a large stadium with a green field and surrounding seating, along with some tennis courts and other facilities nearby. There are no ships or any water bodies that would contain a ship. Therefore, it is not possible to provide a bounding box coordinate for a ship that does not exist in the image.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 12.6
+    },
+    {
+      "image_id": "06900_0000.png",
+      "id": "06900_0000.png#10033",
+      "q_source_image": "10248_0000.png",
+      "question": "The large bridge running horizontally across the image.",
+      "raw": "There is no object in the image that matches the description \"The large bridge running horizontally across the image.\" The image shows a body of water with several boats docked along the right side and a small floating object in the center. There is no bridge visible.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 10.3
+    },
+    {
+      "image_id": "P2802_0096.png",
+      "id": "P2802_0096.png#7574",
+      "q_source_image": "06295_0000.png",
+      "question": "The bottom-most tennis court in the image.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 4.6
+    },
+    {
+      "image_id": "07065_0000.png",
+      "id": "07065_0000.png#10230",
+      "q_source_image": "P1557_0044.png",
+      "question": "The small bridge observed in the image is situated in the top-right section of the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [826, 0, 1000, 176], \"label\": \"The small bridge observed in the image is situated in the top-right section of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 8.6
+    },
+    {
+      "image_id": "P1854_0157.png",
+      "id": "P1854_0157.png#5478",
+      "q_source_image": "P1022_0007.png",
+      "question": "The small ship located near the top-left corner of the image.",
+      "raw": "There is no small ship visible in the image. The image shows an airport tarmac with two large airplanes (one Virgin Atlantic aircraft and another aircraft) parked at gates, along with ground service equipment, vehicles, and airport infrastructure. There are no ships of any kind in the scene. Therefore, it is not possible to provide a bounding box coordinate for a \"small ship\" as it does not exist in the image.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 10.5
+    },
+    {
+      "image_id": "09634_0000.png",
+      "id": "09634_0000.png#13490",
+      "q_source_image": "P1471_0047.png",
+      "question": "The large vehicle near the bottom-left of the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [234, 967, 270, 1000], \"label\": \"The large vehicle near the bottom-left of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 8.2
+    },
+    {
+      "image_id": "P0027_0017.png",
+      "id": "P0027_0017.png#161",
+      "q_source_image": "11372_0000.png",
+      "question": "The small vehicle is near the middle-right of the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [442, 338, 484, 376], \"label\": \"The small vehicle is near the middle-right of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 7.7
+    },
+    {
+      "image_id": "07911_0000.png",
+      "id": "07911_0000.png#11305",
+      "q_source_image": "10572_0000.png",
+      "question": "The harbor is located at the top-left of the image.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 4.2
+    },
+    {
+      "image_id": "09551_0000.png",
+      "id": "09551_0000.png#13395",
+      "q_source_image": "10621_0000.png",
+      "question": "The dam is positioned in the bottom right corner of the image.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 4.3
+    },
+    {
+      "image_id": "08308_0000.png",
+      "id": "08308_0000.png#11821",
+      "q_source_image": "09488_0000.png",
+      "question": "The airport is visible as a large, elongated area with a runway, located at the bottom of the image.",
+      "raw": "There is no object matching the description in the image. The image shows a road with a bridge and surrounding trees, but there is no airport or runway visible.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 6.7
+    },
+    {
+      "image_id": "P1376_0033.png",
+      "id": "P1376_0033.png#3534",
+      "q_source_image": "07764_0000.png",
+      "question": "The tennis court located on the right edge of the image is without any trees nearby.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [710, 767, 998, 998], \"label\": \"The tennis court located on the right edge of the image is without any trees nearby.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 8.5
+    },
+    {
+      "image_id": "P8656_0098.png",
+      "id": "P8656_0098.png#8677",
+      "q_source_image": "P0027_0006.png",
+      "question": "The ship situated at the bottom part of a bottom-middle harbor.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 5.3
+    },
+    {
+      "image_id": "P0027_0017.png",
+      "id": "P0027_0017.png#160",
+      "q_source_image": "P1809_0111.png",
+      "question": "The vehicle located in the middle-left section of the image on the diagonal road.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [222, 336, 256, 365], \"label\": \"The vehicle located in the middle-left section of the image on the diagonal road.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 6.9
+    },
+    {
+      "image_id": "11380_0000.png",
+      "id": "11380_0000.png#15726",
+      "q_source_image": "P0179_0071.png",
+      "question": "The plane situated on the far right side.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 5.0
+    },
+    {
+      "image_id": "10575_0000.png",
+      "id": "10575_0000.png#14705",
+      "q_source_image": "08224_0000.png",
+      "question": "The right-most airplane in the image .",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 5.1
+    },
+    {
+      "image_id": "07663_0000.png",
+      "id": "07663_0000.png#11000",
+      "q_source_image": "07305_0000.png",
+      "question": "The windmill is located in the middle-left part of the image.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 4.7
+    },
+    {
+      "image_id": "P2630_0004.png",
+      "id": "P2630_0004.png#6756",
+      "q_source_image": "07142_0000.png",
+      "question": "The small airplane visible in the image has a white and blue color scheme.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 5.8
+    },
+    {
+      "image_id": "P2714_0037.png",
+      "id": "P2714_0037.png#6994",
+      "q_source_image": "P2789_0053.png",
+      "question": "The ship docked at the top right of the image.",
+      "raw": "There is no ship visible in the image. The image is a satellite view of a densely built urban area with buildings, roads, and some green spaces, but there are no water bodies or ships present. Therefore, it is not possible to provide a bounding box coordinate for a ship that does not exist in the image.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 10.3
+    },
+    {
+      "image_id": "11511_0000.png",
+      "id": "11511_0000.png#15892",
+      "q_source_image": "P2230_0003.png",
+      "question": "The small vehicle is on the middle-left.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 5.2
+    },
+    {
+      "image_id": "P2330_0059.png",
+      "id": "P2330_0059.png#6151",
+      "q_source_image": "P5789_1972.png",
+      "question": "The plane positioned at the very top of the image, partially cut off by the top edge.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [863, 54, 1000, 137], \"label\": \"The plane positioned at the very top of the image, partially cut off by the top edge.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 8.7
+    },
+    {
+      "image_id": "P2271_0034.png",
+      "id": "P2271_0034.png#6009",
+      "q_source_image": "P3466_0003.png",
+      "question": "The small vehicle located at the bottom edge of the image sits isolated from others.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [977, 573, 999, 603], \"label\": \"The small vehicle located at the bottom edge of the image sits isolated from others.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 9.7
+    },
+    {
+      "image_id": "P1474_0059.png",
+      "id": "P1474_0059.png#4554",
+      "q_source_image": "10055_0000.png",
+      "question": "The tennis court is located on the right side of the image and has a distinctive blue playing surface.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [669, 313, 740, 410], \"label\": \"The tennis court is located on the right side of the image and has a distinctive blue playing surface.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 10.6
+    },
+    {
+      "image_id": "11080_0000.png",
+      "id": "11080_0000.png#15345",
+      "q_source_image": "11115_0000.png",
+      "question": "The small vehicle located on the horizontal road near the top left quadrant of the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [19, 127, 256, 156], \"label\": \"The small vehicle located on the horizontal road near the top left quadrant of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 10.1
+    },
+    {
+      "image_id": "P0882_0007.png",
+      "id": "P0882_0007.png#1618",
+      "q_source_image": "P2044_0000.png",
+      "question": "The basketball court is situated to the left of the other court at the bottom of the image, featuring visible court lines and hoops.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [587, 13, 722, 250], \"label\": \"The basketball court is situated to the left of the other court at the bottom of the image, featuring visible court lines and hoops.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 9.6
+    },
+    {
+      "image_id": "10598_0000.png",
+      "id": "10598_0000.png#14734",
+      "q_source_image": "06982_0000.png",
+      "question": "The vehicle situated at the bottom middle of the image is on a section of the road that curves slightly.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [346, 815, 522, 1000], \"label\": \"The vehicle situated at the bottom middle of the image is on a section of the road that curves slightly.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 9.2
+    },
+    {
+      "image_id": "P2781_0008.png",
+      "id": "P2781_0008.png#7304",
+      "q_source_image": "P1007_0016.png",
+      "question": "The harbor situated in the bottom-middle of the image.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 5.6
+    },
+    {
+      "image_id": "P0329_0003.png",
+      "id": "P0329_0003.png#625",
+      "q_source_image": "P1508_0028.png",
+      "question": "The helicopter is located at the centre of the image.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 4.4
+    },
+    {
+      "image_id": "P1854_0028.png",
+      "id": "P1854_0028.png#5346",
+      "q_source_image": "07278_0000.png",
+      "question": "The baseball field is positioned on the right side of the image.",
+      "raw": "There is no object matching the description \"The baseball field\" in the image. The image shows an airport tarmac with airplanes and runway markings, not a baseball field. Therefore, no bounding box can be provided for this non-existent object.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 8.3
+    },
+    {
+      "image_id": "P0683_0001.png",
+      "id": "P0683_0001.png#1338",
+      "q_source_image": "11341_0000.png",
+      "question": "The storage tank located at the top-right corner of the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [821, 54, 853, 105], \"label\": \"The storage tank located at the top-right corner of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 9.4
+    },
+    {
+      "image_id": "P0833_0005.png",
+      "id": "P0833_0005.png#1542",
+      "q_source_image": "10835_0000.png",
+      "question": "The vehicle positioned directly below the topmost vehicle in the top-right area exhibits a white color and is also parked.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [773, 462, 836, 517], \"label\": \"The vehicle positioned directly below the topmost vehicle in the top-right area exhibits a white color and is also parked.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 9.6
+    },
+    {
+      "image_id": "06543_0000.png",
+      "id": "06543_0000.png#9593",
+      "q_source_image": "P1377_0062.png",
+      "question": "The small vehicle is located at the bottom-right part of the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [901, 912, 933, 998], \"label\": \"The small vehicle is located at the bottom-right part of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 8.9
+    },
+    {
+      "image_id": "P2285_0025.png",
+      "id": "P2285_0025.png#6026",
+      "q_source_image": "10438_0000.png",
+      "question": "The small stadium is located in the center-right portion of the image.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 5.1
+    },
+    {
+      "image_id": "06384_0000.png",
+      "id": "06384_0000.png#9406",
+      "q_source_image": "P0822_0003.png",
+      "question": "The tennis court at the bottom-most part of the image is furthest south.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [100, 750, 176, 832], \"label\": \"The tennis court at the bottom-most part of the image is furthest south.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 10.2
+    },
+    {
+      "image_id": "P0526_0008.png",
+      "id": "P0526_0008.png#1034",
+      "q_source_image": "P2462_0019.png",
+      "question": "The small vehicle positioned on the highway is extending slightly beyond the image's top boundary.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 5.5
+    },
+    {
+      "image_id": "P1030_0009.png",
+      "id": "P1030_0009.png#2452",
+      "q_source_image": "07078_0000.png",
+      "question": "The overpass is located towards the upper part of the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [416, 14, 500, 262], \"label\": \"The overpass is located towards the upper part of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 9.5
+    },
+    {
+      "image_id": "P2625_0017.png",
+      "id": "P2625_0017.png#6718",
+      "q_source_image": "P2645_0055.png",
+      "question": "The ship at the bottom-right corner of the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [458, 654, 997, 997], \"label\": \"The ship at the bottom-right corner of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 8.8
+    },
+    {
+      "image_id": "P0551_0008.png",
+      "id": "P0551_0008.png#1081",
+      "q_source_image": "P0998_0006.png",
+      "question": "The small harbor with docks extending into the water is situated at the bottom of the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [547, 877, 821, 998], \"label\": \"The small harbor with docks extending into the water is situated at the bottom of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 10.0
+    },
+    {
+      "image_id": "07481_0000.png",
+      "id": "07481_0000.png#10777",
+      "q_source_image": "11408_0000.png",
+      "question": "The overpass is located on the left side of the image.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 4.6
+    },
+    {
+      "image_id": "P2630_0004.png",
+      "id": "P2630_0004.png#6757",
+      "q_source_image": "P0173_0000.png",
+      "question": "The plane with a bright body located near the bottom edge of the image and wings extending towards the right.",
+      "raw": "There is no object in the image that matches the description of a \"plane with a bright body located near the bottom edge of the image and wings extending towards the right.\" The image is an aerial view of a large industrial or commercial building complex with parking lots, trucks, and various structures, but there are no aircraft visible. Therefore, no bounding box can be provided for this non-existent object.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 8.7
+    },
+    {
+      "image_id": "P8287_0018.png",
+      "id": "P8287_0018.png#8468",
+      "q_source_image": "05991_0000.png",
+      "question": "A vehicle in the top-left quadrant.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [206, 74, 270, 204], \"label\": \"A vehicle in the top-left quadrant.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 8.4
+    },
+    {
+      "image_id": "P0949_0010.png",
+      "id": "P0949_0010.png#1868",
+      "q_source_image": "09311_0000.png",
+      "question": "The expressway toll station is positioned at the bottom-right part of the image.",
+      "raw": "There is no expressway toll station visible in the image. The image shows a waterfront area with houses, swimming pools, and piers extending into the water. There are no roads, highways, or toll stations depicted. Therefore, it is not possible to provide a bounding box coordinate for an object that does not exist in the image.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 10.6
+    },
+    {
+      "image_id": "08088_0000.png",
+      "id": "08088_0000.png#11521",
+      "q_source_image": "P5789_2963.png",
+      "question": "The bridge located in the top left of the image.",
+      "raw": "There is no bridge visible in the image. The image shows a boat speeding across dark water, leaving a wake behind it. There is no structure that resembles a bridge in the top left or anywhere else in the image.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 8.5
+    },
+    {
+      "image_id": "06422_0000.png",
+      "id": "06422_0000.png#9447",
+      "q_source_image": "09696_0000.png",
+      "question": "The dark-colored vehicle is located in the top-right corner of the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [842, 417, 904, 548], \"label\": \"The dark-colored vehicle is located in the top-right corner of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 9.2
+    },
+    {
+      "image_id": "P2541_0026.png",
+      "id": "P2541_0026.png#6453",
+      "q_source_image": "08014_0000.png",
+      "question": "The top harbor can be recognized by its pier-like structures extending into the water body.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 4.8
+    },
+    {
+      "image_id": "07444_0000.png",
+      "id": "07444_0000.png#10726",
+      "q_source_image": "06250_0000.png",
+      "question": "The single wind turbine is noticeable in the center of the image.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 5.0
+    },
+    {
+      "image_id": "P1397_0061.png",
+      "id": "P1397_0061.png#4029",
+      "q_source_image": "P1007_0010.png",
+      "question": "The unique small ship is present towards the middle-right area of the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [424, 282, 738, 605], \"label\": \"The unique small ship is present towards the middle-right area of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 8.6
+    },
+    {
+      "image_id": "10472_0000.png",
+      "id": "10472_0000.png#14572",
+      "q_source_image": "09349_0000.png",
+      "question": "The windmill is positioned at the bottom right corner in the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [656, 838, 710, 988], \"label\": \"The windmill is positioned at the bottom right corner in the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 8.9
+    },
+    {
+      "image_id": "P2595_0002.png",
+      "id": "P2595_0002.png#6592",
+      "q_source_image": "06590_0000.png",
+      "question": "The tennis court located at the right edge of the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [964, 274, 1000, 387], \"label\": \"The tennis court located at the right edge of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 9.0
+    },
+    {
+      "image_id": "09931_0000.png",
+      "id": "09931_0000.png#13869",
+      "q_source_image": "P1065_0030.png",
+      "question": "The small, rectangular-shaped swimming pool is located in the top-right area of the image.",
+      "raw": "There is no visible swimming pool in the provided satellite image. The top-right area of the image shows a cluster of tall, rectangular buildings with flat roofs, likely residential or commercial structures, and no body of water that resembles a swimming pool is present. Therefore, it is not possible to provide a bounding box coordinate for a swimming pool as described in the sentence.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 10.9
+    },
+    {
+      "image_id": "08671_0000.png",
+      "id": "08671_0000.png#12284",
+      "q_source_image": "08281_0000.png",
+      "question": "The large vehicle is situated near the middle-right side of the upper bridge.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [681, 832, 899, 975], \"label\": \"The large vehicle is situated near the middle-right side of the upper bridge.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 11.0
+    },
+    {
+      "image_id": "P1410_0064.png",
+      "id": "P1410_0064.png#4226",
+      "q_source_image": "P2598_0024.png",
+      "question": "The vehicle located on the bottom right on a road curvature.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [967, 985, 998, 1000], \"label\": \"The vehicle located on the bottom right on a road curvature.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 9.6
+    },
+    {
+      "image_id": "11585_0000.png",
+      "id": "11585_0000.png#15988",
+      "q_source_image": "P0499_0005.png",
+      "question": "The vehicle located on the left side of the image, which is the bottom-most among the parked vehicles.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 5.3
+    },
+    {
+      "image_id": "P1390_0033.png",
+      "id": "P1390_0033.png#3845",
+      "q_source_image": "P2781_0027.png",
+      "question": "The small white vehicle is located on the road near the top-left corner of the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [133, 0, 183, 58], \"label\": \"The small white vehicle is located on the road near the top-left corner of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 8.6
+    },
+    {
+      "image_id": "09638_0000.png",
+      "id": "09638_0000.png#13500",
+      "q_source_image": "10501_0000.png",
+      "question": "The vehicle that is located at the bottom-right of the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [937, 817, 1000, 937], \"label\": \"The vehicle that is located at the bottom-right of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 9.0
+    },
+    {
+      "image_id": "P0457_0002.png",
+      "id": "P0457_0002.png#915",
+      "q_source_image": "10840_0000.png",
+      "question": "The wind turbine can be identified in the bottom-left quadrant of the image.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 5.0
+    },
+    {
+      "image_id": "06985_0000.png",
+      "id": "06985_0000.png#10141",
+      "q_source_image": "P1463_0047.png",
+      "question": "The small vehicle is positioned in the top-left area of the image.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 5.0
+    },
+    {
+      "image_id": "09675_0000.png",
+      "id": "09675_0000.png#13546",
+      "q_source_image": "11172_0000.png",
+      "question": "The stadium in the image has an unusual shape, occupying the bottom right corner.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [700, 612, 1000, 967], \"label\": \"The stadium in the image has an unusual shape, occupying the bottom right corner.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 7.6
+    },
+    {
+      "image_id": "06897_0000.png",
+      "id": "06897_0000.png#10029",
+      "q_source_image": "P2239_0000.png",
+      "question": "There is a large plane positioned towards the left section of the frame.",
+      "raw": "```json\n[\n\t{\"bbox_2d\": [86, 109, 615, 732], \"label\": \"There is a large plane positioned towards the left section of the frame.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 8.2
+    },
+    {
+      "image_id": "11583_0000.png",
+      "id": "11583_0000.png#15986",
+      "q_source_image": "P2789_0076.png",
+      "question": "The ship located near the top edge of the dock.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [588, 317, 750, 550], \"label\": \"The ship located near the top edge of the dock.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 7.9
+    },
+    {
+      "image_id": "P2645_0036.png",
+      "id": "P2645_0036.png#6812",
+      "q_source_image": "10108_0000.png",
+      "question": "The bridge curving adjacent to the road on the right side of the image.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 4.5
+    },
+    {
+      "image_id": "P5789_1947.png",
+      "id": "P5789_1947.png#8095",
+      "q_source_image": "P0019_0087.png",
+      "question": "The harbor at the middle-right edge of the image features a wider dock area and is surrounded by land with vegetation.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [846, 0, 1000, 500], \"label\": \"The harbor at the middle-right edge of the image features a wider dock area and is surrounded by land with vegetation.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 8.9
+    },
+    {
+      "image_id": "08926_0000.png",
+      "id": "08926_0000.png#12610",
+      "q_source_image": "06516_0000.png",
+      "question": "The storage tank near the center-left of the image, positioned above the other tank.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [448, 357, 500, 412], \"label\": \"The storage tank near the center-left of the image, positioned above the other tank.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 8.6
+    },
+    {
+      "image_id": "P3575_0002.png",
+      "id": "P3575_0002.png#7660",
+      "q_source_image": "P0814_0005.png",
+      "question": "The vehicle parked at the northernmost edge of the bottom-left parking lot area.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [199, 288, 238, 327], \"label\": \"The vehicle parked at the northernmost edge of the bottom-left parking lot area.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 7.6
+    },
+    {
+      "image_id": "P0179_0003.png",
+      "id": "P0179_0003.png#367",
+      "q_source_image": "P0795_0017.png",
+      "question": "The ship positioned at the top-middle of the image and is the top-most ship within the group.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [886, 137, 1000, 305], \"label\": \"The ship positioned at the top-middle of the image and is the top-most ship within the group.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 7.8
+    },
+    {
+      "image_id": "08738_0000.png",
+      "id": "08738_0000.png#12374",
+      "q_source_image": "08624_0000.png",
+      "question": "The small ship is at the bottom edge of the image.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 3.6
+    },
+    {
+      "image_id": "P2794_0023.png",
+      "id": "P2794_0023.png#7451",
+      "q_source_image": "07690_0000.png",
+      "question": "The basketball court is located at the lower part of the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [319, 738, 414, 998], \"label\": \"The basketball court is located at the lower part of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 7.1
+    },
+    {
+      "image_id": "P1179_0137.png",
+      "id": "P1179_0137.png#2939",
+      "q_source_image": "P1398_0016.png",
+      "question": "The plane is positioned on dry terrain at bottom-right of the image.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 3.9
+    },
+    {
+      "image_id": "P2093_0011.png",
+      "id": "P2093_0011.png#5805",
+      "q_source_image": "07378_0000.png",
+      "question": "The aerial image showcases a baseball field characterized by its diamond-shaped dirt infield and surrounding green outfield.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 0.8
+    },
+    {
+      "image_id": "P5789_0640.png",
+      "id": "P5789_0640.png#7983",
+      "q_source_image": "P5070_0103.png",
+      "question": "The small vehicle is located on the top left of the image.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 3.7
+    },
+    {
+      "image_id": "P0309_0002.png",
+      "id": "P0309_0002.png#610",
+      "q_source_image": "P0348_0004.png",
+      "question": "The small ship is situated at the end of the pier on the waterbody.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [256, 183, 352, 323], \"label\": \"The small ship is situated at the end of the pier on the waterbody.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 7.9
+    },
+    {
+      "image_id": "10793_0000.png",
+      "id": "10793_0000.png#14971",
+      "q_source_image": "P2093_0011.png",
+      "question": "The large vehicle is located near the left edge of the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [0, 534, 387, 750], \"label\": \"The large vehicle is located near the left edge of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 7.9
+    },
+    {
+      "image_id": "P1390_0078.png",
+      "id": "P1390_0078.png#3938",
+      "q_source_image": "P4151_0031.png",
+      "question": "The small-vehicle positioned closest to the bottom right corner of the image.",
+      "raw": "There are no small vehicles in the image. The image shows several large military aircraft parked on a tarmac or airfield. The aircraft are the only objects visible in the image. Therefore, it is not possible to provide a bounding box coordinate for a small vehicle that does not exist in the image.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 9.3
+    },
+    {
+      "image_id": "10002_0000.png",
+      "id": "10002_0000.png#13953",
+      "q_source_image": "P2689_0032.png",
+      "question": "The plane located on the top-middle of the image.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 4.5
+    },
+    {
+      "image_id": "11601_0000.png",
+      "id": "11601_0000.png#16004",
+      "q_source_image": "P1066_0010.png",
+      "question": "The small harbor located on the bottom end of the image.",
+      "raw": "There is no harbor visible in the image. The image shows a mountainous region with an airport runway and some buildings, but no body of water or harbor is present. Therefore, it is not possible to provide a bounding box coordinate for a harbor that does not exist in the image.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 8.5
+    },
+    {
+      "image_id": "P0936_0006.png",
+      "id": "P0936_0006.png#1795",
+      "q_source_image": "11005_0000.png",
+      "question": "The largest storage tank situated on the right-most edge of the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [836, 767, 945, 882], \"label\": \"The largest storage tank situated on the right-most edge of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 8.4
+    },
+    {
+      "image_id": "08166_0000.png",
+      "id": "08166_0000.png#11626",
+      "q_source_image": "P2330_0050.png",
+      "question": "The ship found in the center of the image.",
+      "raw": "There is no ship in the image. The image shows an aerial view of a sports complex, likely a football (soccer) stadium, with green fields, stands, and surrounding buildings. There are no ships or watercraft visible. Therefore, no bounding box can be provided for a ship, as one does not exist in the image.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 9.4
+    },
+    {
+      "image_id": "P1380_0003.png",
+      "id": "P1380_0003.png#3620",
+      "q_source_image": "06826_0000.png",
+      "question": "The bridge towards the middle-left of the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [273, 340, 550, 540], \"label\": \"The bridge towards the middle-left of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 7.9
+    },
+    {
+      "image_id": "P5789_2611.png",
+      "id": "P5789_2611.png#8178",
+      "q_source_image": "08449_0000.png",
+      "question": "The larger airplane positioned towards the middle-right portion of the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [627, 875, 683, 919], \"label\": \"The larger airplane positioned towards the middle-right portion of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 8.0
+    },
+    {
+      "image_id": "P0590_0006.png",
+      "id": "P0590_0006.png#1194",
+      "q_source_image": "11196_0000.png",
+      "question": "The vehicle at the top part of the road has a small size.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 4.5
+    },
+    {
+      "image_id": "08402_0000.png",
+      "id": "08402_0000.png#11948",
+      "q_source_image": "P2488_0014.png",
+      "question": "The swimming pool located in the bottom right region of the image near the image border.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [705, 250, 998, 786], \"label\": \"The swimming pool located in the bottom right region of the image near the image border.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 8.5
+    },
+    {
+      "image_id": "P2802_0122.png",
+      "id": "P2802_0122.png#7611",
+      "q_source_image": "P1342_0049.png",
+      "question": "The small ground track and field has an oval shape with visible internal sports areas and running lanes.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 4.6
+    },
+    {
+      "image_id": "09674_0000.png",
+      "id": "09674_0000.png#13545",
+      "q_source_image": "P0300_0002.png",
+      "question": "The ship in the image has a long and narrow structure that extends across most of the waterfront area within the harbor's protective barrier.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 4.7
+    },
+    {
+      "image_id": "P1583_0054.png",
+      "id": "P1583_0054.png#4806",
+      "q_source_image": "P4151_0125.png",
+      "question": "The small white vehicle is aligned horizontally near the top of the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [492, 362, 528, 398], \"label\": \"The small white vehicle is aligned horizontally near the top of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 8.3
+    },
+    {
+      "image_id": "P2330_0092.png",
+      "id": "P2330_0092.png#6186",
+      "q_source_image": "P1398_0019.png",
+      "question": "The small plane is located at middle right of the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [745, 380, 998, 426], \"label\": \"The small plane is located at middle right of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 9.6
+    },
+    {
+      "image_id": "P4151_0049.png",
+      "id": "P4151_0049.png#7740",
+      "q_source_image": "P0977_0007.png",
+      "question": "The northern harbor in the image along the topmost edge of a brown-colored waterway.",
+      "raw": "There is no harbor or waterway visible in the image. The image shows an aerial view of a residential building with a roof, trees, and parked cars on the street below. There is no northern harbor or any body of water. Therefore, it is not possible to provide a bounding box coordinate for a region that does not exist in the image.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 9.8
+    },
+    {
+      "image_id": "10450_0000.png",
+      "id": "10450_0000.png#14541",
+      "q_source_image": "06910_0000.png",
+      "question": "The tank located at the top-right corner of the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [876, 12, 938, 72], \"label\": \"The tank located at the top-right corner of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 8.0
+    },
+    {
+      "image_id": "06544_0000.png",
+      "id": "06544_0000.png#9596",
+      "q_source_image": "P0353_0006.png",
+      "question": "The large vehicle at the very top of the image, placed above all others in the top-left segment.",
+      "raw": "There is no large vehicle at the very top of the image. The top-left segment contains a tennis court, not a vehicle. Therefore, no bounding box can be provided for a vehicle in that location.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 7.3
+    },
+    {
+      "image_id": "07907_0000.png",
+      "id": "07907_0000.png#11300",
+      "q_source_image": "P1390_0059.png",
+      "question": "The plane on the right-most edge of the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [484, 456, 822, 756], \"label\": \"The plane on the right-most edge of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 7.9
+    },
+    {
+      "image_id": "10622_0000.png",
+      "id": "10622_0000.png#14770",
+      "q_source_image": "06920_0000.png",
+      "question": "The small airplane is positioned on the right side of the image.",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 4.4
+    },
+    {
+      "image_id": "P1147_0015.png",
+      "id": "P1147_0015.png#2799",
+      "q_source_image": "P1452_0003.png",
+      "question": "The large vehicle located at the right side in the middle-left section of the image.",
+      "raw": "```json\n[\n    {\"bbox_2d\": [867, 462, 1000, 656], \"label\": \"The large vehicle located at the right side in the middle-left section of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "invented_box": true,
+      "sec": 8.4
+    }
+  ]
+}

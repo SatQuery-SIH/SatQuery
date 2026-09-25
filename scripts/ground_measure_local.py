@@ -2,11 +2,12 @@
 seeded subset of the frozen VRSBench referring ids.
 
 Purpose (D-014): answer "did the LoRA break box output, and which served
-seat should own the `ground` tool?" Both seats are served through
-IDENTICAL llama.cpp preprocessing, so the comparison is apples-to-apples.
-The absolute acc is NOT comparable to the bf16 vLLM 0.6114 column
-(different quantization + backend) — the reportable bf16 number needs the
-Modal run; this decides the seat.
+seat should own the `ground` tool?" Seats are compared AS SERVED —
+canonical runs --image-min-tokens 384, narrator runs defaults; pass each
+seat's geometry via --min-px/--max-px so parse tags are interpreted in the
+correct frame. The absolute acc is NOT comparable to the bf16 vLLM
+0.6114 column (different quantization + backend) — the reportable bf16
+number needs the Modal run; this decides the seat.
 
 Scoring is verbatim from scripts/modal_vrsbench_eval.py
 (parse_pred_box / parse_gt_box / iou_official / iou_float / _clip01 /

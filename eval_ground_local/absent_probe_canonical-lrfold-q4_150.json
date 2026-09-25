@@ -1,0 +1,1519 @@
+{
+  "seat": "127.0.0.1:8091",
+  "label": "canonical-lrfold-q4",
+  "n": 150,
+  "invented_boxes": 147,
+  "invention_rate": 0.98,
+  "refusals": 3,
+  "parse_tags": {
+    "tuple4_px": 9,
+    "tuple4_100": 5,
+    "tuple4_1000": 133,
+    "parse_fail": 3
+  },
+  "method": "mismatched pairing \u2014 image gets a referring expression from a different image; invention rate is an UPPER BOUND (coincidental matches possible)",
+  "sample_seed": 20260925,
+  "wall_seconds": 1183.2,
+  "preds": [
+    {
+      "image_id": "10171_0000.png",
+      "id": "10171_0000.png#14178",
+      "q_source_image": "P1410_0125.png",
+      "question": "The small vehicle at the top-right is the top-most one among the visible small vehicles.",
+      "raw": "834,608,903,670",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 13.4
+    },
+    {
+      "image_id": "P5789_1971.png",
+      "id": "P5789_1971.png#8099",
+      "q_source_image": "P1463_0005.png",
+      "question": "The vehicle located more to the east in the top-right of the image.",
+      "raw": "899, 177, 988, 222",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 3.9
+    },
+    {
+      "image_id": "07586_0000.png",
+      "id": "07586_0000.png#10910",
+      "q_source_image": "11509_0000.png",
+      "question": "The tennis court is positioned at the bottom-left of the image.",
+      "raw": "[101, 817, 126, 867]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 2.9
+    },
+    {
+      "image_id": "P1809_0017.png",
+      "id": "P1809_0017.png#5206",
+      "q_source_image": "06590_0000.png",
+      "question": "The tennis court positioned at the bottom-right of the image.",
+      "raw": "[777, 817, 957, 999]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 3.0
+    },
+    {
+      "image_id": "P0518_0001.png",
+      "id": "P0518_0001.png#980",
+      "q_source_image": "P1513_0010.png",
+      "question": "The smallest plane visible in the image is located at the middle-left of the image.",
+      "raw": "396, 234, 410, 250",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 2.7
+    },
+    {
+      "image_id": "07427_0000.png",
+      "id": "07427_0000.png#10702",
+      "q_source_image": "07440_0000.png",
+      "question": "The white domed storage tank casting a shadow is located centrally in the image.",
+      "raw": "[0, 0, 1061, 1061]",
+      "tag": "tuple4_px",
+      "invented_box": true,
+      "sec": 2.5
+    },
+    {
+      "image_id": "11482_0000.png",
+      "id": "11482_0000.png#15853",
+      "q_source_image": "08898_0000.png",
+      "question": "The left-most tennis court located at the bottom of the image.",
+      "raw": "393, 835, 581, 989",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 2.5
+    },
+    {
+      "image_id": "P0953_0015.png",
+      "id": "P0953_0015.png#1897",
+      "q_source_image": "11113_0000.png",
+      "question": "The basketball court positioned towards the bottom right part of the image, directly underneath another court, is also marked for gameplay.",
+      "raw": "[718, 761, 888, 999]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 9.1
+    },
+    {
+      "image_id": "P5789_2057.png",
+      "id": "P5789_2057.png#8127",
+      "q_source_image": "P1463_0030.png",
+      "question": "The small vehicle on the top-left side of the image.",
+      "raw": "[14, 14, 34, 34]",
+      "tag": "tuple4_100",
+      "invented_box": true,
+      "sec": 8.7
+    },
+    {
+      "image_id": "P1570_0077.png",
+      "id": "P1570_0077.png#4763",
+      "q_source_image": "P2541_0030.png",
+      "question": "The roundabout located in the right of the image is the bottom-most of the two roundabouts.",
+      "raw": "[959, 784, 999, 884]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 9.0
+    },
+    {
+      "image_id": "P1982_0009.png",
+      "id": "P1982_0009.png#5674",
+      "q_source_image": "P1397_0072.png",
+      "question": "The plane located at the top of the image.",
+      "raw": "0,0,400,100",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.4
+    },
+    {
+      "image_id": "P1373_0006.png",
+      "id": "P1373_0006.png#3490",
+      "q_source_image": "08972_0000.png",
+      "question": "The baseball field situated to the right of the top-most field.",
+      "raw": "276, 130, 556, 430",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.5
+    },
+    {
+      "image_id": "P1095_0040.png",
+      "id": "P1095_0040.png#2672",
+      "q_source_image": "08622_0000.png",
+      "question": "The left bottom vehicle is small.",
+      "raw": "250,704,281,731",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.4
+    },
+    {
+      "image_id": "08942_0000.png",
+      "id": "08942_0000.png#12627",
+      "q_source_image": "P2794_0012.png",
+      "question": "The small vehicle parked at the middle-right side of the image.",
+      "raw": "[690, 345, 714, 371]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.5
+    },
+    {
+      "image_id": "P0961_0004.png",
+      "id": "P0961_0004.png#1904",
+      "q_source_image": "P0583_0001.png",
+      "question": "The larger harbor located to the left in the image.",
+      "raw": "[0, 380, 279, 1000]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.5
+    },
+    {
+      "image_id": "P0261_0008.png",
+      "id": "P0261_0008.png#595",
+      "q_source_image": "07563_0000.png",
+      "question": "The overpass is located at the top-left of the image.",
+      "raw": "[0, 0, 410, 242]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.3
+    },
+    {
+      "image_id": "10981_0000.png",
+      "id": "10981_0000.png#15213",
+      "q_source_image": "P2802_0041.png",
+      "question": "The small vehicle located towards the top-left part of the tarmac.",
+      "raw": "[381, 558, 414, 581]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.6
+    },
+    {
+      "image_id": "06997_0000.png",
+      "id": "06997_0000.png#10153",
+      "q_source_image": "11351_0000.png",
+      "question": "The vehicle parked closest to the middle-right edge of the image.",
+      "raw": "[899, 781, 961, 861]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.6
+    },
+    {
+      "image_id": "P6687_0065.png",
+      "id": "P6687_0065.png#8302",
+      "q_source_image": "P1086_0005.png",
+      "question": "The tennis court located on the left side of the image.",
+      "raw": "[0, 0, 1024, 1024]",
+      "tag": "tuple4_px",
+      "invented_box": true,
+      "sec": 8.3
+    },
+    {
+      "image_id": "P0557_0013.png",
+      "id": "P0557_0013.png#1098",
+      "q_source_image": "P0420_0006.png",
+      "question": "The harbor featuring a T-shaped dock that is more centrally positioned in the top.",
+      "raw": "183,299,321,416",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.3
+    },
+    {
+      "image_id": "09327_0000.png",
+      "id": "09327_0000.png#13114",
+      "q_source_image": "P0654_0006.png",
+      "question": "The school bus at the right part of the image.",
+      "raw": "[660, 967, 714, 997]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.6
+    },
+    {
+      "image_id": "P2779_0002.png",
+      "id": "P2779_0002.png#7284",
+      "q_source_image": "07352_0000.png",
+      "question": "The dam is located at the bottom of the image.",
+      "raw": "[279, 679, 967, 999]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.5
+    },
+    {
+      "image_id": "05986_0000.png",
+      "id": "05986_0000.png#8918",
+      "q_source_image": "P2781_0023.png",
+      "question": "The large vehicle is located bottom-middle part of the image.",
+      "raw": "[740, 670, 890, 770]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.5
+    },
+    {
+      "image_id": "09719_0000.png",
+      "id": "09719_0000.png#13615",
+      "q_source_image": "11206_0000.png",
+      "question": "The airport is located on the lower part of the island.",
+      "raw": "No",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 7.5
+    },
+    {
+      "image_id": "P2462_0007.png",
+      "id": "P2462_0007.png#6364",
+      "q_source_image": "P1397_0028.png",
+      "question": "The small vehicle located at the left edge of the road near the central part of the image.",
+      "raw": "[199, 712, 212, 727]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.5
+    },
+    {
+      "image_id": "06006_0000.png",
+      "id": "06006_0000.png#8934",
+      "q_source_image": "08539_0000.png",
+      "question": "The ground track field can be identified by its reddish-brown color and oval shape with track lines, positioned centrally towards the right.",
+      "raw": "[690, 799, 999, 999]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.5
+    },
+    {
+      "image_id": "10352_0000.png",
+      "id": "10352_0000.png#14405",
+      "q_source_image": "07485_0000.png",
+      "question": "The expressway toll station is located toward the bottom-right section of the image.",
+      "raw": "[0, 199, 39, 287]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.6
+    },
+    {
+      "image_id": "08964_0000.png",
+      "id": "08964_0000.png#12663",
+      "q_source_image": "10290_0000.png",
+      "question": "The basketball court on the right is identical in appearance to the left one, also seen from above with boundary lines and hoops.",
+      "raw": "500, 542, 565, 621",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.5
+    },
+    {
+      "image_id": "P1095_0025.png",
+      "id": "P1095_0025.png#2666",
+      "q_source_image": "P1806_0005.png",
+      "question": "The elongated large vehicle located at the top-most position in the middle of the image.",
+      "raw": "[753, 218, 815, 262]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.6
+    },
+    {
+      "image_id": "P1023_0005.png",
+      "id": "P1023_0005.png#2383",
+      "q_source_image": "10494_0000.png",
+      "question": "The basketball court located on the centre of the image.",
+      "raw": "0, 0, 106, 106",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.2
+    },
+    {
+      "image_id": "P1384_0022.png",
+      "id": "P1384_0022.png#3703",
+      "q_source_image": "06544_0000.png",
+      "question": "The tennis court in the uppe-left portion of the image is surrounded by a few palm trees on its top and right sides.",
+      "raw": "[167, 618, 381, 763]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.5
+    },
+    {
+      "image_id": "P1397_0024.png",
+      "id": "P1397_0024.png#3987",
+      "q_source_image": "07332_0000.png",
+      "question": "The storage tank located towards the middle-right of the image.",
+      "raw": "[741, 0, 789, 48]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.4
+    },
+    {
+      "image_id": "08796_0000.png",
+      "id": "08796_0000.png#12443",
+      "q_source_image": "11452_0000.png",
+      "question": "The expressway toll station situated at the bottom of the image, showing a structured rectangular layout.",
+      "raw": "343,613,583,813",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.3
+    },
+    {
+      "image_id": "P0027_0003.png",
+      "id": "P0027_0003.png#132",
+      "q_source_image": "07727_0000.png",
+      "question": "The ship at the bottom-most position in the image.",
+      "raw": "[777, 800, 941, 907]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.6
+    },
+    {
+      "image_id": "P0998_0003.png",
+      "id": "P0998_0003.png#2174",
+      "q_source_image": "P1342_0006.png",
+      "question": "The bridge located near the bottom-right corner of the image.",
+      "raw": "[750, 579, 999, 666]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.6
+    },
+    {
+      "image_id": "P2093_0008.png",
+      "id": "P2093_0008.png#5796",
+      "q_source_image": "P1143_0009.png",
+      "question": "The aircraft with contrasting markings is parked on the tarmac.",
+      "raw": "444, 444, 555, 555",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.5
+    },
+    {
+      "image_id": "05930_0000.png",
+      "id": "05930_0000.png#8856",
+      "q_source_image": "10177_0000.png",
+      "question": "The overpass is the largest structure in the image, stretching horizontally across the entire width of the picture with roads visible beneath it.",
+      "raw": "[0, 879, 1000, 999]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.6
+    },
+    {
+      "image_id": "07336_0000.png",
+      "id": "07336_0000.png#10591",
+      "q_source_image": "07494_0000.png",
+      "question": "The vehicle positioned at the bottom right corner of the image.",
+      "raw": "[530, 700, 553, 742]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.6
+    },
+    {
+      "image_id": "P2701_0038.png",
+      "id": "P2701_0038.png#6924",
+      "q_source_image": "P1315_0029.png",
+      "question": "The bridge located closer to the bottom of the image spans across the water body.",
+      "raw": "[0, 371, 674, 821]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.6
+    },
+    {
+      "image_id": "08364_0000.png",
+      "id": "08364_0000.png#11896",
+      "q_source_image": "08138_0000.png",
+      "question": "The small vehicle is positioned on the bottom-left side of the image.",
+      "raw": "[177, 799, 208, 831]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.6
+    },
+    {
+      "image_id": "P0402_0003.png",
+      "id": "P0402_0003.png#853",
+      "q_source_image": "08461_0000.png",
+      "question": "The stadium with a colorful exterior and a large white-covered section is located towards the right-hand side of the image.",
+      "raw": "0, 0, 620, 494",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.3
+    },
+    {
+      "image_id": "09192_0000.png",
+      "id": "09192_0000.png#12951",
+      "q_source_image": "P5789_1627.png",
+      "question": "The small plane located towards the bottom right corner of the image.",
+      "raw": "[661, 565, 875, 907]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.5
+    },
+    {
+      "image_id": "P1732_0019.png",
+      "id": "P1732_0019.png#5023",
+      "q_source_image": "P1332_0043.png",
+      "question": "The ship situated centrally is the centre of the image.",
+      "raw": "[444, 374, 554, 488]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.5
+    },
+    {
+      "image_id": "P0974_0001.png",
+      "id": "P0974_0001.png#2041",
+      "q_source_image": "08797_0000.png",
+      "question": "The vehicle located in the left part of the image.",
+      "raw": "[218, 287, 234, 307]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.4
+    },
+    {
+      "image_id": "11307_0000.png",
+      "id": "11307_0000.png#15628",
+      "q_source_image": "P1377_0023.png",
+      "question": "The large vehicle is parked near the top-right corner of the image.",
+      "raw": "930,236,950,296",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.2
+    },
+    {
+      "image_id": "10112_0000.png",
+      "id": "10112_0000.png#14094",
+      "q_source_image": "08854_0000.png",
+      "question": "The tennis court located at the bottom-right corner of the image.",
+      "raw": "[777, 887, 807, 928]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.5
+    },
+    {
+      "image_id": "08537_0000.png",
+      "id": "08537_0000.png#12099",
+      "q_source_image": "11293_0000.png",
+      "question": "The windmill positioned in the bottom-left corner.",
+      "raw": "[161, 871, 181, 918]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.5
+    },
+    {
+      "image_id": "P2802_0038.png",
+      "id": "P2802_0038.png#7520",
+      "q_source_image": "P1029_0016.png",
+      "question": "The ship positioned closest to the bottom-left corner of the image.",
+      "raw": "[0, 527, 648, 986]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.4
+    },
+    {
+      "image_id": "08896_0000.png",
+      "id": "08896_0000.png#12574",
+      "q_source_image": "P2645_0011.png",
+      "question": "The left-most storage tank is fully visible and situated on the upper-left side of the image.",
+      "raw": "[438, 517, 505, 567]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.5
+    },
+    {
+      "image_id": "P2330_0025.png",
+      "id": "P2330_0025.png#6094",
+      "q_source_image": "06286_0000.png",
+      "question": "The vehicle with the striking red color is parked on the driveway near the middle-right portion of the image.",
+      "raw": "[708, 743, 791, 809]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.6
+    },
+    {
+      "image_id": "P8287_0096.png",
+      "id": "P8287_0096.png#8511",
+      "q_source_image": "08791_0000.png",
+      "question": "The airplane located at the center of the image.",
+      "raw": "[0, 0, 1024, 1024]",
+      "tag": "tuple4_px",
+      "invented_box": true,
+      "sec": 8.4
+    },
+    {
+      "image_id": "08902_0000.png",
+      "id": "08902_0000.png#12583",
+      "q_source_image": "09085_0000.png",
+      "question": "The lower overpass ia situated near the bottom edge of the image similarly intersects the multilane roadway.",
+      "raw": "[519, 777, 999, 999]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.7
+    },
+    {
+      "image_id": "P1390_0084.png",
+      "id": "P1390_0084.png#3955",
+      "q_source_image": "P3107_0000.png",
+      "question": "The ground track field can be identified by its distinct rectangular shape with slightly curved ends located in the middle-right area of the image.",
+      "raw": "666, 377, 999, 610",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.4
+    },
+    {
+      "image_id": "P2429_0006.png",
+      "id": "P2429_0006.png#6313",
+      "q_source_image": "P2231_0008.png",
+      "question": "The right-most plane on the tarmac is small.",
+      "raw": "[197, 224, 210, 244]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.5
+    },
+    {
+      "image_id": "11405_0000.png",
+      "id": "11405_0000.png#15763",
+      "q_source_image": "08005_0000.png",
+      "question": "The storage tank in the top left corner of the image.",
+      "raw": "[0, 0, 10, 10]",
+      "tag": "tuple4_100",
+      "invented_box": true,
+      "sec": 8.2
+    },
+    {
+      "image_id": "P1738_0010.png",
+      "id": "P1738_0010.png#5041",
+      "q_source_image": "06924_0000.png",
+      "question": "The other clearly demarcated rectangular court, which is situated a small distance below the first tennis court.",
+      "raw": "777, 867, 941, 999",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.5
+    },
+    {
+      "image_id": "P0359_0003.png",
+      "id": "P0359_0003.png#761",
+      "q_source_image": "P0352_0002.png",
+      "question": "The small red vehicle located at the top-middle of the image.",
+      "raw": "[199, 0, 222, 15]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.4
+    },
+    {
+      "image_id": "P2789_0053.png",
+      "id": "P2789_0053.png#7373",
+      "q_source_image": "P1513_0033.png",
+      "question": "The small vehicle located towards the centre of the image.",
+      "raw": "[264, 839, 380, 939]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.7
+    },
+    {
+      "image_id": "P8656_0038.png",
+      "id": "P8656_0038.png#8600",
+      "q_source_image": "07021_0000.png",
+      "question": "The windmill located near the bottom edge in the left half of the image.",
+      "raw": "[16, 641, 144, 789]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.6
+    },
+    {
+      "image_id": "11696_0000.png",
+      "id": "11696_0000.png#16121",
+      "q_source_image": "07522_0000.png",
+      "question": "The expressway service area is occupying a significant portion of the scenery.",
+      "raw": "0,0,1000,1000",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.3
+    },
+    {
+      "image_id": "06276_0000.png",
+      "id": "06276_0000.png#9268",
+      "q_source_image": "P4151_0002.png",
+      "question": "The ship situated at the top-right of the image.",
+      "raw": "[845, 10, 870, 44]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.5
+    },
+    {
+      "image_id": "06900_0000.png",
+      "id": "06900_0000.png#10033",
+      "q_source_image": "10248_0000.png",
+      "question": "The large bridge running horizontally across the image.",
+      "raw": "0,0,1000,1000",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.3
+    },
+    {
+      "image_id": "P2802_0096.png",
+      "id": "P2802_0096.png#7574",
+      "q_source_image": "06295_0000.png",
+      "question": "The bottom-most tennis court in the image.",
+      "raw": "[0, 478, 106, 548]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.4
+    },
+    {
+      "image_id": "07065_0000.png",
+      "id": "07065_0000.png#10230",
+      "q_source_image": "P1557_0044.png",
+      "question": "The small bridge observed in the image is situated in the top-right section of the image.",
+      "raw": "[811, 0, 999, 109]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.3
+    },
+    {
+      "image_id": "P1854_0157.png",
+      "id": "P1854_0157.png#5478",
+      "q_source_image": "P1022_0007.png",
+      "question": "The small ship located near the top-left corner of the image.",
+      "raw": "[10, 567, 161, 620]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.4
+    },
+    {
+      "image_id": "09634_0000.png",
+      "id": "09634_0000.png#13490",
+      "q_source_image": "P1471_0047.png",
+      "question": "The large vehicle near the bottom-left of the image.",
+      "raw": "[19, 700, 97, 805]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.2
+    },
+    {
+      "image_id": "P0027_0017.png",
+      "id": "P0027_0017.png#161",
+      "q_source_image": "11372_0000.png",
+      "question": "The small vehicle is near the middle-right of the image.",
+      "raw": "[669, 573, 688, 595]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.4
+    },
+    {
+      "image_id": "07911_0000.png",
+      "id": "07911_0000.png#11305",
+      "q_source_image": "10572_0000.png",
+      "question": "The harbor is located at the top-left of the image.",
+      "raw": "[0, 0, 177, 287]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.3
+    },
+    {
+      "image_id": "09551_0000.png",
+      "id": "09551_0000.png#13395",
+      "q_source_image": "10621_0000.png",
+      "question": "The dam is positioned in the bottom right corner of the image.",
+      "raw": "[0, 0, 1024, 1024]",
+      "tag": "tuple4_px",
+      "invented_box": true,
+      "sec": 8.3
+    },
+    {
+      "image_id": "08308_0000.png",
+      "id": "08308_0000.png#11821",
+      "q_source_image": "09488_0000.png",
+      "question": "The airport is visible as a large, elongated area with a runway, located at the bottom of the image.",
+      "raw": "0, 0, 1024, 1024",
+      "tag": "tuple4_px",
+      "invented_box": true,
+      "sec": 8.4
+    },
+    {
+      "image_id": "P1376_0033.png",
+      "id": "P1376_0033.png#3534",
+      "q_source_image": "07764_0000.png",
+      "question": "The tennis court located on the right edge of the image is without any trees nearby.",
+      "raw": "No",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 7.4
+    },
+    {
+      "image_id": "P8656_0098.png",
+      "id": "P8656_0098.png#8677",
+      "q_source_image": "P0027_0006.png",
+      "question": "The ship situated at the bottom part of a bottom-middle harbor.",
+      "raw": "[0, 0, 106, 106]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.3
+    },
+    {
+      "image_id": "P0027_0017.png",
+      "id": "P0027_0017.png#160",
+      "q_source_image": "P1809_0111.png",
+      "question": "The vehicle located in the middle-left section of the image on the diagonal road.",
+      "raw": "[199, 333, 234, 357]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 2.2
+    },
+    {
+      "image_id": "11380_0000.png",
+      "id": "11380_0000.png#15726",
+      "q_source_image": "P0179_0071.png",
+      "question": "The plane situated on the far right side.",
+      "raw": "901, 159, 919, 202",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.5
+    },
+    {
+      "image_id": "10575_0000.png",
+      "id": "10575_0000.png#14705",
+      "q_source_image": "08224_0000.png",
+      "question": "The right-most airplane in the image .",
+      "raw": "899, 61, 945, 101",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.3
+    },
+    {
+      "image_id": "07663_0000.png",
+      "id": "07663_0000.png#11000",
+      "q_source_image": "07305_0000.png",
+      "question": "The windmill is located in the middle-left part of the image.",
+      "raw": "[0, 0, 1000, 1000]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.4
+    },
+    {
+      "image_id": "P2630_0004.png",
+      "id": "P2630_0004.png#6756",
+      "q_source_image": "07142_0000.png",
+      "question": "The small airplane visible in the image has a white and blue color scheme.",
+      "raw": "[611, 758, 700, 918]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.6
+    },
+    {
+      "image_id": "P2714_0037.png",
+      "id": "P2714_0037.png#6994",
+      "q_source_image": "P2789_0053.png",
+      "question": "The ship docked at the top right of the image.",
+      "raw": "0, 0, 1061, 1061",
+      "tag": "tuple4_px",
+      "invented_box": true,
+      "sec": 8.4
+    },
+    {
+      "image_id": "11511_0000.png",
+      "id": "11511_0000.png#15892",
+      "q_source_image": "P2230_0003.png",
+      "question": "The small vehicle is on the middle-left.",
+      "raw": "[14, 119, 44, 181]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.3
+    },
+    {
+      "image_id": "P2330_0059.png",
+      "id": "P2330_0059.png#6151",
+      "q_source_image": "P5789_1972.png",
+      "question": "The plane positioned at the very top of the image, partially cut off by the top edge.",
+      "raw": "863, 74, 999, 134",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.3
+    },
+    {
+      "image_id": "P2271_0034.png",
+      "id": "P2271_0034.png#6009",
+      "q_source_image": "P3466_0003.png",
+      "question": "The small vehicle located at the bottom edge of the image sits isolated from others.",
+      "raw": "977, 503, 1000, 521",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.5
+    },
+    {
+      "image_id": "P1474_0059.png",
+      "id": "P1474_0059.png#4554",
+      "q_source_image": "10055_0000.png",
+      "question": "The tennis court is located on the right side of the image and has a distinctive blue playing surface.",
+      "raw": "[679, 307, 755, 445]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.5
+    },
+    {
+      "image_id": "11080_0000.png",
+      "id": "11080_0000.png#15345",
+      "q_source_image": "11115_0000.png",
+      "question": "The small vehicle located on the horizontal road near the top left quadrant of the image.",
+      "raw": "[17, 119, 179, 143]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.5
+    },
+    {
+      "image_id": "P0882_0007.png",
+      "id": "P0882_0007.png#1618",
+      "q_source_image": "P2044_0000.png",
+      "question": "The basketball court is situated to the left of the other court at the bottom of the image, featuring visible court lines and hoops.",
+      "raw": "[579, 141, 724, 256]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.5
+    },
+    {
+      "image_id": "10598_0000.png",
+      "id": "10598_0000.png#14734",
+      "q_source_image": "06982_0000.png",
+      "question": "The vehicle situated at the bottom middle of the image is on a section of the road that curves slightly.",
+      "raw": "349, 821, 699, 999",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.5
+    },
+    {
+      "image_id": "P2781_0008.png",
+      "id": "P2781_0008.png#7304",
+      "q_source_image": "P1007_0016.png",
+      "question": "The harbor situated in the bottom-middle of the image.",
+      "raw": "[0, 0, 1000, 1000]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.3
+    },
+    {
+      "image_id": "P0329_0003.png",
+      "id": "P0329_0003.png#625",
+      "q_source_image": "P1508_0028.png",
+      "question": "The helicopter is located at the centre of the image.",
+      "raw": "499, 301, 541, 351",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.4
+    },
+    {
+      "image_id": "P1854_0028.png",
+      "id": "P1854_0028.png#5346",
+      "q_source_image": "07278_0000.png",
+      "question": "The baseball field is positioned on the right side of the image.",
+      "raw": "821, 472, 884, 537",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.4
+    },
+    {
+      "image_id": "P0683_0001.png",
+      "id": "P0683_0001.png#1338",
+      "q_source_image": "11341_0000.png",
+      "question": "The storage tank located at the top-right corner of the image.",
+      "raw": "[830, 63, 863, 107]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.5
+    },
+    {
+      "image_id": "P0833_0005.png",
+      "id": "P0833_0005.png#1542",
+      "q_source_image": "10835_0000.png",
+      "question": "The vehicle positioned directly below the topmost vehicle in the top-right area exhibits a white color and is also parked.",
+      "raw": "[199, 733, 345, 817]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.7
+    },
+    {
+      "image_id": "06543_0000.png",
+      "id": "06543_0000.png#9593",
+      "q_source_image": "P1377_0062.png",
+      "question": "The small vehicle is located at the bottom-right part of the image.",
+      "raw": "[889, 941, 907, 977]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.5
+    },
+    {
+      "image_id": "P2285_0025.png",
+      "id": "P2285_0025.png#6026",
+      "q_source_image": "10438_0000.png",
+      "question": "The small stadium is located in the center-right portion of the image.",
+      "raw": "0, 0, 1024, 1024",
+      "tag": "tuple4_px",
+      "invented_box": true,
+      "sec": 8.3
+    },
+    {
+      "image_id": "06384_0000.png",
+      "id": "06384_0000.png#9406",
+      "q_source_image": "P0822_0003.png",
+      "question": "The tennis court at the bottom-most part of the image is furthest south.",
+      "raw": "[484, 915, 511, 949]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.5
+    },
+    {
+      "image_id": "P0526_0008.png",
+      "id": "P0526_0008.png#1034",
+      "q_source_image": "P2462_0019.png",
+      "question": "The small vehicle positioned on the highway is extending slightly beyond the image's top boundary.",
+      "raw": "[0, 484, 71, 584]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.5
+    },
+    {
+      "image_id": "P1030_0009.png",
+      "id": "P1030_0009.png#2452",
+      "q_source_image": "07078_0000.png",
+      "question": "The overpass is located towards the upper part of the image.",
+      "raw": "[0, 0, 44, 1088]",
+      "tag": "tuple4_px",
+      "invented_box": true,
+      "sec": 8.3
+    },
+    {
+      "image_id": "P2625_0017.png",
+      "id": "P2625_0017.png#6718",
+      "q_source_image": "P2645_0055.png",
+      "question": "The ship at the bottom-right corner of the image.",
+      "raw": "[847, 500, 999, 999]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.6
+    },
+    {
+      "image_id": "P0551_0008.png",
+      "id": "P0551_0008.png#1081",
+      "q_source_image": "P0998_0006.png",
+      "question": "The small harbor with docks extending into the water is situated at the bottom of the image.",
+      "raw": "[547, 879, 665, 999]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.6
+    },
+    {
+      "image_id": "07481_0000.png",
+      "id": "07481_0000.png#10777",
+      "q_source_image": "11408_0000.png",
+      "question": "The overpass is located on the left side of the image.",
+      "raw": "[17, 699, 77, 749]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.4
+    },
+    {
+      "image_id": "P2630_0004.png",
+      "id": "P2630_0004.png#6757",
+      "q_source_image": "P0173_0000.png",
+      "question": "The plane with a bright body located near the bottom edge of the image and wings extending towards the right.",
+      "raw": "611, 758, 702, 915",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 2.0
+    },
+    {
+      "image_id": "P8287_0018.png",
+      "id": "P8287_0018.png#8468",
+      "q_source_image": "05991_0000.png",
+      "question": "A vehicle in the top-left quadrant.",
+      "raw": "[0, 63, 48, 137]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.4
+    },
+    {
+      "image_id": "P0949_0010.png",
+      "id": "P0949_0010.png#1868",
+      "q_source_image": "09311_0000.png",
+      "question": "The expressway toll station is positioned at the bottom-right part of the image.",
+      "raw": "[777, 474, 880, 588]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.4
+    },
+    {
+      "image_id": "08088_0000.png",
+      "id": "08088_0000.png#11521",
+      "q_source_image": "P5789_2963.png",
+      "question": "The bridge located in the top left of the image.",
+      "raw": "[0, 0, 100, 100]",
+      "tag": "tuple4_100",
+      "invented_box": true,
+      "sec": 8.3
+    },
+    {
+      "image_id": "06422_0000.png",
+      "id": "06422_0000.png#9447",
+      "q_source_image": "09696_0000.png",
+      "question": "The dark-colored vehicle is located in the top-right corner of the image.",
+      "raw": "[849, 414, 899, 539]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.5
+    },
+    {
+      "image_id": "P2541_0026.png",
+      "id": "P2541_0026.png#6453",
+      "q_source_image": "08014_0000.png",
+      "question": "The top harbor can be recognized by its pier-like structures extending into the water body.",
+      "raw": "699, 127, 722, 149",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.4
+    },
+    {
+      "image_id": "07444_0000.png",
+      "id": "07444_0000.png#10726",
+      "q_source_image": "06250_0000.png",
+      "question": "The single wind turbine is noticeable in the center of the image.",
+      "raw": "[367, 464, 407, 514]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.5
+    },
+    {
+      "image_id": "P1397_0061.png",
+      "id": "P1397_0061.png#4029",
+      "q_source_image": "P1007_0010.png",
+      "question": "The unique small ship is present towards the middle-right area of the image.",
+      "raw": "[745, 246, 767, 283]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.5
+    },
+    {
+      "image_id": "10472_0000.png",
+      "id": "10472_0000.png#14572",
+      "q_source_image": "09349_0000.png",
+      "question": "The windmill is positioned at the bottom right corner in the image.",
+      "raw": "[669, 841, 718, 984]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.2
+    },
+    {
+      "image_id": "P2595_0002.png",
+      "id": "P2595_0002.png#6592",
+      "q_source_image": "06590_0000.png",
+      "question": "The tennis court located at the right edge of the image.",
+      "raw": "[894, 250, 984, 388]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.0
+    },
+    {
+      "image_id": "09931_0000.png",
+      "id": "09931_0000.png#13869",
+      "q_source_image": "P1065_0030.png",
+      "question": "The small, rectangular-shaped swimming pool is located in the top-right area of the image.",
+      "raw": "[849, 14, 907, 69]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 7.9
+    },
+    {
+      "image_id": "08671_0000.png",
+      "id": "08671_0000.png#12284",
+      "q_source_image": "08281_0000.png",
+      "question": "The large vehicle is situated near the middle-right side of the upper bridge.",
+      "raw": "[416, 163, 438, 192]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.0
+    },
+    {
+      "image_id": "P1410_0064.png",
+      "id": "P1410_0064.png#4226",
+      "q_source_image": "P2598_0024.png",
+      "question": "The vehicle located on the bottom right on a road curvature.",
+      "raw": "[953, 987, 984, 1000]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 7.9
+    },
+    {
+      "image_id": "11585_0000.png",
+      "id": "11585_0000.png#15988",
+      "q_source_image": "P0499_0005.png",
+      "question": "The vehicle located on the left side of the image, which is the bottom-most among the parked vehicles.",
+      "raw": "[17, 879, 36, 907]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 7.8
+    },
+    {
+      "image_id": "P1390_0033.png",
+      "id": "P1390_0033.png#3845",
+      "q_source_image": "P2781_0027.png",
+      "question": "The small white vehicle is located on the road near the top-left corner of the image.",
+      "raw": "[124, 0, 161, 58]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 7.7
+    },
+    {
+      "image_id": "09638_0000.png",
+      "id": "09638_0000.png#13500",
+      "q_source_image": "10501_0000.png",
+      "question": "The vehicle that is located at the bottom-right of the image.",
+      "raw": "[856, 588, 880, 716]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 7.8
+    },
+    {
+      "image_id": "P0457_0002.png",
+      "id": "P0457_0002.png#915",
+      "q_source_image": "10840_0000.png",
+      "question": "The wind turbine can be identified in the bottom-left quadrant of the image.",
+      "raw": "[349, 917, 399, 987]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.0
+    },
+    {
+      "image_id": "06985_0000.png",
+      "id": "06985_0000.png#10141",
+      "q_source_image": "P1463_0047.png",
+      "question": "The small vehicle is positioned in the top-left area of the image.",
+      "raw": "[199, 427, 222, 456]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 7.8
+    },
+    {
+      "image_id": "09675_0000.png",
+      "id": "09675_0000.png#13546",
+      "q_source_image": "11172_0000.png",
+      "question": "The stadium in the image has an unusual shape, occupying the bottom right corner.",
+      "raw": "[799, 674, 997, 967]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 7.9
+    },
+    {
+      "image_id": "06897_0000.png",
+      "id": "06897_0000.png#10029",
+      "q_source_image": "P2239_0000.png",
+      "question": "There is a large plane positioned towards the left section of the frame.",
+      "raw": "[77, 111, 616, 739]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 7.8
+    },
+    {
+      "image_id": "11583_0000.png",
+      "id": "11583_0000.png#15986",
+      "q_source_image": "P2789_0076.png",
+      "question": "The ship located near the top edge of the dock.",
+      "raw": "741, 417, 881, 517",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 7.7
+    },
+    {
+      "image_id": "P2645_0036.png",
+      "id": "P2645_0036.png#6812",
+      "q_source_image": "10108_0000.png",
+      "question": "The bridge curving adjacent to the road on the right side of the image.",
+      "raw": "854,388,999,769",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 7.7
+    },
+    {
+      "image_id": "P5789_1947.png",
+      "id": "P5789_1947.png#8095",
+      "q_source_image": "P0019_0087.png",
+      "question": "The harbor at the middle-right edge of the image features a wider dock area and is surrounded by land with vegetation.",
+      "raw": "799, 257, 954, 469",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 7.7
+    },
+    {
+      "image_id": "08926_0000.png",
+      "id": "08926_0000.png#12610",
+      "q_source_image": "06516_0000.png",
+      "question": "The storage tank near the center-left of the image, positioned above the other tank.",
+      "raw": "[474, 610, 505, 643]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 7.9
+    },
+    {
+      "image_id": "P3575_0002.png",
+      "id": "P3575_0002.png#7660",
+      "q_source_image": "P0814_0005.png",
+      "question": "The vehicle parked at the northernmost edge of the bottom-left parking lot area.",
+      "raw": "422, 206, 452, 234",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 7.9
+    },
+    {
+      "image_id": "P0179_0003.png",
+      "id": "P0179_0003.png#367",
+      "q_source_image": "P0795_0017.png",
+      "question": "The ship positioned at the top-middle of the image and is the top-most ship within the group.",
+      "raw": "[849, 141, 999, 303]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.0
+    },
+    {
+      "image_id": "08738_0000.png",
+      "id": "08738_0000.png#12374",
+      "q_source_image": "08624_0000.png",
+      "question": "The small ship is at the bottom edge of the image.",
+      "raw": "[899, 883, 945, 937]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 7.8
+    },
+    {
+      "image_id": "P2794_0023.png",
+      "id": "P2794_0023.png#7451",
+      "q_source_image": "07690_0000.png",
+      "question": "The basketball court is located at the lower part of the image.",
+      "raw": "[666, 700, 989, 843]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 7.8
+    },
+    {
+      "image_id": "P1179_0137.png",
+      "id": "P1179_0137.png#2939",
+      "q_source_image": "P1398_0016.png",
+      "question": "The plane is positioned on dry terrain at bottom-right of the image.",
+      "raw": "[0, 303, 48, 381]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 7.8
+    },
+    {
+      "image_id": "P2093_0011.png",
+      "id": "P2093_0011.png#5805",
+      "q_source_image": "07378_0000.png",
+      "question": "The aerial image showcases a baseball field characterized by its diamond-shaped dirt infield and surrounding green outfield.",
+      "raw": "[311, 0, 601, 214]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 7.8
+    },
+    {
+      "image_id": "P5789_0640.png",
+      "id": "P5789_0640.png#7983",
+      "q_source_image": "P5070_0103.png",
+      "question": "The small vehicle is located on the top left of the image.",
+      "raw": "[0, 0, 19, 19]",
+      "tag": "tuple4_100",
+      "invented_box": true,
+      "sec": 7.5
+    },
+    {
+      "image_id": "P0309_0002.png",
+      "id": "P0309_0002.png#610",
+      "q_source_image": "P0348_0004.png",
+      "question": "The small ship is situated at the end of the pier on the waterbody.",
+      "raw": "[244, 234, 316, 316]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 8.0
+    },
+    {
+      "image_id": "10793_0000.png",
+      "id": "10793_0000.png#14971",
+      "q_source_image": "P2093_0011.png",
+      "question": "The large vehicle is located near the left edge of the image.",
+      "raw": "[1, 519, 37, 619]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 7.6
+    },
+    {
+      "image_id": "P1390_0078.png",
+      "id": "P1390_0078.png#3938",
+      "q_source_image": "P4151_0031.png",
+      "question": "The small-vehicle positioned closest to the bottom right corner of the image.",
+      "raw": "[261, 645, 570, 944]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 7.9
+    },
+    {
+      "image_id": "10002_0000.png",
+      "id": "10002_0000.png#13953",
+      "q_source_image": "P2689_0032.png",
+      "question": "The plane located on the top-middle of the image.",
+      "raw": "0, 0, 100, 100",
+      "tag": "tuple4_100",
+      "invented_box": true,
+      "sec": 7.5
+    },
+    {
+      "image_id": "11601_0000.png",
+      "id": "11601_0000.png#16004",
+      "q_source_image": "P1066_0010.png",
+      "question": "The small harbor located on the bottom end of the image.",
+      "raw": "[10, 843, 71, 907]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 7.7
+    },
+    {
+      "image_id": "P0936_0006.png",
+      "id": "P0936_0006.png#1795",
+      "q_source_image": "11005_0000.png",
+      "question": "The largest storage tank situated on the right-most edge of the image.",
+      "raw": "879, 16, 919, 100",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 7.7
+    },
+    {
+      "image_id": "08166_0000.png",
+      "id": "08166_0000.png#11626",
+      "q_source_image": "P2330_0050.png",
+      "question": "The ship found in the center of the image.",
+      "raw": "[0, 0, 106, 106]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 7.6
+    },
+    {
+      "image_id": "P1380_0003.png",
+      "id": "P1380_0003.png#3620",
+      "q_source_image": "06826_0000.png",
+      "question": "The bridge towards the middle-left of the image.",
+      "raw": "[444, 343, 514, 403]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 7.7
+    },
+    {
+      "image_id": "P5789_2611.png",
+      "id": "P5789_2611.png#8178",
+      "q_source_image": "08449_0000.png",
+      "question": "The larger airplane positioned towards the middle-right portion of the image.",
+      "raw": "743, 101, 809, 166",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 6.6
+    },
+    {
+      "image_id": "P0590_0006.png",
+      "id": "P0590_0006.png#1194",
+      "q_source_image": "11196_0000.png",
+      "question": "The vehicle at the top part of the road has a small size.",
+      "raw": "[0, 874, 101, 999]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 6.6
+    },
+    {
+      "image_id": "08402_0000.png",
+      "id": "08402_0000.png#11948",
+      "q_source_image": "P2488_0014.png",
+      "question": "The swimming pool located in the bottom right region of the image near the image border.",
+      "raw": "[899, 849, 987, 987]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 6.7
+    },
+    {
+      "image_id": "P2802_0122.png",
+      "id": "P2802_0122.png#7611",
+      "q_source_image": "P1342_0049.png",
+      "question": "The small ground track and field has an oval shape with visible internal sports areas and running lanes.",
+      "raw": "[388, 214, 444, 274]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 6.8
+    },
+    {
+      "image_id": "09674_0000.png",
+      "id": "09674_0000.png#13545",
+      "q_source_image": "P0300_0002.png",
+      "question": "The ship in the image has a long and narrow structure that extends across most of the waterfront area within the harbor's protective barrier.",
+      "raw": "0, 0, 35, 106",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 6.4
+    },
+    {
+      "image_id": "P1583_0054.png",
+      "id": "P1583_0054.png#4806",
+      "q_source_image": "P4151_0125.png",
+      "question": "The small white vehicle is aligned horizontally near the top of the image.",
+      "raw": "10, 10",
+      "tag": "parse_fail",
+      "invented_box": false,
+      "sec": 6.1
+    },
+    {
+      "image_id": "P2330_0092.png",
+      "id": "P2330_0092.png#6186",
+      "q_source_image": "P1398_0019.png",
+      "question": "The small plane is located at middle right of the image.",
+      "raw": "799, 394, 995, 422",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 6.6
+    },
+    {
+      "image_id": "P4151_0049.png",
+      "id": "P4151_0049.png#7740",
+      "q_source_image": "P0977_0007.png",
+      "question": "The northern harbor in the image along the topmost edge of a brown-colored waterway.",
+      "raw": "0, 0, 1024, 1024",
+      "tag": "tuple4_px",
+      "invented_box": true,
+      "sec": 6.6
+    },
+    {
+      "image_id": "10450_0000.png",
+      "id": "10450_0000.png#14541",
+      "q_source_image": "06910_0000.png",
+      "question": "The tank located at the top-right corner of the image.",
+      "raw": "[464, 11, 500, 44]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 6.6
+    },
+    {
+      "image_id": "06544_0000.png",
+      "id": "06544_0000.png#9596",
+      "q_source_image": "P0353_0006.png",
+      "question": "The large vehicle at the very top of the image, placed above all others in the top-left segment.",
+      "raw": "[0, 0, 106, 106]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 6.6
+    },
+    {
+      "image_id": "07907_0000.png",
+      "id": "07907_0000.png#11300",
+      "q_source_image": "P1390_0059.png",
+      "question": "The plane on the right-most edge of the image.",
+      "raw": "798, 700, 843, 765",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 6.6
+    },
+    {
+      "image_id": "10622_0000.png",
+      "id": "10622_0000.png#14770",
+      "q_source_image": "06920_0000.png",
+      "question": "The small airplane is positioned on the right side of the image.",
+      "raw": "[74, 202, 117, 280]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 6.7
+    },
+    {
+      "image_id": "P1147_0015.png",
+      "id": "P1147_0015.png#2799",
+      "q_source_image": "P1452_0003.png",
+      "question": "The large vehicle located at the right side in the middle-left section of the image.",
+      "raw": "[884, 488, 993, 648]",
+      "tag": "tuple4_1000",
+      "invented_box": true,
+      "sec": 6.7
+    }
+  ]
+}
