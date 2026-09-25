@@ -12,6 +12,7 @@ from typing import Any
 from ingest import (
     UPLOAD_DIR,
     _path as ingest_path,
+    is_sar_profile,
     materialize_rgb,
     pair_misreg_fields,
     read_gsd,
@@ -1032,7 +1033,17 @@ def run_query(
             # dtype/calibration and band names.
             sar_src = paths.get("source_original") or paths.get("image")
             sr_ing = read_sar_arrays(sar_src) if sar_src else {"ok": False, "error": "no bound image"}
-            if sr_ing.get("ok"):
+            # In single mode nothing asserted the file is SAR — the word
+            # "radar" came from the query text. Require modality evidence:
+            # named SAR pol bands / float backscatter / npz schema (ingest
+            # sets sar_evidence), or a declared SAR profile. An 8-bit
+            # photo read as "SAR" withholds rather than emitting DN stats
+            # presented as radar measurement.
+            modality_ok = bool(
+                sr_ing.get("sar_evidence")
+                or is_sar_profile(bound.get("sensor_profile"))
+            )
+            if sr_ing.get("ok") and modality_ok:
                 sr = _call(
                     "tool",
                     "sar_read",
@@ -1043,6 +1054,17 @@ def run_query(
                 )
                 sr["ingest_provenance"] = sr_ing.get("provenance")
                 sr["pol_verified"] = sr_ing.get("pol_verified")
+            elif sr_ing.get("ok"):
+                sr = {
+                    "withheld": True,
+                    "withheld_reason": "modality_unverified",
+                    "provenance": (
+                        "tools.sar_read (withheld — no SAR-modality "
+                        "evidence: unnamed 8-bit/preview image, no declared "
+                        "SAR profile; SAR-worded query alone does not make "
+                        "an optical image radar)."
+                    ),
+                }
             else:
                 sr = {
                     "withheld": True,

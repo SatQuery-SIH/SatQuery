@@ -401,6 +401,19 @@ def _profile_key(name: str) -> str:
 
 _PROFILES_NORM = {_profile_key(k): v for k, v in SENSOR_PROFILES.items()}
 
+# Declared SAR modality profiles. Membership is evidence of MODALITY
+# only — it asserts nothing about band order or polarization semantics
+# (read_sar_arrays still flags unverified pols and refuses named
+# non-VV/VH). RISAT products are deliberately absent: their polarization
+# representation is mentor-gated (D-019).
+SAR_PROFILES = frozenset({"sar_generic", "sentinel1", "sentinel1_grd"})
+_SAR_PROFILES_NORM = frozenset(_profile_key(k) for k in SAR_PROFILES)
+
+
+def is_sar_profile(name: str | None) -> bool:
+    """True when a declared profile asserts SAR modality."""
+    return bool(name) and _profile_key(name) in _SAR_PROFILES_NORM
+
 _BAND_TOKENS = {
     "red": {"red"},
     "green": {"green"},
@@ -777,6 +790,7 @@ def read_sar_arrays(src: str | Path) -> dict[str, Any]:
             "vv": np.asarray(vv_raw, dtype=np.float32),
             "vh": np.asarray(vh_raw, dtype=np.float32),
             "calibrated": calibrated,
+            "sar_evidence": True,  # npz schema declares SAR ('vv' key)
             "provenance": (
                 f"npz `{path.name}` keys={blob.files} calibrated={calibrated}"
             ),
@@ -800,9 +814,14 @@ def read_sar_arrays(src: str | Path) -> dict[str, Any]:
             vv_i = next((i for i, p in enumerate(pols) if p == "vv"), None)
             vh_i = next((i for i, p in enumerate(pols) if p == "vh"), None)
             pol_verified = vv_i is not None and vh_i is not None
+            named_pols = [p for p in pols if p]
 
             arr_raw = np.asarray(tifffile.imread(str(path)))
             calibrated = arr_raw.dtype != np.uint8
+            # SAR-modality evidence for single-mode gating: named VV/VH
+            # bands or float (non-8-bit) backscatter-like data. An 8-bit
+            # unnamed TIFF is a preview, not evidence.
+            sar_evidence = bool(named_pols) or calibrated
             arr = np.asarray(arr_raw, dtype=np.float32)
             if arr.ndim == 3:
                 bands_first = arr.shape[0] <= 4 and arr.shape[-1] > 4
@@ -829,6 +848,8 @@ def read_sar_arrays(src: str | Path) -> dict[str, Any]:
                 "vh": vh,
                 "calibrated": calibrated,
                 "pol_verified": pol_verified,
+                "named_pols": named_pols,
+                "sar_evidence": sar_evidence,
                 "provenance": (
                     f"SAR raster `{path.name}` shape={tuple(np.asarray(vv).shape)} "
                     f"dtype={arr_raw.dtype} calibrated={calibrated}; {pol_note}"
@@ -847,6 +868,7 @@ def read_sar_arrays(src: str | Path) -> dict[str, Any]:
         "vv": arr,
         "vh": arr.copy(),
         "calibrated": calibrated,
+        "sar_evidence": False,  # plain image: no SAR-modality evidence
         "provenance": (
             f"SAR from 8-bit `{path.name}` — not native backscatter. "
             "water_calibrated=false; -16 dB threshold not applied; preview DN."

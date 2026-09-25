@@ -604,6 +604,71 @@ class SingleSarAndAliasTests(unittest.TestCase):
         self.assertTrue(sr.get("withheld"), sr)
         self.assertIn("polariz", (sr.get("withheld_reason") or "").lower())
 
+    def test_single_sar_optical_jpeg_withholds(self) -> None:
+        # Review 2026-09-26 gap: a SAR-worded query on a plain photo must
+        # not produce "SAR" DN stats / overlay / GeoTIFF — no modality
+        # evidence -> modality_unverified, no artifacts.
+        from PIL import Image
+        from pipeline import run_query
+
+        tmp = Path(tempfile.mkdtemp())
+        jpg = tmp / "photo.jpg"
+        Image.new("RGB", (24, 24), (136, 90, 60)).save(jpg)
+        trace = run_query(
+            "Use radar to check for water.",
+            "single",
+            live=False,
+            uploads={"image": str(jpg)},
+        )
+        sr = trace["tool_outputs"].get("sar_read") or {}
+        self.assertTrue(sr.get("withheld"), sr)
+        self.assertEqual(sr.get("withheld_reason"), "modality_unverified")
+        self.assertIsNone(sr.get("dn_stats"))
+        self.assertFalse(trace.get("overlay_path"))
+        self.assertFalse(
+            any("water_sar" in str(g) for g in trace.get("geo_exports") or []),
+            trace.get("geo_exports"),
+        )
+        self.assertIsNone(trace["tool_outputs"].get("area_calc"))
+
+    def test_single_sar_unnamed_float_tiff_runs(self) -> None:
+        # Float (non-8-bit) raster IS backscatter-plausible evidence even
+        # without band names — runs, flagged pol_verified=False.
+        from pipeline import run_query
+
+        tmp = Path(tempfile.mkdtemp())
+        tif = self._sar_tiff(tmp, names=None)
+        trace = run_query(
+            "Give me the VV backscatter stats.",
+            "single",
+            live=False,
+            uploads={"image": str(tif)},
+        )
+        sr = trace["tool_outputs"].get("sar_read") or {}
+        self.assertFalse(sr.get("withheld"), sr)
+        self.assertFalse(sr.get("pol_verified"))
+
+    def test_single_sar_declared_profile_allows_preview(self) -> None:
+        # A declared SAR profile supplies modality evidence for an 8-bit
+        # preview — runs as uncalibrated DN stats, not withheld.
+        from PIL import Image
+        from pipeline import run_query
+
+        tmp = Path(tempfile.mkdtemp())
+        png = tmp / "sar_preview.png"
+        Image.new("L", (24, 24), 90).save(png)
+        trace = run_query(
+            "Give me the VV backscatter stats.",
+            "single",
+            live=False,
+            uploads={"image": str(png)},
+            sensor_profile="sar_generic",
+        )
+        sr = trace["tool_outputs"].get("sar_read") or {}
+        self.assertFalse(sr.get("withheld"), sr)
+        self.assertFalse(sr.get("water_calibrated"))
+        self.assertIsNotNone(sr.get("dn_stats"))
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
