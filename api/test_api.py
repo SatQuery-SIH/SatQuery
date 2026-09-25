@@ -298,6 +298,7 @@ class ApiTests(unittest.TestCase):
                 json={
                     "query": "is there water?",
                     "input_mode": "single",
+                    "scene": 1,
                     "live": False,
                 },
             )
@@ -362,6 +363,16 @@ class ApiTests(unittest.TestCase):
         self.assertEqual(bad.status_code, 422)
         self.assertEqual(bad.json()["error"], "mode_mismatch")
 
+    def test_query_no_input_bound_422(self) -> None:
+        # D-020 / AGENTS rule 7: a run with neither scene nor upload_id must
+        # not silently default to a prepared scene.
+        r = self.client.post(
+            "/query",
+            json={"query": "describe", "input_mode": "single", "live": False},
+        )
+        self.assertEqual(r.status_code, 422)
+        self.assertEqual(r.json()["error"], "no_input_bound")
+
         r = self.client.post(
             "/query",
             json={
@@ -381,7 +392,12 @@ class ApiTests(unittest.TestCase):
         with mock.patch.object(pipeline, "run_query", _fake_run):
             body = self.client.post(
                 "/query",
-                json={"query": "q", "input_mode": "single", "live": False},
+                json={
+                    "query": "q",
+                    "input_mode": "single",
+                    "scene": 1,
+                    "live": False,
+                },
             ).json()
         rid = body["run_id"]
         names = {a["name"] for a in body["artifacts"]}
@@ -505,7 +521,12 @@ class StreamTests(unittest.TestCase):
         with mock.patch.object(pipeline, "run_query", _boom):
             r = self.client.post(
                 "/query/stream",
-                json={"query": "q", "input_mode": "single", "live": False},
+                json={
+                    "query": "q",
+                    "input_mode": "single",
+                    "scene": 1,
+                    "live": False,
+                },
             )
         self.assertEqual(r.status_code, 200)
         events = _sse_events(r.text)

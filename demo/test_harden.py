@@ -215,6 +215,82 @@ class HardenTests(unittest.TestCase):
         self.assertIn("change_detect", out)
         self.assertLess(out.index("change_detect"), out.index("cdvqa_map"))
 
+    def test_validator_mask_only_bitemporal_drops_vqa(self) -> None:
+        # M6/D-021: mask-only bi-temporal phrasing (routing-suite cases
+        # 94-96 semantics) must not get narration forced onto it — the
+        # validator mirrors the regex mask-only branch.
+        from planner import validate_model_plan
+
+        out = validate_model_plan(
+            '{"tools": ["change_detect"]}',
+            "bi-temporal",
+            "show me the change mask only",
+        )
+        self.assertEqual(out, ["change_detect"])
+
+    def test_validator_bitemporal_question_keeps_vqa(self) -> None:
+        from planner import validate_model_plan
+
+        out = validate_model_plan(
+            '{"tools": ["change_detect"]}',
+            "bi-temporal",
+            "what changed between the two dates?",
+        )
+        self.assertIsNotNone(out)
+        self.assertIn("vqa", out)
+
+    def test_validator_single_question_canonical_floor(self) -> None:
+        # D-018: the adapted answer seat is not optional on question-shaped
+        # single-image queries — mirrors regex is_question semantics.
+        from planner import validate_model_plan
+
+        out = validate_model_plan(
+            '{"tools": ["water_highlight"]}',
+            "single",
+            "is there any water in this image?",
+        )
+        self.assertIsNotNone(out)
+        self.assertIn("canonical_vqa", out)
+        self.assertIn("vqa", out)
+        self.assertIn("area_calc", out)
+
+    def test_validator_single_imperative_no_canonical(self) -> None:
+        # Mirrors regex exactly: imperative mask requests get vqa narration
+        # but not the canonical seat.
+        from planner import validate_model_plan
+
+        out = validate_model_plan(
+            '{"tools": ["water_highlight"]}', "single", "highlight the water"
+        )
+        self.assertEqual(out, ["water_highlight", "area_calc", "vqa"])
+
+    def test_model_first_fallback_reason_recorded(self) -> None:
+        # D-021/M3: a model-routing failure must record why — seat down,
+        # malformed JSON, or validator reject are different diagnoses.
+        import pipeline
+        from unittest.mock import patch
+
+        def _boom(*a, **k):
+            if isinstance(k.get("_reason"), dict):
+                k["_reason"]["why"] = "seat_unreachable_or_timeout"
+            return None
+
+        with patch.object(pipeline, "MODEL_FIRST", True), patch.object(
+            pipeline, "plan_model", side_effect=_boom
+        ), patch.object(
+            pipeline,
+            "bind_inputs",
+            return_value={"ok": False, "error": "stubbed"},
+        ):
+            trace = pipeline.run_query(
+                "highlight the water", "single", scene=1, live=True
+            )
+        self.assertEqual(trace["plan"].get("router"), "regex-fallback")
+        self.assertEqual(
+            trace["plan"].get("model_fallback_reason"),
+            "seat_unreachable_or_timeout",
+        )
+
     def test_scene1_highlight_writes_overlay_not_primary(self) -> None:
         from pipeline import run_query
 

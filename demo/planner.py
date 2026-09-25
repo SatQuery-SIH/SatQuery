@@ -373,8 +373,16 @@ def _extract_json(text: str) -> dict[str, Any] | None:
     return obj if isinstance(obj, dict) else None
 
 
-def validate_model_plan(raw: str, mode: str) -> list[str] | None:
-    """Parse + gate the model's tool list; ordered tools or None (fail closed)."""
+def validate_model_plan(
+    raw: str, mode: str, query: str | None = None
+) -> list[str] | None:
+    """Parse + gate the model's tool list; ordered tools or None (fail closed).
+
+    Mirrors the regex plan's conventions: measurement couplings, the
+    bi-temporal mask-only exemption (no narration appended), and the
+    canonical_vqa floor for question-shaped single-image queries — the
+    adapted seat is never optional on a question the PS expects it to own.
+    """
     allowed = FALLBACK_TOOLS.get(mode)
     if not allowed:
         return None
@@ -395,7 +403,21 @@ def validate_model_plan(raw: str, mode: str) -> list[str] | None:
         # nested inside the change_detect block in the pipeline and is a
         # dead tool call without it.
         picked.add("change_detect")
-    picked.add("vqa")  # every plan still gets a prose answer
+    q = (query or "").strip().lower()
+    mask_only = (
+        mode == "bi-temporal"
+        and "vqa" not in picked
+        and "canonical_vqa" not in picked
+        and _match(_MASK_ONLY, q)
+        and not (
+            _match(_AREA, q) or _match(r"\b(what|where|explain|describe)\b", q)
+        )
+    )
+    if not mask_only:
+        picked.add("vqa")
+    is_question = q.endswith("?") or _match(_COUNT, q)
+    if mode == "single" and is_question:
+        picked.add("canonical_vqa")  # the adapted seat floor for questions
     # Match the regex convention: measurement/visual tools first, then vqa,
     # then canonical_vqa last.
     ordered = [t for t in TOOLS if t in picked and t not in _BARE_TOOLS]
@@ -408,13 +430,22 @@ def plan_model(
     input_mode: str,
     url: str,
     timeout: float = 30.0,
+    _reason: dict[str, str] | None = None,
 ) -> dict[str, Any] | None:
     """Ask the narrator seat for a JSON tool plan; validate hard. Any failure
-    returns None — the caller keeps the deterministic plan (fail closed)."""
+    returns None — the caller keeps the deterministic plan (fail closed).
+    When `_reason` is given a dict, `_reason["why"]` records the failure
+    cause for the trace (seat unreachable, malformed JSON, validator
+    reject), which is auditable routing provenance, not an error."""
+    def _fail(why: str) -> None:
+        if _reason is not None:
+            _reason["why"] = why
+        return None
+
     mode = (input_mode or "").strip().lower()
     allowed = FALLBACK_TOOLS.get(mode)
     if not allowed:
-        return None
+        return _fail(f"unsupported_mode:{mode}")
     lines = "\n".join(f"- {t}: {_TOOL_BLURB[t]}" for t in allowed)
     prompt = (
         "You are the tool router for a satellite-imagery assistant. "
@@ -432,7 +463,7 @@ def plan_model(
         "model": "planner-fallback",
         "messages": [{"role": "user", "content": prompt}],
         "temperature": 0,
-        "max_tokens": 64,
+        "max_tokens": 160,
         "stream": False,
     }
     try:
@@ -449,16 +480,18 @@ def plan_model(
             or ""
         )
     except Exception:
-        return None
-    tools = validate_model_plan(text, mode)
+        return _fail("seat_unreachable_or_timeout")
+    tools = validate_model_plan(text, mode, query)
     if not tools:
-        return None
+        return _fail("plan_rejected_by_validator")
     task = next((t for t in tools if t not in _BARE_TOOLS), "vqa")
     return {
         "task": task,
         "input_mode": mode,
         "tools": tools,
-        "vlm_role": "narrate",
+        "vlm_role": (
+            "none" if not (set(tools) & _BARE_TOOLS) else "narrate"
+        ),
         "supported": True,
         "refusal": None,
         "query": (query or "").strip(),

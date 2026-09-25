@@ -565,6 +565,14 @@ def create_app(store: Any = None) -> FastAPI:
 
     def _resolve_uploads(req: QueryRequest) -> dict[str, str] | None:
         """upload_id -> stored role paths. HTTP errors before any run starts."""
+        if not req.upload_id and req.scene is None:
+            # AGENTS.md rule 7: a run requires an explicitly bound input —
+            # never let the pipeline invent a default scene.
+            raise _error(
+                422,
+                "no input bound — supply `scene` or `upload_id`",
+                slug="no_input_bound",
+            )
         if not req.upload_id:
             return None
         rec = app.state.store.get_upload(req.upload_id)

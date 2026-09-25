@@ -42,9 +42,9 @@ SHARED = (
 SHARED_SHA = {
     "tools.py": "8c56dc12fbe3d9633c9f8bdf328649c8b349d328a8d9e241ceba26036c1433d3",  # 2026-09-24 authorized C1-SENSOR-PROFILE (band identity via declared profile/metadata; unidentified bands withhold; evidence_class)
     "app.py": "be1f0ee9e58a2a3800674ac631f76a79cda271c9ee9f298bf7eb9b1089a87bf6",  # 2026-09-13 human-authorized Tab 2 copy edit (readable legend; needles unchanged)
-    "pipeline.py": "c86ab8a1ea806b02aecae080c5cc46ab3476217c99b513027f4af4ccc1fe559b",  # 2026-09-24 authorized C1-SENSOR-PROFILE (sensor_profile threading; withheld water skips overlay/area/agreement artifacts)
+    "pipeline.py": "d34e66f017396ebd5e29cba927c8987b4effd2f8a08fa2b3f1773fbd52b0a911",  # 2026-09-25 authorized ROUTER-HARDEN (model_fallback_reason recorded on regex-fallback plans)
     "report.py": "bbf5370bd67deacda91a817844797f166f793eeb79df03066eb54af52a0fdff6",  # 2026-09-24 authorized WEB-POLISH-V3
-    "planner.py": "31c20c8f97056aacab425e9a0310491e1d00909236078809126db07b7fe1cee3",  # 2026-09-24 authorized ROUTE-PROBE (cdvqa_map→change_detect validator coupling; dead-tool fix)
+    "planner.py": "c326fdb5d713ed8adc378aaf280a7b0b9ef4f60d86cc3783865444a7b052b656",  # 2026-09-25 authorized ROUTER-HARDEN (validator mask-only exemption + canonical floor; max_tokens 160; failure-reason out-param)
     "ingest.py": "f6d0f8bf7c840d5ff2f7b4de375bcd2199771a2c89a91b572e75c36f35ab2e3e",  # 2026-09-24 authorized C1-SENSOR-PROFILE (SENSOR_PROFILES + resolve_band_map; SAR pol verify/refuse; profile-driven true-color)
     "serve.ps1": "19287c44083cd94fd4f91ff6cbae5e66b2c33b30978a0df2bc5b99a0f14dd172",
 }

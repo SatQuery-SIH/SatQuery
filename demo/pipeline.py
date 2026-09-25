@@ -750,12 +750,15 @@ def run_query(
     router = "regex"
     if live and the_plan.get("supported"):
         if MODEL_FIRST:
-            fb = plan_model(query, input_mode, url=vlm_url)
+            why: dict[str, str] = {}
+            fb = plan_model(query, input_mode, url=vlm_url, _reason=why)
             if fb is not None:
                 the_plan = fb
                 router = "model"
             else:
                 router = "regex-fallback"
+                if why.get("why"):
+                    the_plan["model_fallback_reason"] = why["why"]
         elif needs_fallback(the_plan):
             fb = plan_model(query, input_mode, url=vlm_url)
             if fb is not None:
