@@ -1,0 +1,5990 @@
+{
+  "seat": "127.0.0.1:8080",
+  "label": "narrator-base-q4",
+  "n": 300,
+  "acc_iou_0.5": 0.5767,
+  "acc_iou_0.7": 0.3633,
+  "mean_iou": 0.4939,
+  "acc_iou_0.5_float": 0.54,
+  "mean_iou_float": 0.4698,
+  "parse_fail": 9,
+  "parse_tags": {
+    "bbox2d_0_1000": 291,
+    "parse_fail": 9
+  },
+  "prompt": "Please provide the bounding box coordinate of the region this sentence describes: {q}",
+  "decoding": {
+    "temperature": 0.0,
+    "top_p": 1.0,
+    "top_k": -1,
+    "max_tokens": 128
+  },
+  "geometry": {
+    "factor": 32,
+    "min_px": 4096,
+    "max_px": 16777216
+  },
+  "frozen_ids": "vrsbench_referring_eval_ids.json",
+  "gt_sha256": "fd63f7c6b77a158f4cc933a1ead88fa63aa23ebcf30f2ec9be111f3567ff1b44",
+  "sample_seed": 20260925,
+  "sample_n": 300,
+  "note": "local Q4 llama.cpp decision-grade subset \u2014 NOT comparable to the bf16 vLLM 0.6114 column",
+  "wall_seconds": 1515.5,
+  "preds": [
+    {
+      "id": "10171_0000.png#14178",
+      "raw": "```json\n[\n    {\"bbox_2d\": [36, 688, 116, 762], \"label\": \"The blue and white vehicle is located at the bottom left part of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.036,
+        0.688,
+        0.116,
+        0.762
+      ],
+      "gt01": [
+        0.03,
+        0.7,
+        0.11,
+        0.75
+      ],
+      "iou": 0.6153846153846154,
+      "fiou": 0.594855305466238,
+      "sec": 19.9
+    },
+    {
+      "id": "P5789_1971.png#8099",
+      "raw": "```json\n[\n    {\"bbox_2d\": [0, 298, 101, 408], \"label\": \"The plane located towards the top-left portion of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.0,
+        0.298,
+        0.101,
+        0.408
+      ],
+      "gt01": [
+        0.0,
+        0.28,
+        0.11,
+        0.4
+      ],
+      "iou": 0.7245508982035929,
+      "fiou": 0.7354368932038841,
+      "sec": 4.8
+    },
+    {
+      "id": "07586_0000.png#10910",
+      "raw": "```json\n[\n    {\"bbox_2d\": [168, 242, 462, 720], \"label\": \"The airport is situated in the middle of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.168,
+        0.242,
+        0.462,
+        0.72
+      ],
+      "gt01": [
+        0.21,
+        0.23,
+        0.45,
+        0.72
+      ],
+      "iou": 0.8193979933110368,
+      "fiou": 0.7999330599949793,
+      "sec": 4.8
+    },
+    {
+      "id": "P1809_0017.png#5206",
+      "raw": "```json\n[\n    {\"bbox_2d\": [0, 67, 101, 200], \"label\": \"The small storage tank positioned near the top-left corner of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.0,
+        0.067,
+        0.101,
+        0.2
+      ],
+      "gt01": [
+        0.0,
+        0.08,
+        0.08,
+        0.16
+      ],
+      "iou": 0.525974025974026,
+      "fiou": 0.4764386213057395,
+      "sec": 4.9
+    },
+    {
+      "id": "P0518_0001.png#980",
+      "raw": "```json\n[\n    {\"bbox_2d\": [630, 468, 998, 654], \"label\": \"The small harbor is identified by its pier, which extends into the water.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.63,
+        0.468,
+        0.998,
+        0.654
+      ],
+      "gt01": [
+        0.63,
+        0.45,
+        1.0,
+        0.65
+      ],
+      "iou": 0.9047619047619048,
+      "fiou": 0.8874284502861988,
+      "sec": 5.1
+    },
+    {
+      "id": "07427_0000.png#10702",
+      "raw": "```json\n[\n\t{\"bbox_2d\": [101, 0, 826, 999], \"label\": \"The chimney is located in the center of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.101,
+        0.0,
+        0.826,
+        0.999
+      ],
+      "gt01": [
+        0.21,
+        0.41,
+        0.81,
+        1.0
+      ],
+      "iou": 0.4896976184104897,
+      "fiou": 0.48753233316088984,
+      "sec": 4.7
+    },
+    {
+      "id": "11482_0000.png#15853",
+      "raw": "```json\n[\n    {\"bbox_2d\": [388, 212, 595, 632], \"label\": \"The tennis court located towards the left edge of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.388,
+        0.212,
+        0.595,
+        0.632
+      ],
+      "gt01": [
+        0.39,
+        0.21,
+        0.58,
+        0.62
+      ],
+      "iou": 0.8879492600422833,
+      "fiou": 0.8877691250572604,
+      "sec": 4.9
+    },
+    {
+      "id": "P0953_0015.png#1897",
+      "raw": "```json\n[\n    {\"bbox_2d\": [208, 482, 248, 532], \"label\": \"The small vehicle located in the middle-left section of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.208,
+        0.482,
+        0.248,
+        0.532
+      ],
+      "gt01": [
+        0.21,
+        0.48,
+        0.24,
+        0.53
+      ],
+      "iou": 0.8,
+      "fiou": 0.699029126213592,
+      "sec": 4.8
+    },
+    {
+      "id": "P5789_2057.png#8127",
+      "raw": "```json\n[\n    {\"bbox_2d\": [234, 448, 274, 484], \"label\": \"A ship positioned in the water towards the middle-left of the image against the dark water backdrop.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.234,
+        0.448,
+        0.274,
+        0.484
+      ],
+      "gt01": [
+        0.23,
+        0.45,
+        0.27,
+        0.48
+      ],
+      "iou": 1.0,
+      "fiou": 0.6923076923076922,
+      "sec": 5.1
+    },
+    {
+      "id": "P1570_0077.png#4763",
+      "raw": "```json\n[\n    {\"bbox_2d\": [0, 750, 222, 1000], \"label\": \"The baseball diamond is situated at the lower left area of the image, extending beyond the bottom edge.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.0,
+        0.75,
+        0.222,
+        1.0
+      ],
+      "gt01": [
+        0.0,
+        0.88,
+        0.09,
+        1.0
+      ],
+      "iou": 0.21739130434782608,
+      "fiou": 0.19459459459459458,
+      "sec": 5.2
+    },
+    {
+      "id": "P1982_0009.png#5674",
+      "raw": "```json\n[\n    {\"bbox_2d\": [101, 0, 208, 156], \"label\": \"The large vehicle closest to the left edge of the image, located towards the top.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.101,
+        0.0,
+        0.208,
+        0.156
+      ],
+      "gt01": [
+        0.13,
+        0.0,
+        0.27,
+        0.1
+      ],
+      "iou": 0.36666666666666664,
+      "fiou": 0.34073038616110424,
+      "sec": 5.0
+    },
+    {
+      "id": "P1373_0006.png#3490",
+      "raw": "```json\n[\n    {\"bbox_2d\": [0, 887, 112, 1000], \"label\": \"The leftmost aircraft in the image is parked at the very bottom left.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.0,
+        0.887,
+        0.112,
+        1.0
+      ],
+      "gt01": [
+        0.01,
+        0.78,
+        0.12,
+        0.9
+      ],
+      "iou": 0.07913669064748201,
+      "fiou": 0.05405625764370165,
+      "sec": 5.0
+    },
+    {
+      "id": "P1095_0040.png#2672",
+      "raw": "```json\n[\n    {\"bbox_2d\": [0, 767, 264, 1000], \"label\": \"The harbor is located at the bottom left of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.0,
+        0.767,
+        0.264,
+        1.0
+      ],
+      "gt01": [
+        0.07,
+        0.89,
+        0.25,
+        1.0
+      ],
+      "iou": 0.35185185185185186,
+      "fiou": 0.3218884120171674,
+      "sec": 4.6
+    },
+    {
+      "id": "08942_0000.png#12627",
+      "raw": "```json\n[\n    {\"bbox_2d\": [298, 900, 352, 952], \"label\": \"The vehicle parked towards the left side of the bottom-middle area of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.298,
+        0.9,
+        0.352,
+        0.952
+      ],
+      "gt01": [
+        0.52,
+        0.87,
+        0.6,
+        0.97
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 4.9
+    },
+    {
+      "id": "P0961_0004.png#1904",
+      "raw": "```json\n[\n    {\"bbox_2d\": [0, 387, 101, 987], \"label\": \"The harbor situated on the left side of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.0,
+        0.387,
+        0.101,
+        0.987
+      ],
+      "gt01": [
+        0.0,
+        0.39,
+        0.11,
+        0.96
+      ],
+      "iou": 0.8751714677640604,
+      "fiou": 0.8758557736193519,
+      "sec": 4.5
+    },
+    {
+      "id": "P0261_0008.png#595",
+      "raw": "```json\n[\n    {\"bbox_2d\": [384, 873, 432, 917], \"label\": \"The large vehicle parked near the edge of the dock is located towards the bottom-middle of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.384,
+        0.873,
+        0.432,
+        0.917
+      ],
+      "gt01": [
+        0.38,
+        0.89,
+        0.5,
+        0.98
+      ],
+      "iou": 0.16901408450704225,
+      "fiou": 0.1115702479338844,
+      "sec": 5.1
+    },
+    {
+      "id": "10981_0000.png#15213",
+      "raw": "```json\n[\n    {\"bbox_2d\": [733, 912, 925, 1000], \"label\": \"The smallest storage tank is situated towards the bottom-right of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.733,
+        0.912,
+        0.925,
+        1.0
+      ],
+      "gt01": [
+        0.66,
+        0.79,
+        0.69,
+        0.82
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 4.9
+    },
+    {
+      "id": "06997_0000.png#10153",
+      "raw": "```json\n[\n    {\"bbox_2d\": [387, 298, 622, 838], \"label\": \"The expressway-service-area occupying a central to left portion of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.387,
+        0.298,
+        0.622,
+        0.838
+      ],
+      "gt01": [
+        0.38,
+        0.23,
+        0.84,
+        1.0
+      ],
+      "iou": 0.36006546644844517,
+      "fiou": 0.3582721626199888,
+      "sec": 5.0
+    },
+    {
+      "id": "P6687_0065.png#8302",
+      "raw": "```json\n[\n    {\"bbox_2d\": [832, 16, 930, 135], \"label\": \"The large vehicle located at the top-right corner of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.832,
+        0.016,
+        0.93,
+        0.135
+      ],
+      "gt01": [
+        0.85,
+        0.16,
+        0.98,
+        0.33
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 4.7
+    },
+    {
+      "id": "P0557_0013.png#1098",
+      "raw": "```json\n[\n    {\"bbox_2d\": [199, 296, 333, 821], \"label\": \"The harbor extends from the middle-left towards the bottom center.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.199,
+        0.296,
+        0.333,
+        0.821
+      ],
+      "gt01": [
+        0.2,
+        0.3,
+        0.38,
+        0.67
+      ],
+      "iou": 0.5708154506437768,
+      "fiou": 0.5608616366537498,
+      "sec": 4.7
+    },
+    {
+      "id": "09327_0000.png#13114",
+      "raw": "```json\n[\n    {\"bbox_2d\": [248, 679, 998, 998], \"label\": \"The dam shown in the image has a complex structure with several levels or stages and occupies a large area from the center to the right side of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.248,
+        0.679,
+        0.998,
+        0.998
+      ],
+      "gt01": [
+        0.23,
+        0.47,
+        1.0,
+        1.0
+      ],
+      "iou": 0.5954415954415955,
+      "fiou": 0.586253369272237,
+      "sec": 5.8
+    },
+    {
+      "id": "P2779_0002.png#7284",
+      "raw": "```json\n[\n    {\"bbox_2d\": [891, 338, 974, 380], \"label\": \"The small vehicle located towards the right edge of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.891,
+        0.338,
+        0.974,
+        0.38
+      ],
+      "gt01": [
+        0.89,
+        0.33,
+        0.96,
+        0.37
+      ],
+      "iou": 0.6037735849056604,
+      "fiou": 0.5414418832761153,
+      "sec": 4.7
+    },
+    {
+      "id": "05986_0000.png#8918",
+      "raw": "```json\n[\n    {\"bbox_2d\": [699, 678, 904, 792], \"label\": \"The windmill is located in the bottom-right section of the barren landscape.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.699,
+        0.678,
+        0.904,
+        0.792
+      ],
+      "gt01": [
+        0.77,
+        0.69,
+        0.91,
+        0.79
+      ],
+      "iou": 0.5855513307984791,
+      "fiou": 0.5590321234876933,
+      "sec": 4.9
+    },
+    {
+      "id": "09719_0000.png#13615",
+      "raw": "```json\n[\n    {\"bbox_2d\": [202, 788, 319, 894], \"label\": \"The windmill situated towards the bottom center of the image, standing out on a lighter patch of farmland.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.202,
+        0.788,
+        0.319,
+        0.894
+      ],
+      "gt01": [
+        0.58,
+        0.8,
+        0.67,
+        0.84
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 5.3
+    },
+    {
+      "id": "P2462_0007.png#6364",
+      "raw": "```json\n[\n    {\"bbox_2d\": [654, 343, 682, 369], \"label\": \"The large white vehicle is positioned towards the middle-right of the image on the highway.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.654,
+        0.343,
+        0.682,
+        0.369
+      ],
+      "gt01": [
+        0.84,
+        0.41,
+        0.87,
+        0.44
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 5.3
+    },
+    {
+      "id": "06006_0000.png#8934",
+      "raw": "```json\n[\n    {\"bbox_2d\": [398, 750, 998, 998], \"label\": \"The object depicted in the image is an airport situated in a region with sparse vegetation.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.398,
+        0.75,
+        0.998,
+        0.998
+      ],
+      "gt01": [
+        0.29,
+        0.55,
+        1.0,
+        1.0
+      ],
+      "iou": 0.4788647342995169,
+      "fiou": 0.46572769953051646,
+      "sec": 5.2
+    },
+    {
+      "id": "10352_0000.png#14405",
+      "raw": "```json\n[\n    {\"bbox_2d\": [412, 677, 675, 935], \"label\": \"The small white airplane is centered on the gray tarmac.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.412,
+        0.677,
+        0.675,
+        0.935
+      ],
+      "gt01": [
+        0.41,
+        0.67,
+        0.67,
+        0.93
+      ],
+      "iou": 0.896551724137931,
+      "fiou": 0.9300940438871471,
+      "sec": 4.9
+    },
+    {
+      "id": "08964_0000.png#12663",
+      "raw": "```json\n[\n    {\"bbox_2d\": [750, 447, 998, 738], \"label\": \"On the right, adjacent to the stadium, there is a ground track field .\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.75,
+        0.447,
+        0.998,
+        0.738
+      ],
+      "gt01": [
+        0.74,
+        0.43,
+        1.0,
+        0.71
+      ],
+      "iou": 0.8153310104529616,
+      "fiou": 0.8179173354735152,
+      "sec": 5.2
+    },
+    {
+      "id": "P1095_0025.png#2666",
+      "raw": "```json\n[\n    {\"bbox_2d\": [734, 357, 873, 466], \"label\": \"The swimming pool with its distinct kidney shape in the middle-right side of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.734,
+        0.357,
+        0.873,
+        0.466
+      ],
+      "gt01": [
+        0.74,
+        0.39,
+        0.85,
+        0.45
+      ],
+      "iou": 0.4666666666666667,
+      "fiou": 0.4356148109035704,
+      "sec": 5.7
+    },
+    {
+      "id": "P1023_0005.png#2383",
+      "raw": "```json\n[\n    {\"bbox_2d\": [107, 0, 284, 302], \"label\": \"The harbor at the top-left of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.107,
+        0.0,
+        0.284,
+        0.302
+      ],
+      "gt01": [
+        0.09,
+        0.0,
+        0.28,
+        0.29
+      ],
+      "iou": 0.8737864077669902,
+      "fiou": 0.8593107700739931,
+      "sec": 5.7
+    },
+    {
+      "id": "P1384_0022.png#3703",
+      "raw": "```json\n[\n    {\"bbox_2d\": [48, 151, 93, 182], \"label\": \"The swimming pool located in the top-left part of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.048,
+        0.151,
+        0.093,
+        0.182
+      ],
+      "gt01": [
+        0.15,
+        0.16,
+        0.17,
+        0.2
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 6.0
+    },
+    {
+      "id": "P1397_0024.png#3987",
+      "raw": "```json\n[\n    {\"bbox_2d\": [222, 877, 532, 998], \"label\": \"The plane located at the bottom edge of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.222,
+        0.877,
+        0.532,
+        0.998
+      ],
+      "gt01": [
+        0.2,
+        0.81,
+        0.53,
+        1.0
+      ],
+      "iou": 0.611764705882353,
+      "fiou": 0.5921006641034604,
+      "sec": 5.1
+    },
+    {
+      "id": "08796_0000.png#12443",
+      "raw": "```json\n[\n    {\"bbox_2d\": [376, 458, 612, 667], \"label\": \"The baseball field situated at the center of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.376,
+        0.458,
+        0.612,
+        0.667
+      ],
+      "gt01": [
+        0.37,
+        0.46,
+        0.6,
+        0.68
+      ],
+      "iou": 0.8815331010452961,
+      "fiou": 0.8657853461796995,
+      "sec": 4.8
+    },
+    {
+      "id": "P0027_0003.png#132",
+      "raw": "```json\n[\n    {\"bbox_2d\": [730, 583, 836, 648], \"label\": \"The small vehicle is positioned on a road surrounded by greenery in the middle-right section of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.73,
+        0.583,
+        0.836,
+        0.648
+      ],
+      "gt01": [
+        0.76,
+        0.58,
+        0.82,
+        0.62
+      ],
+      "iou": 0.3645833333333333,
+      "fiou": 0.31400282885431374,
+      "sec": 5.5
+    },
+    {
+      "id": "P0998_0003.png#2174",
+      "raw": "```json\n[\n    {\"bbox_2d\": [374, 598, 907, 998], \"label\": \"The harbor located near the bottom-right cornerof the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.374,
+        0.598,
+        0.907,
+        0.998
+      ],
+      "gt01": [
+        0.68,
+        0.66,
+        0.95,
+        1.0
+      ],
+      "iou": 0.35073068893528186,
+      "fiou": 0.33611361784522104,
+      "sec": 5.0
+    },
+    {
+      "id": "P2093_0008.png#5796",
+      "raw": "```json\n[\n    {\"bbox_2d\": [871, 856, 919, 937], \"label\": \"The small vehicle is parked near the edge of a curved road on the bottom right of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.871,
+        0.856,
+        0.919,
+        0.937
+      ],
+      "gt01": [
+        0.87,
+        0.85,
+        0.91,
+        0.94
+      ],
+      "iou": 0.7627118644067796,
+      "fiou": 0.7297297297297305,
+      "sec": 5.7
+    },
+    {
+      "id": "05930_0000.png#8856",
+      "raw": "```json\n[\n    {\"bbox_2d\": [586, 266, 1000, 792], \"label\": \"The baseball field located adjacent to the road.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.586,
+        0.266,
+        1.0,
+        0.792
+      ],
+      "gt01": [
+        0.56,
+        0.27,
+        1.0,
+        0.79
+      ],
+      "iou": 0.9333333333333333,
+      "fiou": 0.9308036872416597,
+      "sec": 4.9
+    },
+    {
+      "id": "07336_0000.png#10591",
+      "raw": "```json\n[\n    {\"bbox_2d\": [323, 0, 562, 988], \"label\": \"The harbor extends from near the middle of the image towards the bottom.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.323,
+        0.0,
+        0.562,
+        0.988
+      ],
+      "gt01": [
+        0.53,
+        0.0,
+        0.82,
+        1.0
+      ],
+      "iou": 0.07797270955165692,
+      "fiou": 0.06393321955204692,
+      "sec": 4.9
+    },
+    {
+      "id": "P2701_0038.png#6924",
+      "raw": "```json\n[\n    {\"bbox_2d\": [291, 511, 476, 630], \"label\": \"The ship positioned at the top-most part of the harbor.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.291,
+        0.511,
+        0.476,
+        0.63
+      ],
+      "gt01": [
+        0.28,
+        0.5,
+        0.47,
+        0.63
+      ],
+      "iou": 0.8430034129692833,
+      "fiou": 0.8381600692531676,
+      "sec": 5.0
+    },
+    {
+      "id": "08364_0000.png#11896",
+      "raw": "```json\n[\n    {\"bbox_2d\": [323, 357, 692, 742], \"label\": \"The baseball field is characterized by its diamond-shaped dirt infield and a larger, grass-covered outfield.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.323,
+        0.357,
+        0.692,
+        0.742
+      ],
+      "gt01": [
+        0.31,
+        0.36,
+        0.67,
+        0.72
+      ],
+      "iou": 0.8768926925608953,
+      "fiou": 0.8512726157620363,
+      "sec": 5.4
+    },
+    {
+      "id": "P0402_0003.png#853",
+      "raw": "```json\n[\n    {\"bbox_2d\": [67, 0, 452, 188], \"label\": \"The tennis court is the top-most court present.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.067,
+        0.0,
+        0.452,
+        0.188
+      ],
+      "gt01": [
+        0.06,
+        0.0,
+        0.45,
+        0.19
+      ],
+      "iou": 0.975,
+      "fiou": 0.9668080992534508,
+      "sec": 4.6
+    },
+    {
+      "id": "09192_0000.png#12951",
+      "raw": "```json\n[\n    {\"bbox_2d\": [658, 563, 873, 904], \"label\": \"The small airplane on the tarmac is located in the right-bottom quadrant of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.658,
+        0.563,
+        0.873,
+        0.904
+      ],
+      "gt01": [
+        0.66,
+        0.59,
+        0.87,
+        0.9
+      ],
+      "iou": 0.9142857142857143,
+      "fiou": 0.8879492600422833,
+      "sec": 5.2
+    },
+    {
+      "id": "P1732_0019.png#5023",
+      "raw": "```json\n[\n    {\"bbox_2d\": [208, 570, 488, 870], \"label\": \"The ground track field is located slightly off-center towards the bottom right quadrant of the image, characterized by its distinct oval shape and inner field.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.208,
+        0.57,
+        0.488,
+        0.87
+      ],
+      "gt01": [
+        0.18,
+        0.55,
+        0.49,
+        0.88
+      ],
+      "iou": 0.8262867647058824,
+      "fiou": 0.8211143695014664,
+      "sec": 5.7
+    },
+    {
+      "id": "P0974_0001.png#2041",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "pred01": null,
+      "gt01": [
+        0.31,
+        0.0,
+        0.48,
+        0.48
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 2.5
+    },
+    {
+      "id": "11307_0000.png#15628",
+      "raw": "```json\n[\n    {\"bbox_2d\": [74, 792, 138, 836], \"label\": \"The black vehicle is located at the bottom-left on the road.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.074,
+        0.792,
+        0.138,
+        0.836
+      ],
+      "gt01": [
+        0.08,
+        0.8,
+        0.13,
+        0.83
+      ],
+      "iou": 0.5,
+      "fiou": 0.5326704545454539,
+      "sec": 4.9
+    },
+    {
+      "id": "10112_0000.png#14094",
+      "raw": "```json\n[\n    {\"bbox_2d\": [0, 797, 998, 880], \"label\": \"The train station is located at the bottom of the image and is recognized by its elongated shape with parallel lines indicative of train tracks or platforms.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.0,
+        0.797,
+        0.998,
+        0.88
+      ],
+      "gt01": [
+        0.59,
+        0.74,
+        1.0,
+        0.9
+      ],
+      "iou": 0.3036144578313253,
+      "fiou": 0.29557475778999726,
+      "sec": 5.7
+    },
+    {
+      "id": "08537_0000.png#12099",
+      "raw": "```json\n[\n    {\"bbox_2d\": [562, 84, 800, 342], \"label\": \"The baseball field is visible near the upper-middle part of the image, identifiable by its classic semicircular shape.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.562,
+        0.084,
+        0.8,
+        0.342
+      ],
+      "gt01": [
+        0.56,
+        0.08,
+        0.82,
+        0.35
+      ],
+      "iou": 0.8928571428571429,
+      "fiou": 0.8747008547008555,
+      "sec": 5.4
+    },
+    {
+      "id": "P2802_0038.png#7520",
+      "raw": "```json\n[\n    {\"bbox_2d\": [848, 876, 932, 932], \"label\": \"The small vehicle located at the bottom-right of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.848,
+        0.876,
+        0.932,
+        0.932
+      ],
+      "gt01": [
+        0.73,
+        0.81,
+        0.76,
+        0.86
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 4.8
+    },
+    {
+      "id": "08896_0000.png#12574",
+      "raw": "```json\n[\n    {\"bbox_2d\": [248, 323, 570, 714], \"label\": \"The small baseball field in the center of the image with brown sand.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.248,
+        0.323,
+        0.57,
+        0.714
+      ],
+      "gt01": [
+        0.24,
+        0.33,
+        0.64,
+        0.7
+      ],
+      "iou": 0.7721674876847291,
+      "fiou": 0.7698272185678653,
+      "sec": 5.0
+    },
+    {
+      "id": "P2330_0025.png#6094",
+      "raw": "```json\n[\n    {\"bbox_2d\": [692, 745, 783, 813], \"label\": \"At the bottom-right corner of the image, the ship is visible.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.692,
+        0.745,
+        0.783,
+        0.813
+      ],
+      "gt01": [
+        0.69,
+        0.74,
+        0.78,
+        0.81
+      ],
+      "iou": 1.0,
+      "fiou": 0.8451536643026015,
+      "sec": 5.0
+    },
+    {
+      "id": "P8287_0096.png#8511",
+      "raw": "```json\n[\n    {\"bbox_2d\": [888, 873, 970, 998], \"label\": \"The small vehicle positioned at the bottom-right corner of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.888,
+        0.873,
+        0.97,
+        0.998
+      ],
+      "gt01": [
+        0.89,
+        0.89,
+        0.97,
+        1.0
+      ],
+      "iou": 0.8571428571428571,
+      "fiou": 0.8299711815561959,
+      "sec": 4.9
+    },
+    {
+      "id": "08902_0000.png#12583",
+      "raw": "```json\n[\n    {\"bbox_2d\": [866, 262, 1000, 700], \"label\": \"The tennis court positioned on the right side.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.866,
+        0.262,
+        1.0,
+        0.7
+      ],
+      "gt01": [
+        0.87,
+        0.26,
+        1.0,
+        0.69
+      ],
+      "iou": 0.9777777777777777,
+      "fiou": 0.943818699959289,
+      "sec": 4.7
+    },
+    {
+      "id": "P1390_0084.png#3955",
+      "raw": "```json\n[\n    {\"bbox_2d\": [848, 513, 902, 543], \"label\": \"The small white vehicle situated towards the upper right side on the road.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.848,
+        0.513,
+        0.902,
+        0.543
+      ],
+      "gt01": [
+        0.84,
+        0.51,
+        0.9,
+        0.53
+      ],
+      "iou": 0.6666666666666666,
+      "fiou": 0.4566115702479339,
+      "sec": 5.1
+    },
+    {
+      "id": "P2429_0006.png#6313",
+      "raw": "```json\n[\n    {\"bbox_2d\": [101, 105, 143, 133], \"label\": \"The left-most ship positioned towards the top-left of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.101,
+        0.105,
+        0.143,
+        0.133
+      ],
+      "gt01": [
+        0.19,
+        0.03,
+        0.2,
+        0.06
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 5.1
+    },
+    {
+      "id": "11405_0000.png#15763",
+      "raw": "```json\n[\n    {\"bbox_2d\": [542, 234, 998, 998], \"label\": \"The ship extending diagonally across the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.542,
+        0.234,
+        0.998,
+        0.998
+      ],
+      "gt01": [
+        0.45,
+        0.29,
+        1.0,
+        1.0
+      ],
+      "iou": 0.7844228094575799,
+      "fiou": 0.7760097683854281,
+      "sec": 4.9
+    },
+    {
+      "id": "P1738_0010.png#5041",
+      "raw": "```json\n[\n    {\"bbox_2d\": [738, 663, 883, 863], \"label\": \"The ship in the image is positioned in the bottom-right quadrant.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.738,
+        0.663,
+        0.883,
+        0.863
+      ],
+      "gt01": [
+        0.75,
+        0.66,
+        0.88,
+        0.86
+      ],
+      "iou": 0.9333333333333333,
+      "fiou": 0.8713848247703299,
+      "sec": 4.9
+    },
+    {
+      "id": "P0359_0003.png#761",
+      "raw": "```json\n[\n    {\"bbox_2d\": [658, 19, 867, 398], \"label\": \"The right-most tennis court located in the top.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.658,
+        0.019,
+        0.867,
+        0.398
+      ],
+      "gt01": [
+        0.65,
+        0.02,
+        0.86,
+        0.39
+      ],
+      "iou": 0.890625,
+      "fiou": 0.9095666354309915,
+      "sec": 4.7
+    },
+    {
+      "id": "P2789_0053.png#7373",
+      "raw": "```json\n[\n    {\"bbox_2d\": [288, 827, 398, 927], \"label\": \"The unique small vehicle is positioned at the bottom-middle of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.288,
+        0.827,
+        0.398,
+        0.927
+      ],
+      "gt01": [
+        0.3,
+        0.84,
+        0.41,
+        0.93
+      ],
+      "iou": 0.7746478873239436,
+      "fiou": 0.6890253757879427,
+      "sec": 5.0
+    },
+    {
+      "id": "P8656_0038.png#8600",
+      "raw": "```json\n[\n    {\"bbox_2d\": [924, 232, 1000, 347], \"label\": \"The white vehicle located on the right side of the building extends beyond the right edge of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.924,
+        0.232,
+        1.0,
+        0.347
+      ],
+      "gt01": [
+        0.91,
+        0.22,
+        1.0,
+        0.33
+      ],
+      "iou": 0.717391304347826,
+      "fiou": 0.6654753395282345,
+      "sec": 5.4
+    },
+    {
+      "id": "11696_0000.png#16121",
+      "raw": "```json\n[\n    {\"bbox_2d\": [634, 873, 834, 1000], \"label\": \"The vehicle at the bottom of the image, appearing as a small white rectangle, is located on the right side of the road.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.634,
+        0.873,
+        0.834,
+        1.0
+      ],
+      "gt01": [
+        0.64,
+        0.91,
+        0.82,
+        1.0
+      ],
+      "iou": 0.6462585034013606,
+      "fiou": 0.6377952755905508,
+      "sec": 5.9
+    },
+    {
+      "id": "06276_0000.png#9268",
+      "raw": "```json\n[\n    {\"bbox_2d\": [67, 67, 278, 273], \"label\": \"The smaller stadium situated in the top-left corner of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.067,
+        0.067,
+        0.278,
+        0.273
+      ],
+      "gt01": [
+        0.07,
+        0.04,
+        0.27,
+        0.28
+      ],
+      "iou": 0.8076923076923077,
+      "fiou": 0.8196395177654876,
+      "sec": 4.8
+    },
+    {
+      "id": "06900_0000.png#10033",
+      "raw": "```json\n[\n    {\"bbox_2d\": [848, 832, 1000, 923], \"label\": \"The ship positioned at the bottom-right corner.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.848,
+        0.832,
+        1.0,
+        0.923
+      ],
+      "gt01": [
+        0.84,
+        0.84,
+        1.0,
+        0.9
+      ],
+      "iou": 0.6706586826347305,
+      "fiou": 0.6372275013974289,
+      "sec": 4.7
+    },
+    {
+      "id": "P2802_0096.png#7574",
+      "raw": "```json\n[\n    {\"bbox_2d\": [757, 14, 791, 71], \"label\": \"The top-most small vehicle is in the top-right area of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.757,
+        0.014,
+        0.791,
+        0.071
+      ],
+      "gt01": [
+        0.75,
+        0.02,
+        0.78,
+        0.06
+      ],
+      "iou": 0.45454545454545453,
+      "fiou": 0.4147880973850315,
+      "sec": 4.9
+    },
+    {
+      "id": "07065_0000.png#10230",
+      "raw": "```json\n[\n    {\"bbox_2d\": [517, 38, 1000, 988], \"label\": \"The basketball court is located at the right side of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.517,
+        0.038,
+        1.0,
+        0.988
+      ],
+      "gt01": [
+        0.54,
+        0.41,
+        1.0,
+        1.0
+      ],
+      "iou": 0.5836665965059987,
+      "fiou": 0.5725606736007924,
+      "sec": 4.9
+    },
+    {
+      "id": "P1854_0157.png#5478",
+      "raw": "```json\n[\n    {\"bbox_2d\": [44, 581, 166, 622], \"label\": \"The small vehicle is positioned on middle-left on the tarmac.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.044,
+        0.581,
+        0.166,
+        0.622
+      ],
+      "gt01": [
+        0.31,
+        0.56,
+        0.35,
+        0.61
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 4.9
+    },
+    {
+      "id": "09634_0000.png#13490",
+      "raw": "```json\n[\n    {\"bbox_2d\": [99, 217, 522, 875], \"label\": \"The stadium with a track and field located on the left of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.099,
+        0.217,
+        0.522,
+        0.875
+      ],
+      "gt01": [
+        0.1,
+        0.21,
+        0.53,
+        0.89
+      ],
+      "iou": 0.9489459815546772,
+      "fiou": 0.947512096581564,
+      "sec": 5.0
+    },
+    {
+      "id": "P0027_0017.png#161",
+      "raw": "```json\n[\n    {\"bbox_2d\": [398, 742, 548, 817], \"label\": \"The harbor situated towards the bottom-middle of the image partially surrounded by land.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.398,
+        0.742,
+        0.548,
+        0.817
+      ],
+      "gt01": [
+        0.41,
+        0.75,
+        0.54,
+        0.8
+      ],
+      "iou": 0.5833333333333334,
+      "fiou": 0.577777777777779,
+      "sec": 5.1
+    },
+    {
+      "id": "07911_0000.png#11305",
+      "raw": "```json\n[\n    {\"bbox_2d\": [854, 777, 945, 877], \"label\": \"Located at the bottom-right, there is a small bridge spanning over a narrow area.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.854,
+        0.777,
+        0.945,
+        0.877
+      ],
+      "gt01": [
+        0.96,
+        0.87,
+        0.98,
+        0.89
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 5.2
+    },
+    {
+      "id": "09551_0000.png#13395",
+      "raw": "```json\n[\n    {\"bbox_2d\": [843, 576, 1000, 856], \"label\": \"The partially visible storage tank is positioned on the far right edge of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.843,
+        0.576,
+        1.0,
+        0.856
+      ],
+      "gt01": [
+        0.87,
+        0.64,
+        1.0,
+        0.85
+      ],
+      "iou": 0.6247464503042597,
+      "fiou": 0.6210191082802544,
+      "sec": 5.2
+    },
+    {
+      "id": "08308_0000.png#11821",
+      "raw": "```json\n[\n    {\"bbox_2d\": [567, 447, 998, 988], \"label\": \"The overpass is on the left side of the highway.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.567,
+        0.447,
+        0.998,
+        0.988
+      ],
+      "gt01": [
+        0.59,
+        0.45,
+        0.87,
+        1.0
+      ],
+      "iou": 0.6512862392813393,
+      "fiou": 0.6368721224702047,
+      "sec": 5.0
+    },
+    {
+      "id": "P1376_0033.png#3534",
+      "raw": "```json\n[\n    {\"bbox_2d\": [0, 93, 109, 135], \"label\": \"The small vehicle is located towards the top-left corner of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.0,
+        0.093,
+        0.109,
+        0.135
+      ],
+      "gt01": [
+        0.0,
+        0.09,
+        0.01,
+        0.14
+      ],
+      "iou": 0.16666666666666666,
+      "fiou": 0.090167453842851,
+      "sec": 4.8
+    },
+    {
+      "id": "P8656_0098.png#8677",
+      "raw": "```json\n[\n    {\"bbox_2d\": [807, 36, 902, 152], \"label\": \"The small vehicle located at the top most right corner of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.807,
+        0.036,
+        0.902,
+        0.152
+      ],
+      "gt01": [
+        0.79,
+        0.05,
+        0.89,
+        0.15
+      ],
+      "iou": 0.6971830985915493,
+      "fiou": 0.6525157232704399,
+      "sec": 5.0
+    },
+    {
+      "id": "P0027_0017.png#160",
+      "raw": "```json\n[\n    {\"bbox_2d\": [0, 427, 607, 987], \"label\": \"The harbor located at the bottom of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.0,
+        0.427,
+        0.607,
+        0.987
+      ],
+      "gt01": [
+        0.46,
+        0.92,
+        0.66,
+        1.0
+      ],
+      "iou": 0.03560500695410292,
+      "fiou": 0.028459477968393737,
+      "sec": 3.3
+    },
+    {
+      "id": "11380_0000.png#15726",
+      "raw": "```json\n[\n    {\"bbox_2d\": [894, 163, 923, 212], \"label\": \"The vehicle at the top section of the image is positioned on a road parallel to the overpass.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.894,
+        0.163,
+        0.923,
+        0.212
+      ],
+      "gt01": [
+        0.72,
+        0.25,
+        0.74,
+        0.31
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 5.3
+    },
+    {
+      "id": "10575_0000.png#14705",
+      "raw": "```json\n[\n    {\"bbox_2d\": [845, 807, 900, 887], \"label\": \"The bridge situated in the bottom-right corner of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.845,
+        0.807,
+        0.9,
+        0.887
+      ],
+      "gt01": [
+        0.81,
+        0.82,
+        0.86,
+        0.87
+      ],
+      "iou": 0.2222222222222222,
+      "fiou": 0.12195121951219536,
+      "sec": 4.8
+    },
+    {
+      "id": "07663_0000.png#11000",
+      "raw": "```json\n[\n    {\"bbox_2d\": [527, 787, 998, 998], \"label\": \"The dam in the image is located horizontally across the lower right portion.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.527,
+        0.787,
+        0.998,
+        0.998
+      ],
+      "gt01": [
+        0.51,
+        0.52,
+        1.0,
+        1.0
+      ],
+      "iou": 0.4310204081632653,
+      "fiou": 0.42253826530612243,
+      "sec": 5.0
+    },
+    {
+      "id": "P2630_0004.png#6756",
+      "raw": "```json\n[\n    {\"bbox_2d\": [722, 802, 781, 932], \"label\": \"The large vehicle located at the bottom-right corner of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.722,
+        0.802,
+        0.781,
+        0.932
+      ],
+      "gt01": [
+        0.72,
+        0.8,
+        0.77,
+        0.93
+      ],
+      "iou": 0.8571428571428571,
+      "fiou": 0.7655120857214054,
+      "sec": 4.9
+    },
+    {
+      "id": "P2714_0037.png#6994",
+      "raw": "```json\n[\n    {\"bbox_2d\": [688, 0, 888, 101], \"label\": \"The soccer-ball field located at the top-right corner.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.688,
+        0.0,
+        0.888,
+        0.101
+      ],
+      "gt01": [
+        0.72,
+        0.0,
+        0.76,
+        0.05
+      ],
+      "iou": 0.12987012987012986,
+      "fiou": 0.09900990099009906,
+      "sec": 4.7
+    },
+    {
+      "id": "11511_0000.png#15892",
+      "raw": "```json\n[\n    {\"bbox_2d\": [236, 250, 500, 536], \"label\": \"The baseball field can be identified by its diamond-shaped brown infield surrounded by a field of green.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.236,
+        0.25,
+        0.5,
+        0.536
+      ],
+      "gt01": [
+        0.24,
+        0.27,
+        0.49,
+        0.53
+      ],
+      "iou": 0.8666666666666667,
+      "fiou": 0.8608815426997244,
+      "sec": 5.3
+    },
+    {
+      "id": "P2330_0059.png#6151",
+      "raw": "```json\n[\n    {\"bbox_2d\": [474, 813, 783, 945], \"label\": \"The ship positioned closer to the center of the image and aligned horizontally.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.474,
+        0.813,
+        0.783,
+        0.945
+      ],
+      "gt01": [
+        0.62,
+        0.46,
+        0.68,
+        0.48
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 5.0
+    },
+    {
+      "id": "P2271_0034.png#6009",
+      "raw": "```json\n[\n    {\"bbox_2d\": [977, 500, 1000, 527], \"label\": \"The small vehicle on the far right side of the image, partially cut off by the edge.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.977,
+        0.5,
+        1.0,
+        0.527
+      ],
+      "gt01": [
+        0.98,
+        0.5,
+        0.99,
+        0.52
+      ],
+      "iou": 0.5,
+      "fiou": 0.322061191626409,
+      "sec": 5.3
+    },
+    {
+      "id": "P1474_0059.png#4554",
+      "raw": "```json\n[\n    {\"bbox_2d\": [542, 536, 738, 845], \"label\": \"The basketball court located towards the central lower portion of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.542,
+        0.536,
+        0.738,
+        0.845
+      ],
+      "gt01": [
+        0.67,
+        0.38,
+        0.75,
+        0.48
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 4.9
+    },
+    {
+      "id": "11080_0000.png#15345",
+      "raw": "```json\n[\n    {\"bbox_2d\": [398, 714, 592, 902], \"label\": \"The storage tank located in the bottom middle of the image, nearer to the bottom edge than the top.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.398,
+        0.714,
+        0.592,
+        0.902
+      ],
+      "gt01": [
+        0.41,
+        0.75,
+        0.56,
+        0.89
+      ],
+      "iou": 0.6,
+      "fiou": 0.5757841631936831,
+      "sec": 5.4
+    },
+    {
+      "id": "P0882_0007.png#1618",
+      "raw": "```json\n[\n    {\"bbox_2d\": [584, 13, 722, 250], \"label\": \"The basketball court is distinguishable as a large rectangular area with noticeable court lines near the top center of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.584,
+        0.013,
+        0.722,
+        0.25
+      ],
+      "gt01": [
+        0.56,
+        0.01,
+        0.73,
+        0.25
+      ],
+      "iou": 0.8333333333333334,
+      "fiou": 0.8016176470588238,
+      "sec": 5.6
+    },
+    {
+      "id": "10598_0000.png#14734",
+      "raw": "```json\n[\n    {\"bbox_2d\": [849, 607, 998, 700], \"label\": \"The small support vehicle is uniquely visible towards the right border of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.849,
+        0.607,
+        0.998,
+        0.7
+      ],
+      "gt01": [
+        0.86,
+        0.65,
+        1.0,
+        0.7
+      ],
+      "iou": 0.5625,
+      "fiou": 0.49437558214515953,
+      "sec": 5.1
+    },
+    {
+      "id": "P2781_0008.png#7304",
+      "raw": "```json\n[\n    {\"bbox_2d\": [845, 712, 895, 792], \"label\": \"The small vehicle located towards the bottom-right corner of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.845,
+        0.712,
+        0.895,
+        0.792
+      ],
+      "gt01": [
+        0.91,
+        0.64,
+        0.98,
+        0.73
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 4.9
+    },
+    {
+      "id": "P0329_0003.png#625",
+      "raw": "```json\n[\n    {\"bbox_2d\": [508, 673, 562, 773], \"label\": \"The small vehicle is found at the bottom-middle of the frame.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.508,
+        0.673,
+        0.562,
+        0.773
+      ],
+      "gt01": [
+        0.5,
+        0.69,
+        0.56,
+        0.77
+      ],
+      "iou": 0.72,
+      "fiou": 0.6887417218543055,
+      "sec": 5.0
+    },
+    {
+      "id": "P1854_0028.png#5346",
+      "raw": "```json\n[\n    {\"bbox_2d\": [0, 0, 458, 242], \"label\": \"The airplane parked at the top-left area of the tarmac.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.0,
+        0.0,
+        0.458,
+        0.242
+      ],
+      "gt01": [
+        0.0,
+        0.0,
+        0.46,
+        0.25
+      ],
+      "iou": 0.9615384615384616,
+      "fiou": 0.9637913043478261,
+      "sec": 4.6
+    },
+    {
+      "id": "P0683_0001.png#1338",
+      "raw": "```json\n[\n    {\"bbox_2d\": [819, 54, 853, 105], \"label\": \"The small vehicle is situated at the top-right corner of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.819,
+        0.054,
+        0.853,
+        0.105
+      ],
+      "gt01": [
+        0.82,
+        0.06,
+        0.85,
+        0.11
+      ],
+      "iou": 0.7142857142857143,
+      "fiou": 0.7165605095541402,
+      "sec": 4.9
+    },
+    {
+      "id": "P0833_0005.png#1542",
+      "raw": "```json\n[\n    {\"bbox_2d\": [770, 0, 998, 168], \"label\": \"The tennis court located at the upper right section of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.77,
+        0.0,
+        0.998,
+        0.168
+      ],
+      "gt01": [
+        0.46,
+        0.0,
+        0.83,
+        0.3
+      ],
+      "iou": 0.08490566037735849,
+      "fiou": 0.07240131011894498,
+      "sec": 4.8
+    },
+    {
+      "id": "06543_0000.png#9593",
+      "raw": "```json\n[\n    {\"bbox_2d\": [714, 333, 998, 989], \"label\": \"The overpass situated at the bottom right of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.714,
+        0.333,
+        0.998,
+        0.989
+      ],
+      "gt01": [
+        0.91,
+        0.38,
+        1.0,
+        1.0
+      ],
+      "iou": 0.3069306930693069,
+      "fiou": 0.2842895942963842,
+      "sec": 4.9
+    },
+    {
+      "id": "P2285_0025.png#6026",
+      "raw": "```json\n[\n    {\"bbox_2d\": [781, 958, 826, 1000], \"label\": \"The ship is anchored near the bottom-right corner of the frame.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.781,
+        0.958,
+        0.826,
+        1.0
+      ],
+      "gt01": [
+        0.78,
+        0.96,
+        0.83,
+        1.0
+      ],
+      "iou": 1.0,
+      "fiou": 0.8612440191387558,
+      "sec": 5.1
+    },
+    {
+      "id": "06384_0000.png#9406",
+      "raw": "```json\n[\n    {\"bbox_2d\": [0, 740, 170, 998], \"label\": \"The ground track field at the bottom-left of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.0,
+        0.74,
+        0.17,
+        0.998
+      ],
+      "gt01": [
+        0.11,
+        0.81,
+        0.18,
+        0.87
+      ],
+      "iou": 0.09939148073022312,
+      "fiou": 0.08097165991902829,
+      "sec": 4.8
+    },
+    {
+      "id": "P0526_0008.png#1034",
+      "raw": "```json\n[\n    {\"bbox_2d\": [630, 267, 708, 372], \"label\": \"The right-most small ship is located near the middle-right part of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.63,
+        0.267,
+        0.708,
+        0.372
+      ],
+      "gt01": [
+        0.7,
+        0.4,
+        0.77,
+        0.47
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 5.2
+    },
+    {
+      "id": "P1030_0009.png#2452",
+      "raw": "```json\n[\n    {\"bbox_2d\": [321, 236, 998, 998], \"label\": \"The harbor with a broad presence and docks running parallel to the shoreline\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.321,
+        0.236,
+        0.998,
+        0.998
+      ],
+      "gt01": [
+        0.49,
+        0.4,
+        0.73,
+        0.66
+      ],
+      "iou": 0.12704686617730096,
+      "fiou": 0.12095976924597865,
+      "sec": 5.1
+    },
+    {
+      "id": "P2625_0017.png#6718",
+      "raw": "```json\n[\n    {\"bbox_2d\": [166, 887, 452, 1000], \"label\": \"The large vehicle lodged in the bottom-left corner of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.166,
+        0.887,
+        0.452,
+        1.0
+      ],
+      "gt01": [
+        0.02,
+        0.66,
+        0.29,
+        0.86
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 5.1
+    },
+    {
+      "id": "P0551_0008.png#1081",
+      "raw": "```json\n[\n    {\"bbox_2d\": [777, 866, 817, 927], \"label\": \"The small vehicle is located near the bottom-right of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.777,
+        0.866,
+        0.817,
+        0.927
+      ],
+      "gt01": [
+        0.75,
+        0.83,
+        0.81,
+        0.91
+      ],
+      "iou": 0.2564102564102564,
+      "fiou": 0.25086385625431956,
+      "sec": 5.0
+    },
+    {
+      "id": "07481_0000.png#10777",
+      "raw": "```json\n[\n    {\"bbox_2d\": [488, 212, 998, 998], \"label\": \"The golf field is surrounded by roads and is primarily composed of greenery.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.488,
+        0.212,
+        0.998,
+        0.998
+      ],
+      "gt01": [
+        0.38,
+        0.19,
+        1.0,
+        1.0
+      ],
+      "iou": 0.8052651955090979,
+      "fiou": 0.7982078853046596,
+      "sec": 5.2
+    },
+    {
+      "id": "P2630_0004.png#6757",
+      "raw": "```json\n[\n    {\"bbox_2d\": [113, 817, 305, 922], \"label\": \"The large vehicle placed at the bottom-left of the parking area.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.113,
+        0.817,
+        0.305,
+        0.922
+      ],
+      "gt01": [
+        0.12,
+        0.83,
+        0.3,
+        0.92
+      ],
+      "iou": 0.8636363636363636,
+      "fiou": 0.8035714285714285,
+      "sec": 3.7
+    },
+    {
+      "id": "P8287_0018.png#8468",
+      "raw": "```json\n[\n    {\"bbox_2d\": [208, 74, 270, 204], \"label\": \"The small vehicle is parked on the top left.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.208,
+        0.074,
+        0.27,
+        0.204
+      ],
+      "gt01": [
+        0.21,
+        0.08,
+        0.27,
+        0.2
+      ],
+      "iou": 0.9285714285714286,
+      "fiou": 0.8933002481389577,
+      "sec": 4.7
+    },
+    {
+      "id": "P0949_0010.png#1868",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "pred01": null,
+      "gt01": [
+        0.12,
+        0.14,
+        0.16,
+        0.19
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 2.5
+    },
+    {
+      "id": "08088_0000.png#11521",
+      "raw": "```json\n[\n    {\"bbox_2d\": [216, 442, 512, 592], \"label\": \"The small ship is located in the center of the image surrounded by water.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.216,
+        0.442,
+        0.512,
+        0.592
+      ],
+      "gt01": [
+        0.24,
+        0.45,
+        0.5,
+        0.57
+      ],
+      "iou": 0.73125,
+      "fiou": 0.7027027027027025,
+      "sec": 5.1
+    },
+    {
+      "id": "06422_0000.png#9447",
+      "raw": "```json\n[\n    {\"bbox_2d\": [402, 382, 470, 530], \"label\": \"The grey vehicle is parked centrally.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.402,
+        0.382,
+        0.47,
+        0.53
+      ],
+      "gt01": [
+        0.41,
+        0.39,
+        0.46,
+        0.52
+      ],
+      "iou": 0.65625,
+      "fiou": 0.6458664546899852,
+      "sec": 4.7
+    },
+    {
+      "id": "P2541_0026.png#6453",
+      "raw": "```json\n[\n    {\"bbox_2d\": [0, 537, 244, 716], \"label\": \"The soccer ball field located horizontally towards the left side of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.0,
+        0.537,
+        0.244,
+        0.716
+      ],
+      "gt01": [
+        0.0,
+        0.54,
+        0.24,
+        0.72
+      ],
+      "iou": 1.0,
+      "fiou": 0.9463213549601219,
+      "sec": 4.9
+    },
+    {
+      "id": "07444_0000.png#10726",
+      "raw": "```json\n[\n    {\"bbox_2d\": [834, 650, 915, 694], \"label\": \"The vehicle positioned towards the bottom right on the highway.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.834,
+        0.65,
+        0.915,
+        0.694
+      ],
+      "gt01": [
+        0.84,
+        0.66,
+        0.9,
+        0.68
+      ],
+      "iou": 0.42,
+      "fiou": 0.33670033670033755,
+      "sec": 4.9
+    },
+    {
+      "id": "P1397_0061.png#4029",
+      "raw": "```json\n[\n    {\"bbox_2d\": [153, 836, 224, 906], \"label\": \"The small plane located at the bottom-left of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.153,
+        0.836,
+        0.224,
+        0.906
+      ],
+      "gt01": [
+        0.24,
+        0.45,
+        0.5,
+        0.78
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 4.9
+    },
+    {
+      "id": "10472_0000.png#14572",
+      "raw": "```json\n[\n    {\"bbox_2d\": [416, 694, 506, 938], \"label\": \"The windmill positioned closer to the bottom-middle of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.416,
+        0.694,
+        0.506,
+        0.938
+      ],
+      "gt01": [
+        0.4,
+        0.82,
+        0.51,
+        0.95
+      ],
+      "iou": 0.436241610738255,
+      "fiou": 0.4141965678627147,
+      "sec": 4.9
+    },
+    {
+      "id": "P2595_0002.png#6592",
+      "raw": "```json\n[\n    {\"bbox_2d\": [222, 0, 886, 722], \"label\": \"The soccer ball field in the image marked with white lines.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.222,
+        0.0,
+        0.886,
+        0.722
+      ],
+      "gt01": [
+        0.21,
+        0.0,
+        0.85,
+        0.69
+      ],
+      "iou": 0.8899483512117601,
+      "fiou": 0.8885188891258344,
+      "sec": 4.7
+    },
+    {
+      "id": "09931_0000.png#13869",
+      "raw": "```json\n[\n    {\"bbox_2d\": [567, 0, 638, 989], \"label\": \"The train station captured in the image has a long, narrow structure extending from the midpoint towards the top of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.567,
+        0.0,
+        0.638,
+        0.989
+      ],
+      "gt01": [
+        0.53,
+        0.63,
+        0.66,
+        1.0
+      ],
+      "iou": 0.2857142857142857,
+      "fiou": 0.2745771840999678,
+      "sec": 5.4
+    },
+    {
+      "id": "08671_0000.png#12284",
+      "raw": "```json\n[\n    {\"bbox_2d\": [677, 822, 902, 988], \"label\": \"The overpass is visible as a small structure spanning across the bottom half of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.677,
+        0.822,
+        0.902,
+        0.988
+      ],
+      "gt01": [
+        0.65,
+        0.86,
+        0.92,
+        0.98
+      ],
+      "iou": 0.6242171189979123,
+      "fiou": 0.6315789473684208,
+      "sec": 5.2
+    },
+    {
+      "id": "P1410_0064.png#4226",
+      "raw": "```json\n[\n    {\"bbox_2d\": [966, 983, 998, 1000], \"label\": \"The small vehicle is located in the bottom right corner of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.966,
+        0.983,
+        0.998,
+        1.0
+      ],
+      "gt01": [
+        0.95,
+        0.99,
+        1.0,
+        1.0
+      ],
+      "iou": 0.5,
+      "fiou": 0.4419889502762431,
+      "sec": 5.0
+    },
+    {
+      "id": "11585_0000.png#15988",
+      "raw": "```json\n[\n    {\"bbox_2d\": [238, 377, 845, 998], \"label\": \"The airport with terminal buildings and surrounding taxiways can be identified with its structure with paved surfaces amidst green fields.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.238,
+        0.377,
+        0.845,
+        0.998
+      ],
+      "gt01": [
+        0.23,
+        0.18,
+        1.0,
+        1.0
+      ],
+      "iou": 0.5936051899907322,
+      "fiou": 0.5970019005384857,
+      "sec": 5.5
+    },
+    {
+      "id": "P1390_0033.png#3845",
+      "raw": "```json\n[\n    {\"bbox_2d\": [149, 476, 252, 612], \"label\": \"The plane located at the middle-left of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.149,
+        0.476,
+        0.252,
+        0.612
+      ],
+      "gt01": [
+        0.03,
+        0.48,
+        0.14,
+        0.63
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 4.8
+    },
+    {
+      "id": "09638_0000.png#13500",
+      "raw": "```json\n[\n    {\"bbox_2d\": [0, 448, 787, 987], \"label\": \"The baseball field located in the bottom-left part of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.0,
+        0.448,
+        0.787,
+        0.987
+      ],
+      "gt01": [
+        0.19,
+        0.7,
+        0.34,
+        0.86
+      ],
+      "iou": 0.06181818181818182,
+      "fiou": 0.0565780199107482,
+      "sec": 4.8
+    },
+    {
+      "id": "P0457_0002.png#915",
+      "raw": "```json\n[\n    {\"bbox_2d\": [889, 580, 1000, 823], \"label\": \"The basketball court in the bottom-right of the image is the top-most court present.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.889,
+        0.58,
+        1.0,
+        0.823
+      ],
+      "gt01": [
+        0.69,
+        0.58,
+        1.0,
+        0.93
+      ],
+      "iou": 0.2604166666666667,
+      "fiou": 0.2485990783410137,
+      "sec": 5.2
+    },
+    {
+      "id": "06985_0000.png#10141",
+      "raw": "```json\n[\n    {\"bbox_2d\": [786, 530, 998, 958], \"label\": \"The tennis court situated on the bottom-right edge of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.786,
+        0.53,
+        0.998,
+        0.958
+      ],
+      "gt01": [
+        0.79,
+        0.53,
+        0.99,
+        0.95
+      ],
+      "iou": 0.9328512396694215,
+      "fiou": 0.9257626520895783,
+      "sec": 4.9
+    },
+    {
+      "id": "09675_0000.png#13546",
+      "raw": "```json\n[\n    {\"bbox_2d\": [789, 677, 998, 894], \"label\": \"The circular storage tank is located at the bottom-right section of the image, near the image's edge.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.789,
+        0.677,
+        0.998,
+        0.894
+      ],
+      "gt01": [
+        0.79,
+        0.69,
+        0.99,
+        0.89
+      ],
+      "iou": 0.9111570247933884,
+      "fiou": 0.8819703216986755,
+      "sec": 5.4
+    },
+    {
+      "id": "06897_0000.png#10029",
+      "raw": "```json\n[\n\t{\"bbox_2d\": [84, 109, 615, 732], \"label\": \"The airplane is distinctly captured in the center of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.084,
+        0.109,
+        0.615,
+        0.732
+      ],
+      "gt01": [
+        0.12,
+        0.19,
+        0.62,
+        0.74
+      ],
+      "iou": 0.7977815699658704,
+      "fiou": 0.7948791637903195,
+      "sec": 4.9
+    },
+    {
+      "id": "11583_0000.png#15986",
+      "raw": "```json\n[\n    {\"bbox_2d\": [538, 550, 904, 768], \"label\": \"The expressway-toll-station is centrally located in the image, stretching from the middle to the right side with its rectangular shape.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.538,
+        0.55,
+        0.904,
+        0.768
+      ],
+      "gt01": [
+        0.54,
+        0.55,
+        0.89,
+        0.78
+      ],
+      "iou": 0.9334836527621195,
+      "fiou": 0.9084631137781585,
+      "sec": 5.7
+    },
+    {
+      "id": "P2645_0036.png#6812",
+      "raw": "```json\n[\n    {\"bbox_2d\": [777, 64, 873, 96], \"label\": \"The right-most ship on the top-right position.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.777,
+        0.064,
+        0.873,
+        0.096
+      ],
+      "gt01": [
+        0.81,
+        0.06,
+        0.87,
+        0.09
+      ],
+      "iou": 0.56,
+      "fiou": 0.47101449275362267,
+      "sec": 4.7
+    },
+    {
+      "id": "P5789_1947.png#8095",
+      "raw": "```json\n[\n    {\"bbox_2d\": [846, 0, 1000, 488], \"label\": \"The northernmost harbor is positioned towards the top right.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.846,
+        0.0,
+        1.0,
+        0.488
+      ],
+      "gt01": [
+        0.85,
+        0.25,
+        0.92,
+        0.28
+      ],
+      "iou": 0.04,
+      "fiou": 0.02794336810730258,
+      "sec": 4.9
+    },
+    {
+      "id": "08926_0000.png#12610",
+      "raw": "```json\n[\n    {\"bbox_2d\": [333, 222, 998, 998], \"label\": \"The expressway-service area, with parking spaces and structures with red roofs.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.333,
+        0.222,
+        0.998,
+        0.998
+      ],
+      "gt01": [
+        0.33,
+        0.18,
+        1.0,
+        1.0
+      ],
+      "iou": 0.9518072289156626,
+      "fiou": 0.9392792136876592,
+      "sec": 5.1
+    },
+    {
+      "id": "P3575_0002.png#7660",
+      "raw": "```json\n[\n    {\"bbox_2d\": [433, 748, 643, 902], \"label\": \"The tennis court located at the bottom-most position.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.433,
+        0.748,
+        0.643,
+        0.902
+      ],
+      "gt01": [
+        0.43,
+        0.74,
+        0.64,
+        0.89
+      ],
+      "iou": 0.8823529411764706,
+      "fiou": 0.8533356558090925,
+      "sec": 4.7
+    },
+    {
+      "id": "P0179_0003.png#367",
+      "raw": "```json\n[\n    {\"bbox_2d\": [442, 558, 595, 741], \"label\": \"The plane situated at the bottom edge of the image, near the center.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.442,
+        0.558,
+        0.595,
+        0.741
+      ],
+      "gt01": [
+        0.41,
+        0.55,
+        0.61,
+        0.76
+      ],
+      "iou": 0.6991341991341992,
+      "fiou": 0.6666428571428569,
+      "sec": 5.2
+    },
+    {
+      "id": "08738_0000.png#12374",
+      "raw": "```json\n[\n    {\"bbox_2d\": [488, 654, 938, 998], \"label\": \"The train station is positioned on the right half of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.488,
+        0.654,
+        0.938,
+        0.998
+      ],
+      "gt01": [
+        0.44,
+        0.51,
+        1.0,
+        1.0
+      ],
+      "iou": 0.5810526315789474,
+      "fiou": 0.5641399416909618,
+      "sec": 5.1
+    },
+    {
+      "id": "P2794_0023.png#7451",
+      "raw": "```json\n[\n    {\"bbox_2d\": [394, 877, 452, 977], \"label\": \"The small vehicle located at the bottom-middle of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.394,
+        0.877,
+        0.452,
+        0.977
+      ],
+      "gt01": [
+        0.41,
+        0.89,
+        0.45,
+        0.97
+      ],
+      "iou": 0.5844155844155844,
+      "fiou": 0.5517241379310348,
+      "sec": 4.9
+    },
+    {
+      "id": "P1179_0137.png#2939",
+      "raw": "```json\n[\n    {\"bbox_2d\": [153, 179, 252, 313], \"label\": \"The plane positioned slightly above and to the right of the first plane.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.153,
+        0.179,
+        0.252,
+        0.313
+      ],
+      "gt01": [
+        0.13,
+        0.17,
+        0.25,
+        0.31
+      ],
+      "iou": 0.7897435897435897,
+      "fiou": 0.7320122126850626,
+      "sec": 5.0
+    },
+    {
+      "id": "P2093_0011.png#5805",
+      "raw": "```json\n[\n    {\"bbox_2d\": [383, 113, 452, 168], \"label\": \"The small vehicle is near the top-center of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.383,
+        0.113,
+        0.452,
+        0.168
+      ],
+      "gt01": [
+        0.37,
+        0.11,
+        0.45,
+        0.16
+      ],
+      "iou": 0.7741935483870968,
+      "fiou": 0.6777873439517864,
+      "sec": 4.8
+    },
+    {
+      "id": "P5789_0640.png#7983",
+      "raw": "```json\n[\n    {\"bbox_2d\": [0, 666, 222, 998], \"label\": \"The harbor positioned at the left edge, at the bottom of the image, partially borders the visible water and land interface.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.0,
+        0.666,
+        0.222,
+        0.998
+      ],
+      "gt01": [
+        0.11,
+        0.53,
+        0.19,
+        0.73
+      ],
+      "iou": 0.06938325991189427,
+      "fiou": 0.06053154260853112,
+      "sec": 5.4
+    },
+    {
+      "id": "P0309_0002.png#610",
+      "raw": "```json\n[\n    {\"bbox_2d\": [188, 442, 998, 604], \"label\": \"The harbor located in the middle of the image consists of a horizontal pier with a clear walking path leading to it.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.188,
+        0.442,
+        0.998,
+        0.604
+      ],
+      "gt01": [
+        0.2,
+        0.45,
+        0.94,
+        0.55
+      ],
+      "iou": 0.5918220946915351,
+      "fiou": 0.5639384240207287,
+      "sec": 5.5
+    },
+    {
+      "id": "10793_0000.png#14971",
+      "raw": "```json\n[\n    {\"bbox_2d\": [0, 534, 396, 750], \"label\": \"The windmill near the intersection of two paths is positioned on the left side of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.0,
+        0.534,
+        0.396,
+        0.75
+      ],
+      "gt01": [
+        0.08,
+        0.62,
+        0.29,
+        0.76
+      ],
+      "iou": 0.31917098445595854,
+      "fiou": 0.31151581541832124,
+      "sec": 5.1
+    },
+    {
+      "id": "P1390_0078.png#3938",
+      "raw": "```json\n[\n    {\"bbox_2d\": [0, 630, 248, 932], \"label\": \"The plane located at the bottom-left corner of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.0,
+        0.63,
+        0.248,
+        0.932
+      ],
+      "gt01": [
+        0.0,
+        0.68,
+        0.25,
+        0.94
+      ],
+      "iou": 0.8125,
+      "fiou": 0.8074418604651167,
+      "sec": 4.8
+    },
+    {
+      "id": "10002_0000.png#13953",
+      "raw": "```json\n[\n    {\"bbox_2d\": [87, 222, 197, 532], \"label\": \"The solitary windmill in the scene is distinguishable by its white color contrasting with the surrounding earthy tones.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.087,
+        0.222,
+        0.197,
+        0.532
+      ],
+      "gt01": [
+        0.07,
+        0.44,
+        0.19,
+        0.56
+      ],
+      "iou": 0.24830699774266365,
+      "fiou": 0.2428249282492825,
+      "sec": 5.5
+    },
+    {
+      "id": "11601_0000.png#16004",
+      "raw": "```json\n[\n    {\"bbox_2d\": [0, 196, 620, 476], \"label\": \"The small airport visible in the image, centrally located from the top to the bottom edges of the frame.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.0,
+        0.196,
+        0.62,
+        0.476
+      ],
+      "gt01": [
+        0.07,
+        0.24,
+        0.58,
+        0.43
+      ],
+      "iou": 0.5692391899288451,
+      "fiou": 0.5581797235023043,
+      "sec": 5.3
+    },
+    {
+      "id": "P0936_0006.png#1795",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "pred01": null,
+      "gt01": [
+        0.08,
+        0.0,
+        0.1,
+        0.04
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 2.5
+    },
+    {
+      "id": "08166_0000.png#11626",
+      "raw": "```json\n[\n    {\"bbox_2d\": [888, 730, 998, 880], \"label\": \"The tennis court located at the top position among the courts is in the bottom-right section of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.888,
+        0.73,
+        0.998,
+        0.88
+      ],
+      "gt01": [
+        0.89,
+        0.74,
+        1.0,
+        0.79
+      ],
+      "iou": 0.375,
+      "fiou": 0.32530120481927727,
+      "sec": 5.4
+    },
+    {
+      "id": "P1380_0003.png#3620",
+      "raw": "```json\n[\n    {\"bbox_2d\": [567, 520, 667, 640], \"label\": \"The swimming pool positioned centrally at the bottom part of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.567,
+        0.52,
+        0.667,
+        0.64
+      ],
+      "gt01": [
+        0.33,
+        0.35,
+        0.38,
+        0.4
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 4.9
+    },
+    {
+      "id": "P5789_2611.png#8178",
+      "raw": "```json\n[\n    {\"bbox_2d\": [629, 869, 688, 929], \"label\": \"The storage-tank is located in the bottom section of the image, encased within a rectangular area.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.629,
+        0.869,
+        0.688,
+        0.929
+      ],
+      "gt01": [
+        0.63,
+        0.87,
+        0.67,
+        0.91
+      ],
+      "iou": 0.5102040816326531,
+      "fiou": 0.4519774011299444,
+      "sec": 5.3
+    },
+    {
+      "id": "P0590_0006.png#1194",
+      "raw": "```json\n[\n    {\"bbox_2d\": [0, 876, 135, 1000], \"label\": \"The large vehicle is positioned at the bottom edge of the forest area.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.0,
+        0.876,
+        0.135,
+        1.0
+      ],
+      "gt01": [
+        0.0,
+        0.9,
+        0.05,
+        1.0
+      ],
+      "iou": 0.3384615384615385,
+      "fiou": 0.29868578255675016,
+      "sec": 5.0
+    },
+    {
+      "id": "08402_0000.png#11948",
+      "raw": "```json\n[\n    {\"bbox_2d\": [648, 359, 998, 998], \"label\": \"The small dam in the image runs diagonally across.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.648,
+        0.359,
+        0.998,
+        0.998
+      ],
+      "gt01": [
+        0.58,
+        0.31,
+        1.0,
+        1.0
+      ],
+      "iou": 0.7774086378737541,
+      "fiou": 0.7717391304347827,
+      "sec": 4.9
+    },
+    {
+      "id": "P2802_0122.png#7611",
+      "raw": "```json\n[\n    {\"bbox_2d\": [953, 10, 997, 36], \"label\": \"The vehicle is positioned near the top edge of the image, to the left side of the visible vehicles.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.953,
+        0.01,
+        0.997,
+        0.036
+      ],
+      "gt01": [
+        0.64,
+        0.0,
+        0.68,
+        0.02
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 5.4
+    },
+    {
+      "id": "09674_0000.png#13545",
+      "raw": "```json\n[\n    {\"bbox_2d\": [592, 620, 852, 972], \"label\": \"The stadium with a red colored dome and a rounded rectangular shape is located towards the bottom-right of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.592,
+        0.62,
+        0.852,
+        0.972
+      ],
+      "gt01": [
+        0.59,
+        0.62,
+        0.85,
+        0.97
+      ],
+      "iou": 1.0,
+      "fiou": 0.9791802212101492,
+      "sec": 5.5
+    },
+    {
+      "id": "P1583_0054.png#4806",
+      "raw": "```json\n[\n    {\"bbox_2d\": [138, 0, 688, 248], \"label\": \"The baseball diamond positioned at the top of the image has its left corner more aligned with the left edge of the frame.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.138,
+        0.0,
+        0.688,
+        0.248
+      ],
+      "gt01": [
+        0.27,
+        0.0,
+        0.42,
+        0.13
+      ],
+      "iou": 0.15384615384615385,
+      "fiou": 0.14296187683284456,
+      "sec": 5.4
+    },
+    {
+      "id": "P2330_0092.png#6186",
+      "raw": "```json\n[\n    {\"bbox_2d\": [810, 388, 998, 422], \"label\": \"The ship located towards the right edge of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.81,
+        0.388,
+        0.998,
+        0.422
+      ],
+      "gt01": [
+        0.96,
+        0.38,
+        1.0,
+        0.41
+      ],
+      "iou": 0.17647058823529413,
+      "fiou": 0.1237418590882179,
+      "sec": 4.8
+    },
+    {
+      "id": "P4151_0049.png#7740",
+      "raw": "```json\n[\n    {\"bbox_2d\": [212, 0, 398, 78], \"label\": \"At the top of the image, there is a small vehicle.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.212,
+        0.0,
+        0.398,
+        0.078
+      ],
+      "gt01": [
+        0.19,
+        0.0,
+        0.34,
+        0.06
+      ],
+      "iou": 0.5051546391752577,
+      "fiou": 0.4852160727824111,
+      "sec": 4.8
+    },
+    {
+      "id": "10450_0000.png#14541",
+      "raw": "```json\n[\n    {\"bbox_2d\": [2, 292, 266, 542], \"label\": \"The golf course situated on the middle-left side of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.002,
+        0.292,
+        0.266,
+        0.542
+      ],
+      "gt01": [
+        0.0,
+        0.27,
+        0.27,
+        0.66
+      ],
+      "iou": 0.65,
+      "fiou": 0.626780626780627,
+      "sec": 4.8
+    },
+    {
+      "id": "06544_0000.png#9596",
+      "raw": "```json\n[\n    {\"bbox_2d\": [134, 607, 374, 988], \"label\": \"The tennis court located at the bottom-left edge of the image is adjacent to a small white-roofed building on its right.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.134,
+        0.607,
+        0.374,
+        0.988
+      ],
+      "gt01": [
+        0.17,
+        0.68,
+        0.33,
+        1.0
+      ],
+      "iou": 0.5483870967741935,
+      "fiou": 0.5278491859468722,
+      "sec": 5.7
+    },
+    {
+      "id": "07907_0000.png#11300",
+      "raw": "```json\n[\n    {\"bbox_2d\": [482, 458, 822, 758], \"label\": \"The windmill is located toward the bottom right of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.482,
+        0.458,
+        0.822,
+        0.758
+      ],
+      "gt01": [
+        0.67,
+        0.67,
+        0.92,
+        0.77
+      ],
+      "iou": 0.13212221304706853,
+      "fiou": 0.11772160811096234,
+      "sec": 5.1
+    },
+    {
+      "id": "10622_0000.png#14770",
+      "raw": "```json\n[\n    {\"bbox_2d\": [488, 498, 998, 738], \"label\": \"The overpass is visible in the center of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.488,
+        0.498,
+        0.998,
+        0.738
+      ],
+      "gt01": [
+        0.36,
+        0.47,
+        1.0,
+        0.89
+      ],
+      "iou": 0.46511627906976744,
+      "fiou": 0.4553571428571428,
+      "sec": 4.8
+    },
+    {
+      "id": "P1147_0015.png#2799",
+      "raw": "```json\n[\n    {\"bbox_2d\": [826, 450, 998, 875], \"label\": \"The small vehicle is located near the bottom right corner of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.826,
+        0.45,
+        0.998,
+        0.875
+      ],
+      "gt01": [
+        0.82,
+        0.77,
+        0.9,
+        0.85
+      ],
+      "iou": 0.0898876404494382,
+      "fiou": 0.08045664582767059,
+      "sec": 5.0
+    },
+    {
+      "id": "P1410_0125.png#4267",
+      "raw": "```json\n[\n    {\"bbox_2d\": [692, 212, 712, 256], \"label\": \"The small vehicle at the top-right is the top-most one among the visible small vehicles.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.692,
+        0.212,
+        0.712,
+        0.256
+      ],
+      "gt01": [
+        0.69,
+        0.2,
+        0.71,
+        0.25
+      ],
+      "iou": 0.7142857142857143,
+      "fiou": 0.5719063545150503,
+      "sec": 5.2
+    },
+    {
+      "id": "P1463_0005.png#4345",
+      "raw": "```json\n[\n    {\"bbox_2d\": [738, 72, 906, 162], \"label\": \"The vehicle located more to the east in the top-right of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.738,
+        0.072,
+        0.906,
+        0.162
+      ],
+      "gt01": [
+        0.82,
+        0.1,
+        0.91,
+        0.16
+      ],
+      "iou": 0.3888888888888889,
+      "fiou": 0.3359375000000001,
+      "sec": 5.1
+    },
+    {
+      "id": "11509_0000.png#15888",
+      "raw": "```json\n[\n    {\"bbox_2d\": [101, 664, 262, 980], \"label\": \"The tennis court is positioned at the bottom-left of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.101,
+        0.664,
+        0.262,
+        0.98
+      ],
+      "gt01": [
+        0.1,
+        0.66,
+        0.25,
+        0.97
+      ],
+      "iou": 0.9126559714795008,
+      "fiou": 0.8804990151017725,
+      "sec": 5.0
+    },
+    {
+      "id": "06590_0000.png#9643",
+      "raw": "```json\n[\n    {\"bbox_2d\": [634, 778, 876, 1000], \"label\": \"The tennis court positioned at the bottom-right of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.634,
+        0.778,
+        0.876,
+        1.0
+      ],
+      "gt01": [
+        0.6,
+        0.78,
+        0.87,
+        1.0
+      ],
+      "iou": 0.8620689655172413,
+      "fiou": 0.8483105679367361,
+      "sec": 5.0
+    },
+    {
+      "id": "P1513_0010.png#4664",
+      "raw": "```json\n[\n    {\"bbox_2d\": [212, 398, 521, 770], \"label\": \"The smallest plane visible in the image is located at the middle-left of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.212,
+        0.398,
+        0.521,
+        0.77
+      ],
+      "gt01": [
+        0.13,
+        0.35,
+        0.57,
+        0.82
+      ],
+      "iou": 0.562962962962963,
+      "fiou": 0.5558413926499035,
+      "sec": 5.4
+    },
+    {
+      "id": "07440_0000.png#10719",
+      "raw": "```json\n[\n    {\"bbox_2d\": [548, 488, 998, 927], \"label\": \"The white domed storage tank casting a shadow is located centrally in the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.548,
+        0.488,
+        0.998,
+        0.927
+      ],
+      "gt01": [
+        0.57,
+        0.51,
+        0.96,
+        0.88
+      ],
+      "iou": 0.7342995169082126,
+      "fiou": 0.730447987851177,
+      "sec": 5.3
+    },
+    {
+      "id": "08898_0000.png#12575",
+      "raw": "```json\n[\n    {\"bbox_2d\": [274, 823, 374, 988], \"label\": \"The left-most tennis court located at the bottom of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.274,
+        0.823,
+        0.374,
+        0.988
+      ],
+      "gt01": [
+        0.27,
+        0.83,
+        0.35,
+        1.0
+      ],
+      "iou": 0.7391304347826086,
+      "fiou": 0.6637187707273933,
+      "sec": 4.9
+    },
+    {
+      "id": "11113_0000.png#15377",
+      "raw": "```json\n[\n    {\"bbox_2d\": [677, 607, 998, 989], \"label\": \"The basketball court positioned towards the bottom right part of the image, directly underneath another court, is also marked for gameplay.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.677,
+        0.607,
+        0.998,
+        0.989
+      ],
+      "gt01": [
+        0.69,
+        0.6,
+        1.0,
+        0.95
+      ],
+      "iou": 0.849128127369219,
+      "fiou": 0.8419324503100147,
+      "sec": 5.5
+    },
+    {
+      "id": "P1463_0030.png#4362",
+      "raw": "```json\n[\n    {\"bbox_2d\": [112, 288, 176, 362], \"label\": \"The small vehicle on the top-left side of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.112,
+        0.288,
+        0.176,
+        0.362
+      ],
+      "gt01": [
+        0.11,
+        0.28,
+        0.19,
+        0.38
+      ],
+      "iou": 0.6464646464646465,
+      "fiou": 0.5920000000000002,
+      "sec": 5.0
+    },
+    {
+      "id": "P2541_0030.png#6455",
+      "raw": "```json\n[\n    {\"bbox_2d\": [638, 735, 735, 832], \"label\": \"The roundabout located in the right of the image is the bottom-most of the two roundabouts.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.638,
+        0.735,
+        0.735,
+        0.832
+      ],
+      "gt01": [
+        0.9,
+        0.95,
+        0.93,
+        0.97
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 5.3
+    },
+    {
+      "id": "P1397_0072.png#4049",
+      "raw": "```json\n[\n    {\"bbox_2d\": [292, 0, 620, 144], \"label\": \"The plane located at the top of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.292,
+        0.0,
+        0.62,
+        0.144
+      ],
+      "gt01": [
+        0.29,
+        0.0,
+        0.6,
+        0.14
+      ],
+      "iou": 0.9411764705882353,
+      "fiou": 0.9075601953190777,
+      "sec": 4.6
+    },
+    {
+      "id": "08972_0000.png#12671",
+      "raw": "```json\n[\n    {\"bbox_2d\": [448, 137, 847, 622], \"label\": \"The baseball field situated to the right of the top-most field.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.448,
+        0.137,
+        0.847,
+        0.622
+      ],
+      "gt01": [
+        0.65,
+        0.37,
+        0.84,
+        0.54
+      ],
+      "iou": 0.1791936286709806,
+      "fiou": 0.1669121256750123,
+      "sec": 4.9
+    },
+    {
+      "id": "08622_0000.png#12212",
+      "raw": "```json\n[\n    {\"bbox_2d\": [23, 643, 138, 728], \"label\": \"The left bottom vehicle is small.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.023,
+        0.643,
+        0.138,
+        0.728
+      ],
+      "gt01": [
+        0.02,
+        0.65,
+        0.13,
+        0.72
+      ],
+      "iou": 0.7384615384615385,
+      "fiou": 0.7501251877816726,
+      "sec": 4.7
+    },
+    {
+      "id": "P2794_0012.png#7440",
+      "raw": "```json\n[\n    {\"bbox_2d\": [848, 387, 945, 492], \"label\": \"The small vehicle parked at the middle-right side of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.848,
+        0.387,
+        0.945,
+        0.492
+      ],
+      "gt01": [
+        0.86,
+        0.52,
+        0.94,
+        0.6
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 5.0
+    },
+    {
+      "id": "P0583_0001.png#1167",
+      "raw": "```json\n[\n    {\"bbox_2d\": [14, 0, 387, 370], \"label\": \"The larger harbor located to the left in the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.014,
+        0.0,
+        0.387,
+        0.37
+      ],
+      "gt01": [
+        0.11,
+        0.02,
+        0.38,
+        0.39
+      ],
+      "iou": 0.6553966189856957,
+      "fiou": 0.6589498640262185,
+      "sec": 4.8
+    },
+    {
+      "id": "07563_0000.png#10887",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "pred01": null,
+      "gt01": [
+        0.3,
+        0.08,
+        0.4,
+        0.63
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 2.6
+    },
+    {
+      "id": "P2802_0041.png#7525",
+      "raw": "```json\n[\n    {\"bbox_2d\": [131, 65, 174, 127], \"label\": \"The small vehicle located towards the top-left part of the tarmac.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.131,
+        0.065,
+        0.174,
+        0.127
+      ],
+      "gt01": [
+        0.17,
+        0.02,
+        0.19,
+        0.06
+      ],
+      "iou": 0.018518518518518517,
+      "fiou": 0.0,
+      "sec": 5.0
+    },
+    {
+      "id": "11351_0000.png#15683",
+      "raw": "```json\n[\n    {\"bbox_2d\": [834, 705, 870, 727], \"label\": \"The vehicle parked closest to the middle-right edge of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.834,
+        0.705,
+        0.87,
+        0.727
+      ],
+      "gt01": [
+        0.94,
+        0.36,
+        0.98,
+        0.38
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 4.9
+    },
+    {
+      "id": "P1086_0005.png#2629",
+      "raw": "```json\n[\n    {\"bbox_2d\": [113, 176, 385, 714], \"label\": \"The tennis court located on the left side of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.113,
+        0.176,
+        0.385,
+        0.714
+      ],
+      "gt01": [
+        0.16,
+        0.27,
+        0.34,
+        0.62
+      ],
+      "iou": 0.4523809523809524,
+      "fiou": 0.43051607260004365,
+      "sec": 4.9
+    },
+    {
+      "id": "P0420_0006.png#887",
+      "raw": "```json\n[\n    {\"bbox_2d\": [573, 0, 677, 333], \"label\": \"The harbor featuring a T-shaped dock that is more centrally positioned in the top.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.573,
+        0.0,
+        0.677,
+        0.333
+      ],
+      "gt01": [
+        0.56,
+        0.07,
+        0.69,
+        0.33
+      ],
+      "iou": 0.7012987012987013,
+      "fiou": 0.6532663316582923,
+      "sec": 5.0
+    },
+    {
+      "id": "P0654_0006.png#1284",
+      "raw": "```json\n[\n    {\"bbox_2d\": [880, 648, 946, 773], \"label\": \"The school bus at the right part of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.88,
+        0.648,
+        0.946,
+        0.773
+      ],
+      "gt01": [
+        0.73,
+        0.64,
+        0.77,
+        0.74
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 4.8
+    },
+    {
+      "id": "07352_0000.png#10612",
+      "raw": "```json\n[\n    {\"bbox_2d\": [370, 680, 998, 998], \"label\": \"The dam is located at the bottom of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.37,
+        0.68,
+        0.998,
+        0.998
+      ],
+      "gt01": [
+        0.45,
+        0.73,
+        1.0,
+        1.0
+      ],
+      "iou": 0.7424242424242424,
+      "fiou": 0.7294328002384031,
+      "sec": 4.8
+    },
+    {
+      "id": "P2781_0023.png#7325",
+      "raw": "```json\n[\n    {\"bbox_2d\": [323, 466, 634, 688], \"label\": \"The large vehicle is located bottom-middle part of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.323,
+        0.466,
+        0.634,
+        0.688
+      ],
+      "gt01": [
+        0.32,
+        0.46,
+        0.63,
+        0.67
+      ],
+      "iou": 0.875,
+      "fiou": 0.8757446094471015,
+      "sec": 4.9
+    },
+    {
+      "id": "11206_0000.png#15501",
+      "raw": "```json\n[\n    {\"bbox_2d\": [576, 427, 998, 998], \"label\": \"The airport is located on the lower part of the island.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.576,
+        0.427,
+        0.998,
+        0.998
+      ],
+      "gt01": [
+        0.59,
+        0.44,
+        1.0,
+        1.0
+      ],
+      "iou": 0.9599037690457097,
+      "fiou": 0.9372823160338909,
+      "sec": 4.8
+    },
+    {
+      "id": "P1397_0028.png#3990",
+      "raw": "```json\n[\n    {\"bbox_2d\": [288, 286, 333, 313], \"label\": \"The small vehicle located at the left edge of the road near the central part of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.288,
+        0.286,
+        0.333,
+        0.313
+      ],
+      "gt01": [
+        0.28,
+        0.28,
+        0.33,
+        0.31
+      ],
+      "iou": 0.625,
+      "fiou": 0.5905096660808451,
+      "sec": 5.3
+    },
+    {
+      "id": "08539_0000.png#12102",
+      "raw": "```json\n[\n    {\"bbox_2d\": [513, 385, 688, 536], \"label\": \"The ground track field can be identified by its reddish-brown color and oval shape with track lines, positioned centrally towards the right.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.513,
+        0.385,
+        0.688,
+        0.536
+      ],
+      "gt01": [
+        0.52,
+        0.4,
+        0.68,
+        0.53
+      ],
+      "iou": 0.7368421052631579,
+      "fiou": 0.7871333964049199,
+      "sec": 5.7
+    },
+    {
+      "id": "07485_0000.png#10786",
+      "raw": "```json\n[\n    {\"bbox_2d\": [670, 670, 870, 900], \"label\": \"The expressway toll station is located toward the bottom-right section of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.67,
+        0.67,
+        0.87,
+        0.9
+      ],
+      "gt01": [
+        0.66,
+        0.86,
+        0.79,
+        0.98
+      ],
+      "iou": 0.10466988727858294,
+      "fiou": 0.08450704225352122,
+      "sec": 5.1
+    },
+    {
+      "id": "10290_0000.png#14338",
+      "raw": "```json\n[\n    {\"bbox_2d\": [694, 288, 930, 694], \"label\": \"The basketball court on the right is identical in appearance to the left one, also seen from above with boundary lines and hoops.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.694,
+        0.288,
+        0.93,
+        0.694
+      ],
+      "gt01": [
+        0.68,
+        0.31,
+        0.91,
+        0.67
+      ],
+      "iou": 0.8013182674199624,
+      "fiou": 0.7710002379630366,
+      "sec": 5.6
+    },
+    {
+      "id": "P1806_0005.png#5196",
+      "raw": "```json\n[\n    {\"bbox_2d\": [335, 148, 536, 262], \"label\": \"The elongated large vehicle located at the top-most position in the middle of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.335,
+        0.148,
+        0.536,
+        0.262
+      ],
+      "gt01": [
+        0.32,
+        0.0,
+        0.5,
+        0.05
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 5.2
+    },
+    {
+      "id": "10494_0000.png#14602",
+      "raw": "```json\n[\n    {\"bbox_2d\": [270, 402, 607, 607], \"label\": \"The basketball court located on the centre of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.27,
+        0.402,
+        0.607,
+        0.607
+      ],
+      "gt01": [
+        0.49,
+        0.41,
+        0.6,
+        0.57
+      ],
+      "iou": 0.2649350649350649,
+      "fiou": 0.2547586306723601,
+      "sec": 4.9
+    },
+    {
+      "id": "06544_0000.png#9595",
+      "raw": "```json\n[\n    {\"bbox_2d\": [116, 102, 377, 576], \"label\": \"The tennis court in the uppe-left portion of the image is surrounded by a few palm trees on its top and right sides.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.116,
+        0.102,
+        0.377,
+        0.576
+      ],
+      "gt01": [
+        0.16,
+        0.17,
+        0.32,
+        0.51
+      ],
+      "iou": 0.4497354497354497,
+      "fiou": 0.43972387926992906,
+      "sec": 4.6
+    },
+    {
+      "id": "07332_0000.png#10587",
+      "raw": "```json\n[\n    {\"bbox_2d\": [658, 312, 820, 512], \"label\": \"The storage tank located towards the middle-right of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.658,
+        0.312,
+        0.82,
+        0.512
+      ],
+      "gt01": [
+        0.66,
+        0.33,
+        0.82,
+        0.5
+      ],
+      "iou": 0.8571428571428571,
+      "fiou": 0.8395061728395061,
+      "sec": 4.9
+    },
+    {
+      "id": "11452_0000.png#15815",
+      "raw": "```json\n[\n    {\"bbox_2d\": [0, 856, 998, 998], \"label\": \"The expressway toll station situated at the bottom of the image, showing a structured rectangular layout.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.0,
+        0.856,
+        0.998,
+        0.998
+      ],
+      "gt01": [
+        0.58,
+        0.81,
+        0.71,
+        1.0
+      ],
+      "iou": 0.13249211356466878,
+      "fiou": 0.12476682256887185,
+      "sec": 5.2
+    },
+    {
+      "id": "07727_0000.png#11093",
+      "raw": "```json\n[\n    {\"bbox_2d\": [617, 857, 952, 1000], \"label\": \"The ship at the bottom-most position in the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.617,
+        0.857,
+        0.952,
+        1.0
+      ],
+      "gt01": [
+        0.61,
+        0.85,
+        0.94,
+        1.0
+      ],
+      "iou": 0.8855098389982111,
+      "fiou": 0.9018470790378006,
+      "sec": 4.8
+    },
+    {
+      "id": "P1342_0006.png#3336",
+      "raw": "```json\n[\n    {\"bbox_2d\": [688, 700, 772, 800], \"label\": \"The bridge located near the bottom-right corner of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.688,
+        0.7,
+        0.772,
+        0.8
+      ],
+      "gt01": [
+        0.69,
+        0.76,
+        0.73,
+        0.79
+      ],
+      "iou": 0.20202020202020202,
+      "fiou": 0.14285714285714285,
+      "sec": 4.9
+    },
+    {
+      "id": "P1143_0009.png#2768",
+      "raw": "```json\n[\n\t{\"bbox_2d\": [366, 228, 952, 989], \"label\": \"The aircraft with contrasting markings is parked on the tarmac.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.366,
+        0.228,
+        0.952,
+        0.989
+      ],
+      "gt01": [
+        0.21,
+        0.21,
+        1.0,
+        1.0
+      ],
+      "iou": 0.70984375,
+      "fiou": 0.7145425412594134,
+      "sec": 4.8
+    },
+    {
+      "id": "10177_0000.png#14188",
+      "raw": "```json\n[\n    {\"bbox_2d\": [0, 276, 998, 912], \"label\": \"The overpass is the largest structure in the image, stretching horizontally across the entire width of the picture with roads visible beneath it.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.0,
+        0.276,
+        0.998,
+        0.912
+      ],
+      "gt01": [
+        0.33,
+        0.32,
+        0.9,
+        0.78
+      ],
+      "iou": 0.421720297029703,
+      "fiou": 0.4130903316066095,
+      "sec": 5.5
+    },
+    {
+      "id": "07494_0000.png#10801",
+      "raw": "```json\n[\n    {\"bbox_2d\": [882, 861, 975, 957], \"label\": \"The vehicle positioned at the bottom right corner of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.882,
+        0.861,
+        0.975,
+        0.957
+      ],
+      "gt01": [
+        0.91,
+        0.88,
+        0.96,
+        0.94
+      ],
+      "iou": 0.34710743801652894,
+      "fiou": 0.3360215053763435,
+      "sec": 4.8
+    },
+    {
+      "id": "P1315_0029.png#3247",
+      "raw": "```json\n[\n    {\"bbox_2d\": [548, 220, 658, 427], \"label\": \"The bridge located closer to the bottom of the image spans across the water body.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.548,
+        0.22,
+        0.658,
+        0.427
+      ],
+      "gt01": [
+        0.55,
+        0.2,
+        0.64,
+        0.37
+      ],
+      "iou": 0.5633802816901409,
+      "fiou": 0.5494505494505493,
+      "sec": 5.1
+    },
+    {
+      "id": "08138_0000.png#11581",
+      "raw": "```json\n[\n    {\"bbox_2d\": [172, 826, 284, 888], \"label\": \"The small vehicle is positioned on the bottom-left side of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.172,
+        0.826,
+        0.284,
+        0.888
+      ],
+      "gt01": [
+        0.17,
+        0.83,
+        0.28,
+        0.88
+      ],
+      "iou": 0.8571428571428571,
+      "fiou": 0.7666098807495748,
+      "sec": 5.0
+    },
+    {
+      "id": "08461_0000.png#12008",
+      "raw": "```json\n[\n    {\"bbox_2d\": [458, 362, 927, 988], \"label\": \"The stadium with a colorful exterior and a large white-covered section is located towards the right-hand side of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.458,
+        0.362,
+        0.927,
+        0.988
+      ],
+      "gt01": [
+        0.46,
+        0.35,
+        0.91,
+        1.0
+      ],
+      "iou": 0.9304677623261695,
+      "fiou": 0.9254453110113863,
+      "sec": 5.5
+    },
+    {
+      "id": "P5789_1627.png#8051",
+      "raw": "```json\n[\n    {\"bbox_2d\": [830, 270, 950, 367], \"label\": \"The small plane located towards the bottom right corner of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.83,
+        0.27,
+        0.95,
+        0.367
+      ],
+      "gt01": [
+        0.9,
+        0.31,
+        0.94,
+        0.35
+      ],
+      "iou": 0.17482517482517482,
+      "fiou": 0.13745704467353925,
+      "sec": 4.9
+    },
+    {
+      "id": "P1332_0043.png#3326",
+      "raw": "```json\n[\n    {\"bbox_2d\": [566, 566, 620, 620], \"label\": \"The ship situated centrally is the centre of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.566,
+        0.566,
+        0.62,
+        0.62
+      ],
+      "gt01": [
+        0.57,
+        0.57,
+        0.61,
+        0.62
+      ],
+      "iou": 0.8333333333333334,
+      "fiou": 0.6858710562414265,
+      "sec": 4.8
+    },
+    {
+      "id": "08797_0000.png#12448",
+      "raw": "```json\n[\n    {\"bbox_2d\": [362, 578, 444, 707], \"label\": \"The vehicle located in the left part of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.362,
+        0.578,
+        0.444,
+        0.707
+      ],
+      "gt01": [
+        0.38,
+        0.58,
+        0.44,
+        0.7
+      ],
+      "iou": 0.7222222222222222,
+      "fiou": 0.6806579693703912,
+      "sec": 4.7
+    },
+    {
+      "id": "P1377_0023.png#3581",
+      "raw": "```json\n[\n    {\"bbox_2d\": [957, 226, 998, 338], \"label\": \"The large vehicle is parked near the top-right corner of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.957,
+        0.226,
+        0.998,
+        0.338
+      ],
+      "gt01": [
+        0.96,
+        0.22,
+        1.0,
+        0.31
+      ],
+      "iou": 0.6923076923076923,
+      "fiou": 0.6383999999999997,
+      "sec": 5.1
+    },
+    {
+      "id": "08854_0000.png#12523",
+      "raw": "```json\n[\n    {\"bbox_2d\": [930, 697, 1000, 989], \"label\": \"The tennis court located at the bottom-right corner of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.93,
+        0.697,
+        1.0,
+        0.989
+      ],
+      "gt01": [
+        0.68,
+        0.7,
+        0.84,
+        1.0
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 5.1
+    },
+    {
+      "id": "11293_0000.png#15612",
+      "raw": "```json\n[\n    {\"bbox_2d\": [168, 550, 312, 821], \"label\": \"The windmill positioned in the bottom-left corner.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.168,
+        0.55,
+        0.312,
+        0.821
+      ],
+      "gt01": [
+        0.17,
+        0.73,
+        0.3,
+        0.84
+      ],
+      "iou": 0.3125,
+      "fiou": 0.28510146045211354,
+      "sec": 4.9
+    },
+    {
+      "id": "P1029_0016.png#2431",
+      "raw": "```json\n[\n    {\"bbox_2d\": [0, 693, 138, 1000], \"label\": \"The ship positioned closest to the bottom-left corner of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.0,
+        0.693,
+        0.138,
+        1.0
+      ],
+      "gt01": [
+        0.0,
+        0.69,
+        0.03,
+        0.73
+      ],
+      "iou": 0.041666666666666664,
+      "fiou": 0.02614471452798193,
+      "sec": 4.9
+    },
+    {
+      "id": "P2645_0011.png#6780",
+      "raw": "There is no object that matches the description. The image shows three large, circular storage tanks, but none of them are situated on the upper-left side of the image. The tank that is most to the left is the one in the upper-middle part of the image, and it is not fully visible because it is partially obscured by the tank to its right. The tank on the far left is not fully visible because it is cut off by the edge of the image.",
+      "tag": "parse_fail",
+      "pred01": null,
+      "gt01": [
+        0.55,
+        0.13,
+        0.77,
+        0.34
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 7.3
+    },
+    {
+      "id": "06286_0000.png#9284",
+      "raw": "```json\n[\n    {\"bbox_2d\": [848, 427, 927, 622], \"label\": \"The vehicle with the striking red color is parked on the driveway near the middle-right portion of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.848,
+        0.427,
+        0.927,
+        0.622
+      ],
+      "gt01": [
+        0.84,
+        0.43,
+        0.91,
+        0.62
+      ],
+      "iou": 0.7,
+      "fiou": 0.6960118168389955,
+      "sec": 5.5
+    },
+    {
+      "id": "08791_0000.png#12438",
+      "raw": "```json\n[\n    {\"bbox_2d\": [336, 330, 684, 625], \"label\": \"The airplane located at the center of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.336,
+        0.33,
+        0.684,
+        0.625
+      ],
+      "gt01": [
+        0.32,
+        0.35,
+        0.67,
+        0.62
+      ],
+      "iou": 0.8607594936708861,
+      "fiou": 0.8429613011777904,
+      "sec": 4.8
+    },
+    {
+      "id": "09085_0000.png#12807",
+      "raw": "```json\n[\n    {\"bbox_2d\": [357, 536, 998, 998], \"label\": \"The lower overpass ia situated near the bottom edge of the image similarly intersects the multilane roadway.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.357,
+        0.536,
+        0.998,
+        0.998
+      ],
+      "gt01": [
+        0.48,
+        0.5,
+        1.0,
+        0.99
+      ],
+      "iou": 0.746250382614019,
+      "fiou": 0.7447572600310352,
+      "sec": 6.1
+    },
+    {
+      "id": "P3107_0000.png#7637",
+      "raw": "```json\n[\n    {\"bbox_2d\": [513, 143, 583, 212], \"label\": \"The ground track field can be identified by its distinct rectangular shape with slightly curved ends located in the middle-right area of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.513,
+        0.143,
+        0.583,
+        0.212
+      ],
+      "gt01": [
+        0.96,
+        0.36,
+        1.0,
+        0.45
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 6.7
+    },
+    {
+      "id": "P2231_0008.png#5942",
+      "raw": "```json\n[\n    {\"bbox_2d\": [927, 67, 1000, 137], \"label\": \"The right-most plane on the tarmac is small.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.927,
+        0.067,
+        1.0,
+        0.137
+      ],
+      "gt01": [
+        0.91,
+        0.05,
+        1.0,
+        0.15
+      ],
+      "iou": 0.5818181818181818,
+      "fiou": 0.5677777777777776,
+      "sec": 5.8
+    },
+    {
+      "id": "08005_0000.png#11421",
+      "raw": "```json\n[\n    {\"bbox_2d\": [96, 54, 326, 242], \"label\": \"The storage tank in the top left corner of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.096,
+        0.054,
+        0.326,
+        0.242
+      ],
+      "gt01": [
+        0.14,
+        0.07,
+        0.31,
+        0.22
+      ],
+      "iou": 0.6,
+      "fiou": 0.589731729879741,
+      "sec": 5.1
+    },
+    {
+      "id": "06924_0000.png#10069",
+      "raw": "```json\n[\n    {\"bbox_2d\": [335, 497, 418, 652], \"label\": \"The other clearly demarcated rectangular court, which is situated a small distance below the first tennis court.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.335,
+        0.497,
+        0.418,
+        0.652
+      ],
+      "gt01": [
+        0.34,
+        0.5,
+        0.4,
+        0.63
+      ],
+      "iou": 0.6805555555555556,
+      "fiou": 0.606296152351341,
+      "sec": 5.4
+    },
+    {
+      "id": "P0352_0002.png#735",
+      "raw": "```json\n[\n    {\"bbox_2d\": [500, 12, 556, 54], \"label\": \"The small red vehicle located at the top-middle of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.5,
+        0.012,
+        0.556,
+        0.054
+      ],
+      "gt01": [
+        0.49,
+        0.0,
+        0.57,
+        0.06
+      ],
+      "iou": 0.5555555555555556,
+      "fiou": 0.49000000000000055,
+      "sec": 4.8
+    },
+    {
+      "id": "P1513_0033.png#4686",
+      "raw": "```json\n[\n    {\"bbox_2d\": [283, 222, 312, 252], \"label\": \"The small vehicle located towards the centre of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.283,
+        0.222,
+        0.312,
+        0.252
+      ],
+      "gt01": [
+        0.47,
+        0.58,
+        0.55,
+        0.67
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 4.8
+    },
+    {
+      "id": "07021_0000.png#10184",
+      "raw": "```json\n[\n    {\"bbox_2d\": [138, 823, 248, 931], \"label\": \"The windmill located near the bottom edge in the left half of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.138,
+        0.823,
+        0.248,
+        0.931
+      ],
+      "gt01": [
+        0.18,
+        0.88,
+        0.24,
+        0.92
+      ],
+      "iou": 0.24305555555555555,
+      "fiou": 0.20202020202020204,
+      "sec": 5.1
+    },
+    {
+      "id": "07522_0000.png#10827",
+      "raw": "```json\n[\n    {\"bbox_2d\": [648, 367, 998, 998], \"label\": \"The expressway service area is occupying a significant portion of the scenery.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.648,
+        0.367,
+        0.998,
+        0.998
+      ],
+      "gt01": [
+        0.35,
+        0.11,
+        1.0,
+        1.0
+      ],
+      "iou": 0.3878787878787879,
+      "fiou": 0.3817631806395851,
+      "sec": 5.1
+    },
+    {
+      "id": "P4151_0002.png#7688",
+      "raw": "```json\n[\n    {\"bbox_2d\": [738, 0, 933, 138], \"label\": \"The ship situated at the top-right of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.738,
+        0.0,
+        0.933,
+        0.138
+      ],
+      "gt01": [
+        0.74,
+        0.0,
+        0.94,
+        0.15
+      ],
+      "iou": 0.8928571428571429,
+      "fiou": 0.8797066983749511,
+      "sec": 4.7
+    },
+    {
+      "id": "10248_0000.png#14285",
+      "raw": "```json\n[\n    {\"bbox_2d\": [182, 156, 998, 825], \"label\": \"The large bridge running horizontally across the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.182,
+        0.156,
+        0.998,
+        0.825
+      ],
+      "gt01": [
+        0.18,
+        0.13,
+        1.0,
+        1.0
+      ],
+      "iou": 0.7613636363636364,
+      "fiou": 0.7652144659377628,
+      "sec": 4.9
+    },
+    {
+      "id": "06295_0000.png#9296",
+      "raw": "```json\n[\n    {\"bbox_2d\": [517, 697, 998, 989], \"label\": \"The bottom-most tennis court in the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.517,
+        0.697,
+        0.998,
+        0.989
+      ],
+      "gt01": [
+        0.74,
+        0.8,
+        1.0,
+        1.0
+      ],
+      "iou": 0.36072144288577157,
+      "fiou": 0.3393555571020946,
+      "sec": 5.0
+    },
+    {
+      "id": "P1557_0044.png#4729",
+      "raw": "```json\n[\n    {\"bbox_2d\": [698, 0, 998, 156], \"label\": \"The small bridge observed in the image is situated in the top-right section of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.698,
+        0.0,
+        0.998,
+        0.156
+      ],
+      "gt01": [
+        0.69,
+        0.09,
+        0.78,
+        0.18
+      ],
+      "iou": 0.12972972972972974,
+      "fiou": 0.10935984481086332,
+      "sec": 5.1
+    },
+    {
+      "id": "P1022_0007.png#2365",
+      "raw": "```json\n[\n    {\"bbox_2d\": [161, 183, 202, 248], \"label\": \"The small ship located near the top-left corner of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.161,
+        0.183,
+        0.202,
+        0.248
+      ],
+      "gt01": [
+        0.16,
+        0.18,
+        0.19,
+        0.24
+      ],
+      "iou": 0.7,
+      "fiou": 0.5878378378378377,
+      "sec": 4.9
+    },
+    {
+      "id": "P1471_0047.png#4435",
+      "raw": "```json\n[\n    {\"bbox_2d\": [148, 630, 365, 748], \"label\": \"The large vehicle near the bottom-left of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.148,
+        0.63,
+        0.365,
+        0.748
+      ],
+      "gt01": [
+        0.16,
+        0.66,
+        0.37,
+        0.72
+      ],
+      "iou": 0.5017064846416383,
+      "fiou": 0.47479348413494904,
+      "sec": 4.8
+    },
+    {
+      "id": "11372_0000.png#15715",
+      "raw": "```json\n[\n    {\"bbox_2d\": [832, 712, 910, 748], \"label\": \"The small vehicle is near the middle-right of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.832,
+        0.712,
+        0.91,
+        0.748
+      ],
+      "gt01": [
+        0.91,
+        0.48,
+        0.95,
+        0.53
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 4.8
+    },
+    {
+      "id": "10572_0000.png#14695",
+      "raw": "The provided sentence is incorrect. The harbor is not located at the top-left of the image. In the image, the harbor is located at the bottom-right corner, where the white boats are docked. The top-left of the image is mostly empty dark space with a thin white line near the top edge. Therefore, there is no bounding box coordinate for the harbor at the top-left, as it does not exist in that location.",
+      "tag": "parse_fail",
+      "pred01": null,
+      "gt01": [
+        0.0,
+        0.01,
+        0.62,
+        0.04
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 6.9
+    },
+    {
+      "id": "10621_0000.png#14769",
+      "raw": "```json\n[\n    {\"bbox_2d\": [677, 877, 998, 1000], \"label\": \"The dam is positioned in the bottom right corner of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.677,
+        0.877,
+        0.998,
+        1.0
+      ],
+      "gt01": [
+        0.92,
+        0.7,
+        0.99,
+        0.88
+      ],
+      "iou": 0.013961605584642234,
+      "fiou": 0.004048348852003935,
+      "sec": 4.9
+    },
+    {
+      "id": "09488_0000.png#13316",
+      "raw": "```json\n[\n    {\"bbox_2d\": [10, 387, 998, 787], \"label\": \"The airport is visible as a large, elongated area with a runway, located at the bottom of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.01,
+        0.387,
+        0.998,
+        0.787
+      ],
+      "gt01": [
+        0.1,
+        0.44,
+        1.0,
+        0.84
+      ],
+      "iou": 0.7192096597145994,
+      "fiou": 0.702457652718477,
+      "sec": 5.4
+    },
+    {
+      "id": "07764_0000.png#11131",
+      "raw": "```json\n[\n    {\"bbox_2d\": [848, 31, 998, 472], \"label\": \"The tennis court located on the right edge of the image is without any trees nearby.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.848,
+        0.031,
+        0.998,
+        0.472
+      ],
+      "gt01": [
+        0.85,
+        0.04,
+        1.0,
+        0.46
+      ],
+      "iou": 0.9555555555555556,
+      "fiou": 0.9278996865203765,
+      "sec": 5.1
+    },
+    {
+      "id": "P0027_0006.png#137",
+      "raw": "```json\n[\n    {\"bbox_2d\": [478, 807, 523, 838], \"label\": \"The ship situated at the bottom part of a bottom-middle harbor.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.478,
+        0.807,
+        0.523,
+        0.838
+      ],
+      "gt01": [
+        0.48,
+        0.81,
+        0.52,
+        0.83
+      ],
+      "iou": 0.75,
+      "fiou": 0.5734767025089593,
+      "sec": 4.9
+    },
+    {
+      "id": "P1809_0111.png#5265",
+      "raw": "```json\n[\n    {\"bbox_2d\": [234, 296, 268, 345], \"label\": \"The vehicle located in the middle-left section of the image on the diagonal road.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.234,
+        0.296,
+        0.268,
+        0.345
+      ],
+      "gt01": [
+        0.26,
+        0.6,
+        0.29,
+        0.64
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 5.1
+    },
+    {
+      "id": "P0179_0071.png#444",
+      "raw": "```json\n[\n    {\"bbox_2d\": [351, 222, 548, 484], \"label\": \"The plane situated on the far right side.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.351,
+        0.222,
+        0.548,
+        0.484
+      ],
+      "gt01": [
+        0.35,
+        0.22,
+        0.55,
+        0.49
+      ],
+      "iou": 0.9642857142857143,
+      "fiou": 0.9558148148148149,
+      "sec": 4.7
+    },
+    {
+      "id": "08224_0000.png#11708",
+      "raw": "```json\n[\n    {\"bbox_2d\": [742, 530, 1000, 900], \"label\": \"The right-most airplane in the image .\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.742,
+        0.53,
+        1.0,
+        0.9
+      ],
+      "gt01": [
+        0.77,
+        0.59,
+        1.0,
+        0.89
+      ],
+      "iou": 0.7251461988304093,
+      "fiou": 0.722815839094909,
+      "sec": 4.7
+    },
+    {
+      "id": "07305_0000.png#10559",
+      "raw": "```json\n[\n    {\"bbox_2d\": [12, 347, 234, 550], \"label\": \"The windmill is located in the middle-left part of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.012,
+        0.347,
+        0.234,
+        0.55
+      ],
+      "gt01": [
+        0.11,
+        0.46,
+        0.19,
+        0.56
+      ],
+      "iou": 0.18292682926829268,
+      "fiou": 0.156979025857934,
+      "sec": 4.9
+    },
+    {
+      "id": "07142_0000.png#10337",
+      "raw": "```json\n[\n    {\"bbox_2d\": [586, 242, 962, 718], \"label\": \"The small airplane visible in the image has a white and blue color scheme.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.586,
+        0.242,
+        0.962,
+        0.718
+      ],
+      "gt01": [
+        0.58,
+        0.32,
+        0.91,
+        0.71
+      ],
+      "iou": 0.694006309148265,
+      "fiou": 0.6969048511990117,
+      "sec": 5.1
+    },
+    {
+      "id": "P2789_0053.png#7372",
+      "raw": "```json\n[\n    {\"bbox_2d\": [896, 31, 961, 166], \"label\": \"The ship docked at the top right of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.896,
+        0.031,
+        0.961,
+        0.166
+      ],
+      "gt01": [
+        0.89,
+        0.03,
+        0.97,
+        0.16
+      ],
+      "iou": 0.7368421052631579,
+      "fiou": 0.7771084337349395,
+      "sec": 3.5
+    },
+    {
+      "id": "P2230_0003.png#5932",
+      "raw": "```json\n[\n    {\"bbox_2d\": [97, 325, 131, 345], \"label\": \"The small vehicle is on the middle-left.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.097,
+        0.325,
+        0.131,
+        0.345
+      ],
+      "gt01": [
+        0.09,
+        0.33,
+        0.13,
+        0.34
+      ],
+      "iou": 0.5714285714285714,
+      "fiou": 0.4400000000000011,
+      "sec": 4.6
+    },
+    {
+      "id": "P5789_1972.png#8103",
+      "raw": "```json\n[\n    {\"bbox_2d\": [107, 238, 242, 321], \"label\": \"The plane positioned at the very top of the image, partially cut off by the top edge.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.107,
+        0.238,
+        0.242,
+        0.321
+      ],
+      "gt01": [
+        0.23,
+        0.0,
+        0.35,
+        0.06
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 5.2
+    },
+    {
+      "id": "P3466_0003.png#7655",
+      "raw": "```json\n[\n    {\"bbox_2d\": [248, 856, 283, 896], \"label\": \"The small vehicle located at the bottom edge of the image sits isolated from others.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.248,
+        0.856,
+        0.283,
+        0.896
+      ],
+      "gt01": [
+        0.26,
+        0.93,
+        0.28,
+        0.96
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 5.1
+    },
+    {
+      "id": "10055_0000.png#14022",
+      "raw": "```json\n[\n    {\"bbox_2d\": [866, 508, 1000, 725], \"label\": \"The tennis court is located on the right side of the image and has a distinctive blue playing surface.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.866,
+        0.508,
+        1.0,
+        0.725
+      ],
+      "gt01": [
+        0.9,
+        0.54,
+        0.96,
+        0.68
+      ],
+      "iou": 0.3409090909090909,
+      "fiou": 0.28887818969667767,
+      "sec": 5.3
+    },
+    {
+      "id": "11115_0000.png#15380",
+      "raw": "```json\n[\n    {\"bbox_2d\": [168, 513, 225, 556], \"label\": \"The small vehicle located on the horizontal road near the top left quadrant of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.168,
+        0.513,
+        0.225,
+        0.556
+      ],
+      "gt01": [
+        0.12,
+        0.08,
+        0.17,
+        0.15
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 5.2
+    },
+    {
+      "id": "P2044_0000.png#5769",
+      "raw": "```json\n[\n    {\"bbox_2d\": [519, 857, 678, 989], \"label\": \"The basketball court is situated to the left of the other court at the bottom of the image, featuring visible court lines and hoops.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.519,
+        0.857,
+        0.678,
+        0.989
+      ],
+      "gt01": [
+        0.52,
+        0.88,
+        0.65,
+        1.0
+      ],
+      "iou": 0.6666666666666666,
+      "fiou": 0.6320813631902932,
+      "sec": 6.1
+    },
+    {
+      "id": "06982_0000.png#10135",
+      "raw": "```json\n[\n    {\"bbox_2d\": [500, 684, 668, 988], \"label\": \"The vehicle situated at the bottom middle of the image is on a section of the road that curves slightly.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.5,
+        0.684,
+        0.668,
+        0.988
+      ],
+      "gt01": [
+        0.56,
+        0.68,
+        0.63,
+        0.79
+      ],
+      "iou": 0.16666666666666666,
+      "fiou": 0.14449291166848408,
+      "sec": 5.6
+    },
+    {
+      "id": "P1007_0016.png#2291",
+      "raw": "```json\n[\n    {\"bbox_2d\": [422, 792, 530, 998], \"label\": \"The harbor situated in the bottom-middle of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.422,
+        0.792,
+        0.53,
+        0.998
+      ],
+      "gt01": [
+        0.36,
+        0.79,
+        0.52,
+        1.0
+      ],
+      "iou": 0.6111111111111112,
+      "fiou": 0.5661245092540662,
+      "sec": 5.3
+    },
+    {
+      "id": "P1508_0028.png#4644",
+      "raw": "```json\n[\n    {\"bbox_2d\": [183, 446, 433, 712], \"label\": \"The helicopter is located at the centre of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.183,
+        0.446,
+        0.433,
+        0.712
+      ],
+      "gt01": [
+        0.26,
+        0.46,
+        0.43,
+        0.71
+      ],
+      "iou": 0.6666666666666666,
+      "fiou": 0.639097744360902,
+      "sec": 4.8
+    },
+    {
+      "id": "07278_0000.png#10518",
+      "raw": "```json\n[\n    {\"bbox_2d\": [452, 119, 998, 810], \"label\": \"The baseball field is positioned on the right side of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.452,
+        0.119,
+        0.998,
+        0.81
+      ],
+      "gt01": [
+        0.8,
+        0.47,
+        1.0,
+        0.78
+      ],
+      "iou": 0.17142857142857143,
+      "fiou": 0.1624213428736246,
+      "sec": 4.9
+    },
+    {
+      "id": "11341_0000.png#15668",
+      "raw": "```json\n[\n    {\"bbox_2d\": [698, 166, 948, 387], \"label\": \"The storage tank located at the top-right corner of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.698,
+        0.166,
+        0.948,
+        0.387
+      ],
+      "gt01": [
+        0.73,
+        0.17,
+        0.93,
+        0.37
+      ],
+      "iou": 0.7374581939799331,
+      "fiou": 0.7239819004524889,
+      "sec": 5.0
+    },
+    {
+      "id": "10835_0000.png#15033",
+      "raw": "```json\n[\n    {\"bbox_2d\": [906, 36, 988, 188], \"label\": \"The vehicle positioned directly below the topmost vehicle in the top-right area exhibits a white color and is also parked.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.906,
+        0.036,
+        0.988,
+        0.188
+      ],
+      "gt01": [
+        0.92,
+        0.13,
+        0.97,
+        0.19
+      ],
+      "iou": 0.2916666666666667,
+      "fiou": 0.23081821076090397,
+      "sec": 5.7
+    },
+    {
+      "id": "P1377_0062.png#3610",
+      "raw": "```json\n[\n    {\"bbox_2d\": [698, 917, 744, 958], \"label\": \"The small vehicle is located at the bottom-right part of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.698,
+        0.917,
+        0.744,
+        0.958
+      ],
+      "gt01": [
+        0.7,
+        0.91,
+        0.74,
+        0.95
+      ],
+      "iou": 0.6666666666666666,
+      "fiou": 0.6094182825484759,
+      "sec": 5.1
+    },
+    {
+      "id": "10438_0000.png#14527",
+      "raw": "```json\n[\n    {\"bbox_2d\": [484, 370, 998, 988], \"label\": \"The small stadium is located in the center-right portion of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.484,
+        0.37,
+        0.998,
+        0.988
+      ],
+      "gt01": [
+        0.44,
+        0.32,
+        0.98,
+        1.0
+      ],
+      "iou": 0.819433817903596,
+      "fiou": 0.8102261553588985,
+      "sec": 5.2
+    },
+    {
+      "id": "P0822_0003.png#1530",
+      "raw": "```json\n[\n    {\"bbox_2d\": [0, 258, 85, 652], \"label\": \"The tennis court at the bottom-most part of the image is furthest south.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.0,
+        0.258,
+        0.085,
+        0.652
+      ],
+      "gt01": [
+        0.1,
+        0.27,
+        0.31,
+        0.67
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 5.0
+    },
+    {
+      "id": "P2462_0019.png#6384",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "pred01": null,
+      "gt01": [
+        0.26,
+        0.0,
+        0.27,
+        0.0
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 2.5
+    },
+    {
+      "id": "07078_0000.png#10244",
+      "raw": "```json\n[\n    {\"bbox_2d\": [276, 103, 677, 345], \"label\": \"The overpass is located towards the upper part of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.276,
+        0.103,
+        0.677,
+        0.345
+      ],
+      "gt01": [
+        0.3,
+        0.24,
+        0.4,
+        0.31
+      ],
+      "iou": 0.08585365853658537,
+      "fiou": 0.07213371529853056,
+      "sec": 5.1
+    },
+    {
+      "id": "P2645_0055.png#6835",
+      "raw": "```json\n[\n    {\"bbox_2d\": [628, 323, 1000, 652], \"label\": \"The ship at the bottom-right corner of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.628,
+        0.323,
+        1.0,
+        0.652
+      ],
+      "gt01": [
+        0.61,
+        0.35,
+        1.0,
+        0.69
+      ],
+      "iou": 0.7780713342140027,
+      "fiou": 0.7875830739463281,
+      "sec": 4.9
+    },
+    {
+      "id": "P0998_0006.png#2177",
+      "raw": "```json\n[\n    {\"bbox_2d\": [0, 652, 788, 1000], \"label\": \"The small harbor with docks extending into the water is situated at the bottom of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.0,
+        0.652,
+        0.788,
+        1.0
+      ],
+      "gt01": [
+        0.02,
+        0.73,
+        0.35,
+        1.0
+      ],
+      "iou": 0.33055555555555555,
+      "fiou": 0.32491685629266587,
+      "sec": 5.2
+    },
+    {
+      "id": "11408_0000.png#15769",
+      "raw": "```json\n[\n    {\"bbox_2d\": [0, 44, 300, 585], \"label\": \"The overpass is located on the left side of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.0,
+        0.044,
+        0.3,
+        0.585
+      ],
+      "gt01": [
+        0.2,
+        0.4,
+        0.33,
+        0.51
+      ],
+      "iou": 0.07581849511774842,
+      "fiou": 0.06642512077294685,
+      "sec": 4.8
+    },
+    {
+      "id": "P0173_0000.png#338",
+      "raw": "```json\n[\n    {\"bbox_2d\": [708, 283, 884, 492], \"label\": \"The plane with a bright body located near the bottom edge of the image and wings extending towards the right.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.708,
+        0.283,
+        0.884,
+        0.492
+      ],
+      "gt01": [
+        0.08,
+        0.6,
+        0.39,
+        0.92
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 5.5
+    },
+    {
+      "id": "05991_0000.png#8925",
+      "raw": "```json\n[\n    {\"bbox_2d\": [10, 306, 101, 362], \"label\": \"A vehicle in the top-left quadrant.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.01,
+        0.306,
+        0.101,
+        0.362
+      ],
+      "gt01": [
+        0.17,
+        0.25,
+        0.2,
+        0.29
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 4.7
+    },
+    {
+      "id": "09311_0000.png#13092",
+      "raw": "```json\n[\n    {\"bbox_2d\": [600, 712, 998, 998], \"label\": \"The expressway toll station is positioned at the bottom-right part of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.6,
+        0.712,
+        0.998,
+        0.998
+      ],
+      "gt01": [
+        0.78,
+        0.75,
+        1.0,
+        0.96
+      ],
+      "iou": 0.4113821138211382,
+      "fiou": 0.4007072333870175,
+      "sec": 5.4
+    },
+    {
+      "id": "P5789_2963.png#8215",
+      "raw": "```json\n[\n    {\"bbox_2d\": [0, 0, 202, 156], \"label\": \"The bridge located in the top left of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.0,
+        0.0,
+        0.202,
+        0.156
+      ],
+      "gt01": [
+        0.25,
+        0.0,
+        0.3,
+        0.11
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 4.7
+    },
+    {
+      "id": "09696_0000.png#13579",
+      "raw": "```json\n[\n    {\"bbox_2d\": [908, 192, 998, 278], \"label\": \"The dark-colored vehicle is located in the top-right corner of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.908,
+        0.192,
+        0.998,
+        0.278
+      ],
+      "gt01": [
+        0.92,
+        0.2,
+        1.0,
+        0.26
+      ],
+      "iou": 0.63,
+      "fiou": 0.595419847328244,
+      "sec": 5.2
+    },
+    {
+      "id": "08014_0000.png#11435",
+      "raw": "```json\n[\n    {\"bbox_2d\": [33, 157, 852, 536], \"label\": \"The top harbor can be recognized by its pier-like structures extending into the water body.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.033,
+        0.157,
+        0.852,
+        0.536
+      ],
+      "gt01": [
+        0.03,
+        0.05,
+        0.87,
+        0.55
+      ],
+      "iou": 0.7467128027681661,
+      "fiou": 0.73905,
+      "sec": 5.3
+    },
+    {
+      "id": "06250_0000.png#9231",
+      "raw": "```json\n[\n    {\"bbox_2d\": [100, 100, 387, 600], \"label\": \"The single wind turbine is noticeable in the center of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.1,
+        0.1,
+        0.387,
+        0.6
+      ],
+      "gt01": [
+        0.29,
+        0.51,
+        0.41,
+        0.64
+      ],
+      "iou": 0.0686641697877653,
+      "fiou": 0.0580567932433331,
+      "sec": 5.0
+    },
+    {
+      "id": "P1007_0010.png#2278",
+      "raw": "```json\n[\n    {\"bbox_2d\": [817, 442, 867, 500], \"label\": \"The unique small ship is present towards the middle-right area of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.817,
+        0.442,
+        0.867,
+        0.5
+      ],
+      "gt01": [
+        0.81,
+        0.44,
+        0.85,
+        0.5
+      ],
+      "iou": 0.5714285714285714,
+      "fiou": 0.5652687536916727,
+      "sec": 5.2
+    },
+    {
+      "id": "09349_0000.png#13146",
+      "raw": "```json\n[\n    {\"bbox_2d\": [930, 780, 998, 922], \"label\": \"The windmill is positioned at the bottom right corner in the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.93,
+        0.78,
+        0.998,
+        0.922
+      ],
+      "gt01": [
+        0.72,
+        0.79,
+        0.79,
+        0.89
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 5.2
+    },
+    {
+      "id": "06590_0000.png#9642",
+      "raw": "```json\n[\n    {\"bbox_2d\": [834, 382, 1000, 714], \"label\": \"The tennis court located at the right edge of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.834,
+        0.382,
+        1.0,
+        0.714
+      ],
+      "gt01": [
+        0.83,
+        0.38,
+        1.0,
+        0.7
+      ],
+      "iou": 0.9705882352941176,
+      "fiou": 0.9306113814258513,
+      "sec": 3.7
+    },
+    {
+      "id": "P1065_0030.png#2529",
+      "raw": "```json\n[\n    {\"bbox_2d\": [799, 189, 882, 297], \"label\": \"The small, rectangular-shaped swimming pool is located in the top-right area of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.799,
+        0.189,
+        0.882,
+        0.297
+      ],
+      "gt01": [
+        0.8,
+        0.18,
+        0.89,
+        0.29
+      ],
+      "iou": 0.7674418604651163,
+      "fiou": 0.7826497826497822,
+      "sec": 5.4
+    },
+    {
+      "id": "08281_0000.png#11780",
+      "raw": "```json\n[\n    {\"bbox_2d\": [775, 506, 998, 562], \"label\": \"The large vehicle is situated near the middle-right side of the upper bridge.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.775,
+        0.506,
+        0.998,
+        0.562
+      ],
+      "gt01": [
+        0.79,
+        0.51,
+        0.99,
+        0.56
+      ],
+      "iou": 0.9130434782608695,
+      "fiou": 0.800768737988469,
+      "sec": 5.0
+    },
+    {
+      "id": "P2598_0024.png#6623",
+      "raw": "```json\n[\n    {\"bbox_2d\": [826, 935, 922, 1000], \"label\": \"The vehicle located on the bottom right on a road curvature.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.826,
+        0.935,
+        0.922,
+        1.0
+      ],
+      "gt01": [
+        0.67,
+        0.75,
+        0.76,
+        0.79
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 4.9
+    },
+    {
+      "id": "P0499_0005.png#968",
+      "raw": "```json\n[\n    {\"bbox_2d\": [62, 595, 138, 667], \"label\": \"The vehicle located on the left side of the image, which is the bottom-most among the parked vehicles.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.062,
+        0.595,
+        0.138,
+        0.667
+      ],
+      "gt01": [
+        0.06,
+        0.59,
+        0.14,
+        0.67
+      ],
+      "iou": 0.8888888888888888,
+      "fiou": 0.8549999999999999,
+      "sec": 5.3
+    },
+    {
+      "id": "P2781_0027.png#7329",
+      "raw": "```json\n[\n    {\"bbox_2d\": [212, 103, 280, 183], \"label\": \"The small white vehicle is located on the road near the top-left corner of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.212,
+        0.103,
+        0.28,
+        0.183
+      ],
+      "gt01": [
+        0.19,
+        0.09,
+        0.28,
+        0.18
+      ],
+      "iou": 0.72,
+      "fiou": 0.6305394990366091,
+      "sec": 5.2
+    },
+    {
+      "id": "10501_0000.png#14615",
+      "raw": "```json\n[\n    {\"bbox_2d\": [700, 732, 944, 998], \"label\": \"The vehicle that is located at the bottom-right of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.7,
+        0.732,
+        0.944,
+        0.998
+      ],
+      "gt01": [
+        0.25,
+        0.67,
+        0.42,
+        0.73
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 4.8
+    },
+    {
+      "id": "10840_0000.png#15038",
+      "raw": "```json\n[\n    {\"bbox_2d\": [0, 524, 120, 774], \"label\": \"The wind turbine can be identified in the bottom-left quadrant of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.0,
+        0.524,
+        0.12,
+        0.774
+      ],
+      "gt01": [
+        0.06,
+        0.75,
+        0.26,
+        0.86
+      ],
+      "iou": 0.03690685413005272,
+      "fiou": 0.028481012658227875,
+      "sec": 5.1
+    },
+    {
+      "id": "P1463_0047.png#4376",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "pred01": null,
+      "gt01": [
+        0.08,
+        0.0,
+        0.15,
+        0.04
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 2.5
+    },
+    {
+      "id": "11172_0000.png#15451",
+      "raw": "```json\n[\n    {\"bbox_2d\": [584, 478, 998, 998], \"label\": \"The stadium in the image has an unusual shape, occupying the bottom right corner.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.584,
+        0.478,
+        0.998,
+        0.998
+      ],
+      "gt01": [
+        0.59,
+        0.47,
+        0.99,
+        1.0
+      ],
+      "iou": 0.9366379310344828,
+      "fiou": 0.9485589201021525,
+      "sec": 5.1
+    },
+    {
+      "id": "P2239_0000.png#5959",
+      "raw": "```json\n[\n\t{\"bbox_2d\": [24, 348, 384, 600], \"label\": \"There is a large plane positioned towards the left section of the frame.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.024,
+        0.348,
+        0.384,
+        0.6
+      ],
+      "gt01": [
+        0.11,
+        0.36,
+        0.4,
+        0.59
+      ],
+      "iou": 0.6653465346534654,
+      "fiou": 0.667584745762712,
+      "sec": 4.9
+    },
+    {
+      "id": "P2789_0076.png#7390",
+      "raw": "```json\n[\n    {\"bbox_2d\": [494, 677, 627, 772], \"label\": \"The ship located near the top edge of the dock.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.494,
+        0.677,
+        0.627,
+        0.772
+      ],
+      "gt01": [
+        0.48,
+        0.65,
+        0.62,
+        0.76
+      ],
+      "iou": 0.6176470588235294,
+      "fiou": 0.5949820788530462,
+      "sec": 4.8
+    },
+    {
+      "id": "10108_0000.png#14088",
+      "raw": "```json\n[\n    {\"bbox_2d\": [0, 437, 688, 988], \"label\": \"The bridge curving adjacent to the road on the right side of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.0,
+        0.437,
+        0.688,
+        0.988
+      ],
+      "gt01": [
+        0.84,
+        0.39,
+        1.0,
+        0.82
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 5.0
+    },
+    {
+      "id": "P0019_0087.png#107",
+      "raw": "```json\n[\n    {\"bbox_2d\": [693, 286, 800, 692], \"label\": \"The harbor at the middle-right edge of the image features a wider dock area and is surrounded by land with vegetation.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.693,
+        0.286,
+        0.8,
+        0.692
+      ],
+      "gt01": [
+        0.68,
+        0.28,
+        0.81,
+        0.69
+      ],
+      "iou": 0.8367346938775511,
+      "fiou": 0.8077886160630872,
+      "sec": 5.6
+    },
+    {
+      "id": "06516_0000.png#9554",
+      "raw": "```json\n[\n    {\"bbox_2d\": [298, 492, 373, 563], \"label\": \"The storage tank near the center-left of the image, positioned above the other tank.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.298,
+        0.492,
+        0.373,
+        0.563
+      ],
+      "gt01": [
+        0.31,
+        0.49,
+        0.36,
+        0.55
+      ],
+      "iou": 0.65625,
+      "fiou": 0.5345622119815674,
+      "sec": 5.1
+    },
+    {
+      "id": "P0814_0005.png#1502",
+      "raw": "```json\n[\n    {\"bbox_2d\": [74, 694, 124, 777], \"label\": \"The vehicle parked at the northernmost edge of the bottom-left parking lot area.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.074,
+        0.694,
+        0.124,
+        0.777
+      ],
+      "gt01": [
+        0.07,
+        0.69,
+        0.12,
+        0.78
+      ],
+      "iou": 1.0,
+      "fiou": 0.7901490066225167,
+      "sec": 5.1
+    },
+    {
+      "id": "P0795_0017.png#1467",
+      "raw": "```json\n[\n    {\"bbox_2d\": [363, 0, 644, 151], \"label\": \"The ship positioned at the top-middle of the image and is the top-most ship within the group.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.363,
+        0.0,
+        0.644,
+        0.151
+      ],
+      "gt01": [
+        0.38,
+        0.04,
+        0.64,
+        0.15
+      ],
+      "iou": 0.6982758620689655,
+      "fiou": 0.6740354929179138,
+      "sec": 5.3
+    },
+    {
+      "id": "08624_0000.png#12213",
+      "raw": "```json\n[\n\t{\"bbox_2d\": [576, 832, 998, 1000], \"label\": \"The small ship is at the bottom edge of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.576,
+        0.832,
+        0.998,
+        1.0
+      ],
+      "gt01": [
+        0.56,
+        0.82,
+        0.99,
+        1.0
+      ],
+      "iou": 0.8852459016393442,
+      "fiou": 0.8832672965559281,
+      "sec": 4.9
+    },
+    {
+      "id": "07690_0000.png#11042",
+      "raw": "```json\n[\n    {\"bbox_2d\": [296, 750, 750, 1000], \"label\": \"The basketball court is located at the lower part of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.296,
+        0.75,
+        0.75,
+        1.0
+      ],
+      "gt01": [
+        0.33,
+        0.81,
+        0.69,
+        1.0
+      ],
+      "iou": 0.6187290969899666,
+      "fiou": 0.6026431718061671,
+      "sec": 5.2
+    },
+    {
+      "id": "P1398_0016.png#4136",
+      "raw": "```json\n[\n    {\"bbox_2d\": [612, 697, 998, 998], \"label\": \"The plane is positioned on dry terrain at bottom-right of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.612,
+        0.697,
+        0.998,
+        0.998
+      ],
+      "gt01": [
+        0.59,
+        0.11,
+        1.0,
+        0.7
+      ],
+      "iou": 0.010752688172043012,
+      "fiou": 0.0032443518020441125,
+      "sec": 5.0
+    },
+    {
+      "id": "07378_0000.png#10646",
+      "raw": "```json\n[\n    {\"bbox_2d\": [0, 0, 998, 1000], \"label\": \"The aerial image showcases a baseball field characterized by its diamond-shaped dirt infield and surrounding green outfield.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.0,
+        0.0,
+        0.998,
+        1.0
+      ],
+      "gt01": [
+        0.13,
+        0.28,
+        0.88,
+        1.0
+      ],
+      "iou": 0.5438682482109597,
+      "fiou": 0.5410821643286573,
+      "sec": 5.1
+    },
+    {
+      "id": "P5070_0103.png#7896",
+      "raw": "```json\n[\n    {\"bbox_2d\": [188, 27, 267, 133], \"label\": \"The small vehicle is located on the top left of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.188,
+        0.027,
+        0.267,
+        0.133
+      ],
+      "gt01": [
+        0.17,
+        0.02,
+        0.27,
+        0.14
+      ],
+      "iou": 0.6923076923076923,
+      "fiou": 0.6978333333333335,
+      "sec": 4.8
+    },
+    {
+      "id": "P0348_0004.png#725",
+      "raw": "```json\n[\n    {\"bbox_2d\": [232, 357, 362, 427], \"label\": \"The small ship is situated at the end of the pier on the waterbody.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.232,
+        0.357,
+        0.362,
+        0.427
+      ],
+      "gt01": [
+        0.23,
+        0.35,
+        0.36,
+        0.43
+      ],
+      "iou": 0.8888888888888888,
+      "fiou": 0.8500948766603417,
+      "sec": 5.1
+    },
+    {
+      "id": "P2093_0011.png#5802",
+      "raw": "```json\n[\n    {\"bbox_2d\": [0, 444, 52, 634], \"label\": \"The large vehicle is located near the left edge of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.0,
+        0.444,
+        0.052,
+        0.634
+      ],
+      "gt01": [
+        0.0,
+        0.45,
+        0.04,
+        0.63
+      ],
+      "iou": 0.7916666666666666,
+      "fiou": 0.7287449392712552,
+      "sec": 3.5
+    },
+    {
+      "id": "P4151_0031.png#7717",
+      "raw": "```json\n[\n    {\"bbox_2d\": [677, 738, 784, 823], \"label\": \"The small-vehicle positioned closest to the bottom right corner of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.677,
+        0.738,
+        0.784,
+        0.823
+      ],
+      "gt01": [
+        0.66,
+        0.73,
+        0.75,
+        0.83
+      ],
+      "iou": 0.5255474452554745,
+      "fiou": 0.521867115222876,
+      "sec": 5.1
+    },
+    {
+      "id": "P2689_0032.png#6898",
+      "raw": "```json\n[\n    {\"bbox_2d\": [404, 75, 507, 204], \"label\": \"The plane located on the top-middle of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.404,
+        0.075,
+        0.507,
+        0.204
+      ],
+      "gt01": [
+        0.38,
+        0.07,
+        0.54,
+        0.2
+      ],
+      "iou": 0.6554621848739496,
+      "fiou": 0.6069677541014517,
+      "sec": 4.7
+    },
+    {
+      "id": "P1066_0010.png#2553",
+      "raw": "```json\n[\n    {\"bbox_2d\": [0, 730, 488, 1000], \"label\": \"The small harbor located on the bottom end of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.0,
+        0.73,
+        0.488,
+        1.0
+      ],
+      "gt01": [
+        0.23,
+        0.34,
+        1.0,
+        0.85
+      ],
+      "iou": 0.06875612144955925,
+      "fiou": 0.06273556231003038,
+      "sec": 4.8
+    },
+    {
+      "id": "11005_0000.png#15247",
+      "raw": "```json\n[\n    {\"bbox_2d\": [823, 148, 1000, 378], \"label\": \"The largest storage tank situated on the right-most edge of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.823,
+        0.148,
+        1.0,
+        0.378
+      ],
+      "gt01": [
+        0.86,
+        0.17,
+        1.0,
+        0.37
+      ],
+      "iou": 0.6907894736842105,
+      "fiou": 0.687791697371653,
+      "sec": 5.0
+    },
+    {
+      "id": "P2330_0050.png#6132",
+      "raw": "```json\n[\n    {\"bbox_2d\": [398, 371, 484, 426], \"label\": \"The ship found in the center of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.398,
+        0.371,
+        0.484,
+        0.426
+      ],
+      "gt01": [
+        0.4,
+        0.37,
+        0.49,
+        0.43
+      ],
+      "iou": 0.9,
+      "fiou": 0.8384754990925589,
+      "sec": 4.7
+    },
+    {
+      "id": "06826_0000.png#9938",
+      "raw": "```json\n[\n    {\"bbox_2d\": [0, 542, 492, 658], \"label\": \"The bridge towards the middle-left of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.0,
+        0.542,
+        0.492,
+        0.658
+      ],
+      "gt01": [
+        0.04,
+        0.6,
+        0.11,
+        0.64
+      ],
+      "iou": 0.06153846153846154,
+      "fiou": 0.049060835435940614,
+      "sec": 4.6
+    },
+    {
+      "id": "08449_0000.png#11992",
+      "raw": "```json\n[\n    {\"bbox_2d\": [517, 179, 988, 732], \"label\": \"The larger airplane positioned towards the middle-right portion of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.517,
+        0.179,
+        0.988,
+        0.732
+      ],
+      "gt01": [
+        0.52,
+        0.19,
+        0.98,
+        0.73
+      ],
+      "iou": 0.9616815476190477,
+      "fiou": 0.9536863201299227,
+      "sec": 4.9
+    },
+    {
+      "id": "11196_0000.png#15484",
+      "raw": "```json\n[\n    {\"bbox_2d\": [580, 222, 756, 288], \"label\": \"The vehicle at the top part of the road has a small size.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.58,
+        0.222,
+        0.756,
+        0.288
+      ],
+      "gt01": [
+        0.57,
+        0.22,
+        0.72,
+        0.28
+      ],
+      "iou": 0.660377358490566,
+      "fiou": 0.6498079385403333,
+      "sec": 5.0
+    },
+    {
+      "id": "P2488_0014.png#6408",
+      "raw": "There are none.",
+      "tag": "parse_fail",
+      "pred01": null,
+      "gt01": [
+        0.96,
+        0.76,
+        0.98,
+        0.78
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 2.5
+    },
+    {
+      "id": "P1342_0049.png#3368",
+      "raw": "```json\n[\n    {\"bbox_2d\": [436, 302, 683, 468], \"label\": \"The small ground track and field has an oval shape with visible internal sports areas and running lanes.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.436,
+        0.302,
+        0.683,
+        0.468
+      ],
+      "gt01": [
+        0.41,
+        0.28,
+        0.7,
+        0.48
+      ],
+      "iou": 0.7142857142857143,
+      "fiou": 0.7069310344827591,
+      "sec": 5.3
+    },
+    {
+      "id": "P0300_0002.png#599",
+      "raw": "```json\n[\n    {\"bbox_2d\": [0, 129, 998, 464], \"label\": \"The ship in the image has a long and narrow structure that extends across most of the waterfront area within the harbor's protective barrier.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.0,
+        0.129,
+        0.998,
+        0.464
+      ],
+      "gt01": [
+        0.41,
+        0.43,
+        1.0,
+        0.81
+      ],
+      "iou": 0.04336826888326708,
+      "fiou": 0.03712272857254273,
+      "sec": 5.5
+    },
+    {
+      "id": "P4151_0125.png#7814",
+      "raw": "```json\n[\n    {\"bbox_2d\": [356, 179, 484, 305], \"label\": \"The small white vehicle is aligned horizontally near the top of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.356,
+        0.179,
+        0.484,
+        0.305
+      ],
+      "gt01": [
+        0.26,
+        0.04,
+        0.39,
+        0.18
+      ],
+      "iou": 0.010666666666666666,
+      "fiou": 0.0009914270717909857,
+      "sec": 5.0
+    },
+    {
+      "id": "P1398_0019.png#4140",
+      "raw": "```json\n[\n    {\"bbox_2d\": [607, 0, 1000, 766], \"label\": \"The small plane is located at middle right of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.607,
+        0.0,
+        1.0,
+        0.766
+      ],
+      "gt01": [
+        0.59,
+        0.19,
+        1.0,
+        0.75
+      ],
+      "iou": 0.7050092764378478,
+      "fiou": 0.7086598960580633,
+      "sec": 4.8
+    },
+    {
+      "id": "P0977_0007.png#2062",
+      "raw": "```json\n[\n    {\"bbox_2d\": [357, 0, 998, 387], \"label\": \"The northern harbor in the image along the topmost edge of a brown-colored waterway.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.357,
+        0.0,
+        0.998,
+        0.387
+      ],
+      "gt01": [
+        0.43,
+        0.2,
+        0.78,
+        0.49
+      ],
+      "iou": 0.24324324324324326,
+      "fiou": 0.23036284347645514,
+      "sec": 5.1
+    },
+    {
+      "id": "06910_0000.png#10045",
+      "raw": "```json\n[\n    {\"bbox_2d\": [815, 56, 1000, 328], \"label\": \"The tank located at the top-right corner of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.815,
+        0.056,
+        1.0,
+        0.328
+      ],
+      "gt01": [
+        0.81,
+        0.14,
+        1.0,
+        0.31
+      ],
+      "iou": 0.6218181818181818,
+      "fiou": 0.6146179401993357,
+      "sec": 4.8
+    },
+    {
+      "id": "P0353_0006.png#758",
+      "raw": "```json\n[\n    {\"bbox_2d\": [133, 50, 248, 133], \"label\": \"The large vehicle at the very top of the image, placed above all others in the top-left segment.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.133,
+        0.05,
+        0.248,
+        0.133
+      ],
+      "gt01": [
+        0.13,
+        0.03,
+        0.25,
+        0.13
+      ],
+      "iou": 0.8181818181818182,
+      "fiou": 0.7452409882543539,
+      "sec": 5.3
+    },
+    {
+      "id": "P1390_0059.png#3902",
+      "raw": "```json\n[\n    {\"bbox_2d\": [540, 202, 870, 607], \"label\": \"The plane on the right-most edge of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.54,
+        0.202,
+        0.87,
+        0.607
+      ],
+      "gt01": [
+        0.56,
+        0.28,
+        0.87,
+        0.61
+      ],
+      "iou": 0.7619047619047619,
+      "fiou": 0.7532322781988408,
+      "sec": 4.8
+    },
+    {
+      "id": "06920_0000.png#10062",
+      "raw": "```json\n[\n    {\"bbox_2d\": [648, 236, 998, 988], \"label\": \"The small airplane is positioned on the right side of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.648,
+        0.236,
+        0.998,
+        0.988
+      ],
+      "gt01": [
+        0.64,
+        0.31,
+        1.0,
+        1.0
+      ],
+      "iou": 0.8740323715693173,
+      "fiou": 0.86511119212541,
+      "sec": 4.9
+    },
+    {
+      "id": "P1452_0003.png#4333",
+      "raw": "```json\n[\n    {\"bbox_2d\": [557, 353, 610, 412], \"label\": \"The large vehicle located at the right side in the middle-left section of the image.\"}\n]\n```",
+      "tag": "bbox2d_0_1000",
+      "pred01": [
+        0.557,
+        0.353,
+        0.61,
+        0.412
+      ],
+      "gt01": [
+        0.01,
+        0.56,
+        0.29,
+        0.64
+      ],
+      "iou": 0.0,
+      "fiou": 0.0,
+      "sec": 5.2
+    }
+  ]
+}
