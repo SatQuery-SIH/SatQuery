@@ -19,7 +19,7 @@ from ingest import (
     read_sar_arrays,
     scale_gsd_for_resize,
 )
-from planner import MODEL_FIRST, needs_fallback, plan, plan_model
+from planner import MODEL_FIRST, ground_target, needs_fallback, plan, plan_model
 from tools import (
     LEVIR_GSD_M,
     S2_GSD_M,
@@ -32,6 +32,7 @@ from tools import (
     attach_rung_display,
     canonical_vqa,
     cdvqa_map,
+    ground,
     change_detect,
     change_direction_proxy,
     coreg_check,
@@ -39,6 +40,7 @@ from tools import (
     load_mask,
     load_rgb,
     narration_prompt,
+    overlay_box,
     overlay_mask,
     sar_agreement,
     sar_read,
@@ -1194,6 +1196,58 @@ def run_query(
         numbers["coreg_check"] = _jsonable(bound["coreg"])
         trace["tool_outputs"]["coreg_check"] = numbers["coreg_check"]
 
+    if "ground" in tools_needed:
+        # Presence-gated grounding (D-014 revised): the tool runs the
+        # canonical_vqa presence oracle on :8091, then the narrator seat
+        # draws the box. Withheld (absent target / uncertain presence /
+        # frame drift / degenerate full-frame) -> no overlay, no box
+        # artifact. Any box that survives is a learned_estimate, never a
+        # measurement.
+        _t0 = _tool_start("ground")
+        gtarget = the_plan.get("ground_target") or ground_target(query)
+        if not gtarget:
+            gr = {
+                "available": False,
+                "withheld": True,
+                "withheld_reason": "target_unclear",
+                "target": None,
+                "evidence_class": "learned_estimate",
+                "provenance": (
+                    "tools.ground (withheld — no target phrase derivable "
+                    "from the query)"
+                ),
+            }
+        else:
+            gr = _call("tool", "ground", ground, gtarget, image_paths[:1])
+        numbers["ground"] = _jsonable(gr)
+        trace["tool_outputs"]["ground"] = numbers["ground"]
+        _tool_done(
+            "ground",
+            _t0,
+            {
+                "target": gr.get("target"),
+                "withheld": gr.get("withheld_reason") if gr.get("withheld") else None,
+                "frame_tag": gr.get("frame_tag"),
+                "presence": (gr.get("presence") or {}).get("answer"),
+            },
+        )
+        if not gr.get("withheld") and gr.get("box_px"):
+            ov = overlay_box(
+                load_rgb(paths["image"]),
+                gr["box_px"],
+                label=f"{gr.get('target') or 'object'} (estimate)",
+            )
+            overlay_dir = workdir if workdir is not None else (DATA / "scene1")
+            overlay_dir.mkdir(parents=True, exist_ok=True)
+            op = overlay_dir / "overlay_ground.png"
+            ov.save(op)
+            # The frontend overlay chip keys off trace.overlay_path —
+            # ground claims it when no water/SAR overlay already did.
+            if trace.get("overlay_path"):
+                trace["ground_overlay_path"] = str(op)
+            else:
+                trace["overlay_path"] = str(op)
+
     if "canonical_vqa" in tools_needed:
         # Adapted RSVQA answer seat on :8091 — a specialist claim, not
         # narration. Runs whenever routed (single-image question plans only);
@@ -1268,6 +1322,8 @@ def run_query(
     trace["images"] = [str(p) for p in image_paths]
     if trace.get("agreement_map_path"):
         trace["images"].append(trace["agreement_map_path"])
+    if trace.get("ground_overlay_path"):
+        trace["images"].append(trace["ground_overlay_path"])
     trace["complete_s"] = round(time.perf_counter() - t_all, 3)
     _packet()
     return _finish(trace)

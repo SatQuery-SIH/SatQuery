@@ -46,6 +46,9 @@ function ProvenanceChips({ c }: { c: Claim }) {
       {c.confidence?.level && (
         <span className={`prov-chip lvl-${c.confidence.level}`}>{c.confidence.level}</span>
       )}
+      {c.evidence_class != null && (
+        <span className="prov-chip lvl-inferred">{String(c.evidence_class)}</span>
+      )}
     </div>
   );
 }

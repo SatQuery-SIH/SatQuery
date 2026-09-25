@@ -68,6 +68,8 @@ export interface Claim {
   value: unknown;
   region?: string | null;
   confidence?: { level?: string; basis?: string };
+  // measured_index | heuristic_estimate | learned_estimate (demo/tools.py)
+  evidence_class?: string;
   provenance?: { tool?: string; model?: string; seat?: string; sha256?: string; gguf_sha256?: string };
   [k: string]: unknown;
 }
@@ -93,6 +95,7 @@ export interface RunBundle {
     geo_exports?: unknown[];
     vlm?: Record<string, unknown>;
     overlay_path?: string | null;
+    ground_overlay_path?: string | null;
     agreement_map_path?: string | null;
     images?: unknown[];
     metrics_badge?: unknown;

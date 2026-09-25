@@ -288,32 +288,45 @@ def _claims_water(
                 provenance=_as_prov("water_highlight"),
             )
         )
+    # evidence_class propagation (D-014 direction): the pixel count and any
+    # derived area inherit the mask's evidence class — a spectral index is
+    # measured, the RGB heuristic is an estimate and must render as one.
+    evc = wh.get("evidence_class")
+    lvl = "inferred" if evc and evc != "measured_index" else "measured"
+    basis_wp = str(method or "water_highlight")
+    if lvl == "inferred":
+        basis_wp += f" ({evc} — not a measured index)"
     wp = wh.get("water_pixels")
     if wp is None:
         limitations.append("water_pixels withheld by the optical water tool.")
     else:
-        claims.append(
-            make_claim(
-                cid=nid(),
-                predicate="water_pixels",
-                value=wp,
-                region=region,
-                confidence=_as_conf("measured", str(method or "water_highlight")),
-                provenance=_as_prov("water_highlight"),
-            )
+        c = make_claim(
+            cid=nid(),
+            predicate="water_pixels",
+            value=wp,
+            region=region,
+            confidence=_as_conf(lvl, basis_wp),
+            provenance=_as_prov("water_highlight"),
         )
+        if evc:
+            c["evidence_class"] = evc
+        claims.append(c)
     if area and area.get("area_m2") is not None and area.get("gsd_m") is not None:
-        claims.append(
-            make_claim(
-                cid=nid(),
-                predicate="area_m2",
-                value=area.get("area_m2"),
-                region=region,
-                confidence=_as_conf("measured", str(area.get("formula") or "area_calc")),
-                provenance=_as_prov("area_calc"),
-                unit="m2",
-            )
+        basis_a = str(area.get("formula") or "area_calc")
+        if lvl == "inferred":
+            basis_a += f" (area inherits mask evidence_class={evc})"
+        c = make_claim(
+            cid=nid(),
+            predicate="area_m2",
+            value=area.get("area_m2"),
+            region=region,
+            confidence=_as_conf(lvl, basis_a),
+            provenance=_as_prov("area_calc"),
+            unit="m2",
         )
+        if evc:
+            c["evidence_class"] = evc
+        claims.append(c)
     elif area and (area.get("gsd_m") is None or area.get("area_m2") is None):
         limitations.append("square metres withheld (no validated GSD).")
     return claims
@@ -735,6 +748,60 @@ def _claims_canonical_vqa(
     return claims
 
 
+def _claims_ground(gr: dict[str, Any], nid, limitations: list[str]) -> list[dict[str, Any]]:
+    """ground output -> grounded_box claim. Always learned_estimate: a VLM
+    localization behind a presence oracle, never a measured extent."""
+    pres = gr.get("presence") or {}
+    prov = _as_prov(
+        "ground",
+        box_seat=gr.get("box_seat"),
+        presence_seat=gr.get("presence_seat"),
+        frame_tag=gr.get("frame_tag"),
+        evidence_class=gr.get("evidence_class") or "learned_estimate",
+    )
+    if gr.get("withheld") or not gr.get("box01"):
+        reason = gr.get("withheld_reason") or "no box"
+        limitations.append(
+            f"ground withheld ({reason}) for target "
+            f"{gr.get('target')!r}; no box rendered."
+        )
+        return [
+            make_claim(
+                cid=nid(),
+                predicate="grounded_box",
+                value="withheld",
+                region=None,
+                confidence=_as_conf(
+                    "withheld",
+                    f"presence-gated box declined: {reason} "
+                    f"(presence={pres.get('answer')!r})",
+                ),
+                provenance=prov,
+            )
+        ]
+    claim = make_claim(
+        cid=nid(),
+        predicate="grounded_box",
+        value=gr.get("box01"),
+        region=None,
+        confidence=_as_conf(
+            "inferred",
+            f"learned_estimate — presence={pres.get('answer')!r} via "
+            "canonical_vqa@8091, box via narrator@8080 "
+            f"(frame={gr.get('frame_tag')}); a model localization, "
+            "not a measured extent",
+        ),
+        provenance=prov,
+    )
+    claim["evidence_class"] = "learned_estimate"
+    limitations.append(
+        "grounded_box is a learned VLM estimate (presence-gated, "
+        "frame-validated) — not a measured extent; box-derived areas are "
+        "not emitted until mask refinement exists."
+    )
+    return [claim]
+
+
 def build_packet(
     tool_outputs: dict[str, Any] | None,
     task: str,
@@ -765,6 +832,7 @@ def build_packet(
     cm = tout.get("cdvqa_map") or {}
     cv = tout.get("canonical_vqa") or {}
     cg = tout.get("coreg_check") or {}
+    gr = tout.get("ground") or {}
 
     canonical: Any = None
     if cd or (task or "").startswith("change"):
@@ -780,7 +848,9 @@ def build_packet(
             claims.extend(_claims_agreement(ag, region, nid, limitations))
         if cg:
             claims.extend(_claims_coreg(cg, nid, limitations))
-        if not (wh or sr or ag or sem or cm or cv):
+        if gr:
+            claims.extend(_claims_ground(gr, nid, limitations))
+        if not (wh or sr or ag or sem or cm or cv or gr):
             limitations.append(
                 "No tool-owned canonical answer; Qwen text is not canonical."
             )
@@ -876,11 +946,14 @@ def build_packet_for_run(
     gsd_m = gsd_info.get("gsd_m") if isinstance(gsd_info, dict) else None
     modality = run_trace.get("input_mode")
     ok = bound.get("ok")
+    gr = (run_trace.get("tool_outputs") or {}).get("ground") or {}
+    ground_box = gr.get("box_px") if not gr.get("withheld") else None
     return build_packet(
         run_trace.get("tool_outputs") or {},
         plan.get("task") or "unsupported",
         overlay_path=run_trace.get("overlay_path"),
         mask_path=mask_path,
+        box=ground_box,
         input_contract={
             "valid": True if ok is None else bool(ok),
             "modality": modality,

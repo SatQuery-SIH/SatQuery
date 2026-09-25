@@ -670,5 +670,182 @@ class SingleSarAndAliasTests(unittest.TestCase):
         self.assertIsNotNone(sr.get("dn_stats"))
 
 
+class GroundGateTests(unittest.TestCase):
+    """ground v1 (D-014 revised): canonical_vqa presence oracle -> narrator
+    box -> strict frame detection -> degenerate full-frame rejection.
+    Canonical invents boxes on 98% of absent targets; the gate is the product."""
+
+    def test_parse_ground_box_frame_tags(self) -> None:
+        from tools import parse_ground_box
+
+        v, tag = parse_ground_box(
+            '```json\n[{"bbox_2d": [10, 20, 300, 400], "label": "x"}]\n```'
+        )
+        self.assertEqual(tag, "bbox2d_1000")
+        self.assertEqual(v, [10.0, 20.0, 300.0, 400.0])
+        v, tag = parse_ground_box("[512, 100, 900, 800]")
+        self.assertEqual(tag, "tuple4_1000")
+        _, tag = parse_ground_box("[0, 0, 1024, 1024]")
+        self.assertEqual(tag, "tuple4_px")
+        _, tag = parse_ground_box("(14, 11, 38, 34)")
+        self.assertEqual(tag, "tuple4_100")
+        v, tag = parse_ground_box("There are none.")
+        self.assertIsNone(v)
+        self.assertEqual(tag, "parse_fail")
+        _, tag = parse_ground_box("<|box_start|>(100,200,300,400)<|box_end|>")
+        self.assertEqual(tag, "qwen_native_px")
+
+    def test_ground_decide_gates(self) -> None:
+        from tools import ground_decide
+
+        yes = {"available": True, "answer": "yes", "seat": "127.0.0.1:8091"}
+        r = ground_decide(
+            "airport", {"available": False, "answer": None}, None, (100, 100)
+        )
+        self.assertEqual(r["withheld_reason"], "presence_oracle_unavailable")
+        r = ground_decide("airport", {"available": True, "answer": "no"}, "x", (100, 100))
+        self.assertEqual(r["withheld_reason"], "target_absent")
+        r = ground_decide("airport", {"available": True, "answer": "maybe"}, "x", (100, 100))
+        self.assertEqual(r["withheld_reason"], "presence_uncertain")
+        r = ground_decide("airport", yes, None, (100, 100))
+        self.assertEqual(r["withheld_reason"], "seat_unavailable")
+        r = ground_decide(
+            "airport", yes,
+            '```json\n[{"bbox_2d": [100, 200, 500, 600], "label": "a"}]\n```',
+            (1000, 1000),
+        )
+        self.assertTrue(r["available"])
+        self.assertEqual(r["frame_tag"], "bbox2d_1000")
+        self.assertEqual(r["box_px"], [100, 200, 500, 600])
+        self.assertEqual(r["evidence_class"], "learned_estimate")
+        # Canonical's can't-localize signature withholds instead of rendering.
+        r = ground_decide("airport", yes, "[0,0,1000,1000]", (1000, 1000))
+        self.assertEqual(r["withheld_reason"], "degenerate_full_frame")
+        # Drifted frames are recorded, never silently rescaled.
+        r = ground_decide("airport", yes, "[0,0,1024,1024]", (1000, 1000))
+        self.assertEqual(r["withheld_reason"], "frame_unexpected:tuple4_px")
+        r = ground_decide("airport", yes, "(14, 11, 38, 34)", (1000, 1000))
+        self.assertEqual(r["withheld_reason"], "frame_unexpected:tuple4_100")
+        r = ground_decide("airport", yes, "There are none.", (100, 100))
+        self.assertEqual(r["withheld_reason"], "box_unparsed")
+        # A refusal-style answer keeps the raw text for the trace.
+        self.assertEqual(r["raw_response"], "There are none.")
+
+    def test_ground_target_extraction(self) -> None:
+        from planner import ground_target
+
+        self.assertEqual(ground_target("Locate the airport."), "airport")
+        self.assertEqual(
+            ground_target("Can you show me the harbor at the bottom edge?"),
+            "harbor at the bottom edge",
+        )
+        self.assertEqual(
+            ground_target("Where is the tennis court?"), "tennis court"
+        )
+        self.assertIsNone(ground_target("highlight"))
+        self.assertIsNone(ground_target(""))
+
+    def test_ground_plan_and_pipeline_withheld(self) -> None:
+        # Withheld ground -> no overlay, no box artifact, claim in packet.
+        import tempfile
+        import pipeline
+        from unittest.mock import patch
+        from PIL import Image
+
+        tmp = Path(tempfile.mkdtemp())
+        png = tmp / "opt.png"
+        Image.new("RGB", (64, 64), (30, 60, 30)).save(png)
+
+        def fake(*a, **k):
+            return {
+                "available": False,
+                "withheld": True,
+                "withheld_reason": "target_absent",
+                "target": "airport",
+                "presence": {"answer": "no", "seat": "127.0.0.1:8091"},
+                "frame_tag": None,
+                "box01": None,
+                "box_px": None,
+                "evidence_class": "learned_estimate",
+            }
+
+        with patch.object(pipeline, "ground", side_effect=fake):
+            trace = pipeline.run_query(
+                "locate the airport", "single", live=False,
+                uploads={"image": str(png)},
+            )
+        self.assertEqual(trace["plan"]["tools"], ["ground", "vqa"])
+        gr = trace["tool_outputs"]["ground"]
+        self.assertTrue(gr["withheld"])
+        self.assertEqual(gr["withheld_reason"], "target_absent")
+        self.assertIsNone(trace.get("overlay_path"))
+        self.assertNotIn("ground_overlay_path", trace)
+
+    def test_ground_pipeline_box_writes_overlay_and_packet(self) -> None:
+        import tempfile
+        import pipeline
+        from unittest.mock import patch
+        from PIL import Image
+
+        tmp = Path(tempfile.mkdtemp())
+        png = tmp / "opt.png"
+        Image.new("RGB", (64, 64), (30, 60, 30)).save(png)
+
+        def fake(*a, **k):
+            return {
+                "available": True,
+                "withheld": False,
+                "withheld_reason": None,
+                "target": "airport",
+                "presence": {"answer": "yes", "seat": "127.0.0.1:8091"},
+                "frame_tag": "bbox2d_1000",
+                "box01": [0.1, 0.1, 0.6, 0.6],
+                "box_px": [6, 6, 38, 38],
+                "evidence_class": "learned_estimate",
+                "box_seat": "127.0.0.1:8080",
+            }
+
+        with patch.object(pipeline, "ground", side_effect=fake):
+            trace = pipeline.run_query(
+                "locate the airport", "single", live=False,
+                uploads={"image": str(png)},
+            )
+        gr = trace["tool_outputs"]["ground"]
+        self.assertFalse(gr["withheld"])
+        op = trace.get("overlay_path")
+        self.assertTrue(op and Path(op).is_file(), trace.get("overlay_path"))
+        packet = trace.get("evidence_packet") or {}
+        box_claims = [
+            c for c in (packet.get("claims") or [])
+            if c.get("predicate") == "grounded_box"
+        ]
+        self.assertTrue(box_claims, packet.get("claims"))
+        self.assertEqual(box_claims[0].get("evidence_class"), "learned_estimate")
+        self.assertEqual(
+            box_claims[0].get("confidence", {}).get("level"), "inferred"
+        )
+
+    def test_check_narration_estimate_qualifier(self) -> None:
+        # Estimate-class outputs cannot be narrated as measurements.
+        from report import check_narration
+
+        est_dump = {
+            "ground": {"box01": [0.1, 0.2, 0.5, 0.6],
+                       "evidence_class": "learned_estimate"}
+        }
+        out = check_narration(
+            "The measured object is at the center.", est_dump
+        )
+        self.assertFalse(out["ok"])
+        out = check_narration("I located an object near the center.", est_dump)
+        self.assertTrue(out["ok"])
+        # A measured_index alongside lifts the restriction.
+        mixed = dict(est_dump)
+        mixed["water_highlight"] = {"water_pixels": 10,
+                                    "evidence_class": "measured_index"}
+        out = check_narration("Water extent is measured.", mixed)
+        self.assertTrue(out["ok"])
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

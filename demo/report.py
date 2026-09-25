@@ -125,6 +125,15 @@ def check_narration(text: str | None, tool_json: Any) -> dict[str, Any]:
         ) and _percent_compatible(tok, dump_nums):
             continue
         issues.append(f"invented number {tok}")
+    # evidence_class qualifier: when every evidence-bearing output this run
+    # is an estimate (no measured_index present), the narration may not call
+    # anything "measured" or claim exactness — estimates are not measurements.
+    est_only = (
+        re.search(r'"evidence_class":\s*"(heuristic|learned)_estimate"', dump)
+        and '"evidence_class": "measured_index"' not in dump
+    )
+    if est_only and re.search(r"\b(measur\w*|exactly|precisely)\b", low):
+        issues.append("estimate-class output narrated as a measurement")
     return {"ok": not issues, "issues": issues}
 
 
@@ -237,6 +246,23 @@ def findings_header(trace: dict[str, Any] | None) -> str:
             f"- canonical_vqa: answer={ans} model={cv.get('model')} "
             f"seat={cv.get('seat', '127.0.0.1:8091')}"
         )
+    gr = tout.get("ground") or {}
+    if gr:
+        pres = gr.get("presence") or {}
+        if gr.get("withheld") or not gr.get("box01"):
+            lines.append(
+                f"- ground: withheld ({gr.get('withheld_reason')}) "
+                f"target={gr.get('target')!r} "
+                f"presence={pres.get('answer')!r}"
+            )
+        else:
+            lines.append(
+                f"- ground: target={gr.get('target')!r} "
+                f"box01={gr.get('box01')} frame={gr.get('frame_tag')} "
+                f"presence={pres.get('answer')!r}@{pres.get('seat')} "
+                f"evidence={gr.get('evidence_class')} (estimate, not a "
+                "measurement)"
+            )
     ge = trace.get("geo_exports") or {}
     if ge:
         parts = []

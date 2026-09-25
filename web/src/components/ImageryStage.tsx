@@ -123,6 +123,14 @@ export function ImageryStage({
 
   const overlaySrc = overlayArt ? api.artifactUrl(overlayArt.url) : null;
   const overlayRole = OVERLAY_ROLE[stageMode];
+  // A presence-gated grounding box isn't a water overlay — label it so the
+  // chip can't pass the estimate off as a measured mask.
+  const groundOut = (bundle?.tool_outputs as Record<string, unknown> | undefined)
+    ?.ground as Record<string, unknown> | undefined;
+  const overlayLabel =
+    groundOut && !groundOut.withheld && groundOut.box01
+      ? "grounding box (estimate)"
+      : OVERLAY_LABEL[stageMode];
 
   // "your images" line — names + one-line honest summary
   const g = (trace.gsd ?? null) as Record<string, unknown> | null;
@@ -217,7 +225,7 @@ export function ImageryStage({
                   aria-pressed={overlayOn}
                   onClick={() => setOverlayOn((o) => !o)}
                 >
-                  {OVERLAY_LABEL[stageMode]}: {overlayOn ? "on" : "off"}
+                  {overlayLabel}: {overlayOn ? "on" : "off"}
                 </button>
               )}
             </div>

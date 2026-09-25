@@ -221,7 +221,7 @@ export function UploadPanel({
           </div>
         );
       })}
-      <button className="btn" disabled={!complete || busy} onClick={doUpload}>
+      <button className="btn" disabled={!complete || busy} onClick={() => void doUpload()}>
         {busy ? "uploading + ingesting…" : "upload & inspect"}
       </button>
       {err && <div className="err">{err}</div>}

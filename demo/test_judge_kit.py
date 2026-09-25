@@ -40,11 +40,11 @@ SHARED = (
     DEMO / "serve.ps1",
 )
 SHARED_SHA = {
-    "tools.py": "8c56dc12fbe3d9633c9f8bdf328649c8b349d328a8d9e241ceba26036c1433d3",  # 2026-09-24 authorized C1-SENSOR-PROFILE (band identity via declared profile/metadata; unidentified bands withhold; evidence_class)
+    "tools.py": "1ab0c172d09ea3e6ee188e60df666ba68b89cf66fb13817a39d26ed3efcf79e1",  # 2026-09-26 authorized GROUND-V1 (ground tool: canonical presence oracle -> narrator box; strict frame detection; full-frame reject; overlay_box)
     "app.py": "be1f0ee9e58a2a3800674ac631f76a79cda271c9ee9f298bf7eb9b1089a87bf6",  # 2026-09-13 human-authorized Tab 2 copy edit (readable legend; needles unchanged)
-    "pipeline.py": "ada9c3aad7ba144db7ebf807645ad1b37a506c94551dc9c37466fcc97dc56e92",  # 2026-09-26 authorized D-019-MODALITY (single-mode sar_read requires SAR evidence — named pols/float dtype/declared SAR profile — else withheld modality_unverified, no artifacts)
-    "report.py": "bbf5370bd67deacda91a817844797f166f793eeb79df03066eb54af52a0fdff6",  # 2026-09-24 authorized WEB-POLISH-V3
-    "planner.py": "047ae64629f47e559be540d84d8907a537313ca5760d673063fc9de46f77e3a7",  # 2026-09-25 authorized D-019 (single-SAR un-refusal -> sar_read plan; single allowlist +sar_read; suite ids 57-59 re-pointed)
+    "pipeline.py": "cecd13a20e36046e9a1a7ffc1745a1497d2e0c62179e98845b08f634190aa496",  # 2026-09-26 authorized GROUND-V1 (ground dispatch: presence gate, box overlay artifact, withheld path emits no image)
+    "report.py": "79fda1935dae3fa9c163fcdf9b7091ea72cbbfbb76f4c22b414e7d5c406e528f",  # 2026-09-26 authorized GROUND-V1 (ground findings line; estimate-qualifier enforcement for evidence_class!=measured_index claims)
+    "planner.py": "f57534d58320c8bf6b0f9a104b7b5d0798284b0ff1b8b8197447db3b50500b7d",  # 2026-09-26 authorized GROUND-V1 (ground in TOOLS/allowlist; locate-route + ground_target extractor; suite +6 cases)
     "ingest.py": "d7adc87c26f64ba8e11248c325f5e61b355666fa4b8a5626246f80ee2158f320",  # 2026-09-26 authorized D-019-MODALITY (SAR_PROFILES + is_sar_profile; read_sar_arrays exposes named_pols/sar_evidence for single-mode gating)
     "serve.ps1": "19287c44083cd94fd4f91ff6cbae5e66b2c33b30978a0df2bc5b99a0f14dd172",
 }

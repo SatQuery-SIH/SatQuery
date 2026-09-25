@@ -29,6 +29,7 @@ TOOLS = (
     "vqa",
     "change_detect",
     "water_highlight",
+    "ground",
     "area_calc",
     "sar_read",
     "sar_agreement",
@@ -90,7 +91,20 @@ _HL_NOUN = (
 )
 _HL_OBJECT = (
     r"(buildings?|houses?|cars?|vehicles?|ships?|boats?|bridges?|roads?|"
-    r"trees?|objects?|structures?|aircraft|planes?)"
+    r"trees?|objects?|structures?|aircraft|planes?|airports?|harbo[u]?rs?|"
+    r"stadiums?|tennis courts?|basketball courts?|baseball (?:fields?|"
+    r"diamonds?)|soccer(?: ball)? fields?|ground track fields?|swimming "
+    r"pools?|storage tanks?|windmills?|wind turbines?|dams?|overpass(?:es)?|"
+    r"train stations?|railway stations?|roundabouts?|helicopters?|buses?|"
+    r"trucks?|chimneys?|toll stations?|service areas?|golf (?:courses?|"
+    r"fields?)|parking lots?|containers?|runways?|towers?)"
+)
+# Locate-style phrasing that needn't use a highlight verb. Water-class
+# targets still route to water_highlight (a mask answers "where" better than
+# a box) — the ground branch only sees non-water targets.
+_LOCATE_Q = (
+    r"\b(where\s+(?:is|are)(?:\s+the)?|where's|find|spot|locate)\b"
+    r"[^.?!]{2,120}"
 )
 _WATER_HL = (
     r"\b" + _HL_VERB + r"\b.{0,80}\b" + _HL_NOUN + r"\b|"
@@ -137,6 +151,55 @@ _CDVQA_STYLE = (
 
 def _norm(text: str) -> str:
     return re.sub(r"\s+", " ", (text or "").strip().lower())
+
+
+# Command preamble for locate/highlight queries — stripped to derive the
+# referring expression the ground tool feeds both seats. The model never
+# invents the target: it comes from the query text (D-014: code-gated).
+_GROUND_LEAD = re.compile(
+    r"^\s*(?:please\s+)?(?:can\s+you|could\s+you|would\s+you|will\s+you|"
+    r"do\s+you\s+see|is\s+there|are\s+there)\s+",
+    re.I,
+)
+_GROUND_VERB = re.compile(
+    r"^\s*(?:hig?h?light|outlines?|locate|marks?|point\s+out|shows?|"
+    r"show\s+me|delineate|overla(?:y|id|ys)|finds?|spots?|where\s+is|"
+    r"where\s+are|where's)(?:\s+|$)",
+    re.I,
+)
+
+
+def ground_target(query: str | None) -> str | None:
+    """Extract the referring expression from a locate/highlight query.
+
+    Returns the cleaned noun phrase ("the harbor at the bottom edge" ->
+    "harbor at the bottom edge") or None when nothing usable remains —
+    the pipeline withholds on target_unclear rather than box a stray verb.
+    """
+    t = (query or "").strip().rstrip("?.!,")
+    for pat in (_GROUND_LEAD, _GROUND_VERB):
+        t = pat.sub("", t)
+    t = re.sub(r"^\s*(?:me\s+)?(?:the\s+|a\s+|an\s+|any\s+|all\s+|some\s+)", "", t)
+    t = re.sub(r"^(?:the|a|an|any|all|some|this|that|these|those)\s+", "", t)
+    t = re.sub(r"\s+", " ", t).strip()
+    if len(t) < 3 or len(t) > 140 or not re.search(r"[a-z]{3}", t, re.I):
+        return None
+    return t
+
+
+def _sanitize_ground_target(raw: Any, query: str) -> str | None:
+    """Accept a model-proposed target only when it is visibly derived from
+    the query — a length cap plus a shared content word (the model may
+    rephrase, never invent a target that isn't in the user's text)."""
+    if not isinstance(raw, str):
+        return None
+    t = re.sub(r"\s+", " ", raw.strip().rstrip("?.!,"))
+    if len(t) < 3 or len(t) > 140:
+        return None
+    q_words = set(re.findall(r"[a-z]{3,}", (query or "").lower()))
+    if not any(w in q_words for w in re.findall(r"[a-z]{3,}", t.lower())):
+        return None
+    return t
 
 
 def _match(pattern: str, text: str) -> bool:
@@ -236,6 +299,7 @@ def plan(query: str, input_mode: str) -> dict[str, Any]:
         # counts ("count the cars") count as questions — count is an RSVQA
         # family.
         is_question = q.endswith("?") or _match(_COUNT, q)
+        wants_locate = _match(_HL_OBJECT_Q, q) or _match(_LOCATE_Q, q)
         if (wants_water_hl or (wants_water and wants_area)) and not sar_terms:
             tools = ["water_highlight", "area_calc", "vqa"]
             if is_question:
@@ -250,10 +314,23 @@ def plan(query: str, input_mode: str) -> dict[str, Any]:
                 }
             )
             return base
-        if _match(_HL_OBJECT_Q, q) and not wants_water_hl:
-            base["refusal"] = (
-                "Highlighting is only supported for water bodies, not other "
-                "objects. " + CAN_DO
+        # Water-class targets keep their existing routing (mask via
+        # highlight verb; bare "where is the water?" stays a question).
+        if wants_locate and not wants_water and not wants_water_hl:
+            # Presence-gated grounding (D-014 revised): the tool itself runs
+            # the canonical_vqa presence oracle before any box call, so this
+            # plan is safe even when the target is absent.
+            tools = ["ground", "vqa"]
+            if is_question:
+                tools.append("canonical_vqa")
+            base.update(
+                {
+                    "task": "ground",
+                    "tools": tools,
+                    "vlm_role": "narrate",
+                    "supported": True,
+                    "refusal": None,
+                }
             )
             return base
         is_caption = wants_caption or not is_question
@@ -342,13 +419,14 @@ def plan_json(query: str, input_mode: str) -> str:
 # bare-plan-only escalation behavior.
 
 FALLBACK_TOOLS: dict[str, tuple[str, ...]] = {
-    "single": ("water_highlight", "area_calc", "vqa", "canonical_vqa", "sar_read"),
+    "single": ("water_highlight", "ground", "area_calc", "vqa", "canonical_vqa", "sar_read"),
     "bi-temporal": ("change_detect", "area_calc", "cdvqa_map", "vqa"),
     "optical+sar": ("sar_read", "sar_agreement", "area_calc", "vqa"),
 }
 
 _TOOL_BLURB = {
     "water_highlight": "detect water pixels, draw a blue overlay, report % of image",
+    "ground": "locate a described object/region and draw its bounding box (presence-checked estimate)",
     "area_calc": "report measured area of the detected mask",
     "change_detect": "pixel-change map between a before/after image pair",
     "cdvqa_map": "semantic type-family change map for a before/after pair",
@@ -470,8 +548,10 @@ def plan_model(
         "Pick only tools the question actually needs — [] is a valid answer. "
         "A water mask or overlay question needs water_highlight; a "
         "before/after change question needs change_detect; SAR or "
-        "backscatter questions need sar_read.\n"
-        'Reply with JSON only, no prose: {"tools": ["..."]}\n\n'
+        "backscatter questions need sar_read; 'locate/find/where is the "
+        "<object>' questions need ground — when you pick it, also emit "
+        '"target": "<the object phrase from the question>".\n'
+        'Reply with JSON only, no prose: {"tools": ["..."], "target": "..."}\n\n'
         f"Question: {query}"
     )
     payload = {
@@ -500,7 +580,7 @@ def plan_model(
     if not tools:
         return _fail("plan_rejected_by_validator")
     task = next((t for t in tools if t not in _BARE_TOOLS), "vqa")
-    return {
+    out = {
         "task": task,
         "input_mode": mode,
         "tools": tools,
@@ -513,6 +593,15 @@ def plan_model(
         "router": "model-fallback",
         "model_plan_raw": text.strip()[:500],
     }
+    if "ground" in tools:
+        # The model may phrase the target, but only a target provably
+        # derived from the query text survives; otherwise the deterministic
+        # extractor runs in the pipeline (and withholds when it fails).
+        obj = _extract_json(text) or {}
+        tgt = _sanitize_ground_target(obj.get("target"), query)
+        if tgt:
+            out["ground_target"] = tgt
+    return out
 
 
 # 20-query routing suite (spec §7 row F). Expected tools are order-insensitive.
@@ -968,11 +1057,13 @@ QUERY_SUITE: list[dict[str, Any]] = [
         "expect_tools": ["vqa", "canonical_vqa"],
     },
     {
+        # D-014 revised: object highlight now routes to presence-gated
+        # `ground` (was refused pre-ground-v1).
         "id": 65,
         "query": "Highlight the buildings in this image.",
         "input_mode": "single",
-        "expect_supported": False,
-        "expect_tools": [],
+        "expect_supported": True,
+        "expect_tools": ["ground", "vqa"],
     },
     {
         "id": 66,
@@ -1499,6 +1590,51 @@ QUERY_SUITE: list[dict[str, Any]] = [
     {
         "id": 140,
         "query": "Count the aircraft on the runway.",
+        "input_mode": "single",
+        "expect_supported": True,
+        "expect_tools": ["vqa", "canonical_vqa"],
+    },
+    {
+        # D-014 revised: locate/highlight phrasing on non-water objects
+        # routes to presence-gated `ground` (was a refusal before).
+        "id": 141,
+        "query": "Locate the airport.",
+        "input_mode": "single",
+        "expect_supported": True,
+        "expect_tools": ["ground", "vqa"],
+    },
+    {
+        "id": 142,
+        "query": "Where is the harbor?",
+        "input_mode": "single",
+        "expect_supported": True,
+        "expect_tools": ["ground", "vqa", "canonical_vqa"],
+    },
+    {
+        "id": 143,
+        "query": "Highlight the buildings.",
+        "input_mode": "single",
+        "expect_supported": True,
+        "expect_tools": ["ground", "vqa"],
+    },
+    {
+        "id": 144,
+        "query": "Find the tennis court at the top left.",
+        "input_mode": "single",
+        "expect_supported": True,
+        "expect_tools": ["ground", "vqa"],
+    },
+    {
+        # Water-class locate stays a mask/answer — never a box.
+        "id": 145,
+        "query": "Locate the lake in this image.",
+        "input_mode": "single",
+        "expect_supported": True,
+        "expect_tools": ["water_highlight", "area_calc", "vqa"],
+    },
+    {
+        "id": 146,
+        "query": "Where is the water in this image?",
         "input_mode": "single",
         "expect_supported": True,
         "expect_tools": ["vqa", "canonical_vqa"],

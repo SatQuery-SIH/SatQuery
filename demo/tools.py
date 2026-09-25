@@ -1821,6 +1821,270 @@ def canonical_vqa(
     return out
 
 
+# --- ground(): presence-gated referring-expression boxes --------------------
+# D-014 revised seat design (2026-09-26; evidence in eval_ground_local/):
+# the canonical seat invents a box on 98% of absent-target probes — it must
+# never be called bare — and the narrator beats it +4.0pp acc@0.5 at matched
+# --image-min-tokens 384. So the adapted seat (:8091) is the presence ORACLE
+# (binary presence/absence is the RSVQA family the LoRA actually trained on)
+# and the :8080 narrator draws the box. Every response is frame-tagged; only
+# unambiguous 0-1000 / 0-1 grids are accepted — a drifted px/100 frame or a
+# degenerate full-frame box withholds instead of silently rescaling.
+
+GROUND_REF_PROMPT = (
+    "Please provide the bounding box coordinate of the region this "
+    "sentence describes: {q}"
+)  # verbatim VRSBench referring prompt — same string as the eval harness
+
+_GROUND_NUM = r"-?\d+(?:\.\d+)?"
+_GROUND_BBOX_KEY_RE = re.compile(
+    r'"(?:bbox_2d|bbox|bounding_box|box)"\s*:\s*\[([^\]]+)\]', re.I
+)
+_GROUND_BOX_TOK_RE = re.compile(r"<\|box_start\|>(.*?)<\|box_end\|>", re.S)
+_GROUND_ARR4_RE = re.compile(
+    rf"[\[\(<]?\s*({_GROUND_NUM})\s*,\s*({_GROUND_NUM})\s*,\s*"
+    rf"({_GROUND_NUM})\s*,\s*({_GROUND_NUM})\s*[\]\)>]?"
+)
+
+# Frames the tool accepts: explicit keyed 0-1000/0-1 or a clean 4-tuple on
+# those grids. px frames need the server's smart-resize geometry (not
+# exposed over HTTP) and 0-100 grids drift under absent-target pressure —
+# both withhold rather than guess. `first4` (numbers scraped from prose) is
+# never a trustworthy box.
+_GROUND_ACCEPT = frozenset(
+    {"bbox2d_1000", "bbox2d_01", "tuple4_1000", "tuple4_01"}
+)
+
+
+def _grid_suffix(v: list[float]) -> str:
+    mx = max(abs(x) for x in v)
+    if mx <= 1.5:
+        return "01"
+    if mx <= 100.5:
+        return "100"
+    if mx <= 1000.5:
+        return "1000"
+    return "px"
+
+
+def parse_ground_box(text: str) -> tuple[list[float] | None, str]:
+    """Frame-detecting parse of a grounding response -> (raw [x1,y1,x2,y2], tag).
+
+    Tag is ALWAYS the detected coordinate frame — `bbox2d_{01,100,1000,px}`,
+    `tuple4_{01,100,1000,px}`, `qwen_native_px`, `first4_*`, or `parse_fail`.
+    Nothing is rescaled here; the caller decides acceptance. Regex order
+    mirrors the benchmark parser in scripts/ground_measure_local.py.
+    """
+    text = text or ""
+    m = _GROUND_BOX_TOK_RE.search(text)
+    if m:
+        nums = re.findall(_GROUND_NUM, m.group(1))
+        if len(nums) >= 4:
+            return [float(x) for x in nums[:4]], "qwen_native_px"
+    m = _GROUND_BBOX_KEY_RE.search(text)
+    if m:
+        nums = re.findall(_GROUND_NUM, m.group(1))
+        if len(nums) >= 4:
+            v = [float(x) for x in nums[:4]]
+            return v, f"bbox2d_{_grid_suffix(v)}"
+    v = None
+    tag = "tuple4"
+    m = _GROUND_ARR4_RE.search(text)
+    if m:
+        v = [float(m.group(i)) for i in range(1, 5)]
+    else:
+        nums = re.findall(_GROUND_NUM, text)
+        if len(nums) >= 4:
+            v = [float(x) for x in nums[:4]]
+            tag = "first4"
+    if v is None:
+        return None, "parse_fail"
+    return v, f"{tag}_{_grid_suffix(v)}"
+
+
+def _ground_presence_question(target: str) -> str:
+    """RSVQA presence-family phrasing for the adapted oracle."""
+    t = re.sub(r"^(?:the|a|an|any|all|some|that|this|those|these)\s+", "",
+               target.strip().rstrip("?.!"), flags=re.I)
+    last = (t.split() or [""])[-1].lower()
+    plural = last.endswith("s") and not last.endswith(("ss", "us", "is"))
+    if plural:
+        return f"Are there any {t} in the image? Answer yes or no."
+    return f"Is there a {t} in the image? Answer yes or no."
+
+
+def _ground_clip01(box: list[float]) -> list[float]:
+    x1, y1, x2, y2 = box
+    x1, x2 = min(x1, x2), max(x1, x2)
+    y1, y2 = min(y1, y2), max(y1, y2)
+    return [
+        min(max(x1, 0.0), 1.0), min(max(y1, 0.0), 1.0),
+        min(max(x2, 0.0), 1.0), min(max(y2, 0.0), 1.0),
+    ]
+
+
+def ground_decide(
+    target: str,
+    presence: dict[str, Any],
+    box_text: str | None,
+    img_wh: tuple[int, int] | None,
+) -> dict[str, Any]:
+    """Pure gate logic for ground() — testable without the seats.
+
+    Order: presence oracle -> box text -> frame tag -> normalize -> reject
+    degenerate full-frame / malformed boxes. Withheld reasons:
+    presence_oracle_unavailable | target_absent | presence_uncertain |
+    seat_unavailable | box_unparsed | frame_unexpected:<tag> |
+    degenerate_full_frame | box_malformed.
+    """
+    rec: dict[str, Any] = {
+        "available": False,
+        "withheld": True,
+        "withheld_reason": None,
+        "target": target,
+        "presence": presence,
+        "frame_tag": None,
+        "box01": None,
+        "box_px": None,
+        "raw_response": None,
+        "evidence_class": "learned_estimate",
+    }
+    if not presence.get("available"):
+        rec["withheld_reason"] = "presence_oracle_unavailable"
+        return rec
+    ans = (presence.get("answer") or "").strip().lower()
+    if ans.startswith("no"):
+        rec["withheld_reason"] = "target_absent"
+        return rec
+    if not ans.startswith("yes"):
+        rec["withheld_reason"] = "presence_uncertain"
+        return rec
+    if box_text is None:
+        rec["withheld_reason"] = "seat_unavailable"
+        return rec
+    rec["raw_response"] = box_text[:400]
+    v, tag = parse_ground_box(box_text)
+    rec["frame_tag"] = tag
+    if v is None:
+        rec["withheld_reason"] = "box_unparsed"
+        return rec
+    if tag not in _GROUND_ACCEPT:
+        rec["withheld_reason"] = f"frame_unexpected:{tag}"
+        return rec
+    scale = 1.0 if tag.endswith("_01") else 1000.0
+    box01 = _ground_clip01([x / scale for x in v])
+    if box01[2] <= box01[0] or box01[3] <= box01[1]:
+        rec["withheld_reason"] = "box_malformed"
+        return rec
+    if (box01[2] - box01[0]) >= 0.98 and (box01[3] - box01[1]) >= 0.98:
+        # Canonical's can't-localize signature is a full-frame box
+        # ([0,0,1000,1000] / [0,0,1024,1024]) — a box covering ~the whole
+        # image is withholding noise, not a localization.
+        rec["withheld_reason"] = "degenerate_full_frame"
+        return rec
+    rec["box01"] = [round(x, 4) for x in box01]
+    if img_wh:
+        w, h = img_wh
+        rec["box_px"] = [
+            int(round(box01[0] * w)), int(round(box01[1] * h)),
+            int(round(box01[2] * w)), int(round(box01[3] * h)),
+        ]
+    rec["available"] = True
+    rec["withheld"] = False
+    return rec
+
+
+def ground(
+    target: str,
+    image_paths: list[str | Path],
+    *,
+    box_url: str = DEFAULT_VLM_URL,
+    presence_url: str = CANONICAL_VLM_URL,
+    timeout: float = 90.0,
+) -> dict[str, Any]:
+    """Presence-gated referring-expression box. Two seats, one contract:
+
+    1. canonical_vqa (:8091 adapted seat) answers "Is there a {target}?"
+       — the RSVQA presence family it trained on. no / uncertain / down
+       -> withheld (no box call at all when the oracle is unreachable).
+    2. Narrator (:8080) draws the box via the benchmark REF_PROMPT —
+       matched-geometry acc@0.5 0.6067 vs canonical 0.5667, and its
+       native refusals stay a second withhold signal.
+    3. Frame detection + degenerate-full-frame rejection own acceptance;
+       nothing is silently rescaled.
+
+    The result is always `evidence_class="learned_estimate"` — a model
+    localization, never a measurement.
+    """
+    paths = [str(p) for p in image_paths][:1]
+    t0 = time.perf_counter()
+    pres = canonical_vqa(
+        _ground_presence_question(target), paths, url=presence_url
+    )
+    pres_out = {
+        "question": _ground_presence_question(target),
+        "available": pres.get("available"),
+        "answer": pres.get("answer"),
+        "seat": pres.get("seat"),
+        "latency_s": pres.get("latency_s"),
+        "error": pres.get("error"),
+    }
+    box_text = None
+    box_err = None
+    if pres_out["available"] and (pres.get("answer") or "").startswith("yes"):
+        try:
+            resp = vqa_nonstream(
+                GROUND_REF_PROMPT.format(q=target),
+                paths,
+                url=box_url,
+                max_tokens=128,
+                timeout=timeout,
+            )
+            box_text = resp.get("text") or ""
+        except Exception as exc:
+            box_err = f"{type(exc).__name__}: {exc}"
+    img_wh = None
+    if paths:
+        try:
+            with Image.open(paths[0]) as im:
+                img_wh = im.size
+        except Exception:
+            img_wh = None
+    rec = ground_decide(target, pres_out, box_text, img_wh)
+    rec.update(
+        {
+            "box_seat": box_url.rsplit("//", 1)[-1],
+            "presence_seat": pres_out.get("seat") or CANONICAL_VLM_SEAT,
+            "box_error": box_err,
+            "decode": {"temperature": 0.0, "max_tokens": 128},
+            "prompt": GROUND_REF_PROMPT,
+            "latency_s": round(time.perf_counter() - t0, 3),
+            "provenance": (
+                "tools.ground — presence oracle canonical_vqa@8091 "
+                f"(answer={pres_out.get('answer')!r}) -> box narrator@8080; "
+                "learned_estimate, not a measurement"
+            ),
+        }
+    )
+    return rec
+
+
+def overlay_box(
+    rgb: np.ndarray,
+    box_px: list[int],
+    label: str | None = None,
+    color: tuple[int, int, int] = (255, 210, 63),
+) -> Image.Image:
+    """Draw one bounding box + optional caption on a copy of rgb."""
+    img = Image.fromarray(np.asarray(rgb, dtype=np.uint8)).convert("RGB")
+    d = ImageDraw.Draw(img)
+    w = max(3, img.width // 300)
+    d.rectangle(list(box_px), outline=color, width=w)
+    if label:
+        d.text((box_px[0] + w, max(0, box_px[1] - 16)), label, fill=color)
+    return img
+
+
 def narration_prompt(query: str, tool_json: dict[str, Any], task: str) -> str:
     """Evidence-fusion prompt: VLM may only use numbers present in tool_json."""
     payload = json.dumps(tool_json, indent=2, default=str)
