@@ -68,6 +68,26 @@ describe("composeVerified — real bundles", () => {
     expect(texts(v.withheld)).toEqual(["area in km² withheld — no map scale (GSD)"]);
   });
 
+  it("upstream withhold → area chip names the cause, not 'no map scale'", () => {
+    // pipeline writes a dependent-withheld area_calc when the mask producer
+    // withheld — the strip must say so, not invent a missing-GSD cause
+    const b = B({
+      tool_outputs: {
+        water_highlight: { withheld: true, withheld_reason: "no_spectral_basis" },
+        area_calc: {
+          withheld: true,
+          withheld_reason: "water_highlight withheld (no_spectral_basis)",
+          label: "water",
+        },
+      },
+      evidence_packet: { claims: [], limitations: [] },
+    });
+    const v = composeVerified(b);
+    expect(texts(v.withheld)).toEqual([
+      "area in km² withheld — water mapping withheld (no_spectral_basis)",
+    ]);
+  });
+
   it("mask-only run (no area tool): pixel count, reference IoU", () => {
     const v = composeVerified(B(maskOnly));
     expect(texts(v.measured)).toEqual([

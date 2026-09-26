@@ -51,6 +51,7 @@ export interface QueryRequest {
   input_mode: InputMode;
   scene?: number | null;
   upload_id?: string | null;
+  sensor_profile?: string | null;
   live?: boolean;
 }
 

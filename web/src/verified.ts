@@ -4,6 +4,7 @@
 // wins"); it is split out and labeled separately by splitAnswer().
 import type { Claim, RunBundle } from "./types";
 import { isWithheldClaim } from "./types";
+import { humanTool } from "./liveTrace";
 
 export interface Fact {
   key: string;
@@ -259,10 +260,19 @@ export function composeVerified(b: RunBundle): VerifiedFacts {
         source: ids(km2, m2),
       });
   } else if (area || limits.some((l) => /square metres withheld/i.test(l))) {
+    // upstream withhold ("water_highlight withheld (no_spectral_basis)") is
+    // the real cause — surface it instead of guessing "no map scale"
+    const reason = typeof area?.withheld_reason === "string" ? area.withheld_reason : "";
+    const dep = reason.match(/^([a-z_]+) withheld/i);
+    const why = dep ? `${humanTool(dep[1])}${reason.slice(dep[1].length)}` : reason;
     const noScale = area ? num(area.gsd_m) == null : true;
     withheld.push({
       key: "area",
-      text: noScale ? "area in km² withheld — no map scale (GSD)" : "area in km² withheld",
+      text: why
+        ? `area in km² withheld — ${why}`
+        : noScale
+          ? "area in km² withheld — no map scale (GSD)"
+          : "area in km² withheld",
       source: area ? "area_calc" : "limitations",
     });
   }

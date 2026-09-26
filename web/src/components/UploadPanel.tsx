@@ -99,15 +99,33 @@ function SlotPreview({
   );
 }
 
+// Declared band identity for rasters that don't name their bands. Keys match
+// demo/ingest.py SENSOR_PROFILES + SAR_PROFILES — the profile is a *declared*
+// truth about the file, not a guess; "auto" leaves it to file metadata.
+const SENSOR_PROFILE_OPTIONS: [string, string][] = [
+  ["", "auto-detect bands"],
+  ["sentinel2_10m", "Sentinel-2 10m (B,G,R,NIR)"],
+  ["cartosat2s_mx", "Cartosat-2S MX (B,G,R,NIR)"],
+  ["cartosat_pan", "Cartosat PAN"],
+  ["naip", "NAIP (R,G,B,NIR)"],
+  ["sentinel1_grd", "Sentinel-1 GRD (SAR)"],
+  ["sar_generic", "generic SAR"],
+];
+
 export function UploadPanel({
   mode,
   onUploaded,
   onFilesChange,
+  sensorProfile,
+  onSensorProfile,
 }: {
   mode: InputMode;
   onUploaded: (u: UploadResponse) => void;
   // lifted so the imagery stage can name the files in its "your images" line
   onFilesChange?: (names: Record<string, string>) => void;
+  // declared sensor for the run — fed into QueryRequest.sensor_profile
+  sensorProfile?: string;
+  onSensorProfile?: (v: string) => void;
 }) {
   const [files, setFiles] = useState<Record<string, File>>({});
   // null = no upload yet this panel; per-role url | null once uploaded
@@ -224,6 +242,24 @@ export function UploadPanel({
       <button className="btn" disabled={!complete || busy} onClick={() => void doUpload()}>
         {busy ? "uploading + ingesting…" : "upload & inspect"}
       </button>
+      {onSensorProfile && (
+        <label className="profile-row">
+          <span className="profile-label">sensor</span>
+          <select
+            className="profile-select"
+            data-testid="sensor-profile"
+            value={sensorProfile ?? ""}
+            disabled={busy}
+            onChange={(e) => onSensorProfile(e.target.value)}
+          >
+            {SENSOR_PROFILE_OPTIONS.map(([v, l]) => (
+              <option key={v} value={v}>
+                {l}
+              </option>
+            ))}
+          </select>
+        </label>
+      )}
       {err && <div className="err">{err}</div>}
     </div>
   );

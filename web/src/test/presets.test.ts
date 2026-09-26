@@ -62,7 +62,9 @@ describe("fetchPresetFile — embedded fallback", () => {
     );
     const f = PRESETS.find((p) => p.id === "sundarbans-single")!.files![0];
     const blob = await fetchPresetFile(f);
-    expect(blob.size).toBe(525066);
+    // 2026-09-26 authorized BAND-DESC: band descriptions written into the
+    // GeoTIFF (C1 band-identity gate made the unnamed file withhold)
+    expect(blob.size).toBe(526200);
     expect(blob.type).toBe("image/tiff");
   });
 
@@ -71,14 +73,17 @@ describe("fetchPresetFile — embedded fallback", () => {
       "fetch",
       vi.fn(async () => new Response(null, { status: 204 })),
     );
+    // 2026-09-26 authorized BAND-DESC: hashes re-pinned — band descriptions
+    // (B02 blue / B03 green / B04 red / B08 nir; VV / VH) written into the
+    // GeoTIFFs so unlabeled-band ingests resolve identity from the file
     const cases: [string, string][] = [
       [
         "sundarbans_optical.tiff",
-        "47cc51d8e532d105efe244f379641c456520658d206498f6c361f32719cb50b0",
+        "9ff9137ac83e308114e62877b52f6c13fef3a7a9d54a89311251bb9c8bd7066c",
       ],
       [
         "sundarbans_sar.tiff",
-        "5fb7616cf07e372d5986ee4a7e24bc616a217f998dad5b8742bc54d0228dfa69",
+        "519eda9ce956e46e705ec3fab4479ffcdf70e9da1d955f5873013675f98bc210",
       ],
     ];
     for (const [name, sha] of cases) {

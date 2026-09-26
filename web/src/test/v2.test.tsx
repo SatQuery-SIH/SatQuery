@@ -459,6 +459,39 @@ describe("stale-run clearing", () => {
   });
 });
 
+// ------------------------------------------------------- sensor profile
+
+describe("sensor profile selector", () => {
+  it("declared profile is sent on the query request; auto sends none", async () => {
+    render(<App />);
+    await loadAndRun("sundarbans-single", "is there water");
+    await waitFor(() =>
+      expect(screen.getByTestId("answer-card")).toBeInTheDocument(),
+    );
+    const mock = fetch as unknown as ReturnType<typeof vi.fn>;
+    const first = mock.mock.calls.find(
+      ([u, i]) => String(u).endsWith("/query/stream") && i?.method === "POST",
+    );
+    expect(first).toBeTruthy();
+    expect(JSON.parse(String(first![1]?.body)).sensor_profile).toBeUndefined();
+
+    mock.mockClear();
+    fireEvent.change(screen.getByTestId("sensor-profile"), {
+      target: { value: "sentinel2_10m" },
+    });
+    fireEvent.click(screen.getByTestId("run-button"));
+    await waitFor(() => {
+      const q = mock.mock.calls.find(
+        ([u, i]) => String(u).endsWith("/query/stream") && i?.method === "POST",
+      );
+      expect(q).toBeTruthy();
+      expect(JSON.parse(String(q![1]?.body)).sensor_profile).toBe(
+        "sentinel2_10m",
+      );
+    });
+  });
+});
+
 // -------------------------------------------------------------- de-jargon
 
 describe("de-jargon guard", () => {

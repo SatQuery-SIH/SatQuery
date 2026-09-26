@@ -362,6 +362,26 @@ pre {
   padding: var(--s-4);
   text-align: center;
 }
+.profile-row {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--s-8);
+}
+.profile-label {
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  color: var(--muted);
+}
+.profile-select {
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-6);
+  padding: var(--s-4) var(--s-8);
+  color: var(--ink-2);
+  font-size: 12px;
+}
 .err {
   color: var(--bad);
   font-size: 12px;
@@ -441,7 +461,7 @@ pre {
   justify-content: center;
 }
 .stage-panels.mode-single {
-  grid-template-columns: min(100%, min(72vh, 840px));
+  grid-template-columns: min(100%, min(58vh, 700px));
 }
 .stage-panels.mode-bi {
   grid-template-columns: repeat(2, min(46vw, min(45vh, 440px)));
@@ -480,7 +500,7 @@ pre {
   display: block;
   width: 100%;
   height: auto;
-  max-height: 72vh;
+  max-height: 58vh;
   object-fit: contain;
 }
 .stage-empty {

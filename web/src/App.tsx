@@ -106,6 +106,8 @@ export default function App() {
   const [scene, setScene] = useState<number | null>(null);
   const [boundPreset, setBoundPreset] = useState<Preset | null>(null);
   const [inputNames, setInputNames] = useState<Record<string, string>>({});
+  // declared sensor for rasters with unnamed bands — "" = auto-detect
+  const [sensorProfile, setSensorProfile] = useState("");
   const [bundle, setBundle] = useState<RunBundle | null>(null);
   const [busy, setBusy] = useState(false);
   const [runError, setRunError] = useState<RunError | null>(null);
@@ -171,6 +173,7 @@ export default function App() {
     mode: InputMode;
     uploadId?: string;
     scene?: number;
+    sensorProfile?: string;
   }) => {
     const text = args.text.trim();
     if (!text) return;
@@ -192,6 +195,7 @@ export default function App() {
       input_mode: args.mode,
       upload_id: args.uploadId,
       scene: args.uploadId ? undefined : args.scene,
+      sensor_profile: args.sensorProfile || undefined,
       live: true,
     };
 
@@ -436,6 +440,8 @@ export default function App() {
               setBundle(null);
               setRunView({ kind: "idle" });
             }}
+            sensorProfile={sensorProfile}
+            onSensorProfile={setSensorProfile}
           />
 
           <div className="query-row">
@@ -453,6 +459,7 @@ export default function App() {
                   mode,
                   uploadId: upload?.upload_id,
                   scene: upload ? undefined : (scene ?? undefined),
+                  sensorProfile,
                 })
               }
             />
@@ -466,6 +473,7 @@ export default function App() {
                   mode,
                   uploadId: upload?.upload_id,
                   scene: upload ? undefined : (scene ?? undefined),
+                  sensorProfile,
                 })
               }
             >
