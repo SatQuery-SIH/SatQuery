@@ -1,0 +1,185 @@
+{
+  "label": "product-ground-v1",
+  "seat_box": "http://127.0.0.1:8080",
+  "seat_presence": "127.0.0.1:8091",
+  "n_present": 2,
+  "n_absent": 1,
+  "present": {
+    "full": {
+      "withheld_rate": 0.0,
+      "box_emitted": 2,
+      "withhold_reasons": {},
+      "acc_iou_0.5": 1.0,
+      "mean_iou": 0.7253
+    },
+    "head": {
+      "withheld_rate": 0.0,
+      "box_emitted": 2,
+      "withhold_reasons": {},
+      "acc_iou_0.5": 1.0,
+      "mean_iou": 0.7253
+    }
+  },
+  "absent": {
+    "full": {
+      "withheld_rate": 1.0,
+      "box_emitted": 0,
+      "withhold_reasons": {
+        "target_absent": 1
+      },
+      "false_box_rate": 0.0
+    },
+    "head": {
+      "withheld_rate": 0.0,
+      "box_emitted": 1,
+      "withhold_reasons": {},
+      "false_box_rate": 1.0
+    }
+  },
+  "pick_rule": "ship best present acc@0.5 with absent false_box_rate <= 0.3; else keep full-phrase gate",
+  "frozen_ids": "vrsbench_referring_eval_ids.json",
+  "gt_sha256": "fd63f7c6b77a158f4cc933a1ead88fa63aa23ebcf30f2ec9be111f3567ff1b44",
+  "sample_seed": 20260925,
+  "note": "local Q4 llama.cpp product-level eval \u2014 shipped gate replayed offline per presence variant; NOT the bf16 reportable column",
+  "wall_seconds": 87.2,
+  "preds_present": [
+    {
+      "id": "10171_0000.png#14178",
+      "image_id": "10171_0000.png",
+      "target": "The blue and white vehicle is located at the bottom left part of the image.",
+      "presence_full": {
+        "question": "Is there a blue and white vehicle is located at the bottom left part of the image in the image? Answer yes or no.",
+        "available": true,
+        "answer": "yes",
+        "seat": "127.0.0.1:8091",
+        "error": null
+      },
+      "presence_head": {
+        "question": "Is there a and white vehicle in the image? Answer yes or no.",
+        "available": true,
+        "answer": "yes",
+        "seat": "127.0.0.1:8091",
+        "error": null
+      },
+      "box_text": "```json\n[\n    {\"bbox_2d\": [34, 688, 120, 762], \"label\": \"The blue and white vehicle is located at the bottom left part of the image.\"}\n]\n```",
+      "box_error": null,
+      "sec": 23.0,
+      "q_source_image": "10171_0000.png",
+      "full_decision": {
+        "withheld": false,
+        "withheld_reason": null,
+        "frame_tag": "bbox2d_1000",
+        "box01": [
+          0.034,
+          0.688,
+          0.12,
+          0.762
+        ],
+        "iou": 0.675
+      },
+      "head_decision": {
+        "withheld": false,
+        "withheld_reason": null,
+        "frame_tag": "bbox2d_1000",
+        "box01": [
+          0.034,
+          0.688,
+          0.12,
+          0.762
+        ],
+        "iou": 0.675
+      }
+    },
+    {
+      "id": "P5789_1971.png#8099",
+      "image_id": "P5789_1971.png",
+      "target": "The plane located towards the top-left portion of the image.",
+      "presence_full": {
+        "question": "Is there a plane located towards the top-left portion of the image in the image? Answer yes or no.",
+        "available": true,
+        "answer": "yes",
+        "seat": "127.0.0.1:8091",
+        "error": null
+      },
+      "presence_head": {
+        "question": "Is there a plane in the image? Answer yes or no.",
+        "available": true,
+        "answer": "yes",
+        "seat": "127.0.0.1:8091",
+        "error": null
+      },
+      "box_text": "```json\n[\n    {\"bbox_2d\": [0, 298, 100, 400], \"label\": \"The plane located towards the top-left portion of the image.\"}\n]\n```",
+      "box_error": null,
+      "sec": 32.3,
+      "q_source_image": "P5789_1971.png",
+      "full_decision": {
+        "withheld": false,
+        "withheld_reason": null,
+        "frame_tag": "bbox2d_1000",
+        "box01": [
+          0.0,
+          0.298,
+          0.1,
+          0.4
+        ],
+        "iou": 0.7756410256410257
+      },
+      "head_decision": {
+        "withheld": false,
+        "withheld_reason": null,
+        "frame_tag": "bbox2d_1000",
+        "box01": [
+          0.0,
+          0.298,
+          0.1,
+          0.4
+        ],
+        "iou": 0.7756410256410257
+      }
+    }
+  ],
+  "preds_absent": [
+    {
+      "id": "10171_0000.png#14178",
+      "image_id": "10171_0000.png",
+      "target": "The small vehicle at the top-right is the top-most one among the visible small vehicles.",
+      "presence_full": {
+        "question": "Are there any small vehicle at the top-right is the top-most one among the visible small vehicles in the image? Answer yes or no.",
+        "available": true,
+        "answer": "no",
+        "seat": "127.0.0.1:8091",
+        "error": null
+      },
+      "presence_head": {
+        "question": "Is there a vehicle in the image? Answer yes or no.",
+        "available": true,
+        "answer": "yes",
+        "seat": "127.0.0.1:8091",
+        "error": null
+      },
+      "box_text": "```json\n[\n    {\"bbox_2d\": [648, 601, 718, 662], \"label\": \"The small vehicle at the top-right is the top-most one among the visible small vehicles.\"}\n]\n```",
+      "box_error": null,
+      "sec": 32.0,
+      "q_source_image": "P1410_0125.png",
+      "full_decision": {
+        "withheld": true,
+        "withheld_reason": "target_absent",
+        "frame_tag": null,
+        "box01": null,
+        "iou": null
+      },
+      "head_decision": {
+        "withheld": false,
+        "withheld_reason": null,
+        "frame_tag": "bbox2d_1000",
+        "box01": [
+          0.648,
+          0.601,
+          0.718,
+          0.662
+        ],
+        "iou": null
+      }
+    }
+  ]
+}

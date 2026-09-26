@@ -167,3 +167,39 @@ establish the reportable public number — that needs the bf16/full-n run
 (approved on the designated Modal profile; volume staging required since
 Images_val and the merged tree currently live on a different account's
 `satquery-data`).
+
+## Product-level eval — shipped gate on frozen ids (2026-09-26)
+
+The seat comparison measured the bare box model. This run measures the
+**shipped `tools.ground` contract end-to-end** — presence oracle (:8091
+`canonical_vqa`) -> narrator box (:8080) -> frame/full-frame gate —
+replayed offline per presence variant on the same frozen items:
+n=300 present (same seeded ids) + n=150 absent (same mismatched pairs
+as the seat probes). Presence was asked TWO ways per item (full
+expression vs head-noun class question); one temp-0 box call shared.
+
+| variant | present acc@0.5 | present withhold | absent false-box | absent withhold |
+|---|---|---|---|---|
+| full phrase | 0.4467 | 17.3% | 0.173 | 82.7% |
+| **head noun** | **0.4800** | **10.7%** | 0.253 | 74.7% |
+
+**Pick rule (pre-registered in scripts/ground_product_local.py):** best
+present acc@0.5 provided absent false-box <= 0.30 -> **head noun wins
+both halves** and ships as `ground(presence_mode="head")` default.
+Head recovers 25 presence false-negatives (36->11 `target_absent`
+withholds on real targets — the adapted seat answers "Is there a
+vehicle?" far more reliably than a 20-word referring expression) at the
+cost of ~12 more absent inventions; both variants keep absent
+invention far below narrator-alone (~52%).
+
+Withhold anatomy (present set): presence says no (36 full / 11 head),
+box unparsed i.e. narrator free-text refusal (14/18 — a second withhold
+layer), degenerate full-frame (2/3).
+
+Product-level acc@0.5 ~0.48 vs bare-narrator 0.6067: the presence gate
+trades ~13pp of present accuracy to cut absent-target invention from
+~52% to 17-25% — the honest-product trade, now measured at n=450.
+
+Artifacts: `ground_product_300p_150a.json` (per-item presence answers,
+box text, per-variant decisions, IoU). Harness:
+`scripts/ground_product_local.py` (incremental partial-resume).

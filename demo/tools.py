@@ -1827,9 +1827,14 @@ def canonical_vqa(
 # never be called bare — and the narrator beats it +4.0pp acc@0.5 at matched
 # --image-min-tokens 384. So the adapted seat (:8091) is the presence ORACLE
 # (binary presence/absence is the RSVQA family the LoRA actually trained on)
-# and the :8080 narrator draws the box. Every response is frame-tagged; only
-# unambiguous 0-1000 / 0-1 grids are accepted — a drifted px/100 frame or a
-# degenerate full-frame box withholds instead of silently rescaling.
+# and the :8080 narrator draws the box. The oracle asks about the
+# expression's head noun, not the full expression (A/B measured
+# 2026-09-26, eval_ground_local/ground_product_300p_150a.json: head
+# present acc@0.5 0.480 vs full 0.447, absent false-box 0.253 vs 0.173 —
+# head wins the pre-registered pick rule). Every response is
+# frame-tagged; only unambiguous 0-1000 / 0-1 grids are accepted — a
+# drifted px/100 frame or a degenerate full-frame box withholds instead
+# of silently rescaling.
 
 GROUND_REF_PROMPT = (
     "Please provide the bounding box coordinate of the region this "
@@ -1951,8 +1956,11 @@ def _ground_presence_question(target: str, mode: str = "full") -> str:
 
     mode="full" wraps the whole referring expression; mode="head" asks
     about just the class-level head noun — a closer match to the RSVQA
-    training distribution. Which variant gates is a measured question
-    (scripts/ground_product_local.py A/B), not an assumption.
+    training distribution. Measured A/B (scripts/ground_product_local.py,
+    n=300 present + n=150 absent, 2026-09-26): head wins the
+    pre-registered pick rule — present acc@0.5 0.480 vs 0.447, absent
+    false-box 0.253 vs 0.173 — because the adapted seat answers
+    class-level questions far more reliably than 20-word expressions.
     """
     t = re.sub(r"^(?:the|a|an|any|all|some|that|this|those|these)\s+", "",
                target.strip().rstrip("?.!"), flags=re.I)
@@ -2052,7 +2060,7 @@ def ground(
     *,
     box_url: str = DEFAULT_VLM_URL,
     presence_url: str = CANONICAL_VLM_URL,
-    presence_mode: str = "full",
+    presence_mode: str = "head",
     timeout: float = 90.0,
 ) -> dict[str, Any]:
     """Presence-gated referring-expression box. Two seats, one contract:

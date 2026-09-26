@@ -40,7 +40,7 @@ SHARED = (
     DEMO / "serve.ps1",
 )
 SHARED_SHA = {
-    "tools.py": "1b1044db52e618c8fe7db6b5a7276b96bf5876d4acf7ac1da45d3f1c16b82ec6",  # 2026-09-26 authorized GROUND-V1-REV1 (bbox_2d schema-declared 0-1000; presence_mode=head variant + _ground_head_phrase for oracle A/B)
+    "tools.py": "8d4dab4a1d32ff81b20d606973c7f47567280c0f186af872bab79e8143fc41e2",  # 2026-09-26 authorized GROUND-V1-PICK (presence_mode default flipped to "head" — won pre-registered pick rule on n=300+150 product eval: acc 0.480 vs 0.447, false-box 0.253 <= 0.30)
     "app.py": "be1f0ee9e58a2a3800674ac631f76a79cda271c9ee9f298bf7eb9b1089a87bf6",  # 2026-09-13 human-authorized Tab 2 copy edit (readable legend; needles unchanged)
     "pipeline.py": "cecd13a20e36046e9a1a7ffc1745a1497d2e0c62179e98845b08f634190aa496",  # 2026-09-26 authorized GROUND-V1 (ground dispatch: presence gate, box overlay artifact, withheld path emits no image)
     "report.py": "79fda1935dae3fa9c163fcdf9b7091ea72cbbfbb76f4c22b414e7d5c406e528f",  # 2026-09-26 authorized GROUND-V1 (ground findings line; estimate-qualifier enforcement for evidence_class!=measured_index claims)

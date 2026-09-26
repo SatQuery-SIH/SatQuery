@@ -88,12 +88,24 @@ def _box_call(target: str, img_path: Path) -> tuple[str | None, str | None]:
 
 
 def run(items, absent: bool, label: str) -> tuple[list[dict], dict]:
+    """Each finished item is appended to a partial JSON so an interrupted
+    run (IDE/host restart) resumes instead of restarting."""
     from PIL import Image
 
+    g.OUT_DIR.mkdir(exist_ok=True)
+    partial = g.OUT_DIR / f"ground_product_{label}.partial.json"
+    recs: list[dict] = []
+    done: set = set()
+    if partial.exists():
+        recs = json.loads(partial.read_text())
+        done = {r["id"] for r in recs}
+        print(f"[resume] {label}: {len(done)} items already done", flush=True)
+
     dims_cache: dict[str, tuple] = {}
-    recs = []
     t0 = time.time()
     for i, (eid, e, q_img) in enumerate(items, 1):
+        if eid in done:
+            continue
         img = e["image_id"]
         p = g.IMG_DIR / img
         if img not in dims_cache:
@@ -132,7 +144,11 @@ def run(items, absent: bool, label: str) -> tuple[list[dict], dict]:
                 iou = None
             else:
                 gt01 = g.parse_gt_box(e["ground_truth"])
-                iou = g.iou_official(dec.get("box01"), gt01) if gt01 else 0.0
+                iou = (
+                    g.iou_official(dec["box01"], gt01)
+                    if dec.get("box01") and gt01
+                    else 0.0
+                )
             rec[f"{m}_decision"] = {
                 "withheld": dec.get("withheld"),
                 "withheld_reason": dec.get("withheld_reason"),
@@ -146,6 +162,9 @@ def run(items, absent: bool, label: str) -> tuple[list[dict], dict]:
             f"head={'W:' + str(rec['head_decision']['withheld_reason']) if rec['head_decision']['withheld'] else 'box iou=' + str(rec['head_decision']['iou'])} "
             f"{dt:.1f}s", flush=True)
         recs.append(rec)
+        partial.write_text(json.dumps(recs))
+    if partial.exists():
+        partial.unlink()
     return recs, {"wall_seconds": round(time.time() - t0, 1)}
 
 
