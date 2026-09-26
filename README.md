@@ -13,52 +13,32 @@ Built for **Smart India Hackathon 2026**, problem statement SIH26167 (ISRO / Spa
 
 ## How it works
 
-```
-                        ┌─────────────────────────────────────────────┐
- USER QUERY + inputs ──►│  PLANNER  (scores visible JSON plan — not    │
- (single / bi-temporal /│  hidden chain-of-thought; refuses cleanly    │
-  optical+SAR)          │  when the request is unsupported)            │
-                        └──────────────┬──────────────────────────────┘
-                                       │ plan: {task, tools[], mode}
-                ┌──────────────────────┼───────────────────────────┐
-                ▼                      ▼                           ▼
-        ┌───────────────┐    ┌──────────────────┐        ┌──────────────────┐
-        │   INGEST      │    │ SPECIALIST TOOLS │        │ LANGUAGE MODELS  │
-        │ load + check  │    │ (deterministic)  │        │ (Qwen3-VL-8B ×2) │
-        │ the rasters:  │    │ cdvqa_map /      │        │                  │
-        │ pixel size,   │    │ changeformer     │        │ answer model     │
-        │ CRS, dtype,   │    │ area_calc        │        │ (adapted)        │
-        │ SAR calib.    │    │ water/SDWI masks │        │  → typed answers │
-        └───────────────┘    │ sar_read/stats   │        │   + claims       │
-                             │ sar_agreement    │        │                  │
-                             │ coreg_check      │        │ narration model  │
-                             │ geo_export       │        │ (frozen) → prose │
-                             └────────┬─────────┘        │   from evidence  │
-                                      │ tool_outputs (numbers,    └────────┬─────────┘
-                                      │ masks, typed verdicts)    │ claims +
-                                      ▼                           ▼ prose
-                        ┌─────────────────────────────────────────────┐
-                        │  EVIDENCE PACKET — every claim is typed:     │
-                        │  {predicate, value, confidence, source_tool, │
-                        │   model_id, artifact_sha256, which endpoint} │
-                        │  withheld when evidence is insufficient      │
-                        └──────────────┬──────────────────────────────┘
-                                       ▼
-                        ┌─────────────────────────────────────────────┐
-                        │  REPORT — findings, measurement, confidence, │
-                        │  limitations, narration_check (blocks        │
-                        │  invented numbers incl. bad % derivations),  │
-                        │  artifacts + GeoTIFF exports                 │
-                        └──────────────┬──────────────────────────────┘
-                                       ▼
-            React SPA (web/) ◄── FastAPI (api/) ──► SQLite run store
-            SSE stage events stream the pipeline live — plan → tools →
-            packet → narration — so the audit trail is visible in real time.
+```mermaid
+flowchart TD
+    Q["User query + bound inputs<br/>single image · bi-temporal pair · optical+SAR pair"] --> P
+
+    P["PLANNER — model-primary<br/>visible JSON plan {task, tools, mode}<br/>regex safety layer · clean refusals"] --> I
+    P --> T
+
+    I["INGEST<br/>sensor profile → band metadata → checked<br/>band inference → withhold<br/>SAR modality + polarization checks"] --> T
+
+    T["SPECIALIST TOOLS — deterministic<br/>water_highlight · area_calc · change_detect<br/>cdvqa_map · sar_read · sar_agreement · ground"]
+    T -->|"tool_outputs — numbers, masks,<br/>typed verdicts, artifacts"| E
+
+    CAN["canonical answer model<br/>adapted Qwen3-VL-8B"] --> E
+
+    E["EVIDENCE PACKET — every claim typed<br/>{predicate, value, confidence,<br/>source tool/model, artifact sha256}<br/>withheld when evidence is insufficient"] --> R
+
+    NAR["narrator model<br/>frozen Qwen3-VL-8B"] --> R
+
+    R["REPORT — findings + measurements<br/>+ confidence + limitations<br/>narration_check blocks invented numbers<br/>artifacts + GeoTIFF exports"] --> UI
+
+    UI["React SPA → FastAPI → run store<br/>trace visible in real time"]
 ```
 
 **The design rule that makes this defensible to judges:** the VLM never computes. Ask "how much did built-up area grow?" and the change-detection tool produces the mask, the area tool converts pixels × ground-sample-distance into km², and only then does the VLM turn that evidence into a sentence — citing the numbers the tools produced.
 
-**Three input modes (the PS's mandatory trio):** single-image VQA/captioning · bi-temporal change description · co-registered optical+SAR analysis.
+**Three input modes (the PS's mandatory trio):** single-image VQA/captioning · bi-temporal change description · co-registered optical+SAR analysis. Plus grounding: "locate the harbor" returns a presence-gated bounding box labeled as an estimate.
 
 **Honest withholding, by design:** when the evidence isn't there, the system says so — `withheld` claims (e.g. SAR agreement withheld when measured misregistration >5px), `inconclusive(weak_peak)` coregistration verdicts, planner refusals for unsupported requests, and `skipped_no_transform` geo exports on un-georeferenced uploads. Withholding is a recorded event in the packet, never silent.
 
@@ -66,22 +46,22 @@ Built for **Smart India Hackathon 2026**, problem statement SIH26167 (ISRO / Spa
 
 ## Model serving — local & cloud, labeled per answer
 
+```mermaid
+flowchart LR
+    S["serving profile<br/>config/seats.json · GET/POST /seats"] --> L & C
+
+    subgraph L["LOCAL — default, runs offline"]
+        NL["narrator :8080<br/>llama.cpp · 4-bit frozen base"]
+        CL["canonical :8091<br/>llama.cpp · 4-bit adapted<br/>id: canonical-lrfold<br/>--image-min-tokens 384"]
+    end
+
+    subgraph C["CLOUD — deployable"]
+        NC["narrator — Modal vLLM bf16"]
+        CC["canonical — Modal vLLM bf16<br/>merged 3a4fecb0…<br/>scale-to-zero · proxy-auth"]
+    end
 ```
-              serving profile: "local" | "cloud"   (config/seats.json)
-        ┌──────────────────────┴──────────────────────┐
-        ▼ LOCAL (default, runs offline)               ▼ CLOUD (deployable)
-  ┌───────────────────────────────┐         ┌───────────────────────────────┐
-  │ narration endpoint :8080      │         │ narration endpoint (Modal     │
-  │  llama.cpp, 4-bit frozen base │         │  vLLM, full-precision bf16)   │
-  │ answer endpoint    :8091      │         │ answer endpoint (Modal vLLM,  │
-  │  llama.cpp, 4-bit adapted     │         │  full-precision merged        │
-  │  (id: canonical-lrfold)       │         │  weights 3a4fecb0…)           │
-  │  --image-min-tokens 384       │         │  scale-to-zero + proxy-auth   │
-  └───────────────────────────────┘         └───────────────────────────────┘
-        Either way, every answer records which model produced it
-        {model id, weights SHA, which endpoint}. A down endpoint
-        withholds — it never silently substitutes another model.
-```
+
+Either way, every answer records which model produced it — `{model id, weights SHA, which endpoint}`. A down endpoint withholds; it never silently substitutes another model.
 
 The serving profile lives in `config/seats.json`; the API exposes it at `GET/POST /seats`; the frontend toggle switches profiles explicitly. Cloud endpoints scale to zero when idle — a `GET /v1/models` probe warms them (cold start measured ~1.5–4.5 min).
 
@@ -124,24 +104,26 @@ All scores are **exact-match accuracy on frozen evaluation question ids** — of
 
 **Question-answering benchmarks (full-precision model):**
 
-| Benchmark | Zero-shot baseline | HR-adapted | Current adapted (served) |
-|---|---:|---:|---:|
-| RSVQA-HR val (n=102,843) | 0.5077 | **0.8136** | 0.8073 ✓ above the 0.80 regression threshold |
-| RSVQA-HR test | — | **0.8164** | deferred* |
-| RSVQA-HR test_phili | — | **0.7813** | deferred* |
-| RSVQA-LR val (n=10,005) | 0.5427 | 0.5401 | **0.7343 (+0.194)** |
-| RSVQA-LR test (n=10,004) | 0.5597 | 0.5566 | **0.7294 (+0.173)** |
-| VRSBench VQA | 0.6597 | **0.6603** | deferred* |
+| Benchmark | Zero-shot baseline | HR-adapted | Current adapted (served) | Official-protocol binned† |
+|---|---:|---:|---:|---:|
+| RSVQA-HR val (n=102,843) | 0.5077 | **0.8136** | 0.8073 ✓ above the 0.80 regression threshold | ~0.84* |
+| RSVQA-HR test | — | **0.8164** | deferred* | — |
+| RSVQA-HR test_phili | — | **0.7813** | deferred* | — |
+| RSVQA-LR val (n=10,005) | 0.5427 | 0.5401 | **0.7343 (+0.194)** | **0.889** |
+| RSVQA-LR test (n=10,004) | 0.5597 | 0.5566 | **0.7294 (+0.173)** | **0.873** |
+| VRSBench VQA | 0.6597 | **0.6603** | deferred* (EM; official metric is model-judged) | — |
 
-\* three columns on the newest model were deferred on budget — the eval resumes shard-by-shard where it stopped; nothing partial is published.
+\* three columns on the newest model are pending on the designated cloud account — the eval resumes shard-by-shard where it stopped; nothing partial is published.
+† the published RSVQA protocol quantizes LR counts and HR areas into 5 bins — exact-match understates the column. LR values re-scored on shipped predictions; the HR figure awaits the official script for exact bin edges.
 
 **Caption (VRSBench, pycocoevalcap, 9,350 frozen ids):** CIDEr **0.2803**, BLEU-4 0.1207, METEOR 0.2170, ROUGE-L 0.3348 — vs **0.0** CIDEr zero-shot (the adapted model answers in caption register, mean length 43 vs 199 words).
 
+**Grounding — shipped `ground` tool:** presence oracle (canonical seat, RSVQA-family yes/no) → box seat (narrator, VRSBench referring prompt) → frame detection + ≥98%-coverage rejection; output labeled `learned_estimate`. Product-level eval on frozen subsets: **present acc@0.5 = 0.480, absent false-box = 0.253** (n=300+150, local 4-bit seats) — the presence gate trades ~13pp of box accuracy for halving absent-target invention (52%→25%). Zero-shot base reference: **0.6114** acc@0.5 (bf16, Modal, n=16,159 frozen ids, 2026-09-14; raw preds not retained — not comparable to the product path above).
+
 **Other measured:**
-- VRSBench grounding acc@0.5: **0.6114** — zero-shot base Qwen3-VL-8B (bf16, Modal), n=16,159 frozen ids, 2026-09-14; raw preds not retained (per policy, the wiped column is not re-run "to confirm"). The live product's `ground` tool is in progress; the adapted seat has not yet been measured on this column.
-- CDVQA change-detection QA: **0.62 / 0.62 / 0.51** — produced by the deterministic tool+mapping layer (honestly labeled: not a trained change-VQA model)
+- CDVQA change-detection QA: **0.62 / 0.62 / 0.51** — deterministic tool+mapping layer (honestly labeled: not a trained change-VQA model). Measured caveat: a train-split answer-prior alone scores 0.68 on val — a combiner (prior + mapper + features) and a pair-reasoning model are in flight; neither is claimed yet.
 - Sanity checks on the served 4-bit model (20-question samples, ±10pt noise): HR 16/20 · LR 18/20 · cloud full-precision 17/20
-- LR weakest family: counting questions ~0.25 even after ×2.5 oversampling — the honest residual
+- LR count family: **0.245 exact-match → 0.768 under the official count-binning** — exact-match scoring overstated the weakness.
 
 **Model discipline:** endpoints change only on measured evidence — the current adapted model shipped after passing a regression threshold on held-out data (0.8073 ≥ 0.80), with provenance re-pinned to the exact bytes served. Every model-produced claim carries `{model id, weights SHA, which endpoint}` — the local quantized model and the cloud full-precision model are labeled separately, never conflated.
 
@@ -203,7 +185,7 @@ cd web && npm install && npm run dev  # React SPA → :5173
 |---|---|
 | `docs/SIH26167_Team_Brief.md` | What the PS asks, FAQ, dates, roles |
 | `docs/SIH26167_Final_Plan.md` | Architecture, PS compliance map, evaluation + demo design |
-| `strategy/MASTER_ARCHITECTURE_AND_STRATEGY.md` | Internal architecture + adaptation gates (laptop) |
+| `strategy/MASTER_PLAN_V2.md` | Internal north star — v3 strategy revision (gitignored) |
 | `CONTRIBUTING.md` | PR rules |
 
 These docs are **product facts** — they do not track live GPU jobs. For background on how we work: every experiment is pre-registered, every verdict is verified against artifacts on disk, and a negative result is reported as honestly as a positive one.
