@@ -495,13 +495,71 @@ def _sar_pol_of(name: str) -> str | None:
     return sorted(hits)[0] if hits else None
 
 
+# Pre-registered thresholds for band-identity inference (BAND-INFER,
+# 2026-09-26, external review). Applies ONLY to 4-band TIFFs that declared
+# no profile and carry no band names. Vegetation set V = top-5%
+# band-4 pixels; accept G=2/NIR=4 iff ALL of:
+#   (i)   median_V(b4) >= 1.5 * median_V(b3) — NIR towers over the third
+#         band on vegetation; LISS-III/AWiFS orderings (G,R,NIR,SWIR) fail
+#         because their b3 IS NIR
+#   (ii)  median_V(b3) <= 0.9 * median_V(b2) — the third band is absorbed
+#         (red under chlorophyll for B,G,R,NIR; blue for R,G,B,NIR)
+#   (iii) p99(b4) >= 1.3 * p50(b4) — band 4 must carry real variance;
+#         constant alpha channels and dead-flat scenes fail here
+# A scene with nothing b4-bright fails (i)/(ii) on its own — there is no
+# vegetation to test the hypothesis against.
+_INFER_NIR_RATIO = 1.5
+_INFER_ABSORB_RATIO = 0.9
+_INFER_VAR_RATIO = 1.3
+
+
+def _infer_bgrn_map(path: Path) -> tuple[dict[str, int] | None, str]:
+    """Last-resort identity for unnamed 4-band TIFFs.
+
+    Returns ({green:2, nir:4}, evidence note) when band 4 measurably
+    behaves like NIR, else (None, reason). Only green/nir are claimed —
+    the red-vs-blue distinction is NOT decidable by this test, so callers
+    that need visible-band identity must keep withholding/marking
+    "assumed". The note carries the median values so the trace can show
+    the evidence, not just the verdict.
+    """
+    try:
+        import rasterio
+
+        with rasterio.open(path) as ds:
+            if int(ds.count) != 4:
+                return None, "inference n/a (not 4-band)"
+            h, w = int(ds.height), int(ds.width)
+            step = max(1, math.ceil(max(h, w) / 512))
+            arr = ds.read(
+                out_shape=(4, max(1, h // step), max(1, w // step))
+            ).astype(np.float32)
+    except Exception as e:
+        return None, f"inference read failed ({type(e).__name__})"
+    b2, b3, b4 = arr[1], arr[2], arr[3]
+    p99, p50 = float(np.percentile(b4, 99)), float(np.percentile(b4, 50))
+    if not (p99 >= _INFER_VAR_RATIO * max(p50, 1.0)):
+        return None, f"inference rejected: band4 flat (p99={p99:.0f}, p50={p50:.0f})"
+    v = b4 >= np.quantile(b4, 0.95)
+    if int(v.sum()) < max(64, int(0.005 * b4.size)):
+        return None, "inference rejected: no band4-bright pixel set"
+    m4 = float(np.median(b4[v]))
+    m3 = float(np.median(b3[v]))
+    m2 = float(np.median(b2[v]))
+    ev = f"veg-px medians b4={m4:.0f} b3={m3:.0f} b2={m2:.0f}"
+    if m4 < _INFER_NIR_RATIO * m3 or m3 > _INFER_ABSORB_RATIO * m2:
+        return None, f"inference rejected ({ev})"
+    return {"green": 2, "nir": 4}, f"band identity inferred (G=2, NIR=4; {ev})"
+
+
 def resolve_band_map(
     path: str | Path, sensor_profile: str | None = None
 ) -> tuple[dict[str, int] | None, str]:
     """({canonical_name: 1-based index} | None, provenance note).
 
-    Evidence order: declared sensor profile → file metadata → None
-    (unidentified — callers must withhold spectral claims, not guess).
+    Evidence order: declared sensor profile → file metadata → checked
+    G=2/NIR=4 inference → None (unidentified — callers must withhold
+    spectral claims, not guess).
     """
     p = _path(path)
     if p is None or not p.is_file():
@@ -519,7 +577,7 @@ def resolve_band_map(
                 n = int(ds.count)
             if max(prof.values()) > n:
                 return None, (
-                    f"profile {sensor_profile!r} needs band {max(prof.values())}; "
+                    f"profile {sensor_profile} needs band {max(prof.values())}; "
                     f"`{p.name}` has {n}"
                 )
         except ImportError:
@@ -529,7 +587,13 @@ def resolve_band_map(
     m = _map_named_bands(names)
     if m:
         return m, f"band metadata {m}"
-    return None, "bands unidentified (no declared profile, no band names/colorinterp)"
+    inferred, inote = _infer_bgrn_map(p)
+    if inferred:
+        return inferred, inote
+    return None, (
+        "bands unidentified (no declared profile, no band names/colorinterp; "
+        + inote + ")"
+    )
 
 
 def _load_rgb_array(

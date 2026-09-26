@@ -45,7 +45,7 @@ SHARED_SHA = {
     "pipeline.py": "cecd13a20e36046e9a1a7ffc1745a1497d2e0c62179e98845b08f634190aa496",  # 2026-09-26 authorized GROUND-V1 (ground dispatch: presence gate, box overlay artifact, withheld path emits no image)
     "report.py": "79fda1935dae3fa9c163fcdf9b7091ea72cbbfbb76f4c22b414e7d5c406e528f",  # 2026-09-26 authorized GROUND-V1 (ground findings line; estimate-qualifier enforcement for evidence_class!=measured_index claims)
     "planner.py": "f57534d58320c8bf6b0f9a104b7b5d0798284b0ff1b8b8197447db3b50500b7d",  # 2026-09-26 authorized GROUND-V1 (ground in TOOLS/allowlist; locate-route + ground_target extractor; suite +6 cases)
-    "ingest.py": "d7adc87c26f64ba8e11248c325f5e61b355666fa4b8a5626246f80ee2158f320",  # 2026-09-26 authorized D-019-MODALITY (SAR_PROFILES + is_sar_profile; read_sar_arrays exposes named_pols/sar_evidence for single-mode gating)
+    "ingest.py": "a3fcf82b81a5e47f1d8edc3af1e57ed4935b7eb8e4b2ca18905cd3aefb01bf34",  # 2026-09-26 authorized BAND-INFER (_infer_bgrn_map: two-part checked G=2/NIR=4 inference for unnamed 4-band TIFFs — LISS-III/AWiFS G,R,NIR,SWIR orderings reject; external-review thresholds)
     "serve.ps1": "a64b97f2c38b2cb0fb23cfa591e9f28bab814b1579d0db617d3569544927ef1d",  # 2026-09-26 authorized GROUND-V1-REV1 (narrator seat gains --image-min-tokens 384, the matched-geometry winning config; applies to all :8080 image calls)
 }
 
