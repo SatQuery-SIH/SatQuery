@@ -65,7 +65,7 @@ export function ImageryStage({
   inputNames: string[];
 }) {
   const [overlayOn, setOverlayOn] = useState(true);
-  const [lb, setLb] = useState<{ src: string; name: string; type?: string } | null>(null);
+  const [lb, setLb] = useState<{ src: string; name: string; type?: string; withOverlay?: boolean } | null>(null);
   const runId = bundle?.run_id ?? null;
   // overlay defaults ON for each new run that ships one — reset during render
   // when the displayed run changes (no post-render effect needed)
@@ -179,7 +179,7 @@ export function ImageryStage({
               {p.src ? (
                 <button
                   className="stage-img-btn"
-                  onClick={() => setLb({ src: p.src!, name: p.name })}
+                  onClick={() => setLb({ src: p.src!, name: p.name, withOverlay: p.role === overlayRole && !!overlaySrc })}
                   title={`expand ${p.label}`}
                 >
                   <img src={p.src} alt={p.label} />
@@ -201,7 +201,7 @@ export function ImageryStage({
                     className="stage-icon"
                     title={`expand ${p.label}`}
                     aria-label={`expand ${p.label}`}
-                    onClick={() => setLb({ src: p.src!, name: p.name })}
+                    onClick={() => setLb({ src: p.src!, name: p.name, withOverlay: p.role === overlayRole && !!overlaySrc })}
                   >
                     ⤢
                   </button>
@@ -250,7 +250,16 @@ export function ImageryStage({
       </div>
       )}
       {lb && (
-        <Lightbox src={lb.src} name={lb.name} type={lb.type} onClose={() => setLb(null)} />
+        <Lightbox
+          src={lb.src}
+          name={lb.name}
+          type={lb.type}
+          overlaySrc={lb.withOverlay ? overlaySrc : null}
+          overlayOn={overlayOn}
+          overlayLabel={overlayLabel}
+          onToggleOverlay={() => setOverlayOn((o) => !o)}
+          onClose={() => setLb(null)}
+        />
       )}
     </div>
   );

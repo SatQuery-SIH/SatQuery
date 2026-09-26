@@ -240,6 +240,40 @@ describe("ImageryStage — mode-driven panels from real bundle artifacts", () =>
     expect(document.querySelector(".stage-overlay")).toBeInTheDocument();
   });
 
+  it("lightbox carries the overlay: same toggle, shared state", () => {
+    render(<ImageryStage mode="single" bundle={singleArea} {...props} />);
+    fireEvent.click(screen.getByRole("button", { name: "expand Image" }));
+    const lb = screen.getByTestId("lightbox");
+    // overlay stacked inside the lightbox, on by default
+    expect(lb.querySelector(".lightbox-overlay")).toBeInTheDocument();
+    // the lightbox offers the same overlay toggle — not just the inline chip
+    const lbToggle = within(lb).getByRole("button", {
+      name: /water overlay: on/,
+    });
+    expect(lbToggle).toHaveAttribute("aria-pressed", "true");
+    // toggling inside the lightbox flips the shared state — the inline
+    // chip and stage overlay follow
+    fireEvent.click(lbToggle);
+    expect(lb.querySelector(".lightbox-overlay")).toBeNull();
+    expect(screen.getByTestId("overlay-toggle")).toHaveTextContent(
+      "water overlay: off",
+    );
+    fireEvent.click(
+      within(lb).getByRole("button", { name: /water overlay: off/ }),
+    );
+    expect(lb.querySelector(".lightbox-overlay")).toBeInTheDocument();
+  });
+
+  it("lightbox on a non-overlay panel shows no overlay controls", () => {
+    render(<ImageryStage mode="bi-temporal" bundle={biFlagged} {...props} />);
+    fireEvent.click(screen.getByRole("button", { name: "expand Before" }));
+    const lb = screen.getByTestId("lightbox");
+    expect(lb.querySelector(".lightbox-overlay")).toBeNull();
+    expect(
+      within(lb).queryByRole("button", { name: /overlay/ }),
+    ).toBeNull();
+  });
+
   it("bi-temporal: before|after both visible; overlay chip on after", () => {
     render(<ImageryStage mode="bi-temporal" bundle={biFlagged} {...props} />);
     const before = screen.getByTestId("stage-panel-before");
